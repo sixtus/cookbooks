@@ -46,6 +46,6 @@ namespace :upstream do
     args.with_defaults({:commit => "master"})
     sh("git cherry-pick #{args.commit}")
     sh("git push")
-    Rake::Task['upstream:merge'].execute
+    sh("git checkout master")
   end
 end
