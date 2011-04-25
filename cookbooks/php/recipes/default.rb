@@ -72,6 +72,13 @@ template "/etc/php/#{sapi}-php#{PHP.slot}/php.ini" do
   notifies :restart, "service[#{service_name}]"
 end
 
+template "/etc/php/cli-php#{PHP.slot}/php.ini" do
+  source "#{PHP.slot}/php.ini"
+  owner "root"
+  group "root"
+  mode "0644"
+end
+
 include_recipe "php::xcache"
 
 syslog_config "90-php" do
