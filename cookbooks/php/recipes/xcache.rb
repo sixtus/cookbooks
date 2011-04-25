@@ -1,6 +1,6 @@
 include_recipe "php"
 
-package "dev-php5/xcache"
+package "dev-php/xcache"
 
 php_extension "xcache" do
   template "xcache.ini.erb"
