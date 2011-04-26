@@ -152,7 +152,7 @@ nrpe_command "check_zombie_procs" do
 end
 
 nrpe_command "check_total_procs" do
-  command "/usr/lib/nagios/plugins/check_procs -w 200 -c 1000"
+  command "/usr/lib/nagios/plugins/check_procs -w 300 -c 1000"
 end
 
 nagios_service "PING" do
