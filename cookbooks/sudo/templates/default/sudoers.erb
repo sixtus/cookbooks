@@ -12,3 +12,8 @@ Defaults env_keep="EDITOR"
 # User privilege specification
 root    ALL = (ALL) ALL
 %wheel  ALL = (ALL) <% if node[:sudo][:nopasswd] == "true" %>NOPASSWD: <% end %>ALL
+
+<% node[:sudo][:rules].each do |name, params| %>
+# <%= name %>
+<%= "%s %s = (%s) %s" % [:user, :host, :runas, :command].map { |i| params[i] } %>
+<% end %>
