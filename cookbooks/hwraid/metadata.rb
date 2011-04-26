@@ -1,0 +1,2 @@
+depends "portage"
+depends "sudo"
