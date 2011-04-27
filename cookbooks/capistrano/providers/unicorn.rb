@@ -41,6 +41,7 @@ PIDFILE=#{rvm[:homedir]}/shared/pids/unicorn.pid
 CONFIG=#{rvm[:homedir]}/shared/config/unicorn.rb
 CMD="bundle exec unicorn_rails -c $CONFIG -E $RAILS_ENV -D"
 
+rvm rvmrc untrust #{current}/
 cd #{current}
 
 sig () {
