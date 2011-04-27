@@ -1,10 +1,8 @@
-untag("nagios-MYSQL")
 tag("mysql-server")
 
 include_recipe "password"
 include_recipe "mysql::default"
 
-portage_package_keywords "=dev-db/maatkit-7041"
 portage_package_keywords "=dev-db/xtrabackup-bin-1.4"
 
 package "dev-db/maatkit"
