@@ -1,5 +1,5 @@
-default[:php][:use_flags] = []
 default[:php][:default_use_flags] = %w(-* bzip2 cli crypt ctype curl exif filter ftp gd hash iconv json mysql mysqli mysqlnd nls pcre pdo posix reflection session simplexml sockets spl sqlite3 ssl tokenizer truetype unicode xml zlib)
+default[:php][:use_flags] = []
 default[:php][:sapi] = "fpm"
 
 default[:php][:tmp_dir] = "/var/tmp/php"
@@ -30,21 +30,5 @@ default[:php][:session][:use_only_cookies] = "1"
 default[:php][:upload][:max_filesize] = "2M"
 default[:php][:upload][:tmp_dir] = "#{node[:php][:tmp_dir]}/uploads"
 
-# php fpm settings
-default[:php][:fpm][:pools]["default"] = {
-  :listen_address => "/var/run/php-fpm.socket",
-  :socket_user => "nobody",
-  :socket_group => "nobody",
-  :socket_mode => "0660",
-  :user => "nobody",
-  :group => "nobody",
-  :max_children => "50",
-  :start_servers => "20",
-  :min_spare_servers => "5",
-  :max_spare_servers => "35",
-  :max_requests => "0",
-  :request_terminate_timeout => "0s",
-  :request_slowlog_timeout => "2s",
-  :slowlog => "/var/log/php-slow-request.log",
-  :rlimit_files => "1024",
-}
+# create default fpm pool
+default[:php][:fpm][:pools][:default] = {}

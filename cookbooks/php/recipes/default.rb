@@ -1,5 +1,3 @@
-include_recipe "portage"
-
 sapi = node[:php][:sapi]
 sapi_use = []
 
@@ -37,12 +35,16 @@ package "dev-lang/php"
 end
 
 file "/var/log/php-error.log" do
-  owner user
-  group "wheel"
-  mode "0640"
+  action :delete
 end
 
 if sapi == "fpm"
+  directory "/var/run/php-fpm" do
+    owner "root"
+    group "root"
+    mode "0755"
+  end
+
   template "/etc/php/fpm-php#{PHP.slot}/php-fpm.conf" do
     source "#{PHP.slot}/php-fpm.conf"
     owner "root"
@@ -81,8 +83,8 @@ end
 
 include_recipe "php::xcache"
 
-syslog_config "90-php" do
-  template "syslog.conf"
+file "/etc/syslog-ng/conf.d/90-php.conf" do
+  action :delete
 end
 
 cookbook_file "/etc/logrotate.d/php" do
