@@ -25,18 +25,12 @@ emerge @preserved-rebuild --usepkg=n
 # this fucker needs to be run after every upgrade, since noone can be sure what
 # has been broken. dude, srsly - can't we simply have PYTHON_TARGETS?
 eselect python update --python2
-python-updater -dmanual
+python-updater -dmanual -- --usepkg
+python-updater -dmanual -- --usepkg=n
 
 # same crap as with python ...
 perl-cleaner --all -- --usepkg
 perl-cleaner --all -- --usepkg=n
-
-# rebuild every php extension every time, since we cannot tell if it got broken
-# by a possible php update. this is even worse than python and perl.
-PHP_BUMS=$(qfile -Cq /usr/lib/php5/lib/extensions/ /usr/lib/php5/lib/php/extensions/ || :)
-if [[ -n ${PHP_BUMS} ]]; then
-	emerge -1 --usepkg=n ${PHP_BUMS}
-fi
 
 # these packages need to be remerged every time, because either revdep-rebuild
 # will not pick them up, or their build system is so horribly broken that even
