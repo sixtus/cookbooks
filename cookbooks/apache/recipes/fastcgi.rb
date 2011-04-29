@@ -1,7 +1,4 @@
-include_recipe "portage"
-include_recipe "apache"
-
-portage_package_keywords "=www-apache/mod_fastcgi_handler-0.3"
+portage_package_keywords "=www-apache/mod_fastcgi_handler-0.5"
 
 package "www-apache/mod_fastcgi_handler"
 
