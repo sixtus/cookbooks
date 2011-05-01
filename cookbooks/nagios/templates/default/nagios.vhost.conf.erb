@@ -18,8 +18,7 @@ NameVirtualHost *:443
   SSLCertificateFile /etc/ssl/apache2/server.crt
   SSLCertificateKeyFile /etc/ssl/apache2/server.key
 
-  AddHandler fcgi:/var/run/php-fpm.socket .php
-  DirectoryIndex index.php index.html
+  DirectoryIndex index.html index.php
 
   <Location />
     AuthType Basic

@@ -1,6 +1,5 @@
 tag("nagios-master")
 
-include_recipe "portage"
 include_recipe "apache::php"
 
 portage_package_use "net-analyzer/nagios-plugins" do
