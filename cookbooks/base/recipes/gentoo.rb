@@ -22,6 +22,7 @@ end
   net-analyzer/bwm-ng
   net-analyzer/iptraf-ng
   net-analyzer/mtr
+  net-analyzer/netcat
   net-analyzer/tcpdump
   net-analyzer/traceroute
   net-dns/bind-tools
