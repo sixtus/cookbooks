@@ -1,0 +1,285 @@
+#!/usr/bin/perl -w
+# $Id: check_munin_rrd.pl
+# 2007/05/20 01:40:47
+#
+# check_munin_rrd.pl Copyright (C) 2007 Julien Rottenberg <julien@rottenberg.info>
+#
+# check_munin_rrd.pl can check various modules via rrd objects.
+#
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty
+# of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# you should have received a copy of the GNU General Public License
+# along with this program (or with Nagios);  if not, write to the
+# Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+# Boston, MA 02111-1307, USA
+#
+#
+# Changelog :
+#
+# 20090827 - will now return UNKNOWN when a value is NaN instead of treating it as zero --cjdaniel
+#
+# 20090624 - check_munin can now exclude values from RRD
+# Ex :
+#   check_munin_rrd.pl -M df -H app1v.domain.org -w 5 -c 10 -e /dev/xvda1
+#   will ignore that drive from the checks
+# Thanks to cjdaniel
+#
+
+# globals
+my $PROGNAME = "check_munin_rrd.pl";
+use POSIX qw(strftime);
+
+eval { require RRDs; };
+if ($@) {
+	print "You need an extra package to make that work :\n";
+	print "- librrds-perl on Debian/Ubuntu\n";
+	print "- rrdtool-perl on RHEL/Centos\n";
+	exit 2;
+}
+
+use strict;
+use Getopt::Long;
+use vars qw($opt_V $opt_v $opt_h $opt_w $opt_c $opt_e $opt_i $opt_h $opt_M $opt_d $opt_H $PROGNAME);
+
+use lib "/usr/lib/nagios/plugins" ;
+use utils qw(%ERRORS &print_revision &support &usage);
+
+# munin specific
+my $datadir = "/var/lib/munin";
+my $rrdpath = undef;
+my $cf = "AVERAGE"; # munin stores its data in this CF for the latest.
+
+# check_munin_rrd specific
+my $REVISION = "1.1";
+my $hostname = undef;
+my $module = undef;
+my @exclude = undef;
+my @include = ();
+my $DEBUG = undef;
+
+# nagios specific
+my $status = '0';
+my $problem_on_nam = undef;
+my $problem_value = undef;
+
+sub in ($$);
+
+$ENV{'BASH_ENV'} = '';
+$ENV{'ENV'}      = '';
+$ENV{'PATH'}     = '';
+$ENV{'LC_ALL'}   = 'C';
+
+# command line paramters
+Getopt::Long::Configure('bundling');
+GetOptions(
+	"V"   => \$opt_V, "version"     => \$opt_V,
+	"h"   => \$opt_h, "help"        => \$opt_h,
+	"v"   => \$opt_v, "verbose"     => \$opt_v,
+	"e=s" => \$opt_e, "exclude=s"   => \$opt_e,
+	"i=s" => \$opt_i, "include=s"   => \$opt_i,
+	"w=f" => \$opt_w, "warning=f"   => \$opt_w,
+	"c=f" => \$opt_c, "critical=f"  => \$opt_c,
+	"M=s" => \$opt_M, "module=s"    => \$opt_M,
+	"H=s" => \$opt_H, "hostname=s"  => \$opt_H
+);
+
+check_parameters();
+
+# open suggested directory
+if (-d $datadir) {
+	printf "datadir: $datadir\n" if $DEBUG;
+} else {
+	printf "No such directory: $datadir\n";
+	exit $ERRORS{"CRITICAL"};
+}
+
+my $next = undef;
+my $name = undef;
+my @response = ();
+
+print "Opening $datadir/*/$hostname-$module-*.rrd\n" if $DEBUG;
+
+my $list_rrd = <$datadir/*/$hostname-$module-*.rrd>;
+
+if (!$list_rrd) {
+	printf "No such files: $datadir/*/$hostname-$module-*.rrd\n";
+	exit $ERRORS{"CRITICAL"};
+}
+
+while (defined($next = <$datadir/*/$hostname-$module-*.rrd>)) {
+
+	print "\nDoing : $next\n" if $DEBUG;
+
+	if ($next =~ /$hostname-$module-(\w+)-[a-z]\.rrd$/im) {
+		$name = $1;
+
+		if (@include > 0) {
+			next unless (grep ($_ eq $name, @include));
+		}
+
+		my $mtime = RRDs::last($next);
+		printf $mtime if $DEBUG;
+
+		my $now_string  = time;
+		printf "\n$now_string \n" if $DEBUG;
+
+		my $seconds_diff = $now_string - $mtime;
+
+		if ($seconds_diff > 600) {
+			my $formated_mtime = strftime "%d-%b-%Y %H:%M:%S %Z", localtime($mtime);
+			print "Problem on $next: data is too old, $formated_mtime\n";
+			exit $ERRORS{"UNKNOWN"};
+		}
+
+		print "module part: $name\n" if $DEBUG;
+
+		my $value = get_last_rrd_data($next);
+		print "$name: $value\n" if $DEBUG;
+
+		unless (grep ($_ eq $name, @exclude)) {
+			if (($value > $opt_w) && ($status < 2)) {
+				$status = "1";
+			}
+
+			if (($value > $opt_c) && ($status < 3)) {
+				$status = "2";
+			}
+
+			if (($value eq 'NaN') && ($status == 0)) {
+				$status = "3";
+			}
+		}
+
+		push(@response, "$name: $value");
+	}
+}
+
+my $response = join(", ", @response);
+print "$response\n";
+
+if ($status eq 1) {
+	$status = $ERRORS{"WARNING"};
+} elsif ($status eq 2) {
+	$status = $ERRORS{"CRITICAL"};
+} elsif ($status eq 3) {
+	$status = $ERRORS{"UNKNOWN"};
+} else {
+	$status = $ERRORS{"OK"};
+}
+
+exit $status;
+
+##
+###
+### Functions
+###
+##
+
+
+sub get_last_rrd_data {
+	my $rrdfile = shift;
+	my $last = RRDs::last($rrdfile) or die "get last value failed ($RRDs::error)";
+	my $start = $last - 300; # Damn rrd ! we may get two values, the one we want and 0.0, we will focus on the first ;-)
+
+	my ($rrdstart, $step, $names, $data) = RRDs::fetch($rrdfile, "--start=$start", "--end=$last", $cf) or die "fetch failed ($RRDs::error)";
+	my $line = shift(@$data);
+
+	for my $val (@$line) {
+		if (!defined $val) {
+			return 'NaN';
+		}
+		return sprintf ("%2.1f", $val);
+	}
+}
+
+sub check_parameters {
+	if ($opt_V) {
+		print_revision($PROGNAME,'$Revision: '.$REVISION.' $');
+		exit $ERRORS{'UNKNOWN'};
+	}
+
+	if ($opt_h) {
+		print_help();
+		print_revision($PROGNAME,'$Revision: '.$REVISION. ' $');
+		exit $ERRORS{'UNKNOWN'};
+	}
+
+	if ($opt_v) {
+		$DEBUG = 1;
+	}
+
+	if (!defined($opt_H)) {
+		print "You need to specify a hostname\n";
+		print_usage();
+		exit $ERRORS{"UNKNOWN"};
+	} else {
+		$hostname = $opt_H if (utils::is_hostname($opt_H));
+		($hostname) || usage("Invalid hostname or address: $opt_H\n");
+		printf "Hostname : $hostname\n" if $DEBUG;
+	}
+
+	if (defined($opt_M)) {
+		$module = $opt_M;
+		printf "Module: $module\n" if $DEBUG;
+	} else {
+		print "You need to specify a module\n";
+		print_usage();
+		exit $ERRORS{"UNKNOWN"};
+	}
+
+	if (!defined($opt_w) || !defined($opt_c)) {
+		print "You need to specify warning and critical thresholds.\n";
+		print_usage();
+		exit $ERRORS{"UNKNOWN"};
+	}
+
+	if (!defined($opt_e)) {
+		@exclude = ( '' );
+	} else {
+		@exclude = split(/,/, $opt_e);
+	}
+
+	if (defined($opt_i)) {
+		@include = split(/,/, $opt_i);
+	}
+}
+
+sub print_usage () {
+	print "Usage: $0 -H <host> -M <Module> -w <warn level> -c <crit level> [-e <exclude value>] [-e <include value>] [-V]\n";
+}
+
+sub print_help () {
+	print "\nMonitor server via Munin-node pulled data\n";
+	print_usage();
+	print <<EOT;
+-h, --help
+       print this help message
+-H, --hostname=HOST
+       name or IP address of host to check
+-M, --module=MUNIN MODULE
+       Munin module value to fetch
+-w, --warn=INTEGER
+       warning level
+-c, --crit=INTEGER
+       critical level
+-e, --exclude=EXCLUDE VALUE
+       exclude the value(s) (multiples should be comma-separated) from the RRD
+       e.g., use this to exclude "idle" CPU value from warning/critical checks
+-i, --include=INCLUDE VALUE
+       include the value(s) (multiples should be comma-separated) from the RRD
+       e.g., use this to include only "iowait" CPU value for warning/critical checks
+-v, --verbose
+       Be verbose
+-V, --version
+       prints version number
+EOT
+}

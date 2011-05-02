@@ -2,6 +2,7 @@ unless node[:skip][:nagios_client]
   tag("nagios-client")
 
   include_recipe "password"
+  include_recipe "munin::node"
 
   package "net-analyzer/nagios-nrpe"
   package "net-analyzer/nagios-nsca"
@@ -36,11 +37,6 @@ unless node[:skip][:nagios_client]
   portage_package_keywords "=dev-perl/Nagios-Plugin-0.34"
   portage_package_keywords "=dev-perl/Math-Calc-Units-1.07"
   portage_package_keywords "=net-analyzer/nagios-check_pidfile-1"
-
-  file "/usr/lib/nagios/plugins/check_pidfile" do
-    action :delete
-    not_if do File.exists?("/var/db/pkg/net-analyzer/nagios-check_pidfile-1") end
-  end
 
   package "net-analyzer/nagios-check_pidfile"
 end

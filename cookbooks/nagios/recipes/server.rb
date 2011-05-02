@@ -1,11 +1,5 @@
 tag("nagios-master")
 
-include_recipe "apache::php"
-
-portage_package_use "net-analyzer/nagios-plugins" do
-  use %w(ldap mysql nagios-dns nagios-ntp nagios-ping nagios-ssh postgres)
-end
-
 portage_package_keywords "~net-analyzer/nagios-3.2.3"
 portage_package_keywords "~net-analyzer/nagios-core-3.2.3"
 
@@ -13,8 +7,18 @@ portage_package_use "net-analyzer/nagios-core" do
   use %w(apache2)
 end
 
+portage_package_use "net-analyzer/nagios-plugins" do
+  use %w(ldap mysql nagios-dns nagios-ntp nagios-ping nagios-ssh postgres)
+end
+
+portage_package_use "net-analyzer/nagios-plugins" do
+  use %w(ldap mysql nagios-dns nagios-ntp nagios-ping nagios-ssh postgres)
+end
+
 package "net-analyzer/nagios"
 package "net-analyzer/nagios-nsca"
+
+include_recipe "munin::master"
 
 directory "/etc/nagios" do
   owner "nagios"
@@ -141,6 +145,8 @@ service "nsca" do
 end
 
 # apache specifics
+include_recipe "apache::php"
+
 group "nagios" do
   members %w(apache)
   append true

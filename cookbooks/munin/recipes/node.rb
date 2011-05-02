@@ -43,30 +43,6 @@ unless node[:skip][:munin_node]
     action [:enable, :start]
   end
 
-  base_plugins = %w(
-    df
-    processes
-    load
-    memory
-  )
-
-  if node[:virtualization][:role] == "host"
-    base_plugins += %w(
-      iostat
-      forks
-      vmstat
-      entropy
-      cpu
-      open_files
-      open_inodes
-      swap
-    )
-  end
-
-  base_plugins.each do |p|
-    munin_plugin p
-  end
-
   nagios_service "MUNIN-NODE" do
     check_command "check_munin_node"
   end

@@ -144,16 +144,33 @@ link "/dev/stderr" do
   to "/dev/fd/2"
 end
 
+# enable munin plugins
+base_plugins = %w(
+  cpu
+  df
+  entropy
+  forks
+  load
+  memory
+  open_files
+  open_inodes
+  processes
+)
+
+if node[:virtualization][:role] == "host"
+  base_plugins += %w(
+    iostat
+    swap
+    vmstat
+  )
+end
+
+base_plugins.each do |p|
+  munin_plugin p
+end
+
 # reset all attributes to make sure cruft is being deleted on chef-client run
 node.default[:nagios][:services] = {}
-
-nrpe_command "check_zombie_procs" do
-  command "/usr/lib/nagios/plugins/check_procs -w 5 -c 10 -s Z"
-end
-
-nrpe_command "check_total_procs" do
-  command "/usr/lib/nagios/plugins/check_procs -w 300 -c 1000"
-end
 
 nagios_service "PING" do
   check_command "check_ping!100.0,20%!500.0,60%"
@@ -161,27 +178,18 @@ nagios_service "PING" do
 end
 
 nagios_service "ZOMBIES" do
-  check_command "check_nrpe!check_zombie_procs"
+  check_command "check_munin_single!processes!zombie!5!10"
   servicegroups "system"
 end
 
 nagios_service "PROCS" do
-  check_command "check_nrpe!check_total_procs"
+  check_command "check_munin!processes!300!1000"
   servicegroups "system"
 end
 
 if node[:virtualization][:role] == "host"
   nagios_plugin "raid" do
     source "check_raid"
-  end
-
-  nrpe_command "check_load" do
-    command "/usr/lib/nagios/plugins/check_load -w 15,10,5 -c 30,25,20"
-  end
-
-  nagios_service "LOAD" do
-    check_command "check_nrpe!check_load"
-    servicegroups "system"
   end
 
   nrpe_command "check_raid" do
@@ -193,12 +201,13 @@ if node[:virtualization][:role] == "host"
     servicegroups "system"
   end
 
-  nrpe_command "check_disks" do
-    command "/usr/lib/nagios/plugins/check_disk -w 10% -c 5%"
+  nagios_service "LOAD" do
+    check_command "check_munin!load!#{node[:cpu][:total]*3}!#{node[:cpu][:total]*10}"
+    servicegroups "system"
   end
 
   nagios_service "DISKS" do
-    check_command "check_nrpe!check_disks"
+    check_command "check_munin!df!90!95"
     notification_interval 15
     servicegroups "system"
   end
@@ -207,12 +216,8 @@ if node[:virtualization][:role] == "host"
     notification_interval 15
   end
 
-  nrpe_command "check_swap" do
-    command "/usr/lib/nagios/plugins/check_swap -w 75% -c 50%"
-  end
-
   nagios_service "SWAP" do
-    check_command "check_nrpe!check_swap"
+    check_command "check_munin!swap!50!100"
     notification_interval 180
     servicegroups "system"
   end
