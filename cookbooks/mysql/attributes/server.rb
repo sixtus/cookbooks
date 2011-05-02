@@ -19,7 +19,7 @@ default[:mysql][:server][:skip_innodb] = false
 # replication and binary log
 default[:mysql][:server][:server_id] = 1
 default[:mysql][:server][:log_bin] = false
-default[:mysql][:server][:sync_binlog] = "1"
+default[:mysql][:server][:sync_binlog] = "0"
 default[:mysql][:server][:relay_log] = false
 default[:mysql][:server][:expire_logs_days] = 14
 default[:mysql][:server][:log_slave_updates] = false
