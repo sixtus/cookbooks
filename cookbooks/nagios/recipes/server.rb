@@ -14,6 +14,7 @@ portage_package_use "net-analyzer/nagios-core" do
 end
 
 package "net-analyzer/nagios"
+package "net-analyzer/nagios-nsca"
 
 directory "/etc/nagios" do
   owner "nagios"
@@ -31,6 +32,12 @@ file "/var/nagios/rw/nagios.cmd" do
   owner "nagios"
   group "apache"
   mode "0660"
+end
+
+directory "/var/run/nsca" do
+  owner "nagios"
+  group "nagios"
+  mode "0755"
 end
 
 template "/usr/lib/nagios/plugins/notify" do
@@ -82,7 +89,9 @@ end
 end
 
 # nagios base config
-%w(nagios resource).each do |f|
+node.set[:nagios][:nsca][:password] = get_password("nagios/nsca")
+
+%w(nagios nsca resource).each do |f|
   nagios_conf f do
     subdir false
   end
@@ -124,6 +133,10 @@ end
 include_recipe "nagios::extras"
 
 service "nagios" do
+  action [:enable, :start]
+end
+
+service "nsca" do
   action [:enable, :start]
 end
 

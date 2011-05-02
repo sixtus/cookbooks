@@ -30,7 +30,7 @@ nrpe_group=nagios
 # ALLOWED HOST ADDRESSES
 # This is an optional comma-delimited list of IP address or hostnames 
 # that are allowed to talk to the NRPE daemon.
-allowed_hosts=<%= @allowed.join(",") %>
+allowed_hosts=<%= @master[:ipaddress] %>
 
 # DEBUGGING OPTION
 # This option determines whether or not debugging messages are logged to the

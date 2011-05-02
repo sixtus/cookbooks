@@ -4,6 +4,7 @@ unless node[:skip][:nagios_client]
   include_recipe "password"
 
   package "net-analyzer/nagios-nrpe"
+  package "net-analyzer/nagios-nsca"
 
   directory "/etc/nagios" do
     owner "nagios"
@@ -21,14 +22,14 @@ unless node[:skip][:nagios_client]
     action [:enable, :start]
   end
 
-  allowed = search(:node, "tags:nagios-master").map do |n| n['ipaddress'] end
+  master = search(:node, "tags:nagios-master").first
 
-  mysql_nagios_password = get_password("mysql/nagios")
-
-  nagios_conf "nrpe" do
-    subdir false
-    mode "0640"
-    variables :allowed => allowed, :mysql_nagios_password => mysql_nagios_password
+  %w(nrpe send_nsca).each do |f|
+    nagios_conf f do
+      subdir false
+      mode "0640"
+      variables :master => master
+    end
   end
 
   # third-party plugins
