@@ -21,14 +21,14 @@ ssl_certificate "/etc/ssl/munin/master" do
   group "munin"
 end
 
-client_nodes = search(:node, "tags:munin-node")
+nodes = search(:node, "tags:munin-node")
 
 template "/etc/munin/munin.conf" do
   source "munin.conf"
   owner "root"
   group "root"
   mode "0644"
-  variables :client_nodes => client_nodes
+  variables :nodes => nodes
 end
 
 cron "munin-cron" do

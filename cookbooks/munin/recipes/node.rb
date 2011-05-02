@@ -20,14 +20,14 @@ unless node[:skip][:munin_node]
     group "munin"
   end
 
-  server_nodes = search(:node, "tags:munin-master")
+  master = search(:node, "tags:munin-master").first
 
   template "/etc/munin/munin-node.conf" do
     source "munin-node.conf"
     owner "root"
     group "root"
     mode "0644"
-    variables :server_nodes => server_nodes
+    variables :master => master
     notifies :restart, "service[munin-node]"
   end
 
