@@ -8,6 +8,6 @@ define :nginx_module, :action => :create, :template => nil do
     group "root"
     mode "0644"
     variables :params => params
-    notifies :restart, "service[nginx]"
+    notifies :reload, "service[nginx]"
   end
 end

@@ -58,7 +58,7 @@ template "/etc/nginx/nginx.conf" do
   owner "root"
   group "root"
   mode "0644"
-  notifies :restart, "service[nginx]"
+  notifies :reload, "service[nginx]"
 end
 
 nginx_module "fastcgi" do
@@ -79,6 +79,7 @@ end
 
 service "nginx" do
   action [:enable, :start]
+  supports [:reload]
 end
 
 syslog_config "90-nginx" do
