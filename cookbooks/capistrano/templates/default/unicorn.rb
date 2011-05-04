@@ -4,6 +4,7 @@ listen <%= @params[:port] %>, :backlog => <%= @params[:backlog] %>
 
 working_directory '<%= @params[:homedir] %>/current'
 pid '<%= @params[:homedir] %>/shared/pids/unicorn.pid'
+stderr_path '<%= @params[:homedir] %>/shared/log/unicorn.log'
 
 before_fork do |server, worker|
   old_pid = "#{server.config[:pid]}.oldbin"
