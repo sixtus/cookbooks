@@ -6,4 +6,4 @@ end
 actions :create, :delete
 
 attribute :default, :kind_of => [TrueClass, FalseClass], :default => true
-attribute :ruby_config, :kind_of => Hash, :default => nil
+attribute :ruby_config, :kind_of => Hash, :default => {}

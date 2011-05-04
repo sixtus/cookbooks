@@ -6,11 +6,7 @@ action :create do
   ruby_config = {
     :version => "ruby-1.9.2-p136",
     :libpath => "lib/ruby/site_ruby",
-  }
-
-  if new_resource.ruby_config
-    ruby_config = new_resource.ruby_config
-  end
+  }.merge(new_resource.ruby_config)
 
   rvm_execute "installing ruby interpreter: #{ruby_config[:version]}" do
     code <<-EOS
