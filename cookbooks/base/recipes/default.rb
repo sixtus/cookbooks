@@ -53,7 +53,7 @@ file "/etc/resolv.conf" do
   owner "root"
   group "root"
   mode "0644"
-  content "nameserver 8.8.8.8\nnameserver 8.8.4.4\n"
+  content "search #{node[:domain]}\nnameserver 8.8.8.8\nnameserver 8.8.4.4\n"
 end
 
 if node[:virtualization][:role] == "guest" and node[:virtualization][:emulator] = "vserver"
