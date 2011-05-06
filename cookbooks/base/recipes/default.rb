@@ -39,19 +39,14 @@ EOS
   not_if 'test "$(GIT_DIR=/etc/.git GIT_WORK_TREE=/etc git status --porcelain)" = ""'
 end
 
-nodes = search(:node, "ipaddress:[* TO *]", "hostname asc")
-host_node = nil
-
-if node[:virtualization][:host]
-  host_node = search(:node, "fqdn:#{node[:virtualization][:host]}").first
-end
+node.run_state[:nodes] = search(:node, "ipaddress:[* TO *]")
 
 template "/etc/hosts" do
   owner "root"
   group "root"
   mode "0644"
   source "hosts.erb"
-  variables :nodes => nodes, :host_node => host_node
+  variables :nodes => node.run_state[:nodes]
 end
 
 file "/etc/resolv.conf" do
