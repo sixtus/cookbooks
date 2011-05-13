@@ -1,6 +1,6 @@
 worker_processes <%= @params[:worker_processes] %>
 timeout <%= @params[:timeout] %>
-listen <%= @params[:port] %>, :backlog => <%= @params[:backlog] %>
+listen '<%= @params[:homedir] %>/shared/pids/unicorn.sock'
 
 working_directory '<%= @params[:homedir] %>/current'
 pid '<%= @params[:homedir] %>/shared/pids/unicorn.pid'

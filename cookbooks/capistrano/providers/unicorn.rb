@@ -9,8 +9,6 @@ action :create do
   config = {
     :worker_processes => 4,
     :timeout => 30,
-    :port => 3000,
-    :backlog => 64,
     :homedir => rvm[:homedir],
   }.merge(new_resource.config)
 
