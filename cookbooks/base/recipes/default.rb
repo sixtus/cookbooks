@@ -212,7 +212,7 @@ if node[:virtualization][:role] == "host"
   end
 
   nagios_service "SWAP" do
-    check_command "check_munin!swap!50!100"
+    check_command "check_munin!swap!128!1024"
     notification_interval 180
     servicegroups "system"
   end
