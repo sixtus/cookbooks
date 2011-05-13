@@ -1,4 +1,4 @@
-define :nginx_server, :action => :create, :template => nil do
+define :nginx_server, :action => :create do
   include_recipe "nginx"
 
   template "/etc/nginx/servers/#{params[:name]}.conf" do
@@ -9,5 +9,6 @@ define :nginx_server, :action => :create, :template => nil do
     mode "0644"
     variables :params => params
     notifies :reload, "service[nginx]"
+    cookbook params[:cookbook] if params[:cookbook]
   end
 end
