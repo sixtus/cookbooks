@@ -1,7 +1,9 @@
-define :nginx_module, :action => :create, :template => nil do
+define :nginx_module, :action => :create, :template => nil, :auto => true do
   include_recipe "nginx"
 
-  template "/etc/nginx/modules/#{params[:name]}.conf" do
+  suffix = params[:auto] ? "conf" : "include"
+
+  template "/etc/nginx/modules/#{params[:name]}.#{suffix}" do
     action params[:action]
     source params[:template]
     owner "root"
