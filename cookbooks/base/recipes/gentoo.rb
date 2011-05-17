@@ -1,14 +1,5 @@
-include_recipe "portage"
-
-portage_package_keywords "~sys-apps/baselayout-2.0.1"
-portage_package_keywords "~sys-apps/openrc-0.6.8"
-
-# mask these globally so we don't accidently upgrade
-file "/etc/portage/package.mask/block-upgrades" do
-  content node[:gentoo][:upgrade_blockers].join("\n")
-end
-
 %w(
+  app-admin/lib_users
   app-admin/pwgen
   app-admin/pydf
   app-admin/superadduser

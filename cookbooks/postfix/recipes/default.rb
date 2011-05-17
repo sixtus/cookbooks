@@ -1,5 +1,3 @@
-include_recipe "portage"
-
 portage_package_use "mail-mta/postfix" do
   use node[:postfix][:use_flags].sort.uniq
 end

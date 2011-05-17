@@ -62,7 +62,7 @@ package "sys-apps/portage"
 end
 
 execute "eix-update" do
-  only_if do
+  not_if do
     check_files = Dir.glob("/var/lib/layman/*/.git/index")
     check_files << "/usr/portage/.git/index"
     FileUtils.uptodate?("/var/cache/eix", check_files)

@@ -3,8 +3,6 @@ tag("mysql-server")
 include_recipe "password"
 include_recipe "mysql::default"
 
-portage_package_keywords "=dev-db/xtrabackup-bin-1.4"
-
 package "dev-db/maatkit"
 package "dev-db/mysqltuner"
 package "dev-db/mytop"
@@ -153,8 +151,6 @@ if tagged?("nagios-client")
     privileges ["PROCESS", "REPLICATION CLIENT"]
     database "*"
   end
-
-  portage_package_keywords "=net-analyzer/nagios-check_mysql_health-2.1.1"
 
   package "net-analyzer/nagios-check_mysql_health"
 

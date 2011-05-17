@@ -13,7 +13,6 @@ service "memcached" do
 end
 
 if tagged?("nagios-client")
-  portage_package_keywords "=dev-perl/Nagios-Plugins-Memcached-0.02"
   package "dev-perl/Nagios-Plugins-Memcached"
 
   nrpe_command "check_memcached" do

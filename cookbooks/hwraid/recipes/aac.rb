@@ -1,5 +1,3 @@
-portage_package_keywords "=sys-block/asm-7.00.18781"
-
 package "sys-block/asm"
 
 sudo_rule "nagios-arcconf" do

@@ -1,8 +1,5 @@
 tag("nagios-master")
 
-portage_package_keywords "~net-analyzer/nagios-3.2.3"
-portage_package_keywords "~net-analyzer/nagios-core-3.2.3"
-
 portage_package_use "net-analyzer/nagios-core" do
   use %w(apache2)
 end

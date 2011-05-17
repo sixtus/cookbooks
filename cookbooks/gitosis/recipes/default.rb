@@ -1,7 +1,4 @@
-include_recipe "portage"
 include_recipe "ssh"
-
-portage_package_keywords "=dev-vcs/gitosis-0.2_p20080825"
 
 package "dev-vcs/gitosis"
 

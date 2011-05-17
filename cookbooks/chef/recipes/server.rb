@@ -4,7 +4,6 @@ include_recipe "chef::client"
 include_recipe "couchdb"
 include_recipe "nginx"
 include_recipe "openssl"
-include_recipe "portage"
 include_recipe "rabbitmq"
 
 cookbook_file "/etc/portage/package.keywords/chef-server" do

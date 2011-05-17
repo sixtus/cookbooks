@@ -1,4 +1,3 @@
-include_recipe "portage"
 include_recipe "syslog"
 
 nginx_default_use_flags = %w(
@@ -17,8 +16,6 @@ nginx_default_use_flags = %w(
 portage_package_use "www-servers/nginx" do
   use(nginx_default_use_flags + node[:nginx][:use_flags])
 end
-
-portage_package_keywords "~www-servers/nginx-1.0.0"
 
 group "nginx" do
   gid 82

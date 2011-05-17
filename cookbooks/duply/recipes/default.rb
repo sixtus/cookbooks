@@ -1,5 +1,3 @@
-portage_package_keywords "=app-backup/duply-1.5.2.3"
-
 package "app-backup/duply"
 
 %w(

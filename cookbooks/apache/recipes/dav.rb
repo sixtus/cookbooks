@@ -1,4 +1,3 @@
-include_recipe "portage"
 include_recipe "apache"
 
 portage_package_use "www-servers/apache|dav" do

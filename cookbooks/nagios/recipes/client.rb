@@ -34,9 +34,5 @@ unless node[:skip][:nagios_client]
   end
 
   # third-party plugins
-  portage_package_keywords "=dev-perl/Nagios-Plugin-0.34"
-  portage_package_keywords "=dev-perl/Math-Calc-Units-1.07"
-  portage_package_keywords "=net-analyzer/nagios-check_pidfile-1"
-
   package "net-analyzer/nagios-check_pidfile"
 end

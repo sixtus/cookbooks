@@ -1,5 +1,3 @@
-include_recipe "portage"
-
 chef_server = tagged?("chef-server")
 
 cookbook_file "/etc/portage/package.keywords/chef" do

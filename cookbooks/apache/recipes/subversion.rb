@@ -1,4 +1,3 @@
-include_recipe "portage"
 include_recipe "apache"
 include_recipe "apache::dav"
 

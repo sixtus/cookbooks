@@ -1,5 +1,3 @@
-include_recipe "portage"
-
 group "spamd" do
   gid 638
 end

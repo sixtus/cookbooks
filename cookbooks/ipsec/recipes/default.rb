@@ -1,9 +1,6 @@
 tag("ipsec")
 
-include_recipe "portage"
 include_recipe "openssl"
-
-portage_package_keywords "=net-firewall/ipsec-tools-0.7.3-r1"
 
 package "net-firewall/ipsec-tools"
 
