@@ -6,29 +6,27 @@ directory node[:portage][:confdir] do
   owner "root"
   group "root"
   mode "0755"
-  action :create
-  not_if "test -d #{node[:portage][:confdir]}"
+  not_if { File.directory?(node[:portage][:confdir]) }
 end
 
 %w(keywords mask unmask use).each do |type|
   path = "#{node[:portage][:confdir]}/package.#{type}"
 
-  execute "backup-package.#{type}" do
-    command "mv #{path} #{path}.bak"
-    only_if "test -f #{path}"
+  ruby_block "backup-package.#{type}" do
+    block { FileUtils.mv(path, "#{path}.bak") }
+    only_if { File.file?(path) }
   end
 
   directory path do
     owner "root"
     group "root"
     mode "0755"
-    action :create
-    not_if "test -d #{path}"
+    not_if { File.directory?(path) }
   end
 
-  execute "restore-package.#{type}" do
-    command "mv #{path}.bak #{path}/local"
-    only_if "test -f #{path}.bak"
+  ruby_block "restore-package.#{type}" do
+    block { FileUtils.mv("#{path}.bak", "#{path}/local") }
+    only_if { File.file?("#{path}.bak") }
   end
 end
 
@@ -36,15 +34,14 @@ directory "#{node[:portage][:make_conf]}.d" do
   owner "root"
   group "root"
   mode "755"
-  action :create
-  not_if "test -d #{node[:portage][:make_conf]}.d"
+  not_if { File.directory?("#{node[:portage][:make_conf]}.d") }
 end
 
 template "#{node[:portage][:make_conf]}.d/local.conf" do
   owner "root"
   group "root"
   mode "644"
-  source "make.conf.local.erb"
+  source "make.conf.local"
   backup 0
 end
 
@@ -52,18 +49,10 @@ template node[:portage][:make_conf] do
   owner "root"
   group "root"
   mode "644"
-  source "make.conf.erb"
+  source "make.conf"
   cookbook "portage"
   variables({:sources => []})
   backup 0
-end
-
-portage_package_keywords "=sys-apps/portage-2.2*" do
-  keywords "**"
-end
-
-portage_package_unmask "=sys-apps/portage-2.2*" do
-  action :delete
 end
 
 package "sys-apps/portage"
@@ -74,16 +63,9 @@ end
 
 execute "eix-update" do
   only_if do
-    doit = false
-
     check_files = Dir.glob("/var/lib/layman/*/.git/index")
-    check_files << "/usr/portage/metadata/timestamp.chk"
-
-    check_files.each do |f|
-      doit = true if test ?>, f, "/var/cache/eix"
-    end
-
-    doit
+    check_files << "/usr/portage/.git/index"
+    FileUtils.uptodate?("/var/cache/eix", check_files)
   end
 end
 

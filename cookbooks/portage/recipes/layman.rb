@@ -14,9 +14,10 @@ directory "/var/lib/layman" do
   mode "0755"
 end
 
-execute "layman-init" do
-  command "layman -f -a hollow; layman -f -a betagarden"
-  not_if "test -d /var/lib/layman/betagarden"
+file "/var/lib/layman/make.conf" do
+  owner "root"
+  group "root"
+  mode "0644"
 end
 
 make_conf "layman" do

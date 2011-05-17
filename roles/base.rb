@@ -2,7 +2,6 @@ description "base role for all nodes"
 
 # order is very important here!
 run_list(%w(
-  recipe[portage::layman]
   recipe[portage]
   recipe[portage::porticron]
   recipe[base]
