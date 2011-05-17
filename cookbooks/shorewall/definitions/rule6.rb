@@ -5,5 +5,5 @@ define :shorewall6_rule,
   :proto => "tcp",
   :destport => "-",
   :sourceport => "-" do
-  node[:shorewall][:rules6][params[:name]] = params
+  node[:shorewall6][:rules][params[:name]] = params
 end
