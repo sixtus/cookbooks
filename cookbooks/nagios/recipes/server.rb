@@ -8,10 +8,6 @@ portage_package_use "net-analyzer/nagios-plugins" do
   use %w(ldap mysql nagios-dns nagios-ntp nagios-ping nagios-ssh postgres)
 end
 
-portage_package_use "net-analyzer/nagios-plugins" do
-  use %w(ldap mysql nagios-dns nagios-ntp nagios-ping nagios-ssh postgres)
-end
-
 package "net-analyzer/nagios"
 package "net-analyzer/nagios-nsca"
 
