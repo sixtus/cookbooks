@@ -17,9 +17,6 @@ end
   package "app-admin/#{p}"
 end
 
-package "dev-ruby/net-ssh-multi"
-package "dev-ruby/net-ssh-gateway"
-
 template "/etc/chef/server.rb" do
   source "server.rb.erb"
   owner "chef"
