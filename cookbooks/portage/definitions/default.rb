@@ -104,7 +104,7 @@ define :make_conf, :appends => [], :overrides => [], :sources => [], :force_rege
     owner 'root'
     group 'root'
     mode '0644'
-    source 'extra_make_conf'
+    source 'make.conf.extra'
     cookbook "portage"
     variables(:overrides => overrides, :appends => appends, :sources => sources)
     subscribes :create, make_conf, :immediately

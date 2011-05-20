@@ -28,7 +28,7 @@ when "gentoo"
   default[:portage][:MAKEOPTS] = "-j1"
 
   # language support
-  default[:portage][:LINGUAS] = []
+  default[:portage][:LINGUAS] = %w(en)
 else
   raise "This cookbook is Gentoo-only"
 end
