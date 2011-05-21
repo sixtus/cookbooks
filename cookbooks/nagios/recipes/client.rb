@@ -1,7 +1,6 @@
 unless node[:skip][:nagios_client]
   tag("nagios-client")
 
-  include_recipe "password"
   include_recipe "munin::node"
 
   package "net-analyzer/nagios-nrpe"

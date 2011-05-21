@@ -1,6 +1,5 @@
 tag("mysql-server")
 
-include_recipe "password"
 include_recipe "mysql::default"
 
 package "dev-db/maatkit"

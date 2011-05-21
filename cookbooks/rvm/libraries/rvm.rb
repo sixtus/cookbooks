@@ -3,7 +3,7 @@ module ChefUtils
     include ChefUtils::Account
 
     def infer_vars(user, version = nil)
-      user = getpwnam(user)
+      user = get_user(user)
       path = user[:name] == "root" ? "/usr/local/rvm" : "#{user[:dir]}/.rvm"
       rvmrc = user[:name] == "root" ? "/etc/rvmrc" : "#{user[:dir]}/.rvmrc"
 

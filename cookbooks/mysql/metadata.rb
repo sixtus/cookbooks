@@ -1,5 +1,4 @@
 depends          "munin"
 depends          "nagios"
 depends          "password"
-depends          "portage"
 depends          "syslog"

@@ -1,3 +1,9 @@
+begin
+  include_recipe "base::#{node[:platform]}"
+rescue
+  raise "The base module has not been ported to your platform (#{node[:platform]})"
+end
+
 include_recipe "git"
 include_recipe "lftp"
 include_recipe "tmux"
@@ -216,10 +222,4 @@ if node[:virtualization][:role] == "host"
     notification_interval 180
     servicegroups "system"
   end
-end
-
-begin
-  include_recipe "base::#{node[:platform]}"
-rescue
-  raise "The base module has not been ported to your platform (#{node[:platform]})"
 end

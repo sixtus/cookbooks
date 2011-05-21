@@ -1,2 +1,1 @@
-depends "portage"
 depends "sudo"

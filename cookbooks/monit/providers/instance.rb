@@ -21,7 +21,7 @@ action :create do
     cookbook "monit"
   end
 
-  user = getpwnam(new_resource.name)
+  user = get_user(new_resource.name)
 
   template "/etc/init.d/monit.#{user[:name]}" do
     source "monit.initd"

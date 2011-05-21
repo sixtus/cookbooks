@@ -3,16 +3,10 @@ include ChefUtils::RVM
 action :create do
   rvm = infer_vars(new_resource.name)
 
-  # convert strings to symbols
-  ruby_config = new_resource.ruby_config.inject({}) do |memo,(k,v)|
-    memo[k.to_sym] = v
-    memo
-  end
-
   ruby_config = {
     :version => "ruby-1.9.2-p136",
     :libpath => "lib/ruby/site_ruby",
-  }.merge(ruby_config)
+  }.merge(new_resource.ruby_config.symbolize_keys)
 
   rvm_execute "installing ruby interpreter: #{ruby_config[:version]}" do
     code <<-EOS

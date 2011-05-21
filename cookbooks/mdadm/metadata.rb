@@ -1,2 +1,1 @@
 depends "nagios"
-depends "portage"

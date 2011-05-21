@@ -1,2 +1,0 @@
-depends "portage"
-depends "password"

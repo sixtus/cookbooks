@@ -1,6 +1,6 @@
 module ChefUtils
   module Account
-    def getpwnam(user)
+    def get_user(user)
       pwent = Etc.getpwnam(user)
       user = Mash[pwent.members.zip(pwent.values)]
 
@@ -10,4 +10,8 @@ module ChefUtils
       user
     end
   end
+end
+
+class Chef::Recipe
+  include ChefUtils::Account
 end

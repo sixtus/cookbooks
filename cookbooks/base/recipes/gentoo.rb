@@ -1,3 +1,6 @@
+include_recipe "portage"
+include_recipe "portage::porticron"
+
 %w(
   app-admin/lib_users
   app-admin/pwgen
