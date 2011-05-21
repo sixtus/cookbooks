@@ -25,11 +25,11 @@ end
 directory "/root/.vim" do
   action :delete
   recursive true
-  only_if "test -L /root/.vim"
+  only_if { File.symlink?("/root/.vim") }
 end
 
 execute "rm -f /root/.bashrc" do
-  only_if "test -L /root/.bashrc"
+  only_if { File.symlink?("/root/.bashrc") }
 end
 
 directory "/root/.dotfiles" do

@@ -13,8 +13,8 @@ include_recipe "tmux"
 include_recipe "vim"
 
 execute "git init" do
-  not_if "test -d /etc/.git"
   cwd "/etc"
+  creates "/etc/.git"
 end
 
 directory "/etc/.git" do
@@ -45,7 +45,7 @@ git add -A .
 git commit -m 'automatic commit during chef-client run'
 git gc
 EOS
-  not_if 'test "$(GIT_DIR=/etc/.git GIT_WORK_TREE=/etc git status --porcelain)" = ""'
+  not_if { %x(env GIT_DIR=/etc/.git GIT_WORK_TREE=/etc git status --porcelain).strip.empty? }
 end
 
 template "/etc/hosts" do

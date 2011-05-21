@@ -30,7 +30,7 @@ template "/usr/sbin/mysql_pkg_config" do
   owner "root"
   group "root"
   mode "0755"
-  not_if "test -d /var/lib/mysql/mysql"
+  not_if { File.directory?("/var/lib/mysql/mysql") }
   backup 0
   variables(:root_pass => mysql_root_pass)
 end

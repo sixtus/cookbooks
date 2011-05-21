@@ -53,7 +53,7 @@ define :account,
     group "root"
     mode "0755"
     recursive true
-    not_if "test -d #{File.dirname(home)}"
+    not_if { File.directory?(File.dirname(home)) }
   end
 
   directory home do
@@ -86,7 +86,11 @@ end
 define :account_from_databag,
   :databag => :users,
   :seed => false do
-  user = params[:seed] or search(params[:databag], "id:#{params[:name]}").first
+  user = if params[:seed]
+           params[:seed]
+         else
+           search(params[:databag], "id:#{params[:name]}").first
+         end
 
   account user[:id] do
     user.each do |k, v|
