@@ -1,3 +1,6 @@
+# to make things faster, add the node list to our run_state for later use
+node.run_state[:nodes] = search(:node)
+
 begin
   include_recipe "base::#{node[:platform]}"
 rescue
@@ -44,8 +47,6 @@ git gc
 EOS
   not_if 'test "$(GIT_DIR=/etc/.git GIT_WORK_TREE=/etc git status --porcelain)" = ""'
 end
-
-node.run_state[:nodes] = search(:node, "ipaddress:[* TO *]")
 
 template "/etc/hosts" do
   owner "root"

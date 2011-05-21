@@ -4,7 +4,11 @@ include_recipe "openssl"
 
 package "net-firewall/ipsec-tools"
 
-nodes = search(:node, "tags:ipsec AND ipv6_enabled:true AND NOT fqdn:#{node[:fqdn]}")
+nodes = node.run_state[:nodes].select do |n|
+  n[:tags].include?("ipsec") and
+  n[:ipv6_enabled] == true and
+  n[:fqdn] != node[:fqdn]
+end
 
 template "/etc/ipsec.conf" do
   source "ipsec.conf.erb"

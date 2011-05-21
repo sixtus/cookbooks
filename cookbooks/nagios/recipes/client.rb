@@ -22,7 +22,9 @@ unless node[:skip][:nagios_client]
     action [:enable, :start]
   end
 
-  master = search(:node, "tags:nagios-master").first
+  master = node.run_state[:nodes].select do |n|
+    n[:tags].include?("nagios-master")
+  end.first
 
   %w(nrpe send_nsca).each do |f|
     nagios_conf f do

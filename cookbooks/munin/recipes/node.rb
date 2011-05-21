@@ -20,7 +20,9 @@ unless node[:skip][:munin_node]
     group "munin"
   end
 
-  master = search(:node, "tags:munin-master").first
+  master = node.run_state[:nodes].select do |n|
+    n[:tags].include?("munin-master")
+  end.first
 
   template "/etc/munin/munin-node.conf" do
     source "munin-node.conf"

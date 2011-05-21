@@ -84,8 +84,9 @@ define :account,
 end
 
 define :account_from_databag,
-  :databag => :users do
-  user = search(params[:databag], "id:#{params[:name]}").first
+  :databag => :users,
+  :seed => false do
+  user = params[:seed] or search(params[:databag], "id:#{params[:name]}").first
 
   account user[:id] do
     user.each do |k, v|
@@ -102,6 +103,7 @@ define :accounts_from_databag,
   search(params[:databag], params[:name]) do |user|
     account_from_databag user[:id] do
       databag params[:databag]
+      seed user
     end
 
     params[:groups].each do |g|

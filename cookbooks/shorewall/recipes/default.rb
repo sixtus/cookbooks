@@ -16,7 +16,9 @@ include_recipe "shorewall::rules"
 
 # pkgsync rules
 if tagged?("pkgsync-client")
-  search(:node, "tags:pkgsync-master").each do |n|
+  node.run_state[:nodes].select do |n|
+    n[:tags].include?("pkgsync-master")
+  end.each do |n|
     shorewall_rule "pkgsync-master@#{n[:fqdn]}" do
       source "net:#{n[:ipaddress]}"
       dest "$FW:#{node[:ipaddress]}"
@@ -34,7 +36,9 @@ if tagged?("pkgsync-client")
 end
 
 # nagios rules
-search(:node, "tags:nagios-master").each do |n|
+node.run_state[:nodes].select do |n|
+  n[:tags].include?("nagios-master")
+end.each do |n|
   shorewall_rule "nagios-master@#{n[:fqdn]}" do
     source "net:#{n[:ipaddress]}"
     destport "4949,5666"
@@ -49,7 +53,9 @@ search(:node, "tags:nagios-master").each do |n|
 end
 
 # munin rules
-search(:node, "tags:munin-master").each do |n|
+node.run_state[:nodes].select do |n|
+  n[:tags].include?("munin-master")
+end.each do |n|
   shorewall_rule "munin-master@#{n[:fqdn]}" do
     source "net:#{n[:ipaddress]}"
     destport "4949"

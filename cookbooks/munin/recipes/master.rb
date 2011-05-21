@@ -21,7 +21,9 @@ ssl_certificate "/etc/ssl/munin/master" do
   group "munin"
 end
 
-nodes = search(:node, "tags:munin-node")
+nodes = node.run_state[:nodes].select do |n|
+  n[:tags].include?("munin-node")
+end
 
 template "/etc/munin/munin.conf" do
   source "munin.conf"

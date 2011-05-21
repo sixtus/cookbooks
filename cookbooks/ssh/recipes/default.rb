@@ -2,7 +2,9 @@ untag("nagios-SSH")
 
 package "net-misc/openssh"
 
-nodes = search(:node, "keys_ssh:[* TO *]")
+nodes = node.run_state[:nodes].select do |n|
+  n[:keys] and n[:keys][:ssh]
+end
 
 template "/etc/ssh/ssh_known_hosts" do
   source "known_hosts.erb"
@@ -43,10 +45,12 @@ cookbook_file "/etc/denyhosts.conf" do
   notifies :restart, "service[denyhosts]"
 end
 
-allowed_hosts = search(:node, "ipaddress:[* TO *]").map do |n| n[:ipaddress] end.sort
+allowed_hosts = node.run_state[:nodes].map do |n|
+  n[:ipaddress]
+end
 
 file "/var/lib/denyhosts/allowed-hosts" do
-  content allowed_hosts.join("\n")
+  content allowed_hosts.sort.join("\n")
   owner "root"
   group "root"
   mode "0644"

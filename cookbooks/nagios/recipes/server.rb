@@ -48,7 +48,12 @@ end
 contacts = search(:users, "nagios_contact_groups:[* TO *]").sort { |a,b| a[:id] <=> b[:id] }
 hostmasters = search(:users, "nagios_contact_groups:hostmasters").sort { |a,b| a[:id] <=> b[:id] }
 
-hosts = search(:node, "tags:nagios-client").sort { |a,b| a[:fqdn] <=> b[:fqdn] }
+hosts = node.run_state[:nodes].select do |n|
+  n[:tags].include?("nagios-client")
+end.sort do |a,b|
+  a[:fqdn] <=> b[:fqdn]
+end
+
 roles = search(:role, "NOT name:base").sort { |a,b| a.name <=> b.name }
 hostgroups = {}
 

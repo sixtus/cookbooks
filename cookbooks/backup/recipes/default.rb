@@ -5,7 +5,9 @@ ssh_chroot_sftp "backup" do
   directory "/backup"
 end
 
-search(:node, "backup_configs:[* TO *]") do |n|
+node.run_state[:nodes].each do |n|
+  next unless n[:backup] and n[:backup][:configs]
+
   directory "/backup/#{n[:fqdn]}" do
     owner "backup"
     group "backup"

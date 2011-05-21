@@ -2,7 +2,9 @@ tag("pkgsync-master")
 
 node[:pkgsync][:password] = get_password("pkgsync")
 
-clients = search(:node, "tags:pkgsync-client")
+clients = node.run_state[:nodes].select do |n|
+  n[:tags].include?("pkgsync-client")
+end
 
 file "/etc/pkgsync.secret" do
   content node[:pkgsync][:password]

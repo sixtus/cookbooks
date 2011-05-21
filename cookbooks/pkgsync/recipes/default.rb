@@ -1,6 +1,8 @@
 tag("pkgsync-client")
 
-master = search(:node, "tags:pkgsync-master").first
+master = node.run_state[:nodes].select do |n|
+  n[:tags].include?("pkgsync-master")
+end.first
 
 if master
   file "/etc/rsyncd.secrets" do

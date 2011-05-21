@@ -20,7 +20,11 @@ template "/etc/shorewall6/shorewall6.conf" do
 end
 
 if tagged?("ipsec")
-  ipsec_nodes = search(:node, "tags:ipsec AND ipv6_enabled:true AND NOT fqdn:#{node[:fqdn]}")
+  ipsec_nodes = node.run_state[:nodes].select do |n|
+    n[:tags].include?("ipsec") and
+    n[:ipv6_enabled] == true and
+    n[:fqdn] != node[:fqdn]
+  end
 else
   ipsec_nodes = []
 end
