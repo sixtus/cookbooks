@@ -1,0 +1,4 @@
+.. _chef-nodes:
+
+Nodes
+=====

@@ -1,0 +1,1 @@
+../../../../../cookbooks/mysql/README.rst
