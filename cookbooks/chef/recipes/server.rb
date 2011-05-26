@@ -6,13 +6,6 @@ include_recipe "nginx"
 include_recipe "openssl"
 include_recipe "rabbitmq"
 
-cookbook_file "/etc/portage/package.keywords/chef-server" do
-  source "chef-server.keywords"
-  owner "root"
-  group "root"
-  mode "0644"
-end
-
 %w(chef-solr chef-server-api chef-server).each do |p|
   package "app-admin/#{p}"
 end

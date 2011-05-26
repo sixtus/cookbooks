@@ -24,11 +24,18 @@ EOH
     end
 
     Rake::Task['load:node'].invoke(fqdn)
-
-    # create new client cert
-    sh("knife client -n create #{fqdn}")
   end
 
+  desc "Bootstrap the specified node"
+  task :bootstrap, :fqdn do |t, args|
+    fqdn = args.fqdn
+
+    Rake::Task['node:create'].invoke(fqdn)
+
+    sh("knife bootstrap #{fqdn} --distro gentoo")
+  end
+
+  desc "Delete the specified node, client key and SSL certificates"
   task :delete, :fqdn do |t, args|
     fqdn = args.fqdn
 

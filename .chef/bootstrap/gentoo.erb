@@ -1,0 +1,16 @@
+/bin/bash -c '
+emerge --nospinner --keep-going=n --noreplace --quiet app-admin/chef
+
+cat <<'EOF' > /etc/chef/client.rb
+log_level        :info
+log_location     "/var/log/chef/client.log"
+file_cache_path  "/var/lib/chef/cache"
+chef_server_url  "<%= Chef::Config[:chef_server_url] %>"
+validation_client_name "<%= Chef::Config[:node_name] %>"
+EOF
+
+cat <<'EOF' > /etc/chef/validation.pem
+<%= IO.read(Chef::Config[:client_key]) %>
+EOF
+
+/usr/bin/chef-client -V'

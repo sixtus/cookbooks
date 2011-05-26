@@ -11,10 +11,12 @@ NAME=$1 && shift
 FQDN=$1 && shift
 INTERFACE=$1 && shift
 
+STAGE4_DATE=20110522
+
 if [[ -z $1 || "$1" = "--" ]]; then
-	TEMPLATE=/vservers/stage4-amd64-current.tar.bz2
+	TEMPLATE=/vservers/stage4-x86-64-gentoo-lts-${STAGE4_DATE}.tar.bz2
 	pushd /vservers >/dev/null
-	wget -N http://bb.xnull.de/projects/gentoo/amd64/stage4-amd64-current.tar.bz2
+	wget -N http://bb.xnull.de/projects/gentoo/stage4-x86-64-gentoo-lts-${STAGE4_DATE}.tar.bz2
 	popd >/dev/null
 else
 	TEMPLATE="$1"
@@ -39,16 +41,20 @@ vserver $NAME build \
 
 echo
 
+# start vserver on boot
 echo default > /etc/vservers/$NAME/apps/init/mark
 
+# make binary packages available
 echo "/usr/portage/packages /usr/portage/packages none bind,rw 0 0" >> /etc/vservers/$NAME/fstab
 
+# use hosts resolv.conf to make sure we have DNS resolution
 cp /etc/resolv.conf /vservers/$NAME/etc/resolv.conf
 
+# set proper /etc/hosts entries
 echo "127.0.0.1 localhost" > /vservers/$NAME/etc/hosts
 echo "$IP $FQDN ${FQDN/.*}" >> /vservers/$NAME/etc/hosts
 
-# rsyslog handles this gracefully.
+# disable kmsg polling in syslog-ng (not allowed in vservers)
 if [[ -e /vservers/$NAME/etc/syslog-ng/syslog-ng.conf ]]; then
 	sed -i -e '/kmsg/d' /vservers/$NAME/etc/syslog-ng/syslog-ng.conf
 fi
@@ -56,25 +62,13 @@ fi
 # enable sshd
 ln -sf /etc/init.d/sshd /vservers/$NAME/etc/runlevels/default/sshd
 
-vserver $NAME start
-
 # remerge openssl to get USE=-bindist
+vserver $NAME start
 vserver $NAME exec emerge --oneshot --usepkg=n openssl
 
 einfo ""
 einfo "Please set the initial root password:"
 vserver $NAME exec passwd root
-
-einfo ""
-einfo "Bootstrapping chef ..."
-cat <<EOF | vserver $NAME exec bash -s
-pushd /tmp &>/dev/null
-git clone git://gist.github.com/480600.git chef-bootstrap
-pushd ./chef-bootstrap &>/dev/null
-./bootstrap-client.sh
-popd &>/dev/null
-rm -rf chef-bootstrap
-EOF
 
 einfo ""
 einfo "All done. Use 'vserver $NAME enter' to login."

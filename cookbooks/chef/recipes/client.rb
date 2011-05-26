@@ -1,12 +1,5 @@
 chef_server = tagged?("chef-server")
 
-cookbook_file "/etc/portage/package.keywords/chef" do
-  source "chef.keywords"
-  owner "root"
-  group "root"
-  mode "0644"
-end
-
 package "app-admin/chef"
 
 if not chef_server

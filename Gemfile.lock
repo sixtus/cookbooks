@@ -2,7 +2,7 @@ GEM
   remote: http://rubygems.org/
   specs:
     bunny (0.6.0)
-    chef (0.9.12)
+    chef (0.9.16)
       bunny (>= 0.6.0)
       erubis
       extlib
@@ -18,7 +18,7 @@ GEM
       uuidtools
     erubis (2.7.0)
     extlib (0.9.15)
-    highline (1.6.1)
+    highline (1.6.2)
     json (1.4.6)
     mime-types (1.16)
     mixlib-authentication (1.1.4)
@@ -33,7 +33,7 @@ GEM
     net-ssh-multi (1.1)
       net-ssh (>= 2.1.4)
       net-ssh-gateway (>= 0.99.0)
-    ohai (0.6.2)
+    ohai (0.6.4)
       mixlib-cli
       mixlib-config
       mixlib-log
@@ -49,5 +49,5 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  chef (= 0.9.12)
+  chef (= 0.9.16)
   net-ssh-multi
