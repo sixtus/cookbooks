@@ -7,6 +7,7 @@ action :create do
   environment = new_resource.environment
 
   config = {
+    :port => 3000,
     :worker_processes => 4,
     :timeout => 30,
     :homedir => rvm[:homedir],
@@ -86,5 +87,13 @@ EOS
     cookbook "capistrano"
     variables :user => rvm[:user],
               :logfile => logfile
+  end
+
+  nginx_server "capistrano_unicorn-#{rvm[:user]}" do
+    template "unicorn.nginx.conf"
+    cookbook "capistrano"
+    user rvm[:user]
+    homedir rvm[:homedir]
+    port config[:port]
   end
 end
