@@ -88,7 +88,3 @@ EOS
               :logfile => logfile
   end
 end
-
-action :delete do
-  rvm = infer_vars(new_resource.user)
-end

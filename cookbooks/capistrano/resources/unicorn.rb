@@ -3,7 +3,7 @@ def initialize(name, run_context=nil)
   @action = :create
 end
 
-actions :create, :delete
+actions :create
 
 attribute :version, :kind_of => String, :default => "3.4.0"
 attribute :environment, :kind_of => String, :default => "production"

@@ -14,6 +14,13 @@ directory node[:portage][:confdir] do
   not_if { File.directory?(node[:portage][:confdir]) }
 end
 
+cookbook_file "#{node[:portage][:confdir]}/bashrc" do
+  source "bashrc"
+  owner "root"
+  group "root"
+  mode "0644"
+end
+
 %w(keywords mask unmask use).each do |type|
   path = "#{node[:portage][:confdir]}/package.#{type}"
 
@@ -33,6 +40,12 @@ end
     block { FileUtils.mv("#{path}.bak", "#{path}/local") }
     only_if { File.file?("#{path}.bak") }
   end
+end
+
+directory "#{node[:portage][:confdir]}/preserve-libs.d" do
+  owner "root"
+  group "root"
+  mode "0755"
 end
 
 directory "#{node[:portage][:make_conf]}.d" do
@@ -88,9 +101,9 @@ end
 
 %w(
   cruft
-  fake-vardb
-  fake-world
+  fake-preserved-libs
   remerge
+  update-preserved-libs
   updateworld
 ).each do |f|
   cookbook_file "/usr/local/sbin/#{f}" do
@@ -98,5 +111,14 @@ end
     owner "root"
     group "root"
     mode "0755"
+  end
+end
+
+%w(
+  fake-world
+  fake-vardb
+).each do |f|
+  file "/usr/local/sbin/#{f}" do
+    action :delete
   end
 end

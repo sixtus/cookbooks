@@ -19,6 +19,13 @@ action :create do
     user rvm[:user]
   end
 
+  portage_preserve_libs "rvm-#{rvm[:user]}" do
+    paths [
+      "#{rvm[:path]}/rubies",
+      "#{rvm[:path]}/gems",
+    ]
+  end
+
   if new_resource.default
     rvm_execute "setting default interpreter" do
       code "rvm --default #{ruby_config[:version]}"
@@ -30,17 +37,6 @@ action :create do
         rescue
           false
         end
-      end
-    end
-  end
-
-  bash "creating fake entry in /var/db/pkg" do
-    code "fake-vardb rvm/#{rvm[:user]} #{rvm[:path]}/rubies #{rvm[:path]}/gems"
-    not_if do
-      begin
-        FileUtils.uptodate?("/var/db/pkg/rvm/#{rvm[:user]}-0/CONTENTS", ["#{rvm[:path]}/.last_install_action"])
-      rescue
-        false
       end
     end
   end
