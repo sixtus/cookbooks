@@ -2,6 +2,11 @@ link "/etc/make.profile" do
   to node[:portage][:profile]
 end
 
+directory node[:portage][:distdir] do
+  owner "root"
+  group "portage"
+end
+
 directory node[:portage][:confdir] do
   owner "root"
   group "root"
@@ -33,14 +38,14 @@ end
 directory "#{node[:portage][:make_conf]}.d" do
   owner "root"
   group "root"
-  mode "755"
+  mode "0755"
   not_if { File.directory?("#{node[:portage][:make_conf]}.d") }
 end
 
 template "#{node[:portage][:make_conf]}.d/local.conf" do
   owner "root"
   group "root"
-  mode "644"
+  mode "0644"
   source "make.conf.local"
   backup 0
 end
@@ -48,7 +53,7 @@ end
 template node[:portage][:make_conf] do
   owner "root"
   group "root"
-  mode "644"
+  mode "0644"
   source "make.conf"
   cookbook "portage"
   variables({:sources => []})
@@ -73,11 +78,6 @@ cookbook_file "/etc/logrotate.d/portage" do
   source "portage.logrotate"
   mode "0644"
   backup 0
-end
-
-directory node[:portage][:distdir] do
-  owner "root"
-  group "portage"
 end
 
 cookbook_file "/etc/dispatch-conf.conf" do
