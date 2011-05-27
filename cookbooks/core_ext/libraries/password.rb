@@ -6,6 +6,7 @@ module ChefUtils
     def secure_random(length = 42)
       r = ""
       r << ::OpenSSL::Random.random_bytes(1).gsub(/\W/, '') while r.length < length
+      r
     end
 
     def get_password(key, length = 42)
