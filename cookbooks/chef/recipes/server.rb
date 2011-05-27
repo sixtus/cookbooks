@@ -7,9 +7,9 @@ include_recipe "nginx"
 include_recipe "openssl"
 include_recipe "rabbitmq"
 
+# setup RabbitMQ user/permissions
 amqp_pass = get_password("rabbitmq/chef")
 
-# setup RabbitMQ user/permissions
 execute "rabbitmqctl add_vhost /chef" do
   not_if "rabbitmqctl list_vhosts | grep /chef"
 end
