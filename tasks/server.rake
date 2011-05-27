@@ -12,13 +12,12 @@ namespace :server do
     scfg = File.join(TOPDIR, "bootstrap", "solo.rb")
     sjson = File.join(TOPDIR, "bootstrap", "bootstrap.json")
 
-    sh("chef-solo -l debug -L /dev/stdout -c #{scfg} -j #{sjson}")
+    sh("chef-solo -L /dev/stdout -c #{scfg} -j #{sjson}")
 
     # run chef-client to register a client key
     sh("chef-client -V")
 
     # setup a client key for root
-    sh("knife client delete root -y -u chef-webui -k /etc/chef/webui.pem")
     sh("knife client create root -a -n -u chef-webui -k /etc/chef/webui.pem | tail -n+2 > /root/.chef/client.pem")
 
     # create new node
@@ -30,11 +29,11 @@ namespace :server do
 
     # create initial user account
     print "Please enter your username: "
-    username = STDIN.gets
+    username = STDIN.gets.chomp
 
     uf = File.join(BAGS_DIR, "users", "#{username}.rb")
 
-    File.open(nf, "w") do |fd|
+    File.open(uf, "w") do |fd|
       fd.puts "self[:tags] = %w(hostmaster)"
     end
 
@@ -45,6 +44,9 @@ namespace :server do
 
     # deploy initial repository
     Rake::Task['deploy'].invoke
+
+    # run final chef-client
+    sh("chef-client -V")
   end
 
 end
