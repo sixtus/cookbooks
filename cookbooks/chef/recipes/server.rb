@@ -50,21 +50,21 @@ end
 # install chef-server
 package "app-admin/chef-server"
 
-template "/etc/chef/server.rb" do
-  source "server.rb.erb"
-  owner "chef"
-  group "chef"
-  mode "0600"
-  notifies :restart, "service[chef-server-api]", :immediately
-  variables :amqp_pass => amqp_pass
-end
-
 template "/etc/chef/solr.rb" do
   source "solr.rb.erb"
   owner "chef"
   group "chef"
   mode "0600"
   notifies :restart, "service[chef-solr]", :immediately
+  variables :amqp_pass => amqp_pass
+end
+
+template "/etc/chef/server.rb" do
+  source "server.rb.erb"
+  owner "chef"
+  group "chef"
+  mode "0600"
+  notifies :restart, "service[chef-server-api]", :immediately
   variables :amqp_pass => amqp_pass
 end
 
