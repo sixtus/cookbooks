@@ -68,6 +68,19 @@ template "/etc/chef/server.rb" do
   variables :amqp_pass => amqp_pass
 end
 
+directory "/root/.chef" do
+  owner "root"
+  group "root"
+  mode "0700"
+end
+
+template "/root/.chef/knife.rb" do
+  source "knife.rb"
+  owner "root"
+  group "root"
+  mode "0600"
+end
+
 directory "/etc/chef/certificates" do
   owner "chef"
   group "root"

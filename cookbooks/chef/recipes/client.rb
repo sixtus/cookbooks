@@ -5,22 +5,11 @@ directory "/var/lib/chef/cache" do
   mode "0750"
 end
 
-directory "/root/.chef" do
+template "/etc/chef/client.rb" do
+  source "client.rb.erb"
   owner "root"
   group "root"
-  mode "0700"
-end
-
-%w(
-  /etc/chef/client.rb
-  /root/.chef/knife.rb
-).each do |f|
-  template f do
-    source "client.rb.erb"
-    owner "root"
-    group "root"
-    mode "0644"
-  end
+  mode "0644"
 end
 
 service "chef-client" do
