@@ -1,19 +1,9 @@
-chef_server = tagged?("chef-server")
-
 package "app-admin/chef"
 
-if not chef_server
-  file "/etc/chef/validation.pem" do
-    action :delete
-    backup false
-  end
-end
-
-cookbook_file "/etc/logrotate.d/chef" do
-  source "chef.logrotate"
-  owner "root"
+directory "/var/lib/chef/cache" do
+  owner "chef"
   group "root"
-  mode "0644"
+  mode "0750"
 end
 
 template "/etc/chef/client.rb" do
@@ -27,10 +17,11 @@ service "chef-client" do
   action [:disable, :stop]
 end
 
-directory "/var/lib/chef/cache" do
+cookbook_file "/etc/logrotate.d/chef" do
+  source "chef.logrotate"
   owner "root"
-  group chef_server ? "chef" : "root"
-  mode "0770"
+  group "root"
+  mode "0644"
 end
 
 file "/var/log/chef/client.log" do

@@ -1,4 +1,5 @@
 depends "couchdb"
+depends "java"
 depends "nginx"
 depends "openssl"
 depends "rabbitmq"
