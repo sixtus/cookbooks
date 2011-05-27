@@ -1,4 +1,3 @@
-depends          "munin"
-depends          "nagios"
-depends          "password"
-depends          "syslog"
+depends "munin"
+depends "nagios"
+depends "syslog"
