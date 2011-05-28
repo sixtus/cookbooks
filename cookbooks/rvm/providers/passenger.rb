@@ -27,7 +27,7 @@ cd #{current}
 
 case $@ in
   start)
-    passenger start --pid-file #{pidfile} -p #{new_resource.port} --log-file #{logfile} -d #{new_resource.args} -e $RAILS_ENV #{current}
+    passenger start --pid-file #{pidfile} -p #{new_resource.port} --max-pool-size=#{new_resource.max_pool_size} --log-file #{logfile} -d #{new_resource.args} -e $RAILS_ENV #{current}
   ;;
   stop)
     passenger stop --pid-file #{pidfile}

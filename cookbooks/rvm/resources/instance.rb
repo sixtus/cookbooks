@@ -5,4 +5,4 @@ end
 
 actions :create, :delete
 
-attribute :version, :kind_of => String, :default => "1.6.4"
+attribute :version, :kind_of => String, :default => "1.6.5"
