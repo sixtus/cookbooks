@@ -1,5 +1,5 @@
 # to make things faster, add the node list to our run_state for later use
-node.run_state[:nodes] = search(:node)
+node.run_state[:nodes] = search(:node, "ipaddress:[* TO *]")
 
 begin
   include_recipe "base::#{node[:platform]}"

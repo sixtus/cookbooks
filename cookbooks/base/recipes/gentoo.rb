@@ -70,6 +70,10 @@ end
   end
 end
 
+file "/etc/conf.d/local" do
+  action :delete
+end
+
 %w(
   /etc/init.d/net.lo
   /etc/init.d/net.eth0
