@@ -23,7 +23,11 @@ bundle install
 
 # setup knife
 mkdir -p ~/.chef
-sudo knife client -a -n create $(whoami) | tail -n +2 > ~/.chef/client.pem
+rm -f ~/.chef/knife.rb
+
+if [[ ! -e ~/.chef/client.pem ]]; then
+	sudo knife client -a -n create $(whoami) | tail -n +2 > ~/.chef/client.pem
+fi
 
 cat <<EOF > ~/.chef/knife.rb
 whoami = %x(whoami).chomp
