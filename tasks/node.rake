@@ -2,37 +2,31 @@ namespace :node do
 
   desc "Create a new node with SSL certificates and chef client key"
   task :create => [ :pull ]
-  task :create, :fqdn do |t, args|
-    fqdn = args.fqdn
+  task :create, :fqdn, :role do |t, args|
+    args.with_defaults(:role => "base")
 
     # create SSL cert
     ENV['BATCH'] = "1"
-    Rake::Task['ssl:do_cert'].invoke(fqdn)
+    Rake::Task['ssl:do_cert'].invoke(args.fqdn)
     Rake::Task['load:cookbook'].invoke('openssl')
 
     # create new node
-    nf = File.join(TOPDIR, "nodes", "#{fqdn}.rb")
+    nf = File.join(TOPDIR, "nodes", "#{args.fqdn}.rb")
 
     unless File.exists?(nf)
       File.open(nf, "w") do |fd|
-        fd.puts <<EOH
-run_list(%w(
-  role[base]
-))
-EOH
+        fd.puts "run_list(%w(\n  role[#{args.role}]\n))"
       end
     end
 
-    Rake::Task['load:node'].invoke(fqdn)
+    # upload to chef server
+    Rake::Task['load:node'].invoke(args.fqdn)
   end
 
   desc "Bootstrap the specified node"
-  task :bootstrap, :fqdn do |t, args|
-    fqdn = args.fqdn
-
-    Rake::Task['node:create'].invoke(fqdn)
-
-    sh("knife bootstrap #{fqdn} --distro gentoo")
+  task :bootstrap, :fqdn, :role do |t, args|
+    Rake::Task['node:create'].invoke(args.fqdn, args.role)
+    sh("knife bootstrap #{args.fqdn} --distro gentoo")
   end
 
   desc "Delete the specified node, client key and SSL certificates"
