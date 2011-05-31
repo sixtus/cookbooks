@@ -31,6 +31,12 @@ action :create do
     variables :params => config
   end
 
+  cmd_prefix = if new_resource.bundler
+                 "bundle exec "
+               else
+                 ""
+               end
+
   rvm_wrapper "#{rvm[:homedir]}/bin/unicorn" do
     user rvm[:user]
     code <<-EOS
@@ -38,7 +44,7 @@ export RAILS_ENV=#{environment}
 
 PIDFILE=#{rvm[:homedir]}/shared/pids/unicorn.pid
 CONFIG=#{rvm[:homedir]}/shared/config/unicorn.rb
-CMD="bundle exec unicorn_rails -c $CONFIG -E $RAILS_ENV -D"
+CMD="#{cmd_prefix}unicorn_rails -c $CONFIG -E $RAILS_ENV -D"
 
 rvm rvmrc untrust #{current}/
 cd #{current}
