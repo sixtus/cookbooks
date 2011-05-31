@@ -1,4 +1,6 @@
 /bin/bash -c '
+emerge --sync
+
 emerge --nospinner --keep-going=n --noreplace --quiet app-admin/chef
 
 cat <<'EOF' > /etc/chef/client.rb
