@@ -17,7 +17,8 @@ default[:mysql][:server][:bind_address] = "127.0.0.1"
 default[:mysql][:server][:skip_innodb] = false
 
 # replication and binary log
-default[:mysql][:server][:server_id] = 1
+default[:mysql][:server][:server_id] = IPAddr.new(node[:ipaddress]).to_i
+default[:mysql][:server][:slave_enabled] = false
 default[:mysql][:server][:log_bin] = false
 default[:mysql][:server][:sync_binlog] = "0"
 default[:mysql][:server][:relay_log] = false
@@ -25,6 +26,11 @@ default[:mysql][:server][:expire_logs_days] = 14
 default[:mysql][:server][:log_slave_updates] = false
 default[:mysql][:server][:replicate_do_db] = false
 default[:mysql][:server][:replicate_do_table] = false
+
+if node[:mysql][:server][:slave_enabled]
+  set[:mysql][:server][:log_bin] = true
+  set[:mysql][:server][:relay_log] = true
+end
 
 # slow query log
 default[:mysql][:server][:long_query_time] = "0"
