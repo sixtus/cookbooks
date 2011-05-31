@@ -23,19 +23,6 @@ action :create do
     user rvm[:user]
     group rvm[:group]
   end
-
-  directory "#{rvm[:path]}/hooks" do
-    owner rvm[:user]
-    group rvm[:group]
-    mode "0755"
-  end
-
-  file "#{rvm[:path]}/hooks/after_install" do
-    content "# needed for idempotency in fake-vardb\ntouch #{rvm[:path]}/.last_install_action"
-    owner rvm[:user]
-    group rvm[:group]
-    mode "0644"
-  end
 end
 
 action :delete do
