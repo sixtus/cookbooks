@@ -28,25 +28,21 @@ default[:mysql][:server][:replicate_do_db] = false
 default[:mysql][:server][:replicate_do_table] = false
 
 if node[:mysql][:server][:slave_enabled]
-  set[:mysql][:server][:log_bin] = true
-  set[:mysql][:server][:relay_log] = true
+  default[:mysql][:server][:log_bin] = true
+  default[:mysql][:server][:relay_log] = true
 end
 
 # General Performance Options
-default[:mysql][:server][:open_files_limit] = "4096"
 default[:mysql][:server][:table_open_cache] = "1024"
-default[:mysql][:server][:table_definition_cache] = "4096"
-default[:mysql][:server][:thread_cache_size] = "16"
+default[:mysql][:server][:table_definition_cache] = 4 * node[:mysql][:server][:table_open_cache].to_i
+default[:mysql][:server][:open_files_limit] = 3 * node[:mysql][:server][:table_open_cache].to_i
 default[:mysql][:server][:tmp_table_size] = "64M"
-default[:mysql][:server][:max_heap_table_size] = "64M"
+default[:mysql][:server][:max_heap_table_size] = node[:mysql][:server][:tmp_table_size]
 default[:mysql][:server][:group_concat_max_len] = "1024"
-
-if node[:mysql][:server][:max_heap_table_size].to_bytes < node[:mysql][:server][:tmp_table_size].to_bytes
-  set[:mysql][:server][:max_heap_table_size] = node[:mysql][:server][:tmp_table_size]
-end
 
 # Client Connection Optimization
 default[:mysql][:server][:max_connections] = "128"
+default[:mysql][:server][:thread_cache_size] = node[:mysql][:server][:max_connections]
 default[:mysql][:server][:max_allowed_packet] = "16M"
 default[:mysql][:server][:wait_timeout] = "28800"
 default[:mysql][:server][:connect_timeout] = "10"
@@ -63,7 +59,7 @@ default[:mysql][:server][:query_cache_type] = 1
 default[:mysql][:server][:query_cache_limit] = "4M"
 
 if node[:mysql][:server][:query_cache_type] == 0
-  set[:mysql][:server][:query_cache_size] = 0
+  default[:mysql][:server][:query_cache_size] = 0
 end
 
 # Sort Optimization
@@ -90,3 +86,59 @@ default[:mysql][:server][:default_storage_engine] = "MyISAM"
 # backup
 default[:mysql][:backupdir] = "/var/backup/mysql"
 default[:mysql][:backups] = {}
+
+# nagios
+default[:mysql][:server][:detailed_monitoring] = false
+
+{ # name          command               warn crit check note detailed
+  :ctime    => %w(connection-time       1    5    1     15   0),
+  :conns    => %w(threads-connected     0    0    1     15   0),
+  :tchit    => %w(threadcache-hitrate   90:  80:  60    180  1),
+  :qchit    => %w(qcache-hitrate        90:  80:  60    180  1),
+  :qclow    => %w(qcache-lowmem-prunes  1    10   60    180  1),
+  :slow     => %w(slow-queries          0.1  1    60    60   0),
+  :long     => %w(long-running-procs    10   20   5     60   0),
+  :tabhit   => %w(tablecache-hitrate    99:  95:  60    180  1),
+  :lock     => %w(table-lock-contention 1    2    60    180  1),
+  :index    => %w(index-usage           90:  80:  60    60   1),
+  :tmptab   => %w(tmp-disk-tables       25   50   60    180  1),
+  :kchit    => %w(keycache-hitrate      99:  95:  60    180  1),
+  :bphit    => %w(bufferpool-hitrate    99:  95:  60    180  1),
+  :bpwait   => %w(bufferpool-wait-free  1    10   60    180  1),
+  :logwait  => %w(log-waits             1    10   60    180  1),
+  :slaveio  => %w(slave-io-running      0    0    1     15   0),
+  :slavesql => %w(slave-sql-running     0    0    1     15   0),
+  :slavelag => %w(slave-lag             60   120  5     60   0),
+}.each do |name, p|
+  enabled = if node[:mysql][:server][:detailed_monitoring]
+              true
+            else
+              p[5].to_i.zero?
+            end
+
+  default[:mysql][:server][:nagios][name] = {
+    :command => p[0],
+    :warning => p[1],
+    :critical => p[2],
+    :check_interval => p[3].to_i,
+    :notification_interval => p[4].to_i,
+    :enabled => enabled,
+  }
+end
+
+# calculate a bunch of thresholds from mysql attributes
+default[:mysql][:server][:nagios][:conns][:warning] = (node[:mysql][:server][:max_connections].to_i * 0.80).to_i
+default[:mysql][:server][:nagios][:conns][:critical] = (node[:mysql][:server][:max_connections].to_i * 0.95).to_i
+
+# disable checks if they are not supported by the current configuration
+default[:mysql][:server][:nagios][:slow][:enabled] = node[:mysql][:server][:long_query_time].to_i > 0
+
+if node[:mysql][:server][:detailed_monitoring]
+  default[:mysql][:server][:nagios][:bphit][:enabled]   = node[:mysql][:server][:skip_innodb]
+  default[:mysql][:server][:nagios][:bpwait][:enabled]  = node[:mysql][:server][:skip_innodb]
+  default[:mysql][:server][:nagios][:logwait][:enabled] = node[:mysql][:server][:skip_innodb]
+end
+
+default[:mysql][:server][:nagios][:slaveio][:enabled]  = node[:mysql][:server][:slave_enabled]
+default[:mysql][:server][:nagios][:slavesql][:enabled] = node[:mysql][:server][:slave_enabled]
+default[:mysql][:server][:nagios][:slavelag][:enabled] = node[:mysql][:server][:slave_enabled]
