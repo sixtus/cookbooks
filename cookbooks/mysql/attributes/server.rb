@@ -11,12 +11,12 @@ default[:mysql][:server][:includedir] = "/usr/include/mysql"
 default[:mysql][:server][:datadir] = "/var/lib/mysql"
 default[:mysql][:server][:tmpdir] = "/var/tmp"
 
-# general security & performance tuning
+# Startup & Security
 default[:mysql][:server][:skip_networking] = false
 default[:mysql][:server][:bind_address] = "127.0.0.1"
 default[:mysql][:server][:skip_innodb] = false
 
-# replication and binary log
+# Replication & Binary Log
 default[:mysql][:server][:server_id] = IPAddr.new(node[:ipaddress]).to_i
 default[:mysql][:server][:slave_enabled] = false
 default[:mysql][:server][:log_bin] = false
@@ -32,57 +32,60 @@ if node[:mysql][:server][:slave_enabled]
   set[:mysql][:server][:relay_log] = true
 end
 
-# slow query log
-default[:mysql][:server][:long_query_time] = "0"
+# General Performance Options
+default[:mysql][:server][:open_files_limit] = "4096"
+default[:mysql][:server][:table_open_cache] = "1024"
+default[:mysql][:server][:table_definition_cache] = "4096"
+default[:mysql][:server][:thread_cache_size] = "16"
+default[:mysql][:server][:tmp_table_size] = "64M"
+default[:mysql][:server][:max_heap_table_size] = "64M"
+default[:mysql][:server][:group_concat_max_len] = "1024"
 
-# client connection optimization
+if node[:mysql][:server][:max_heap_table_size].to_bytes < node[:mysql][:server][:tmp_table_size].to_bytes
+  set[:mysql][:server][:max_heap_table_size] = node[:mysql][:server][:tmp_table_size]
+end
+
+# Client Connection Optimization
 default[:mysql][:server][:max_connections] = "128"
 default[:mysql][:server][:max_allowed_packet] = "16M"
-default[:mysql][:server][:net_buffer_length] = "8K"
 default[:mysql][:server][:wait_timeout] = "28800"
 default[:mysql][:server][:connect_timeout] = "10"
 
-# key buffer optimization
+# Slow Query Log
+default[:mysql][:server][:long_query_time] = "0"
+
+# Key Buffer Optimization
 default[:mysql][:server][:key_buffer_size] = "64M"
 
-# query cache optimization
+# Query Cache Optimization
 default[:mysql][:server][:query_cache_size] = "128M"
 default[:mysql][:server][:query_cache_type] = 1
 default[:mysql][:server][:query_cache_limit] = "4M"
 
-# sort optimization
+if node[:mysql][:server][:query_cache_type] == 0
+  set[:mysql][:server][:query_cache_size] = 0
+end
+
+# Sort Optimization
 default[:mysql][:server][:sort_buffer_size] = "4M"
 default[:mysql][:server][:read_buffer_size] = "1M"
 default[:mysql][:server][:read_rnd_buffer_size] = "512K"
 default[:mysql][:server][:myisam_sort_buffer_size] = "64M"
 
-# join optimization
+# Join Optimization
 default[:mysql][:server][:join_buffer_size] = "2M"
 
-# misc
-default[:mysql][:server][:group_concat_max_len] = "1024"
-
-# open files & table cache
-default[:mysql][:server][:open_files_limit] = "4096"
-default[:mysql][:server][:table_cache] = "1024"
-
-# temporary tables
-default[:mysql][:server][:tmp_table_size] = "64M"
-default[:mysql][:server][:max_heap_table_size] = "64M"
-
-# thread cache
-default[:mysql][:server][:thread_cache_size] = "16"
-
-# storage engine
-default[:mysql][:server][:default_storage_engine] = "MyISAM"
-
-# innodb
+# InnoDB Options
 default[:mysql][:server][:innodb_file_per_table] = true
 default[:mysql][:server][:innodb_data_home_dir] = "/var/lib/mysql"
 default[:mysql][:server][:innodb_buffer_pool_size] = "512M"
 default[:mysql][:server][:innodb_log_file_size] = "256M"
 default[:mysql][:server][:innodb_flush_log_at_trx_commit] = "1"
+default[:mysql][:server][:innodb_thread_concurrency] = node[:cpu][:total] * 2 + 1
 default[:mysql][:server][:innodb_lock_wait_timeout] = "50"
+
+# Miscellaneous Options
+default[:mysql][:server][:default_storage_engine] = "MyISAM"
 
 # backup
 default[:mysql][:backupdir] = "/var/backup/mysql"
