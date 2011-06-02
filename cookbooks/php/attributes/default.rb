@@ -1,6 +1,5 @@
 default[:php][:default_use_flags] = %w(-* bzip2 cli crypt ctype curl exif filter ftp gd hash iconv json mysql mysqli mysqlnd nls pcre pdo posix reflection session simplexml sockets spl sqlite3 ssl tokenizer truetype unicode xml zlib)
 default[:php][:use_flags] = []
-default[:php][:sapi] = "fpm"
 
 default[:php][:tmp_dir] = "/var/tmp/php"
 
