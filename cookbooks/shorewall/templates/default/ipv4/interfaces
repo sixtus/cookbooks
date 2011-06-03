@@ -9,11 +9,11 @@
 ###############################################################################
 #ZONE	INTERFACE	BROADCAST	OPTIONS
 
-net eth0 - tcpflags,blacklist,routefilter,nosmurfs,logmartians
+net eth0 - tcpflags,routefilter,nosmurfs,logmartians
 
 <% if node[:local_ipaddress] %>
-<% if node[:local_interface] == :eth1 %>
-loc eth1 - tcpflags,blacklist,routefilter,nosmurfs,logmartians
+<% if node[:local_interface] != "eth0" %>
+loc <%= node[:local_interface] %> - tcpflags,routefilter,nosmurfs,logmartians
 <% end %>
 <% end %>
 

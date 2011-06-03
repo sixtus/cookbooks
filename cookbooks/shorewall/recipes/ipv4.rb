@@ -27,6 +27,7 @@ template "/etc/shorewall/shorewall.conf" do
 end
 
 %w(
+  accounting
   hosts
   interfaces
   policy
@@ -45,4 +46,9 @@ end
 
 service "shorewall" do
   action [:enable, :start]
+end
+
+munin_plugin "shorewall_accounting" do
+  source "munin/shorewall_accounting"
+  config ["user root"]
 end

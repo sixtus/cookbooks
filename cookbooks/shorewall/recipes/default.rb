@@ -1,4 +1,6 @@
 # reset all attributes to make sure cruft is being deleted on chef-client run
+node[:shorewall][:accounting] = {}
+node[:shorewall6][:accounting] = {}
 node[:shorewall][:hosts] = {}
 node[:shorewall6][:hosts] = {}
 node[:shorewall][:interfaces] = {}
@@ -65,6 +67,26 @@ end.each do |n|
     shorewall6_rule "munin-master@#{n[:fqdn]}" do
       source "net:<#{n[:ip6address]}>"
       destport "4949"
+    end
+  end
+end
+
+# accounting
+node[:network][:interfaces].each do |int, cfg|
+  cfg[:addresses].each do |adr, net|
+    next unless net[:family] == "inet"
+    next if cfg[:flags].include?("LOOPBACK")
+
+    if net[:private]
+      shorewall_accounting "loc-#{adr}" do
+        target "loc"
+        address adr
+      end
+    else
+      shorewall_accounting "net-#{adr}" do
+        target "net"
+        address adr
+      end
     end
   end
 end
