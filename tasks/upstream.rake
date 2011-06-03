@@ -6,9 +6,7 @@ namespace :upstream do
       # make private repository the new origin
       sh("git remote rm origin")
       sh("git remote add origin #{args.repo}")
-      sh("git config branch.master.remote origin")
-      sh("git config branch.master.merge refs/heads/master")
-      sh("git push origin master")
+      sh("git push -u origin master")
     end
 
     # add public cookbooks as upstream branch
