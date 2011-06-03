@@ -1,6 +1,9 @@
 # to make things faster, add the node list to our run_state for later use
 node.run_state[:nodes] = search(:node, "ipaddress:[* TO *]")
 
+# load ohai plugins first
+include_recipe "ohai"
+
 begin
   include_recipe "base::#{node[:platform]}"
 rescue
