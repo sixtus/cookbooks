@@ -21,12 +21,17 @@ iface = Mash.new
 popen4("ip addr list") do |pid, stdin, stdout, stderr|
   stdin.close
   cint = nil
-  prim4 = prim6 = false
+  seen = nil
 
   stdout.each do |line|
     if line =~ /^[0-9]+:\s+([0-9a-zA-Z]+):\s+<(.+)> mtu (\d+)/
       cint = $1
-      prim4 = prim6 = true
+      seen = {
+        :primary4 => false,
+        :primary6 => false,
+        :local4 => false,
+        :local6 => false,
+      }
       iface[cint] = Mash.new
       iface[cint][:addresses] = Mash.new
       iface[cint][:flags] = $2.split(',')
@@ -44,24 +49,44 @@ popen4("ip addr list") do |pid, stdin, stdout, stderr|
     end
 
     if line =~ /inet (\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})(\/(\d+))?/
-      prefixlen = $3.nil? ? "32" : $3
-      iface[cint][:addresses][$1] = {
+      adr, prefix = $1, $3
+      prefix ||= "32"
+
+      if rfc1918?(adr)
+        primary = !seen[:local4]
+        seen[:local4] = true
+      else
+        primary = !seen[:primary4]
+        seen[:primary4] = true
+      end
+
+      iface[cint][:addresses][adr] = {
         "family" => "inet",
-        "prefixlen" => prefixlen,
+        "prefixlen" => prefix,
         "scope" => "global",
-        "primary" => prim4,
-        "private" => rfc1918?($1),
+        "primary" => primary,
+        "private" => rfc1918?(adr),
       }
       prim4 = false
     end
 
     if line =~ /inet6 ([a-f0-9\:]+)\/(\d+) scope (\w+)/
-      iface[cint][:addresses][$1] = {
+      adr, prefix, scope = $1, $2, $3
+
+      if rfc1918?(adr)
+        primary = !seen[:local6]
+        seen[:local6] = true
+      else
+        primary = !seen[:primary6]
+        seen[:primary6] = true
+      end
+
+      iface[cint][:addresses][adr] = {
         "family" => "inet6",
-        "prefixlen" => $2,
-        "scope" => $3,
+        "prefixlen" => prefix,
+        "scope" => scope,
         "primary" => prim6,
-        "private" => rfc1918?($1),
+        "private" => rfc1918?(adr),
       }
       prim6 = false
     end
