@@ -143,6 +143,8 @@ nginx_server "chef-server-api" do
 end
 
 # CouchDB maintenance
+require 'open-uri'
+
 http_request "compact chef couchDB" do
   action :post
   url "#{Chef::Config[:couchdb_url]}/chef/_compact"
@@ -153,7 +155,7 @@ http_request "compact chef couchDB" do
       f = open("#{Chef::Config[:couchdb_url]}/chef")
       disk_size = JSON::parse(f.read)["disk_size"]
       f.close
-    rescue OpenURI::HTTPError
+    rescue ::OpenURI::HTTPError
       nil
     end
 
@@ -181,7 +183,7 @@ end
         f = open("#{Chef::Config[:couchdb_url]}/chef/_design/#{view}/_info")
         disk_size = JSON::parse(f.read)["view_index"]["disk_size"]
         f.close
-      rescue OpenURI::HTTPError
+      rescue ::OpenURI::HTTPError
         nil
       end
 
