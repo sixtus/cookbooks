@@ -1,5 +1,7 @@
 tag("nagios-master")
 
+include_recipe "apache::php"
+
 portage_package_use "net-analyzer/nagios-core" do
   use %w(apache2)
 end
@@ -143,8 +145,6 @@ service "nsca" do
 end
 
 # apache specifics
-include_recipe "apache::php"
-
 group "nagios" do
   members %w(apache)
   append true
