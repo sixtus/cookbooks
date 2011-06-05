@@ -39,6 +39,11 @@ end
   end
 end
 
+# old cruft, filename is actually 20_mod_fastcgi_handler.conf
+file "/etc/apache2/modules.d/10_mod_fastcgi_handler.conf" do
+  action :delete
+end
+
 %w(
   00_default_settings
   00_error_documents
