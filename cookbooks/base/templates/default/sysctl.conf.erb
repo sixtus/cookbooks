@@ -9,6 +9,10 @@
 # Look in /proc/sys/ for all the things you can setup.
 #
 
+# promote secondary addresses
+net.ipv4.conf.default.promote_secondaries = 1
+net.ipv4.conf.all.promote_secondaries = 1
+
 # enable source route verification
 net.ipv4.conf.default.rp_filter = 1
 net.ipv4.conf.all.rp_filter = 1
