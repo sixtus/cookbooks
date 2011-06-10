@@ -19,13 +19,6 @@ action :create do
     user rvm[:user]
   end
 
-  portage_preserve_libs "rvm-#{rvm[:user]}" do
-    paths [
-      "#{rvm[:path]}/rubies",
-      "#{rvm[:path]}/gems",
-    ]
-  end
-
   if new_resource.default
     rvm_execute "setting default interpreter" do
       code "rvm --default #{ruby_config[:version]}"

@@ -23,6 +23,13 @@ action :create do
     user rvm[:user]
     group rvm[:group]
   end
+
+  portage_preserve_libs "rvm-#{rvm[:user]}" do
+    paths [
+      "#{rvm[:path]}/rubies",
+      "#{rvm[:path]}/gems",
+    ]
+  end
 end
 
 action :delete do
