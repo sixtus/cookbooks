@@ -1,12 +1,11 @@
-Description
-===========
+Backup
+======
 
 This cookbook provides a sftp-only account for client nodes that wish to store
 backups on this node.
 
-
 Usage
-=====
+-----
 
 You need to create a backup entry in the users databag for this recipe to work:
 ::
