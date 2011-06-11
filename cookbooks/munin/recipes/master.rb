@@ -34,8 +34,31 @@ template "/etc/munin/munin.conf" do
 end
 
 cron "munin-cron" do
-  command "/usr/bin/munin-cron &>/dev/null"
+  action :delete
+  user "munin"
+end
+
+cron "munin-update" do
+  command "/usr/libexec/munin/munin-update"
+  minute "*/1"
+  user "munin"
+end
+
+cron "munin-limits" do
+  command "/usr/libexec/munin/munin-limits"
+  minute "*/2"
+  user "munin"
+end
+
+cron "munin-graph" do
+  command "/usr/bin/nice /usr/libexec/munin/munin-graph --cron"
   minute "*/5"
+  user "munin"
+end
+
+cron "munin-html" do
+  command "/usr/bin/nice /usr/libexec/munin/munin-html"
+  minute "*/15"
   user "munin"
 end
 
