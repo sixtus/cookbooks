@@ -32,6 +32,11 @@ default[:sysctl][:net][:netfilter][:nf_conntrack_max] = 262144
 default[:sysctl][:kernel][:sysrq] = 1
 default[:sysctl][:kernel][:panic] = 60
 
+# shared memory sizes
+default_unless[:sysctl][:kernel][:shmall] = 2*1024*1024 #pages
+default_unless[:sysctl][:kernel][:shmmax] = 32*1024*1024 #bytes
+default_unless[:sysctl][:kernel][:shmmni] = 4096
+
 # rc_sys
 if node[:virtualization][:role] == "guest"
   default[:openrc][:sys] = case node[:virtualization][:system]
