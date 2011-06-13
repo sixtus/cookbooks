@@ -178,3 +178,8 @@ file "/var/www/localhost/htdocs/index.php" do
   group "root"
   mode "0644"
 end
+
+file "/var/www/localhost/htdocs/index.html" do
+  action :delete
+end
+
