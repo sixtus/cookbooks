@@ -13,9 +13,10 @@ default[:timezone] = "Europe/Berlin"
 # custom /etc/hosts entries
 default[:base][:additional_hosts] = []
 
-# ohai does not detect Linux-VServer
+# backwards compatibility (ohai-0.6 introduces linux-vserver detection)
 if File.exists?("/proc/self/vinfo")
-  set[:virtualization][:emulator] = "vserver"
+  set[:virtualization][:emulator] = "linux-vserver"
+  set[:virtualization][:system] = "linux-vserver"
   if File.exists?("/proc/virtual")
     set[:virtualization][:role] = "host"
   else
@@ -30,3 +31,15 @@ default[:sysctl][:net][:ipv4][:ip_forward] = 0
 default[:sysctl][:net][:netfilter][:nf_conntrack_max] = 262144
 default[:sysctl][:kernel][:sysrq] = 1
 default[:sysctl][:kernel][:panic] = 60
+
+# rc_sys
+if node[:virtualization][:role] == "guest"
+  default[:openrc][:sys] = case node[:virtualization][:system]
+                             when "linux-vserver"
+                               "vserver"
+                             else
+                               raise "Unsupported virtualization system: #{node[:virtualization][:system]}"
+                             end
+else
+  default[:openrc][:sys] = ""
+end

@@ -35,12 +35,14 @@ include_recipe "portage::porticron"
   package pkg
 end
 
-file "/etc/profile.d/prompt.sh" do
-  action :delete
-  backup 0
+template "/etc/rc.conf" do
+  source "rc.conf"
+  owner "root"
+  group "root"
+  mode "0644"
 end
 
-if node[:virtualization][:emulator] == "vserver" and node[:virtualization][:role] == "guest"
+if node[:virtualization][:system] == "linux-vserver" and node[:virtualization][:role] == "guest"
   file "/etc/init.d/shutdown.sh" do
     content "exit 0\n"
     mode "0755"

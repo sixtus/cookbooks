@@ -55,7 +55,7 @@ template "/etc/hosts" do
   owner "root"
   group "root"
   mode "0644"
-  source "hosts.erb"
+  source "hosts"
   variables :nodes => node.run_state[:nodes]
 end
 
@@ -66,8 +66,13 @@ file "/etc/resolv.conf" do
   content "search #{node[:domain]}\nnameserver 8.8.8.8\nnameserver 8.8.4.4\n"
 end
 
-if node[:virtualization][:role] == "guest" and node[:virtualization][:emulator] = "vserver"
+if node[:virtualization][:role] == "guest" and node[:virtualization][:system] == "linux-vserver"
   execute "sysctl-reload" do
+    command "/bin/true"
+    action :nothing
+  end
+
+  execute "init-reload" do
     command "/bin/true"
     action :nothing
   end
@@ -76,33 +81,26 @@ else
     command "/sbin/sysctl -p /etc/sysctl.conf"
     action :nothing
   end
-end
 
-template "/etc/sysctl.conf" do
-  owner "root"
-  group "root"
-  mode "0644"
-  source "sysctl.conf.erb"
-  notifies :run, "execute[sysctl-reload]"
-end
-
-if node[:virtualization][:emulator] == "vserver" and node[:virtualization][:role] == "guest"
-  execute "init-reload" do
-    command "/bin/true"
-    action :nothing
-  end
-else
   execute "init-reload" do
     command "/sbin/telinit q"
     action :nothing
   end
 end
 
+template "/etc/sysctl.conf" do
+  owner "root"
+  group "root"
+  mode "0644"
+  source "sysctl.conf"
+  notifies :run, "execute[sysctl-reload]"
+end
+
 template "/etc/inittab" do
   owner "root"
   group "root"
   mode "0644"
-  source "inittab.erb"
+  source "inittab"
   notifies :run, "execute[init-reload]"
   backup 0
 end
@@ -121,7 +119,7 @@ template "/etc/locale.gen" do
   owner "root"
   group "root"
   mode "0644"
-  source "locale.gen.erb"
+  source "locale.gen"
   notifies :run, "execute[locale-gen]"
 end
 
