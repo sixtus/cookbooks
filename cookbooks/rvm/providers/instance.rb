@@ -3,10 +3,6 @@ include ChefUtils::RVM
 action :create do
   rvm = infer_vars(new_resource.name, new_resource.version)
 
-  file rvm[:rvmrc] do
-    action :delete
-  end
-
   bash "install rvm-#{rvm[:version]}" do
     code <<-EOS
     export USER=#{rvm[:user]}
