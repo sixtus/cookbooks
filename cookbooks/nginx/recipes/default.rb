@@ -55,6 +55,18 @@ directory "/var/cache/nginx" do
   mode "0755"
 end
 
+ssl_certificate "/etc/ssl/nginx/nginx" do
+  cn node[:fqdn]
+  owner "nginx"
+  group "nginx"
+end
+
+%w(csr pem).each do |f|
+  file "/etc/ssl/nginx/nginx.#{f}" do
+    action :delete
+  end
+end
+
 template "/etc/nginx/nginx.conf" do
   source "nginx.conf.erb"
   owner "root"
