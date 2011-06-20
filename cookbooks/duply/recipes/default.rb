@@ -12,6 +12,17 @@ package "app-backup/duply"
   end
 end
 
+directory "/var/log/duply" do
+  owner "root"
+  group "root"
+  mode "0755"
+end
+
+# nagios checks
+nagios_plugin "duplybackup" do
+  source "check_duplybackup"
+end
+
 node.set[:lftp][:bookmarks][:backup] = node[:backup][:target_base_url].sub(/^ssh:/, "sftp:")
 
 node[:backup][:configs].each do |name, params|
@@ -19,6 +30,12 @@ node[:backup][:configs].each do |name, params|
     owner "root"
     group "root"
     mode "0700"
+  end
+
+  directory "/var/log/duply/#{name}" do
+    owner "root"
+    group "root"
+    mode "0755"
   end
 
   template "/etc/duply/#{name}/conf" do
@@ -30,10 +47,20 @@ node[:backup][:configs].each do |name, params|
   end
 
   cron_daily "duply-bkp-#{name}" do
-    command "/usr/bin/duply #{name} bkp | mailx -s 'Backup report for #{name} on #{node[:fqdn]}' #{node[:contacts][:hostmaster]}"
+    command "/usr/bin/duply #{name} bkp > /var/log/duply/#{name}/#{Time.new.strftime('%Y-%m-%d')}.log"
   end
 
   cron_weekly "duply-purge-#{name}" do
     command "/usr/bin/duply #{name} purge-full --force &> /dev/null"
+  end
+
+  nrpe_command "check_duplybackup_#{name}" do
+    command "/usr/lib/nagios/plugins/check_duplybackup #{name}"
+  end
+
+  nagios_service "DUPLYBACKUP-#{name.upcase}" do
+    check_command "check_nrpe!check_duplybackup_#{name}"
+    normal_check_interval 1440
+    notification_interval 180
   end
 end

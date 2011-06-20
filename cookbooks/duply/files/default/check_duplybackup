@@ -1,0 +1,21 @@
+#!/bin/sh
+
+date=`date +%Y-%m-%d`
+
+log=/var/log/duply/${1}/${date}.log
+
+if [ ! -e $log ]
+then
+	echo "CRITICAL - Duply backup logfile $log not found. Check file and permissions."
+	exit 2
+else
+	grep -q -o "Finished state OK at" $log
+	if [ $? -ne 0 ]
+		then
+			echo "WARNING - Duply backup logfile contains errors. Check $log!"
+			exit 1
+		else
+			echo "OK - Duply backup completed without errors"
+			exit 0
+	fi
+fi
