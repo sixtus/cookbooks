@@ -1,3 +1,4 @@
+package "net-misc/openrdate"
 package "net-misc/openntpd"
 
 directory "/var/lib/openntpd/chroot" do
@@ -32,6 +33,10 @@ directory "/var/lib/openntpd/chroot" do
   group "root"
   mode "0755"
   recursive true
+end
+
+service "openrdate" do
+  action [:enable, :start]
 end
 
 service "ntpd" do
