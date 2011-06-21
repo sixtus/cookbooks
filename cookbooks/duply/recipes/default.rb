@@ -42,7 +42,7 @@ node[:backup][:configs].each do |name, params|
   end
 
   cron_daily "duply-bkp-#{name}" do
-    command "/usr/bin/duply #{name} bkp > /var/log/duply/#{name}/#{Time.new.strftime('%Y-%m-%d')}.log"
+    command "/usr/bin/duply #{name} bkp > /var/log/duply/#{name}/$(date +%Y-%m-%d).log"
   end
 
   cron_weekly "duply-purge-#{name}" do
