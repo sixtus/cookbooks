@@ -12,12 +12,6 @@ package "app-backup/duply"
   end
 end
 
-directory "/var/log/duply" do
-  owner "root"
-  group "root"
-  mode "0755"
-end
-
 # nagios checks
 nagios_plugin "duplybackup" do
   source "check_duplybackup"
@@ -36,6 +30,7 @@ node[:backup][:configs].each do |name, params|
     owner "root"
     group "root"
     mode "0755"
+    recursive true
   end
 
   template "/etc/duply/#{name}/conf" do
