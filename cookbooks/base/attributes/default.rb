@@ -17,6 +17,10 @@ default[:locales] = [
 # custom /etc/hosts entries
 default[:base][:additional_hosts] = []
 
+# nameservers and search domain
+default[:resolv][:search] = [node[:domain]]
+default[:resolv][:nameservers] = %w(8.8.8.8 8.8.4.4)
+
 # sysctl attributes
 default[:sysctl][:net][:ipv4][:ip_forward] = 0
 default[:sysctl][:net][:netfilter][:nf_conntrack_max] = 262144

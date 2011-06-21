@@ -20,11 +20,12 @@
 <%= node[:ip6address] %> <%= node[:fqdn] %> <%= node[:hostname] %>
 <% end %>
 
+<%= if node[:cluster][:name] != "default" %>
 # local nodes in cluster <%= node[:cluster][:name] %>
 <% @nodes.sort_by { |n| n[:hostname] }.each do |n| %>
-<% n.default[:cluster][:name] = "default" unless n[:cluster] %>
 <% if n[:cluster][:name] == node[:cluster][:name] and n[:local_ipaddress] %>
 <%= n[:local_ipaddress] %> <%= n[:hostname] %>.local
+<% end %>
 <% end %>
 <% end %>
 

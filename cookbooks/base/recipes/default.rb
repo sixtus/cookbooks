@@ -17,7 +17,7 @@ node[:packages].each do |pkg|
   package pkg
 end
 
-# initialize /etc with git to keep trackof changes
+# initialize /etc with git to keep track of changes
 execute "git init" do
   cwd "/etc"
   creates "/etc/.git"
@@ -63,11 +63,11 @@ template "/etc/hosts" do
   variables :nodes => node.run_state[:nodes]
 end
 
-file "/etc/resolv.conf" do
+template "/etc/resolv.conf" do
   owner "root"
   group "root"
   mode "0644"
-  content "search #{node[:domain]}\nnameserver 8.8.8.8\nnameserver 8.8.4.4\n"
+  source "resolv.conf"
 end
 
 # configure and update sysctl/init
@@ -162,25 +162,11 @@ template "/etc/rc.conf" do
   mode "0644"
 end
 
-if node[:virtualization][:system] == "linux-vserver" and node[:virtualization][:role] == "guest"
-  file "/etc/init.d/shutdown.sh" do
-    content "exit 0\n"
+%w(shutdown reboot).each do |t|
+  template "/etc/init.d/#{t}.sh" do
+    source "#{t}.sh"
     mode "0755"
     backup 0
-  end
-
-  file "/etc/init.d/reboot.sh" do
-    content "exit 0\n"
-    mode "0755"
-    backup 0
-  end
-else
-  %w(shutdown reboot).each do |t|
-    cookbook_file "/etc/init.d/#{t}.sh" do
-      source "#{t}.sh"
-      mode "0755"
-      backup 0
-    end
   end
 end
 
@@ -192,11 +178,8 @@ end
   end
 end
 
-file "/etc/conf.d/local" do
-  action :delete
-end
-
 %w(
+  /etc/conf.d/local
   /etc/init.d/net.lo
   /etc/init.d/net.eth0
   /etc/init.d/net.eth1
