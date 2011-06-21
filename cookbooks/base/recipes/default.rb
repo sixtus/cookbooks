@@ -4,17 +4,20 @@ node.run_state[:nodes] = search(:node, "ipaddress:[* TO *]")
 # load ohai plugins first
 include_recipe "ohai"
 
-begin
-  include_recipe "base::#{node[:platform]}"
-rescue
-  raise "The base module has not been ported to your platform (#{node[:platform]})"
-end
-
+# load base recipes
+include_recipe "portage"
+include_recipe "portage::porticron"
 include_recipe "git"
 include_recipe "lftp"
 include_recipe "tmux"
 include_recipe "vim"
 
+# install base packages
+node[:packages].each do |pkg|
+  package pkg
+end
+
+# initialize /etc with git to keep trackof changes
 execute "git init" do
   cwd "/etc"
   creates "/etc/.git"
@@ -51,6 +54,7 @@ EOS
   not_if { %x(env GIT_DIR=/etc/.git GIT_WORK_TREE=/etc git status --porcelain).strip.empty? }
 end
 
+# configure the resolver
 template "/etc/hosts" do
   owner "root"
   group "root"
@@ -66,6 +70,7 @@ file "/etc/resolv.conf" do
   content "search #{node[:domain]}\nnameserver 8.8.8.8\nnameserver 8.8.4.4\n"
 end
 
+# configure and update sysctl/init
 if node[:virtualization][:role] == "guest" and node[:virtualization][:system] == "linux-vserver"
   execute "sysctl-reload" do
     command "/bin/true"
@@ -105,6 +110,7 @@ template "/etc/inittab" do
   backup 0
 end
 
+# localization/i18n
 link "/etc/localtime" do
   to "/usr/share/zoneinfo/#{node[:timezone]}"
 end
@@ -115,7 +121,6 @@ execute "locale-gen" do
 end
 
 template "/etc/locale.gen" do
-  # TODO: make it configurable
   owner "root"
   group "root"
   mode "0644"
@@ -123,6 +128,7 @@ template "/etc/locale.gen" do
   notifies :run, "execute[locale-gen]"
 end
 
+# TODO: move to account cookbook
 %w(/root /root/.ssh).each do |dir|
   directory dir do
     owner "root"
@@ -131,6 +137,7 @@ end
   end
 end
 
+# these links are missing in udev
 link "/dev/fd" do
   to "/proc/self/fd"
 end
@@ -147,8 +154,109 @@ link "/dev/stderr" do
   to "/dev/fd/2"
 end
 
+# configure openrc
+template "/etc/rc.conf" do
+  source "rc.conf"
+  owner "root"
+  group "root"
+  mode "0644"
+end
+
+if node[:virtualization][:system] == "linux-vserver" and node[:virtualization][:role] == "guest"
+  file "/etc/init.d/shutdown.sh" do
+    content "exit 0\n"
+    mode "0755"
+    backup 0
+  end
+
+  file "/etc/init.d/reboot.sh" do
+    content "exit 0\n"
+    mode "0755"
+    backup 0
+  end
+else
+  %w(shutdown reboot).each do |t|
+    cookbook_file "/etc/init.d/#{t}.sh" do
+      source "#{t}.sh"
+      mode "0755"
+      backup 0
+    end
+  end
+end
+
+%w(hostname hwclock).each do |f|
+  template "/etc/conf.d/#{f}" do
+    source "#{f}.confd"
+    mode "0644"
+    backup 0
+  end
+end
+
+file "/etc/conf.d/local" do
+  action :delete
+end
+
+%w(
+  /etc/init.d/net.lo
+  /etc/init.d/net.eth0
+  /etc/init.d/net.eth1
+  /etc/runlevels/boot/net.lo
+  /etc/runlevels/boot/net.eth0
+  /etc/runlevels/boot/net.eth1
+  /etc/runlevels/default/net.lo
+  /etc/runlevels/default/net.eth0
+  /etc/runlevels/default/net.eth1
+  /etc/conf.d/net
+).each do |f|
+  file f do
+    action :delete
+    backup 0
+  end
+end
+
+%w(devfs dmesg udev).each do |f|
+  link "/etc/runlevels/sysinit/#{f}" do
+    to "/etc/init.d/#{f}"
+  end
+end
+
+%w(
+  bootmisc
+  consolefont
+  fsck
+  hostname
+  hwclock
+  keymaps
+  localmount
+  modules
+  mtab
+  network
+  procfs
+  root
+  swap
+  sysctl
+  termencoding
+  urandom
+).each do |f|
+  link "/etc/runlevels/boot/#{f}" do
+    to "/etc/init.d/#{f}"
+  end
+end
+
+%w(local netmount).each do |f|
+  link "/etc/runlevels/default/#{f}" do
+    to "/etc/init.d/#{f}"
+  end
+end
+
+%w(killprocs mount-ro savecache).each do |f|
+  link "/etc/runlevels/shutdown/#{f}" do
+    to "/etc/init.d/#{f}"
+  end
+end
+
 # enable munin plugins
-base_plugins = %w(
+munin_plugins = %w(
   cpu
   df
   entropy
@@ -161,14 +269,14 @@ base_plugins = %w(
 )
 
 if node[:virtualization][:role] == "host"
-  base_plugins += %w(
+  munin_plugins += %w(
     iostat
     swap
     vmstat
   )
 end
 
-base_plugins.each do |p|
+munin_plugins.each do |p|
   munin_plugin p
 end
 

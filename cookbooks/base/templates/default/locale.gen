@@ -15,5 +15,4 @@
 # rebuilt for you.  After updating this file, you can simply run `locale-gen`
 # yourself instead of re-emerging glibc.
 
-en_US.UTF-8 UTF-8
-de_DE.UTF-8 UTF-8
+<%= node[:locales].join("\n") %>
