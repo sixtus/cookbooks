@@ -1,14 +1,60 @@
 Overview
 ========
 
+
 Key Contacts
 ------------
+
+The IT Operations Team consists of the following people:
+
++------------------+-----------------------------------+----------------+--------------------------+
+| Name             | E-Mail address                    | Mobile         | Role                     |
++==================+===================================+================+==========================+
+| John Doe         | john.doe@example.com              | +4912345678901 | Operations Manager       |
++------------------+-----------------------------------+----------------+--------------------------+
+| Jane Smith       | jane.smith@example.com            | +4912345678902 | Administrator            |
++------------------+-----------------------------------+----------------+--------------------------+
+
 
 Hours of Operations
 -------------------
 
-Operations Calendar
--------------------
+The IT Operations Team is responsible for monitoring the computer systems 24
+hours a day, 7 days a week. However, non-critical computer systems and other
+enquiries will only be handled during office hours, which are as follows:
+
+* **Office Hours**: 7:00 - 22:00 CET
+* **Non-office Hours**: 22:00 - 7:00 CET
+
+
+Emergency Response Team
+-----------------------
+
+The Emergency Response Team (ERT) is responsible for handling security relevant
+occurrences and unacceptable downtime of computer systems.  This includes
+the following tasks:
+
+ * Fast and efficient help as reaction on occurring events (e.g.
+   hacking-attacks, critical security holes, unplanned downtime, etc.)
+ * Blocking of devices or accounts during severe incidents.
+
+The ERT is available 24 hours a day, 7 days a week. For unplanned downtime of
+critical computer systems automated notification has been setup. The team will
+also respond to other enquiries during non-office hours. However, one should
+refrain from enquiries that are not highly critical. Instead, these can be
+handled by the Operations Team during office hours.
+
+First-level support is handled according to the following schedule. It may,
+however, be escalated to any of the key contacts specified above.
+
++------------------+-----+-----+-----+-----+-----+-----+-----+
+| Time Period      | Mon | Tue | Wed | Thu | Fri | Sat | Sun |
++==================+=====+=====+=====+=====+=====+=====+=====+
+| Office Hours     | JD  | JD  | JD  | JS  | JS  | JS  | JS  |
++------------------+-----+-----+-----+-----+-----+-----+-----+
+| Non-office Hours | JD  | JD  | JD  | JS  | JS  | JS  | JS  |
++------------------+-----+-----+-----+-----+-----+-----+-----+
+
 
 System Classification
 ---------------------
@@ -48,11 +94,11 @@ Responsibilities
 ----------------
 
 The following roles and responsibilities for installing, managing, and
-sanitizing the university's computer systems establish the hierarchy for
+sanitizing the company's computer systems establish the hierarchy for
 compliance with this policy.
 
 **User**
-  Anyone using a company computer systems. User responsibilities include:
+  Anyone using a company computer system. User responsibilities include:
 
   * Follow the operating procedures defined by the computer system manager.
   * Comply with information security policies and best practices to insure the
@@ -80,11 +126,11 @@ compliance with this policy.
   The person who maintains this policy and has the responsibility for company
   computer systems. Manager responsibilities include:
 
-  * Classify the computer system(s).
+  * Classify the computer systems.
   * Establish the necessary controls to protect the availability of the
-    computer system.
+    computer systems.
   * Implement information systems security policies and best practices
-    to protect the computer system.
+    to protect the computer systems.
   * Define and establish the appropriate business use of the computer
-    system.
+    systems.
   * Report suspected breached or compromised security to the CTO/CEO.
