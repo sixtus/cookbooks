@@ -12,6 +12,12 @@ server {
   ssl_certificate     /etc/ssl/nginx/<%= node[:fqdn] %>.crt;
   ssl_certificate_key /etc/ssl/nginx/<%= node[:fqdn] %>.key;
 
+  location /documentation {
+    alias /var/www/documentation;
+    auth_basic "Restricted";
+    auth_basic_user_file "/var/www/documentation/.htpasswd";
+  }
+
   location / {
     try_files $uri @backend;
   }

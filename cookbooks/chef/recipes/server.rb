@@ -122,6 +122,30 @@ end
   end
 end
 
+# documentation
+users = search(:users, "tags:hostmaster AND password:[* TO *]")
+
+template "/var/www/documentation/.htpasswd" do
+  source "htpasswd"
+  owner "root"
+  group "nginx"
+  mode "0640"
+  variables :users => users
+end
+
+package "dev-python/sphinx"
+
+remote_directory "/var/www/documentation" do
+  source "documentation/html"
+  files_backup 0
+  files_owner "root"
+  files_group "root"
+  files_mode "0644"
+  owner "root"
+  group "root"
+  mode "0755"
+end
+
 # nginx SSL proxy
 ssl_ca "/etc/ssl/nginx/#{node[:fqdn]}-ca"
 

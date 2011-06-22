@@ -35,7 +35,7 @@ end
 namespace "load" do
 
   desc "Upload all entities"
-  task :all => [ :cookbooks, :nodes, :roles, :databags ]
+  task :all => [ :documentation, :cookbooks, :nodes, :roles, :databags ]
 
   desc "Upload a single cookbook"
   task :cookbook => [ :pull ]
@@ -165,6 +165,12 @@ namespace "load" do
       args = Rake::TaskArguments.new([:name], [bag])
       Rake::Task['load:databag'].execute(args)
     end
+  end
+
+  desc "Generate documentation"
+  task :documentation => [ :pull ]
+  task :documentation do
+    sh("make -C #{TOPDIR}/documentation html")
   end
 
 end

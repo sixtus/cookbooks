@@ -5,7 +5,7 @@
 SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 PAPER         =
-BUILDDIR      = build
+BUILDDIR      = ../cookbooks/chef/files/default/documentation
 
 # Internal variables.
 PAPEROPT_a4     = -D latex_paper_size=a4
