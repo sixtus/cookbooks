@@ -14,17 +14,8 @@ cookbook_file "/etc/vservers/.defaults/fstab" do
   mode "0644"
 end
 
-content = nil
-
-begin
-  f = resources(:file => "/etc/resolv.conf")
-  content = f.content
-rescue ArgumentError
-  content = "nameserver 8.8.8.8\nnameserver 8.8.4.4\n"
-end
-
-file "/etc/vservers/.defaults/files/resolv.conf" do
-  content content
+template "/etc/vservers/.defaults/files/resolv.conf" do
+  source "resolv.conf"
   owner "root"
   group "root"
   mode "0644"
