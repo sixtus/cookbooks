@@ -48,9 +48,9 @@ however, be escalated to any of the key contacts specified above.
 +------------------+-----+-----+-----+-----+-----+-----+-----+
 | Time Period      | Mon | Tue | Wed | Thu | Fri | Sat | Sun |
 +==================+=====+=====+=====+=====+=====+=====+=====+
-| Office Hours     | JD  | JD  | JD  | JS  | JS  | JS  | JS  |
+| Office Hours     |     |     |     |     |     |     |     |
 +------------------+-----+-----+-----+-----+-----+-----+-----+
-| Non-office Hours | JD  | JD  | JD  | JS  | JS  | JS  | JS  |
+| Non-office Hours |     |     |     |     |     |     |     |
 +------------------+-----+-----+-----+-----+-----+-----+-----+
 
 
