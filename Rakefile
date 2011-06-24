@@ -11,7 +11,7 @@ require File.join(File.dirname(__FILE__), 'config', 'rake')
 
 # load chef config
 begin
-  Chef::Config.from_file(File.join(ENV['HOME'], '.chef', 'knife.rb'))
+  Chef::Config.from_file(File.join(File.dirname(__FILE__), '.chef', 'knife.rb'))
 rescue
   # do nothing
 end
