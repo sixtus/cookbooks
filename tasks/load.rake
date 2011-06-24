@@ -167,13 +167,7 @@ namespace "load" do
     end
   end
 
-  desc "Generate documentation"
-  task :documentation => [ :pull ]
-  task :documentation do
-    sh("make -C #{TOPDIR}/documentation html")
-  end
-
 end
 
 desc "Upload cookbooks, roles and databags"
-task :deploy => [ "pull", "load:all" ]
+task :deploy => [ "pull", "doc:all", "load:all" ]

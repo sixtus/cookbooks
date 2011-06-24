@@ -11,6 +11,11 @@ NODES_DIR = File.expand_path(File.join(TOPDIR, "nodes"))
 ROLES_DIR = File.expand_path(File.join(TOPDIR, "roles"))
 BAGS_DIR = File.expand_path(File.join(TOPDIR, "databags"))
 
+# documentation directories
+DOC_DIR = File.expand_path(File.join(TOPDIR, "documentation"))
+DOC_SOURCE_DIR = File.expand_path(File.join(DOC_DIR, "source"))
+DOC_BUILD_DIR = File.expand_path(File.join(TOPDIR, "cookbooks", "chef", "files", "default", "documentation", "html"))
+
 # Directories needed by the SSL tasks
 SSL_CA_DIR = File.expand_path(File.join(TOPDIR, "ca"))
 SSL_CERT_DIR = File.expand_path(File.join(TOPDIR, "site-cookbooks/openssl/files/default/certificates"))

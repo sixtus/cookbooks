@@ -393,3 +393,7 @@ a.footnote-reference:hover {
 a:hover tt {
     background: #EEE;
 }
+
+a.internal em {
+  font-style: normal;
+}

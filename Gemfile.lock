@@ -42,6 +42,7 @@ GEM
     rest-client (1.6.1)
       mime-types (>= 1.16)
     systemu (2.2.0)
+    terminal-table (1.4.2)
     uuidtools (2.1.2)
     yajl-ruby (0.8.2)
 
@@ -51,3 +52,4 @@ PLATFORMS
 DEPENDENCIES
   chef (= 0.9.16)
   net-ssh-multi
+  terminal-table
