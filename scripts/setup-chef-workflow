@@ -1,51 +1,167 @@
 #!/bin/bash
 
-cd ~
+CHEF_DIR=$(realpath $(dirname $0)/../)
 
 # install rvm
-curl -s https://rvm.beginrescueend.com/install/rvm -o /tmp/rvm-installer
-chmod +x /tmp/rvm-installer
-/tmp/rvm-installer --version 1.6.5
-rm -f /tmp/rvm-installer
+if [[ ! -d ~/.rvm ]]; then
+	curl -s https://rvm.beginrescueend.com/install/rvm -o /tmp/rvm-installer
+	chmod +x /tmp/rvm-installer
+	/tmp/rvm-installer --version 1.6.5
+	rm -f /tmp/rvm-installer
+fi
 
 # load rvm
 source ~/.rvm/scripts/rvm
 
 # install ruby
-rvm install ruby-1.8.7-p302
-touch ~/.rvm/rubies/ruby-1.8.7-p302/lib/ruby/site_ruby/auto_gem.rb
-
-# install chef gemset
-rvm rvmrc trust ~/chef
-cd ~/chef
-gem install bundler
-bundle install
-
-# setup knife
-mkdir -p ~/.chef
-rm -f ~/.chef/knife.rb
-
-if [[ ! -e ~/.chef/client.pem ]]; then
-	sudo knife client -a -n create $(whoami) | tail -n +2 > ~/.chef/client.pem
+if ! rvm list rubies | grep -q ruby-1.8.7-p302; then
+	rvm install ruby-1.8.7-p302
+	touch ~/.rvm/rubies/ruby-1.8.7-p302/lib/ruby/site_ruby/auto_gem.rb
 fi
 
-cat <<EOF > ~/.chef/knife.rb
-whoami = %x(whoami).chomp
-fqdn = %x(hostname -f).chomp
+# install chef gemset
+rvm rvmrc trust "${CHEF_DIR}"
 
+if ! gem query -i -n ^bundler$ > /dev/null; then
+	gem install bundler
+fi
+
+pushd ${CHEF_DIR} > /dev/null
+bundle install
+popd > /dev/null
+
+# setup knife
+rm -f "${CHEF_DIR}"/.chef/knife.rb
+
+if [[ ! -e "${CHEF_DIR}"/.chef/client.pem ]]; then
+	sudo knife client -a -n create $(whoami) | tail -n +2 > ${CHEF_DIR}/.chef/client.pem
+fi
+
+cat <<EOF > ${CHEF_DIR}/.chef/knife.rb
 log_level :info
 log_location STDOUT
 
-node_name whoami
-client_key "/home/#{whoami}/.chef/client.pem"
+node_name "$(whoami)"
+client_key "${CHEF_DIR}/.chef/client.pem"
 
-chef_server_url "https://#{fqdn}"
+chef_server_url "https://#{%x(hostname -f).chomp}"
 
 cache_type 'BasicFile'
-cache_options(:path => "/home/#{whoami}/.chef/checksums")
+cache_options(:path => "${CHEF_DIR}/.chef/checksums")
 
 cookbook_path [
-  "/home/#{whoami}/chef/cookbooks",
-  "/home/#{whoami}/chef/site-cookbooks"
+  "${CHEF_DIR}/cookbooks",
+  "${CHEF_DIR}/site-cookbooks"
 ]
 EOF
+
+# generate openssl.cnf
+cat <<EOF > ${CHEF_DIR}/config/openssl.cnf
+SSL_CA_DIR = ${CHEF_DIR}/ca
+SSL_CERT_DIR = ${CHEF_DIR}/site-cookbooks/openssl/files/default/certificates
+
+
+[ ca ]
+default_ca = CA_default
+
+
+[ CA_default ]
+database         = \$SSL_CA_DIR/index
+new_certs_dir    = \$SSL_CA_DIR/newcerts
+
+certificate      = \$SSL_CERT_DIR/ca.crt
+serial           = \$SSL_CA_DIR/serial
+private_key      = \$SSL_CA_DIR/ca.key
+RANDFILE         = \$SSL_CA_DIR/.rand
+
+crl              = \$SSL_CERT_DIR/ca.crl
+crl_dir          = \$SSL_CA_DIR/crl
+crlnumber        = \$SSL_CA_DIR/crlnumber
+
+default_days     = 365
+default_crl_days = 30
+default_md       = sha1
+
+policy           = policy_match
+email_in_dn      = no
+
+name_opt         = ca_default
+cert_opt         = ca_default
+
+copy_extensions  = none
+x509_extensions  = usr_cert
+
+preserve         = no
+
+
+[ policy_match ]
+countryName            = match
+stateOrProvinceName    = match
+localityName           = match
+organizationName       = match
+organizationalUnitName = optional
+commonName             = supplied
+emailAddress           = optional
+
+
+[ req ]
+default_bits       = 2048
+default_keyfile    = privkey.pem
+default_md         = sha1
+distinguished_name = req_distinguished_name
+x509_extensions    = v3_ca
+
+
+[ req_distinguished_name ]
+countryName                     = Country Name (2 letter code)
+countryName_default             = 
+countryName_min                 = 2
+countryName_max                 = 2
+
+stateOrProvinceName             = State or Province Name (full name)
+stateOrProvinceName_default     = 
+
+localityName                    = Locality Name (eg, city)
+localityName_default            = 
+
+0.organizationName              = Organization Name (eg, company)
+0.organizationName_default      = 
+
+organizationalUnitName          = Organizational Unit Name (eg, section)
+organizationalUnitName_default  = 
+
+commonName                      = Common Name (eg, YOUR name)
+commonName_max                  = 64
+commonName_default              = 
+
+emailAddress                    = Email Address
+emailAddress_max                = 64
+emailAddress_default            = 
+
+
+[ usr_cert ]
+basicConstraints       = CA:FALSE
+subjectKeyIdentifier   = hash
+authorityKeyIdentifier = keyid,issuer
+
+
+[ v3_ca ]
+subjectKeyIdentifier   = hash
+authorityKeyIdentifier = keyid:always,issuer:always
+basicConstraints       = CA:true
+
+
+[ crl_ext ]
+authorityKeyIdentifier = keyid:always,issuer:always
+EOF
+
+# check for sphinx
+if ! hash sphinx-build 2>/dev/null; then
+	echo "!!!"
+	echo "!!! You need to install sphinx for documentation generation:"
+	echo "!!!"
+	echo "!!!  - Gentoo: emerge dev-python/sphinx"
+	echo "!!!  - Debian: apt-get install python-sphinx"
+	echo "!!!  - MacOS X: sudo easy_install sphinx"
+	echo "!!!"
+fi
