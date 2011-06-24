@@ -30,6 +30,6 @@
 <% end %>
 
 # custom nodes
-<% node[:base][:additional_hosts].each do |n| %>
+<% node[:resolv][:hosts].each do |n| %>
 <%= n %>
 <% end %>

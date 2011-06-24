@@ -14,12 +14,10 @@ default[:locales] = [
   "de_DE.UTF-8 UTF-8",
 ]
 
-# custom /etc/hosts entries
-default[:base][:additional_hosts] = []
-
 # nameservers and search domain
 default[:resolv][:search] = [node[:domain]]
 default[:resolv][:nameservers] = %w(8.8.8.8 8.8.4.4)
+default[:resolv][:hosts] = []
 
 # sysctl attributes
 default[:sysctl][:net][:ipv4][:ip_forward] = 0
