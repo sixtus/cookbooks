@@ -239,28 +239,28 @@ end
 end
 
 # enable munin plugins
-munin_plugins = %w(
-  cpu
-  df
-  entropy
-  forks
-  load
-  memory
-  open_files
-  open_inodes
-  processes
-)
+munin_plugin "cpu"
+munin_plugin "entropy"
+munin_plugin "forks"
+munin_plugin "load"
+munin_plugin "memory"
+munin_plugin "open_files"
+munin_plugin "open_inodes"
+munin_plugin "processes"
 
-if node[:virtualization][:role] == "host"
-  munin_plugins += %w(
-    iostat
-    swap
-    vmstat
-  )
+munin_plugin "df" do
+  source "df"
+  config [
+    "env.exclude none unknown iso9660 squashfs udf romfs ramfs debugfs simfs rootfs rc-svcdir udev shm",
+    "env.warning 90",
+    "env.critical 95"
+  ]
 end
 
-munin_plugins.each do |p|
-  munin_plugin p
+if node[:virtualization][:role] == "host"
+  munin_plugin "iostat"
+  munin_plugin "swap"
+  munin_plugin "vmstat"
 end
 
 # reset all attributes to make sure cruft is being deleted on chef-client run
