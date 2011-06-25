@@ -55,6 +55,7 @@ node[:packages] = %w(
   net-misc/telnet-bsd
   net-misc/wget
   net-misc/whois
+  sys-apps/hdparm
   sys-apps/iproute2
   sys-apps/pciutils
   sys-fs/ncdu

@@ -251,7 +251,6 @@ munin_plugin "processes"
 munin_plugin "df" do
   source "df"
   config [
-    "env.exclude none unknown iso9660 squashfs udf romfs ramfs debugfs simfs rootfs rc-svcdir udev shm",
     "env.warning 90",
     "env.critical 95"
   ]
