@@ -1,0 +1,1 @@
+../../../../../cookbooks/portage/README.rst

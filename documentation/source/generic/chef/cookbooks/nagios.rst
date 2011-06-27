@@ -1,0 +1,1 @@
+../../../../../cookbooks/nagios/README.rst

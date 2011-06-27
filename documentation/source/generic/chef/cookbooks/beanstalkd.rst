@@ -1,0 +1,1 @@
+../../../../../cookbooks/beanstalkd/README.rst

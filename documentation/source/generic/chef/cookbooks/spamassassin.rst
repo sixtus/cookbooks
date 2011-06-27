@@ -1,0 +1,1 @@
+../../../../../cookbooks/spamassassin/README.rst

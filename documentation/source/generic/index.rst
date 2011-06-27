@@ -14,11 +14,17 @@ manual is `Gentoo Linux`_ - a very powerful and for beginners sometimes complex
 Linux distribution. To get started you should have at least read the `Working
 with Gentoo`_ and `Working with Portage`_ sections of the `Gentoo Handbook`_.
 
-Additionally, every software that can be deployed using the techniques
-described in this manual may require solid knowledge which cannot be covered in
-great detail. References to further documentation may be provided where
-appropriate, but the authors expect the user to gain the necessary knowledge
-independently if required.
+All systems will then be bootstrapped and deployed with `Chef`_, an open-source
+systems integration framework built specifically for automating the datacenter
+or cloud. No matter how complex the realities of the business, Chef makes it
+easy to deploy servers and scale applications throughout the entire
+infrastructure. Because it combines the fundamental elements of configuration
+management and service oriented architectures with the full power of `Ruby`_,
+Chef makes it easy to create an elegant, fully automated infrastructure.
+
+Eventually the reconstruction of the business can be accomplished from nothing
+but a source code repository, an application data backup, and bare metal
+resources.
 
 Contents
 --------
@@ -26,8 +32,7 @@ Contents
 .. toctree::
    :maxdepth: 1
 
-   concepts
-   config/index
+   chef/index
    user
    maintenance
    monitoring
@@ -40,3 +45,5 @@ Contents
 .. _Working with Gentoo: http://www.gentoo.org/doc/en/handbook/handbook-amd64.xml?part=2
 .. _Working with Portage: http://www.gentoo.org/doc/en/handbook/handbook-amd64.xml?part=3
 .. _Gentoo Handbook: http://www.gentoo.org/doc/en/handbook/handbook-amd64.xml
+.. _Chef: http://www.opscode.com/chef/
+.. _Ruby: http://www.ruby-lang.org

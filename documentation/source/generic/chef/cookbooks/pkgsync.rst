@@ -1,0 +1,1 @@
+../../../../../cookbooks/pkgsync/README.rst

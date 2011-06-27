@@ -1,0 +1,1 @@
+../../../../../cookbooks/bash/README.rst

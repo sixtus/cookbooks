@@ -1,4 +1,4 @@
-Description
-===========
+.. _chef-cookbook-git:
 
-Simple cookbook to configure git.
+Git
+===

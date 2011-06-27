@@ -1,0 +1,1 @@
+../../../../../cookbooks/syslog/README.rst

@@ -1,4 +1,4 @@
-Description
-===========
+.. _chef-cookbook-bash:
 
-Simple cookbook to configure the global bashrc.
+Bash
+====

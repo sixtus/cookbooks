@@ -1,0 +1,1 @@
+../../../../../cookbooks/capistrano/README.rst

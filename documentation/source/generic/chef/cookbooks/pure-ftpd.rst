@@ -1,0 +1,1 @@
+../../../../../cookbooks/pure-ftpd/README.rst

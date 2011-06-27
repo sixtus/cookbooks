@@ -1,0 +1,1 @@
+../../../../../cookbooks/couchdb/README.rst

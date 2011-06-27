@@ -1,0 +1,1 @@
+../../../../../cookbooks/vserver/README.rst

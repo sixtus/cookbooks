@@ -1,0 +1,1 @@
+../../../../../cookbooks/munin/README.rst
