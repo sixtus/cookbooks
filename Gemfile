@@ -5,3 +5,6 @@ gem 'net-ssh-multi'
 
 # for documentation generation
 gem 'terminal-table'
+
+# for generating htpasswd entries
+gem 'htauth'
