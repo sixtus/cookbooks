@@ -69,7 +69,7 @@ git add -A .
 git ci -m 'automatic commit after updateworld'
 
 # run chef-client to fixup configs overwritten by etc-update
-chef-client -V
+chef-client
 
 # cleanup unneeded dependencies
 emerge --depclean -aq

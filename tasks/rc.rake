@@ -2,7 +2,8 @@
 
 def rc(default_query)
   ENV['QUERY'] = default_query if not ENV.key?('QUERY')
-  Chef::Search::Query.new.search(:node, "NOT skip_rc:true AND #{ENV['QUERY']}", 'fqdn asc') do |node|
+  Chef::Search::Query.new.search(:node, ENV['QUERY'], 'fqdn asc') do |node|
+    next if node[:skip][:rc]
     puts(">>> #{node.name}")
     yield node
   end

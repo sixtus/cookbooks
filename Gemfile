@@ -1,7 +1,6 @@
 source :rubygems
 
-gem "chef", "= 0.9.16"
-gem 'net-ssh-multi'
+gem "chef", "~> 0.10.0"
 
 # for documentation generation
 gem 'terminal-table'
