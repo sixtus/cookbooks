@@ -5,7 +5,7 @@ module Gentoo
       # Creates or deletes per package portage attributes. Returns true if it
       # changes (sets or deletes) something.
       # * action == :create || action == :delete
-      # * foo_category =~ /\A(use|keywords|mask|unmask)\Z/
+      # * conf_type =~ /\A(use|keywords|mask|unmask)\Z/
       def manage_package_conf(action, conf_type, name, package = nil, flags = nil)
         conf_file = package_conf_file(conf_type, name)
         case action
@@ -19,8 +19,8 @@ module Gentoo
       end
 
       # Returns the portage package control file name:
-      # =net-analyzer/nagios-core-3.1.2 => chef.net-analyzer-nagios-core-3-1-2
-      # =net-analyzer/netdiscover => chef.net-analyzer-netdiscover
+      # =net-analyzer/nagios-core-3.1.2 => chef-net-analyzer-nagios-core-3-1-2
+      # =net-analyzer/netdiscover => chef-net-analyzer-netdiscover
       def package_conf_file(conf_type, name)
         conf_dir = "/etc/portage/package.#{conf_type}"
         raise Chef::Exceptions::Package, "#{conf_type} should be a directory." unless ::File.directory?(conf_dir)
@@ -28,6 +28,20 @@ module Gentoo
         package_atom = name.strip.split(/\s+/).first
         package_file = package_atom.gsub(/[\/\.|]/, "-").gsub(/[^a-z0-9_\-]/i, "")
         return "#{conf_dir}/chef-#{package_file}"
+      end
+
+      # Normalizes package conf content
+      def normalize_package_conf_content(name, flags = nil)
+        [ name, normalize_flags(flags) ].join(' ')
+      end
+
+      # Normalizes String / Arrays
+      def normalize_flags(flags)
+        if flags.is_a?(Array)
+          flags.sort.uniq.join(' ')
+        else
+          flags
+        end
       end
 
       def same_content?(filepath, content)
@@ -49,44 +63,19 @@ module Gentoo
         Chef::Log.info("Deleted #{conf_file}")
         true
       end
-
-
-      # Normalizes package conf content
-      def normalize_package_conf_content(name, flags = nil)
-        [ name, normalize_flags(flags) ].join(' ')
-      end
-
-      # Normalizes String / Arrays
-      def normalize_flags(flags)
-        if flags.is_a?(Array)
-          flags.sort.uniq.join(' ')
-        else
-          flags
-        end
-      end
     end
 
     module Emerge
       include Gentoo::Portage::PackageConf
 
-      def emerge_cmd(pkg, emerge_options = nil)
-        "/usr/bin/emerge --color=n --nospinner --quiet #{emerge_options} #{pkg}"
-      end
-
-      def unmerge(new_resource)
-        package_data = package_info_for(new_resource.name) || {}
-        return nil unless package_data[:current_version].any?
-
-        Chef::Log.info("Unmerging #{package_data[:package_atom]}.")
-        Chef::Mixin::Command.run_command_with_systems_locale(
-          :command => emerge_cmd(package_data[:package_atom], '--unmerge')
-        )
-      end
-
       # Memoize package info
       attr_accessor :package_info
       def package_info
-        @package_info ||= package_info_for(@new_resource.name)
+        @package_info ||= package_info_from_eix(@new_resource.name)
+      end
+
+      def emerge_cmd(pkg, emerge_options = nil)
+        "/usr/bin/emerge --color=n --nospinner --quiet #{emerge_options} #{pkg}"
       end
 
       # Sets portage attributes and then emerges the package only if necessary.
@@ -117,18 +106,6 @@ module Gentoo
         emerge(package_data[:package_atom], new_resource.options) if emerge?(action, package_data, new_resource.version)
       end
 
-
-      def package_info_for(package_name)
-        info = begin
-          package_info_from_eix(package_name)
-        rescue Chef::Exceptions::Package => err
-          Chef::Log.error("Error attempting to use EIX: #{err.inspect}")
-          Chef::Log.info("Falling back to portage.")
-          package_info_from_portage(package_name)
-        end
-        info[:package_atom] = full_package_atom(info[:category], info[:package_name], new_resource.version)
-        info
-      end
 
       private
 
@@ -173,59 +150,13 @@ module Gentoo
         package_atom = "#{category}/#{name}"
         return package_atom unless version
 
-        if(version =~ /^\~(.+)/)
+        if version =~ /^\~(.+)/
           # If we start with a tilde
           "~#{package_name}-#{$1}"
         else
           "=#{package_name}-#{version}"
         end
       end
-
-      def package_info_from_portage(package_atom)
-        portage_data = {}
-        package_name = package_atom.split('/').last
-
-        # When emerge is set to --quiet, it will not emit version information
-        status = popen4("/usr/bin/emerge --verbose --search #{package_name}") do |pid, stdin, stdout, stderr|
-          portage_data = parse_emerge_data(package_name, stdout.read)
-        end
-
-        unless status.exitstatus == 0
-          raise Chef::Exceptions::Package, "emerge --search failed - #{status.inspect}!"
-        end
-
-        Chef::Log.info "Found candidate package: #{portage_data.inspect}"
-
-        return portage_data
-      end
-
-      def parse_emerge_data(package, txt)
-        available, installed, category, name, pkg = nil
-        Chef::Log.info "Output from emerge --search: #{txt}"
-        txt.each do |line|
-          if line =~ /\*(.*)/
-            pkg = $1.strip
-          end
-          if (pkg == package) || (pkg.split('/').last == package rescue false)
-            category, name = pkg.split('/')
-            if line =~ /Latest version available: (.*)/
-              available = $1
-            elsif line =~ /Latest version installed: (.*)/
-              installed = $1
-            end
-          end
-        end
-
-        available = installed unless available
-
-        return {
-          :category => category,
-          :package_name => name,
-          :current_version => installed,
-          :candidate_version => available
-        }
-      end
-
 
       # Searches for "package_name" and returns a hash with parsed information
       # returned by eix.
@@ -255,13 +186,13 @@ module Gentoo
         eix_update = "/usr/bin/eix-update"
 
         unless ::File.executable?(eix)
-          raise Chef::Exceptions::Package, "You need app-portage/eix installed to use gentoo_package."
+          raise Chef::Exceptions::Package, "You should install app-portage/eix for fast package searches."
         end
 
         # We need to update the eix database if it's older than the current portage
         # tree or the eix binary.
         unless ::FileUtils.uptodate?("/var/cache/eix", [eix, "/usr/portage/metadata/timestamp"])
-          Chef::Log.debug("Eix database outdated, calling `#{eix_update}`.")
+          Chef::Log.debug("eix database outdated, calling `#{eix_update}`.")
           Chef::Mixin::Command.run_command_with_systems_locale(:command => eix_update)
         end
 
@@ -272,22 +203,27 @@ module Gentoo
         eix_out = eix_stderr = nil
 
         Chef::Log.debug("Calling `#{query_command}`.")
-        status = Chef::Mixin::Command.popen4(query_command) { |pid,stdin,stdout,stderr|
-          eix_out = if stdout.read.split("\n").first =~ /\A(\S+)\t(\S+)\t(\S*)\t(\S+)\Z/
-                      {
-            :category => $1,
-            :package_name => $2,
-            :current_version => $3,
-            :candidate_version => $4
-          }
-                    end
+        status = Chef::Mixin::Command.popen4(query_command) do |pid, stdin, stdout, stderr|
           eix_stderr = stderr.read
-        }
+          if stdout.read.split("\n").first =~ /\A(\S+)\t(\S+)\t(\S*)\t(\S+)\Z/
+            eix_out = {
+              :category => $1,
+              :package_name => $2,
+              :current_version => $3,
+              :candidate_version => $4
+            }
+          end
+        end
 
         eix_out ||= {}
-        raise Chef::Exceptions::Package, "Eix search failed: `#{query_command}`\n#{eix_stderr}\n#{status.inspect}!" unless status.exitstatus == 0
-        Chef::Log.debug("Eix search for #{package_name} returned: category: \"#{eix_out[:category]}\", package_name: \"#{eix_out[:package_name]}\", current_version: \"#{eix_out[:current_version]}\", candidate_version: \"#{eix_out[:candidate_version]}\".")
 
+        unless status.exitstatus == 0
+          raise Chef::Exceptions::Package, "eix search failed: `#{query_command}`\n#{eix_stderr}\n#{status.inspect}!"
+        end
+
+        Chef::Log.debug("eix search for #{package_name} returned: category: \"#{eix_out[:category]}\", package_name: \"#{eix_out[:package_name]}\", current_version: \"#{eix_out[:current_version]}\", candidate_version: \"#{eix_out[:candidate_version]}\".")
+
+        eix_out[:package_atom] = full_package_atom(info[:category], info[:package_name], new_resource.version)
         eix_out
       end
     end
