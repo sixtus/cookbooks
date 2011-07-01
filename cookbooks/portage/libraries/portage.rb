@@ -302,6 +302,37 @@ class Chef
       class Portage < Chef::Provider::Package
         include ::Gentoo::Portage::Emerge
 
+        def load_current_resource
+          @current_resource = Chef::Resource::Package.new(@new_resource.name)
+          @current_resource.package_name(@new_resource.package_name)
+
+          @current_resource.version(nil)
+
+          _, category_with_slash, category, pkg = %r{^#{PACKAGE_NAME_PATTERN}$}.match(@new_resource.package_name).to_a
+
+          possibilities = Dir["/var/db/pkg/#{category || "*"}/#{pkg}-*"].map {|d| d.sub(%r{/var/db/pkg/}, "") }
+          versions = possibilities.map do |entry|
+            if(entry =~ %r{[^/]+/#{Regexp.escape(pkg)}\-(\d[\.\d]*((_(alpha|beta|pre|rc|p)\d*)*)?(-r\d+)?)})
+              [$&, $1]
+            end
+          end.compact
+
+          if versions.size > 1
+            if category
+              @current_resource.version(versions.last.last)
+            else
+              atoms = versions.map {|v| v.first }.sort
+              raise Chef::Exceptions::Package, "Multiple packages found for #{@new_resource.package_name}: #{atoms.join(" ")}. Specify a category."
+            end
+          elsif versions.size == 1
+            @current_resource.version(versions.first.last)
+          end
+
+          Chef::Log.debug("#{@new_resource} current version #{$1}")
+
+          @current_resource
+        end
+
         def install_package(name, version)
           conditional_emerge(new_resource, :install)
         end
