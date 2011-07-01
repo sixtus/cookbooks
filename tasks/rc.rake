@@ -21,7 +21,7 @@ namespace :rc do
   desc "Run chef-client"
   task :converge do
     rc("ipaddress:[* TO *]") do |node|
-      system("ssh -t #{node.name} '/usr/bin/sudo -H /usr/bin/chef-client -V'")
+      system("ssh -t #{node.name} '/usr/bin/sudo -H /usr/bin/chef-client'")
     end
   end
 
