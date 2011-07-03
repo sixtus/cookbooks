@@ -14,9 +14,9 @@ fi
 source ~/.rvm/scripts/rvm
 
 # install ruby
-if ! rvm list rubies | grep -q ruby-1.8.7-p302; then
-	rvm install ruby-1.8.7-p302
-	touch ~/.rvm/rubies/ruby-1.8.7-p302/lib/ruby/site_ruby/auto_gem.rb
+if ! rvm list rubies | grep -q ruby-1.8.7-p352; then
+	rvm install ruby-1.8.7-p352
+	touch ~/.rvm/rubies/ruby-1.8.7-p352/lib/ruby/site_ruby/auto_gem.rb
 fi
 
 # install chef gemset
