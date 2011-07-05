@@ -230,9 +230,41 @@ module Gentoo
   end
 end
 
-# Reopens and overrides Chef::Provider::Package::Portage
-# Works with Chef 0.8.10
+# monkeypatch Chefs package resource and portage provider
 class Chef
+  class Resource
+    class Package < Chef::Resource
+      def keywords(arg=nil)
+        set_or_return(
+          :keywords,
+          arg,
+          :kind_of => [ String ]
+        )
+      end
+      def mask(arg=nil)
+        set_or_return(
+          :mask,
+          arg,
+          :kind_of => [ String ]
+        )
+      end
+      def unmask(arg=nil)
+        set_or_return(
+          :unmask,
+          arg,
+          :kind_of => [ String ]
+        )
+      end
+      def use(arg=nil)
+        set_or_return(
+          :use,
+          arg,
+          :kind_of => [ String ]
+        )
+      end
+    end
+  end
+
   class Provider
     class Package
       class Portage < Chef::Provider::Package
@@ -278,7 +310,7 @@ class Chef
         end
 
         def candidate_version
-          @candidate_verison ||= self.package_info[:candidate_version]
+          @candidate_version ||= self.package_info[:candidate_version]
         end
 
       end
