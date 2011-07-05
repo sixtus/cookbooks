@@ -10,6 +10,7 @@
 #TYPE			ZONE	GATEWAY		GATEWAY
 #						ZONE
 
-<% node[:shorewall][:tunnels].each do |type, params| %>
-<%= type %> <%= params[:zone] %> <%= params[:gateway] %>
+<% node[:shorewall][:tunnels].each do |name, params| %>
+# <%= name %>
+<%= params[:vpntype] %> <%= params[:zone] %> <%= params[:gateway] %>
 <% end %>
