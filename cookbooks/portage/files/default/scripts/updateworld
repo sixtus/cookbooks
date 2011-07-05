@@ -2,6 +2,11 @@
 
 set -e
 
+# commit any changes to /etc
+cd /etc
+git add -A .
+git ci -m 'automatic commit before updateworld' || :
+
 # display news items and mark them as read.
 eselect news read new | grep -v '^No news is good news.' || :
 
@@ -25,28 +30,17 @@ emerge @preserved-rebuild --usepkg=n
 # this fucker needs to be run after every upgrade, since noone can be sure what
 # has been broken. dude, srsly - can't we simply have PYTHON_TARGETS?
 eselect python update --python2
-python-updater -dmanual -- --usepkg
-python-updater -dmanual -- --usepkg=n
+
+if [[ $(qlist -Ive dev-lang/python | wc -l) != 1 ]]; then
+	python-updater -dmanual -- --usepkg
+	python-updater -dmanual -- --usepkg=n
+fi
 
 # same crap as with python ...
-perl-cleaner --all -- --usepkg
-perl-cleaner --all -- --usepkg=n
-
-# these packages need to be remerged every time, because either revdep-rebuild
-# will not pick them up, or their build system is so horribly broken that even
-# API compatible libraries won't be accepted at run-time because of version
-# mismatches.
-# TODO: haunt the developers of this crap.
-BUMS="
-dev-ruby/nokogiri
-dev-ruby/rmagick
-"
-
-for bum in $BUMS; do
-	if [[ "$(qlist -IC ${bum})" != "" ]]; then
-		emerge -1 --usepkg=n ${bum}
-	fi
-done
+if [[ $(qlist -Ive dev-lang/perl | wc -l) != 1 ]]; then
+	perl-cleaner --all -- --usepkg
+	perl-cleaner --all -- --usepkg=n
+fi
 
 # run lafilefixer to get rid of fucking annoying libtool archive dependency
 # crap. aw man. this is getting worse every day.
@@ -60,18 +54,13 @@ EMERGE_DEFAULT_OPTS="" revdep-rebuild -i -- --quiet-build --with-bdeps=y --binpk
 # force latest gcc version
 gcc-config $(gcc-config -l|tail -n1|awk '{print $2}')
 
+# cleanup unneeded dependencies
+emerge --depclean -aq
+
 # update config files
 etc-update
 
-# commit any changes to /etc
-cd /etc
-git add -A .
-git ci -m 'automatic commit after updateworld'
-
 # run chef-client to fixup configs overwritten by etc-update
 chef-client
-
-# cleanup unneeded dependencies
-emerge --depclean -aq
 
 exit 0
