@@ -27,6 +27,7 @@ if ! gem query -i -n ^bundler$ > /dev/null; then
 fi
 
 pushd ${CHEF_DIR} > /dev/null
+source .rvmrc
 bundle install
 popd > /dev/null
 
