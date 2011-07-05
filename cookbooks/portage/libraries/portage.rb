@@ -223,7 +223,7 @@ module Gentoo
 
         Chef::Log.debug("eix search for #{package_name} returned: category: \"#{eix_out[:category]}\", package_name: \"#{eix_out[:package_name]}\", current_version: \"#{eix_out[:current_version]}\", candidate_version: \"#{eix_out[:candidate_version]}\".")
 
-        eix_out[:package_atom] = full_package_atom(info[:category], info[:package_name], new_resource.version)
+        eix_out[:package_atom] = full_package_atom(eix_out[:category], eix_out[:package_name], new_resource.version)
         eix_out
       end
     end
