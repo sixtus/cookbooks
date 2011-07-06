@@ -2,6 +2,8 @@ link "/etc/make.profile" do
   to node[:portage][:profile]
 end
 
+include_recipe "portage::layman"
+
 directory node[:portage][:distdir] do
   owner "root"
   group "portage"
@@ -12,13 +14,6 @@ directory node[:portage][:confdir] do
   group "root"
   mode "0755"
   not_if { File.directory?(node[:portage][:confdir]) }
-end
-
-cookbook_file "#{node[:portage][:confdir]}/bashrc" do
-  source "bashrc"
-  owner "root"
-  group "root"
-  mode "0644"
 end
 
 %w(keywords mask unmask use).each do |type|
@@ -48,19 +43,16 @@ directory "#{node[:portage][:confdir]}/preserve-libs.d" do
   mode "0755"
 end
 
-directory "#{node[:portage][:make_conf]}.d" do
-  owner "root"
-  group "root"
-  mode "0755"
-  not_if { File.directory?("#{node[:portage][:make_conf]}.d") }
-end
-
-template "#{node[:portage][:make_conf]}.d/local.conf" do
+cookbook_file "#{node[:portage][:confdir]}/bashrc" do
+  source "bashrc"
   owner "root"
   group "root"
   mode "0644"
-  source "make.conf.local"
-  backup 0
+end
+
+directory "#{node[:portage][:make_conf]}.d" do
+  action :delete
+  recursive true
 end
 
 template node[:portage][:make_conf] do
@@ -69,7 +61,6 @@ template node[:portage][:make_conf] do
   mode "0644"
   source "make.conf"
   cookbook "portage"
-  variables({:sources => []})
   backup 0
 end
 

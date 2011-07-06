@@ -19,7 +19,3 @@ file "/var/lib/layman/make.conf" do
   group "root"
   mode "0644"
 end
-
-make_conf "layman" do
-  sources %w(/var/lib/layman/make.conf)
-end
