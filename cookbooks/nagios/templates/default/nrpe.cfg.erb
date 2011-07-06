@@ -27,15 +27,6 @@ nrpe_user=nagios
 # You can either supply a group name or a GID.
 nrpe_group=nagios
 
-# ALLOWED HOST ADDRESSES
-# This is an optional comma-delimited list of IP address or hostnames 
-# that are allowed to talk to the NRPE daemon.
-<% if @master %>
-allowed_hosts=<%= @master[:ipaddress] %>
-<% else %>
-allowed_hosts=
-<% end %>
-
 # DEBUGGING OPTION
 # This option determines whether or not debugging messages are logged to the
 # syslog facility.
