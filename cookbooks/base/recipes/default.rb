@@ -238,6 +238,18 @@ end
   end
 end
 
+# vservers don't have hardware access
+if node[:virtualization][:role] == "host"
+  include_recipe "mdadm"
+  include_recipe "ntp"
+  include_recipe "shorewall"
+  include_recipe "smart"
+end
+
+if File.writable?("/usr/portage")
+  include_recipe "pkgsync"
+end
+
 # enable munin plugins
 munin_plugin "cpu"
 munin_plugin "entropy"
