@@ -11,9 +11,10 @@ portage_package_use "net-analyzer/nagios-plugins" do
 end
 
 package "net-analyzer/nagios"
-package "net-analyzer/nagios-nsca"
 
 include_recipe "munin::master"
+include_recipe "nagios::nrpe"
+include_recipe "nagios::nsca"
 
 directory "/etc/nagios" do
   owner "nagios"
@@ -182,4 +183,3 @@ end
 file "/var/www/localhost/htdocs/index.html" do
   action :delete
 end
-
