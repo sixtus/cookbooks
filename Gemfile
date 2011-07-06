@@ -1,9 +1,9 @@
 source :rubygems
 
-gem "chef", "~> 0.10.0"
+gem 'chef', '~> 0.10.0'
 
 # for documentation generation
 gem 'terminal-table'
 
-# for generating htpasswd entries
-gem 'htauth'
+# for interaction
+gem 'highline'

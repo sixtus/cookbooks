@@ -1,12 +1,10 @@
-require "openssl"
+require "securerandom"
 require "fileutils"
 
 module ChefUtils
   module Password
     def secure_random(length = 42)
-      r = ""
-      r << ::OpenSSL::Random.random_bytes(1).gsub(/\W/, '') while r.length < length
-      r
+      SecureRandom.hex(length/2)
     end
 
     def get_password(key, length = 42)
