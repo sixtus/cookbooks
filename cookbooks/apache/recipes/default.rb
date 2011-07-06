@@ -1,22 +1,14 @@
-make_conf "apache" do
-  overrides [
-    [ :APACHE2_MPMS, node[:apache][:mpm] ],
-    [ :APACHE2_MODULES, %w(actions alias auth_basic authn_default authn_file
-    authz_default authz_groupfile authz_host authz_user autoindex cgi cgid
-    deflate dir env expires filter headers info log_config mime mime_magic
-    proxy rewrite setenvif status) ].flatten
-  ]
-end
-
 portage_package_use "dev-libs/apr-util" do
   use node[:apache][:apr_util][:use]
 end
 
-portage_package_use "www-servers/apache" do
-  use %w(static)
+package "www-servers/apache" do
+  use([
+    "static",
+    "apache2_mpms_#{node[:apache][:mpm]}",
+    node[:apache][:modules].map { |m| "apache2_modules_#{m}" }
+  ].flatten.sort)
 end
-
-package "www-servers/apache"
 
 template "/etc/apache2/httpd.conf" do
   source "httpd.conf"
