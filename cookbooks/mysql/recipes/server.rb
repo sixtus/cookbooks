@@ -2,6 +2,7 @@ tag("mysql-server")
 
 include_recipe "mysql::default"
 
+package "dev-db/innotop"
 package "dev-db/maatkit"
 package "dev-db/mysqltuner"
 package "dev-db/mytop"
