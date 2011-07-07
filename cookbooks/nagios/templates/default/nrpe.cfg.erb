@@ -49,8 +49,3 @@ connection_timeout=300
 # This directive allows you to include definitions from config files (with a
 # .cfg extension) in one or more directories (with recursion).
 include_dir=/etc/nagios/nrpe.d/
-
-# COMMANDS
-<% node[:nagios][:nrpe][:commands].sort.each do |command| %>
-command[<%= command[0] %>]=<%= command[1] %>
-<% end %>

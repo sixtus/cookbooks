@@ -10,8 +10,10 @@ master = node.run_state[:nodes].select do |n|
   n[:tags].include?("nagios-master")
 end.first
 
-nagios_conf "send_nsca" do
-  subdir false
+template "/etc/nagios/send_nsca.cfg" do
+  source "send_nsca.cfg.erb"
+  owner "nagios"
+  group "nagios"
   mode "0640"
   variables :master => master
 end

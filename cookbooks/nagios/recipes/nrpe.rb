@@ -8,8 +8,9 @@ directory "/etc/nagios" do
 end
 
 directory "/etc/nagios/nrpe.d" do
-  action :delete
-  recursive true
+  owner "nagios"
+  group "nagios"
+  mode "0750"
 end
 
 template "/etc/nagios/nrpe.cfg" do
