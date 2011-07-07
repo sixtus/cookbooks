@@ -2,13 +2,15 @@ portage_package_use "dev-libs/apr-util" do
   use node[:apache][:apr_util][:use]
 end
 
-package "www-servers/apache" do
+portage_package_use "www-servers/apache" do
   use([
     "static",
     "apache2_mpms_#{node[:apache][:mpm]}",
     node[:apache][:modules].map { |m| "apache2_modules_#{m}" }
   ].flatten.sort.join)
 end
+
+package "www-servers/apache"
 
 template "/etc/apache2/httpd.conf" do
   source "httpd.conf"
