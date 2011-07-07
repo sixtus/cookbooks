@@ -80,28 +80,14 @@ module Gentoo
 
       # Sets portage attributes and then emerges the package only if necessary.
       def conditional_emerge(new_resource, action)
-
-        # Set package metadata that may influence our candidate search.
-        %w(keywords mask unmask).each { |conf_type|
-          if new_resource.respond_to?(conf_type) && atoms = new_resource.send(conf_type)
-            atoms = [atoms] if atoms.is_a?(String)
-            atoms.each do |atom|
-              manage_package_conf(:create, conf_type, atom)
-            end
-          end
-        }
-
         package_data = package_info
+
         if package_data[:candidate_version].to_s == ""
           raise Chef::Exceptions::Package, "No candidate version available for #{new_resource.name}"
         end
 
         package_atom = "#{package_data[:category]}/#{package_data[:package_name]}"
         package_atom = "=#{package_atom}-#{new_resource.version}" if new_resource.version
-
-        if new_resource.respond_to?(:use) && new_resource.use
-          manage_package_conf(:create, "use", package_atom, new_resource.use)
-        end
 
         emerge(package_data[:package_atom], new_resource.options) if emerge?(action, package_data, new_resource.version)
       end
@@ -232,39 +218,6 @@ end
 
 # monkeypatch Chefs package resource and portage provider
 class Chef
-  class Resource
-    class Package < Chef::Resource
-      def keywords(arg=nil)
-        set_or_return(
-          :keywords,
-          arg,
-          :kind_of => [ String ]
-        )
-      end
-      def mask(arg=nil)
-        set_or_return(
-          :mask,
-          arg,
-          :kind_of => [ String ]
-        )
-      end
-      def unmask(arg=nil)
-        set_or_return(
-          :unmask,
-          arg,
-          :kind_of => [ String ]
-        )
-      end
-      def use(arg=nil)
-        set_or_return(
-          :use,
-          arg,
-          :kind_of => [ String ]
-        )
-      end
-    end
-  end
-
   class Provider
     class Package
       class Portage < Chef::Provider::Package
