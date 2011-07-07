@@ -1,6 +1,8 @@
-package "dev-db/mongodb" do
-  use "-v8"
+portage_package_use "dev-db/mongodb" do
+  use %w(v8)
 end
+
+package "dev-db/mongodb"
 
 if tagged?("nagios-client")
   package "dev-python/pymongo"
