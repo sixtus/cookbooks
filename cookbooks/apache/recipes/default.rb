@@ -7,7 +7,7 @@ package "www-servers/apache" do
     "static",
     "apache2_mpms_#{node[:apache][:mpm]}",
     node[:apache][:modules].map { |m| "apache2_modules_#{m}" }
-  ].flatten.sort)
+  ].flatten.sort.join)
 end
 
 template "/etc/apache2/httpd.conf" do
