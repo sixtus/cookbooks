@@ -12,14 +12,19 @@ service "beanstalkd" do
   action [:enable, :start]
 end
 
-if tagged?("nagios-client")
-  include_recipe "beanstalkd::nagios"
+# nagios
+package "dev-python/beanstalkc"
 
-  nrpe_command "check_beanstalkd" do
-    command "/usr/lib/nagios/plugins/check_beanstalkd -S localhost:11300"
-  end
+nagios_plugin "beanstalkd" do
+  source "check_beanstalkd"
+end
 
-  nagios_service "BEANSTALKD" do
-    check_command "check_nrpe!check_beanstalkd"
-  end
+nrpe_command "check_beanstalkd" do
+  command "/usr/lib/nagios/plugins/check_beanstalkd -S localhost:11300 " +
+          "-w #{node[:beanstalkd][:nagios][:warning]} " +
+          "-c #{node[:beanstalkd][:nagios][:critical]}"
+end
+
+nagios_service "BEANSTALKD" do
+  check_command "check_nrpe!check_beanstalkd"
 end
