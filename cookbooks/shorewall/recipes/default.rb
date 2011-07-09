@@ -97,9 +97,7 @@ if node[:ipv6_enabled]
   include_recipe "shorewall::ipv6"
 end
 
-nagios_plugin "conntrack" do
-  source "check_conntrack"
-end
+nagios_plugin "check_conntrack"
 
 nrpe_command "check_conntrack" do
   command "/usr/lib/nagios/plugins/check_conntrack 75 90"

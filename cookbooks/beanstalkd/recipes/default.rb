@@ -15,9 +15,7 @@ end
 # nagios
 package "dev-python/beanstalkc"
 
-nagios_plugin "beanstalkd" do
-  source "check_beanstalkd"
-end
+nagios_plugin "check_beanstalkd"
 
 nrpe_command "check_beanstalkd" do
   command "/usr/lib/nagios/plugins/check_beanstalkd -S localhost:11300 " +

@@ -299,9 +299,7 @@ nagios_service "PROCS" do
 end
 
 if node[:virtualization][:role] == "host"
-  nagios_plugin "raid" do
-    source "check_raid"
-  end
+  nagios_plugin "check_raid"
 
   nrpe_command "check_raid" do
     command "/usr/lib/nagios/plugins/check_raid"

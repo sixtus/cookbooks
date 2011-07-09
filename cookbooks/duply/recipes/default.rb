@@ -13,9 +13,7 @@ package "app-backup/duply"
 end
 
 # nagios checks
-nagios_plugin "duplybackup" do
-  source "check_duplybackup"
-end
+nagios_plugin "check_duplybackup"
 
 node.set[:lftp][:bookmarks][:backup] = node[:backup][:target_base_url].sub(/^ssh:/, "sftp:")
 

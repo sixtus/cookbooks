@@ -60,9 +60,7 @@ if tagged?("nagios-client")
     command "/usr/bin/touch /tmp/.check_cron"
   end
 
-  nagios_plugin "cron" do
-    source "check_cron"
-  end
+  nagios_plugin "check_cron"
 
   nrpe_command "check_cron" do
     command "/usr/lib/nagios/plugins/check_cron"

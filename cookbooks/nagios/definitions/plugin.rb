@@ -18,18 +18,22 @@ define :nagios_plugin,
     mode "0750"
   end
 
-  if params[:source]
-    cookbook_file "/usr/lib/nagios/plugins/check_#{params[:name]}" do
-      source params[:source]
-      cookbook params[:cookbook] if params[:cookbook]
+  if params[:content]
+    file "/usr/lib/nagios/plugins/#{params[:name]}" do
+      content params[:content]
       owner "root"
       group "nagios"
       mode "0750"
       action params[:action]
     end
   else
-    file "/usr/lib/nagios/plugins/check_#{params[:name]}" do
-      content params[:content]
+    unless params[:source]
+      params[:source] = params[:name]
+    end
+
+    cookbook_file "/usr/lib/nagios/plugins/#{params[:name]}" do
+      source params[:source]
+      cookbook params[:cookbook] if params[:cookbook]
       owner "root"
       group "nagios"
       mode "0750"

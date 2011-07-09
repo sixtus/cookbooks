@@ -154,8 +154,11 @@ if tagged?("nagios-client")
 
   package "net-analyzer/nagios-check_mysql_health"
 
-  nagios_plugin "mysql_health_wrapper" do
-    content "#!/bin/bash\nexec /usr/lib/nagios/plugins/check_mysql_health --hostname localhost --username nagios --password #{mysql_nagios_password} \"$@\""
+  nagios_plugin "check_mysql_health_wrapper" do
+    content "#!/bin/bash\n" +
+            "exec /usr/lib/nagios/plugins/check_mysql_health " +
+            "--hostname localhost --username nagios " +
+            "--password #{mysql_nagios_password} \"$@\""
   end
 
   node[:mysql][:server][:nagios].each do |name, params|
