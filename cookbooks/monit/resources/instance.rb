@@ -6,3 +6,4 @@ end
 actions :create
 
 attribute :template, :kind_of => String, :default => "monitrc"
+attribute :manage, :kind_of => [TrueClass, FalseClass], :default => true
