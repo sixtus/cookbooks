@@ -7,6 +7,7 @@ include_recipe "ohai"
 # load base recipes
 include_recipe "portage"
 include_recipe "portage::porticron"
+include_recipe "openssl"
 include_recipe "git"
 include_recipe "lftp"
 include_recipe "tmux"
