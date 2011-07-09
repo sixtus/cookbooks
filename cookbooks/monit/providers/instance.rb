@@ -17,6 +17,11 @@ action :create do
   end
 
   user = get_user(new_resource.name)
+  pidfile = if user[:name] == "root"
+              "/var/run/monit.pid"
+            else
+              "#{user[:dir]}/.monit.pid"
+            end
 
   template "/etc/init.d/monit.#{user[:name]}" do
     source "monit.initd"
@@ -24,7 +29,8 @@ action :create do
     owner "root"
     group "root"
     mode "0755"
-    variables :user => user
+    variables :user => user,
+              :pidfile => pidfile
   end
 
   service "monit.#{user[:name]}" do
@@ -57,7 +63,7 @@ action :create do
   end
 
   nrpe_command "check_monit_#{user[:name]}" do
-    command "/usr/lib/nagios/plugins/check_pidfile #{user[:dir]}/.monit.pid monit"
+    command "/usr/lib/nagios/plugins/check_pidfile #{pidfile} monit"
   end
 
   nagios_service "MONIT-#{user[:name].upcase}" do

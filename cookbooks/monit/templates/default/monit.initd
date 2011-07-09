@@ -1,13 +1,5 @@
 #!/sbin/runscript
 
-<%
-pidfile = if @user[:name] == "root"
-            "/var/run/monit.pid"
-          else
-            "#{@user[:dir]}/.monit.pid"
-          end
-%>
-
 depend() {
 	use net
 }
@@ -15,17 +7,17 @@ depend() {
 start() {
 	ebegin "Starting monit for user <%= @user[:name] %>"
 	start-stop-daemon --start --quiet \
-		--pidfile <%= pidfile %> \
+		--pidfile <%= @pidfile %> \
 		--user <%= @user[:name] %> \
 		--exec /usr/bin/monit \
 		-- \
-		-p <%= pidfile %>
+		-p <%= @pidfile %>
 	eend $?
 }
 
 stop() {
 	ebegin "Stopping monit for user <%= @user[:name] %>"
 	start-stop-daemon --stop --quiet \
-		--pidfile <%= pidfile %> \
+		--pidfile <%= @pidfile %> \
 	eend $?
 }
