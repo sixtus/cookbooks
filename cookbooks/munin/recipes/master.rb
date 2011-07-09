@@ -64,7 +64,3 @@ end
 
 munin_plugin "munin_update"
 munin_plugin "munin_stats"
-
-nagios_plugin "munin" do
-  source "check_munin"
-end

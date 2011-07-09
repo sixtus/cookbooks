@@ -282,13 +282,21 @@ nagios_service "PING" do
   servicegroups "system"
 end
 
+nrpe_command "check_zombie_procs" do
+  command "/usr/lib/nagios/plugins/check_procs -w 5 -c 10 -s Z"
+end
+
 nagios_service "ZOMBIES" do
-  check_command "check_munin_single!processes!zombie!5!10"
+  check_command "check_nrpe!check_zombie_procs"
   servicegroups "system"
 end
 
+nrpe_command "check_total_procs" do
+  command "/usr/lib/nagios/plugins/check_procs -w 300 -c 1000"
+end
+
 nagios_service "PROCS" do
-  check_command "check_munin!processes!300!1000"
+  check_command "check_nrpe!check_total_procs"
   servicegroups "system"
 end
 
@@ -306,13 +314,21 @@ if node[:virtualization][:role] == "host"
     servicegroups "system"
   end
 
+  nrpe_command "check_load" do
+    command "/usr/lib/nagios/plugins/check_load -w #{node[:cpu][:total]*3} -c #{node[:cpu][:total]*10}"
+  end
+
   nagios_service "LOAD" do
-    check_command "check_munin!load!#{node[:cpu][:total]*3}!#{node[:cpu][:total]*10}"
+    check_command "check_nrpe!check_load"
     servicegroups "system"
   end
 
+  nrpe_command "check_disks" do
+    command "/usr/lib/nagios/plugins/check_disk -w 10% -c 5%"
+  end
+
   nagios_service "DISKS" do
-    check_command "check_munin!df!90!95"
+    check_command "check_nrpe!check_disks"
     notification_interval 15
     servicegroups "system"
   end
@@ -321,8 +337,12 @@ if node[:virtualization][:role] == "host"
     notification_interval 15
   end
 
+  nrpe_command "check_swap" do
+    command "/usr/lib/nagios/plugins/check_swap -w 75% -c 50%"
+  end
+
   nagios_service "SWAP" do
-    check_command "check_munin!swap!128!1024"
+    check_command "check_nrpe!check_swap"
     notification_interval 180
     servicegroups "system"
   end

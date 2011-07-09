@@ -12,7 +12,6 @@ end
 
 package "net-analyzer/nagios"
 
-include_recipe "munin::master"
 include_recipe "nagios::nrpe"
 include_recipe "nagios::nsca"
 

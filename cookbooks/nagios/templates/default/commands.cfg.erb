@@ -30,16 +30,6 @@ define command {
   command_line $USER1$/check_nrpe -H $HOSTADDRESS$ -c $ARG1$
 }
 
-define command {
-  command_name check_munin
-  command_line $USER1$/check_munin -H $HOSTADDRESS$ -M $ARG1$ -w $ARG2$ -c $ARG3$
-}
-
-define command {
-  command_name check_munin_single
-  command_line $USER1$/check_munin -H $HOSTADDRESS$ -M $ARG1$ -i $ARG2$ -w $ARG3$ -c $ARG4$
-}
-
 # TODO: these should be defined in cookbooks
 define command {
   command_name check_ssh
