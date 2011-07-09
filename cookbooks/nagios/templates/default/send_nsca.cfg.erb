@@ -14,7 +14,7 @@
 # to read the password you specify here, so make sure to set
 # restrictive permissions on this config file!
 
-password=<%= begin @master[:nagios][:nsca][:password] rescue "" end %>
+password=<%= node[:nagios][:nsca][:password] %>
 
 
 

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+/usr/lib/nagios/plugins/disable_notifications
+/usr/lib/nagios/plugins/disable_obsession

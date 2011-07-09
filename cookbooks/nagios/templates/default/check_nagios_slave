@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# check our slave for failure with generous timeout
+res=$(/usr/lib/nagios/plugins/check_nrpe -H <%= @slave[:fqdn] %> -c check_nagios -t 120)
+
+if [[ $? -ne 0 ]]; then
+	/usr/lib/nagios/plugins/enable_master
+	echo -e "check_nagios returned:\n${res}\n" | \
+		mailx -s "WARNING: nagios master changed to <%= node[:fqdn] %>"
+fi

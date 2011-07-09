@@ -20,16 +20,11 @@ unless node[:skip][:munin_node]
     group "munin"
   end
 
-  master = node.run_state[:nodes].select do |n|
-    n[:tags].include?("munin-master")
-  end.first
-
   template "/etc/munin/munin-node.conf" do
     source "munin-node.conf"
     owner "root"
     group "root"
     mode "0644"
-    variables :master => master
     notifies :restart, "service[munin-node]"
   end
 

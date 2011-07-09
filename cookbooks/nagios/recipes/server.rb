@@ -10,10 +10,10 @@ portage_package_use "net-analyzer/nagios-plugins" do
   use %w(ldap mysql nagios-dns nagios-ntp nagios-ping nagios-ssh postgres)
 end
 
-package "net-analyzer/nagios"
-
 include_recipe "nagios::nrpe"
 include_recipe "nagios::nsca"
+
+package "net-analyzer/nagios"
 
 directory "/etc/nagios" do
   owner "nagios"
@@ -44,6 +44,40 @@ template "/usr/lib/nagios/plugins/notify" do
   owner "root"
   group "nagios"
   mode "0750"
+end
+
+# nagios master/slave setup
+slave = node.run_state[:nodes].select do |n|
+  n[:tags].include?("nagios-master") and
+  n[:fqdn] != node[:fqdn]
+end
+
+if slave.length > 1
+  raise "only 1 nagios slave is supported. found: #{slave.map { |n| n[:fqdn] }.inspect}"
+else
+  slave = slave.first
+end
+
+if slave
+  %w(enable disable).each do |t|
+    nagios_plugin "#{t}_notifications"
+    nagios_plugin "#{t}_obsession"
+    nagios_plugin "#{t}_master"
+  end
+
+  %w(submit_check_result check_nagios_slave).each do |p|
+    template "/usr/lib/nagios/plugins/#{p}" do
+      source p
+      owner "root"
+      group "nagios"
+      mode "0750"
+      variables :slave => slave
+    end
+  end
+
+  cron "check_nagios_slave" do
+    command "/usr/bin/flock /var/lock/check_nagios_slave.lock -c /usr/lib/nagios/plugins/check_nagios_slave"
+  end
 end
 
 # retrieve data from the search index
@@ -93,11 +127,10 @@ end
 end
 
 # nagios base config
-node.set[:nagios][:nsca][:password] = get_password("nagios/nsca")
-
 %w(nagios nsca resource).each do |f|
   nagios_conf f do
     subdir false
+    variables :slave => slave
   end
 end
 
@@ -184,9 +217,9 @@ file "/var/www/localhost/htdocs/index.html" do
 end
 
 nrpe_command "check_nagios" do
-    command "/usr/lib/nagios/plugins/check_pidfile /var/nagios/nagios.lock"
+  command "/usr/lib/nagios/plugins/check_nagios -F /var/nagios/status.dat -C /usr/sbin/nagios -e 5"
 end
 
 nagios_service "NAGIOS" do
-    check_command "check_nrpe!check_nagios"
+  check_command "check_nrpe!check_nagios"
 end

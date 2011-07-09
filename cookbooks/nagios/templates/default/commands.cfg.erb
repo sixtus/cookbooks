@@ -50,3 +50,9 @@ define command {
   command_name check_munin_node
   command_line $USER1$/check_tcp -H $HOSTADDRESS$ -p 4949 -e 'munin node at $HOSTNAME$'
 }
+
+# event handlers
+define command {
+  command_name submit_check_result
+  command_line $USER1$/submit_check_result $HOSTNAME$ '$SERVICEDESC$' $SERVICESTATE$ '$SERVICEOUTPUT$'
+}
