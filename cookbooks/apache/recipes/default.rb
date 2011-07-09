@@ -7,7 +7,7 @@ portage_package_use "www-servers/apache" do
     "static",
     "apache2_mpms_#{node[:apache][:mpm]}",
     node[:apache][:modules].map { |m| "apache2_modules_#{m}" }
-  ].flatten.sort.join)
+  ].flatten.sort.join(" "))
 end
 
 package "www-servers/apache"
