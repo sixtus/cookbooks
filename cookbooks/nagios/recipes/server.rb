@@ -59,20 +59,50 @@ else
 end
 
 if slave
-  %w(enable disable).each do |t|
-    nagios_plugin "#{t}_notifications"
-    nagios_plugin "#{t}_obsession"
-    nagios_plugin "#{t}_master"
+  include_recipe "beanstalkd"
+
+  nagios_plugin "queue_check_result"
+  nagios_plugin "process_check_results"
+
+  cookbook_file "/etc/init.d/nsca-processor" do
+    source "nsca-processor.initd"
+    owner "root"
+    group "root"
+    mode "0755"
   end
 
-  %w(submit_check_result check_nagios_slave).each do |p|
-    template "/usr/lib/nagios/plugins/#{p}" do
-      source p
-      owner "root"
-      group "nagios"
-      mode "0750"
-      variables :slave => slave
-    end
+  template "/etc/conf.d/nsca-processor" do
+    source "nsca-processor.confd"
+    owner "root"
+    group "root"
+    mode "0644"
+    variables :slave => slave
+  end
+
+  service "nsca-processor" do
+    action [:enable, :start]
+  end
+
+  nrpe_command "check_beanstalkd_nsca" do
+    command "/usr/lib/nagios/plugins/check_beanstalkd -S localhost:11300 " +
+            "-w #{node[:beanstalkd][:nagios][:warning]} " +
+            "-c #{node[:beanstalkd][:nagios][:critical]} " +
+            "-t send_nsca"
+  end
+
+  nagios_service "BEANSTALKD-NSCA" do
+    check_command "check_nrpe!check_beanstalkd_nsca"
+  end
+
+  nagios_plugin "enable_master"
+  nagios_plugin "disable_master"
+
+  template "/usr/lib/nagios/plugins/check_nagios_slave" do
+    source "check_nagios_slave"
+    owner "root"
+    group "nagios"
+    mode "0750"
+    variables :slave => slave
   end
 
   cron "check_nagios_slave" do

@@ -1,1 +1,2 @@
 depends "apache"
+depends "beanstalkd"

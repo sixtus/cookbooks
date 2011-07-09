@@ -54,5 +54,5 @@ define command {
 # event handlers
 define command {
   command_name submit_check_result
-  command_line $USER1$/submit_check_result $HOSTNAME$ '$SERVICEDESC$' $SERVICESTATE$ '$SERVICEOUTPUT$'
+  command_line $USER1$/queue_check_result $HOSTNAME$ '$SERVICEDESC$' $SERVICESTATE$ '$SERVICEOUTPUT$'
 }

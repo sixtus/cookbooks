@@ -1,0 +1,1 @@
+NAGIOS_HOST="<%= @slave[:fqdn] %>"
