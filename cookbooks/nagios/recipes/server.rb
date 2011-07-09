@@ -183,3 +183,11 @@ end
 file "/var/www/localhost/htdocs/index.html" do
   action :delete
 end
+
+nrpe_command "check_nagios" do
+    command "/usr/lib/nagios/plugins/check_pidfile /var/nagios/nagios.lock"
+end
+
+nagios_service "NAGIOS" do
+    check_command "check_nrpe!check_nagios"
+end
