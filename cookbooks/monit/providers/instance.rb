@@ -16,6 +16,11 @@ action :create do
     action :delete
   end
 
+  nagios_plugin "monit" do
+    source "check_monit"
+    cookbook "monit"
+  end
+
   user = get_user(new_resource.name)
 
   template "/etc/init.d/monit.#{user[:name]}" do
@@ -32,9 +37,12 @@ action :create do
     action :enable
   end
 
-  file "#{user[:dir]}/.monitrc.local" do
+  template "#{user[:dir]}/.monitrc.local" do
+    source new_resource.template
     owner user[:name]
     group user[:group][:name]
+    variables :user => user
+    notifies :restart, resources(:service => "monit.#{user[:name]}")
   end
 
   template "#{user[:dir]}/.monitrc" do
@@ -45,14 +53,5 @@ action :create do
     mode "0600"
     variables :user => user
     notifies :restart, resources(:service => "monit.#{user[:name]}")
-  end
-
-  nrpe_command "check_monit_#{user[:name]}" do
-    command "/usr/lib/nagios/plugins/check_pidfile #{user[:dir]}/.monit.pid monit"
-  end
-
-  nagios_service "MONIT-#{user[:name].upcase}" do
-    check_command "check_nrpe!check_monit_#{user[:name]}"
-    servicegroups "monit"
   end
 end
