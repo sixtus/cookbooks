@@ -275,9 +275,6 @@ if node[:virtualization][:role] == "host"
   munin_plugin "vmstat"
 end
 
-# reset all attributes to make sure cruft is being deleted on chef-client run
-node.default[:nagios][:services] = {}
-
 nagios_service "PING" do
   check_command "check_ping!100.0,20%!500.0,60%"
   servicegroups "system"
