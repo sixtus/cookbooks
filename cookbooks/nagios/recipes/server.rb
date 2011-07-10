@@ -246,6 +246,13 @@ file "/var/www/localhost/htdocs/index.html" do
   action :delete
 end
 
+template "/usr/share/nagios/htdocs/index.php" do
+  source "index.php"
+  owner "root"
+  group "root"
+  mode "0644"
+end
+
 nrpe_command "check_nagios" do
   command "/usr/lib/nagios/plugins/check_nagios -F /var/nagios/status.dat -C /usr/sbin/nagios -e 5"
 end
