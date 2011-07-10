@@ -31,11 +31,23 @@ nsca = open_nsca(opts.nagios)
 
 while True:
     job = beanstalk.reserve(timeout=5)
+    nsca.poll()
 
-    if nsca.poll() != None:
-        nsca = open_nsca(opts.nagios)
+    if not job:
+        continue
 
-    if job:
-        syslog.syslog(job.body)
+    syslog.syslog(job.body)
+
+    try:
         nsca.stdin.write(job.body + '\n')
+    except IOError:
+        job.release()
+
+        try:
+            nsca.terminate()
+        except:
+            pass
+
+        nsca = open_nsca(opts.nagios)
+    else:
         job.delete()
