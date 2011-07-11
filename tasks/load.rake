@@ -168,6 +168,3 @@ namespace "load" do
   end
 
 end
-
-desc "Upload cookbooks, roles and databags"
-task :deploy => [ "pull", "doc:all", "load:all" ]
