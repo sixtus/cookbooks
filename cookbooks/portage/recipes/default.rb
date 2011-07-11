@@ -66,7 +66,7 @@ end
 
 package "sys-apps/portage"
 
-%w(autounmask eix elogv gentoolkit portage-utils).each do |pkg|
+%w(eix elogv gentoolkit portage-utils).each do |pkg|
   package "app-portage/#{pkg}"
 end
 
