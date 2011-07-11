@@ -77,6 +77,7 @@ default[:mysql][:server][:innodb_file_per_table] = true
 default[:mysql][:server][:innodb_data_home_dir] = "/var/lib/mysql"
 default[:mysql][:server][:innodb_buffer_pool_size] = "512M"
 default[:mysql][:server][:innodb_log_file_size] = "256M"
+default[:mysql][:server][:innodb_log_buffer_size] = "1M"
 default[:mysql][:server][:innodb_flush_log_at_trx_commit] = "1"
 default[:mysql][:server][:innodb_thread_concurrency] = node[:cpu][:total] * 2 + 1
 default[:mysql][:server][:innodb_lock_wait_timeout] = "50"
