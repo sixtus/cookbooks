@@ -9,7 +9,7 @@ define :nrpe_command,
     owner "nagios"
     group "nagios"
     mode "0600"
-    notifies :restart, "service[nrpe]"
+    notifies :restart, resources(:service => "nrpe")
     action params[:action]
   end
 end
