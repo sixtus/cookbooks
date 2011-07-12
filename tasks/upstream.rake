@@ -26,6 +26,13 @@ namespace :upstream do
     sh("git pull")
   end
 
+  desc "Show new upstream commits"
+  task :cherry => [ :pull ]
+  task :cherry do
+    sh("git checkout master")
+    sh("git cherry master upstream | sed 's/^+ //;tn;d;:n' | xargs git show")
+  end
+
   desc "Merge upstream branch"
   task :merge => [ :pull ]
   task :merge do
