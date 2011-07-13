@@ -22,10 +22,16 @@
 
 <% if node[:cluster][:name] != "default" %>
 # local nodes in cluster <%= node[:cluster][:name] %>
-<% @nodes.sort_by { |n| n[:hostname] }.each do |n| %>
-<% if n[:cluster][:name] == node[:cluster][:name] and n[:local_ipaddress] %>
+<%
+@nodes.select do |n|
+  n[:cluster] and
+  n[:cluster][:name] == node[:cluster][:name] and
+  n[:local_ipaddress]
+end.sort_by do |n|
+  n[:hostname]
+end.each do |n|
+%>
 <%= n[:local_ipaddress] %> <%= n[:hostname] %>.local
-<% end %>
 <% end %>
 <% end %>
 
