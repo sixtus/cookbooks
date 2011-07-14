@@ -1,0 +1,69 @@
+#!/bin/bash
+
+source /usr/lib/nagios/plugins/utils.sh
+
+# defaults
+interface="all"
+rx_warn=60
+tx_warn=60
+rx_crit=85
+tx_crit=85
+
+while getopts "i:w:W:c:C:l:" opt; do
+	case $opt in
+		i) interface="$OPTARG:" ;;
+		w) rx_warn=$OPTARG ;;
+		W) tx_warn=$OPTARG ;;
+		c) rx_crit=$OPTARG ;;
+		C) tx_crit=$OPTARG ;;
+		\?)
+			echo "Invalid option: -$OPTARG" >&2
+			exit 1
+			;;
+		:)
+			echo "Option -$OPTARG requires an argument." >&2
+			exit 1
+			;;
+	esac
+done
+
+state=$STATE_OK
+new_time=$(date +%s)
+
+while read int new_rxb _ _ _ _ _ _ _ new_txb _; do
+	if [[ $interface != "all" && $interface != $int ]]; then
+		continue
+	fi
+
+	statefile="/tmp/.check_link_usage.${int}"
+
+	if [[ -e $statefile ]]; then
+		read old_time old_rxb old_txb < $statefile
+	fi
+
+	true ${old_time:=$new_time}
+	true ${old_rxb:=$new_rxb}
+	true ${old_txb:=$new_txb}
+
+	echo $new_time $new_rxb $new_txb > $statefile
+
+	time_diff=$(($new_time - $old_time))
+
+	if [[ $time_diff -lt 1 ]]; then
+		continue
+	fi
+
+	rx_rate=$((($new_rxb - $old_rxb) / $time_diff * 8 / 1024 / 1024))
+	tx_rate=$((($new_txb - $old_txb) / $time_diff * 8 / 1024 / 1024))
+
+	echo -n "$int(rx=$rx_rate,tx=$tx_rate) "
+
+	if [[ $rx_rate -ge $rx_crit ]]; then
+		state=$STATE_CRITICAL
+	elif [[ $rx_rate -ge $rx_warn ]]; then
+		state=$STATE_WARNING
+	fi
+done < <(grep ":" /proc/net/dev)
+
+echo
+exit $state

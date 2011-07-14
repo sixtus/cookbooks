@@ -342,4 +342,22 @@ if node[:virtualization][:role] == "host"
     notification_interval 180
     servicegroups "system"
   end
+
+  nagios_plugin "check_link_usage"
+
+  nrpe_command "check_link_usage" do
+    command "/usr/lib/nagios/plugins/check_link_usage"
+  end
+
+  nagios_service "LINK" do
+    check_command "check_nrpe!check_link_usage"
+    servicegroups "system"
+  end
+
+  execute "check_link_usage" do
+    command "/usr/lib/nagios/plugins/check_link_usage"
+    creates "/tmp/.check_link_usage.lo:"
+    user "nagios"
+    group "nagios"
+  end
 end
