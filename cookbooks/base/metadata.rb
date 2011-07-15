@@ -1,5 +1,6 @@
 depends "core_ext"
 depends "git"
+depends "hwraid"
 depends "lftp"
 depends "mdadm"
 depends "munin"
