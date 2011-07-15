@@ -9,6 +9,9 @@ define host {
 <% if @host[:virtualization][:host] %>
   parents <%= @host[:virtualization][:host] %>
 <% end %>
+<% if @host[:nagios][:contact_groups] %>
+  contact_groups <%= @host[:nagios][:contact_groups].join(",") %>
+<% end %>
 }
 
 <%

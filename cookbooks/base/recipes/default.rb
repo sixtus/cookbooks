@@ -1,5 +1,7 @@
 # to make things faster, add the node list to our run_state for later use
 node.run_state[:nodes] = search(:node, "ipaddress:[* TO *]")
+node.run_state[:roles] = search(:role)
+node.run_state[:users] = search(:users)
 
 # load ohai plugins first
 include_recipe "ohai"

@@ -137,7 +137,11 @@ remote_directory "/var/www/documentation" do
   mode "0755"
 end
 
-users = search(:users, "tags:hostmaster AND password:[* TO *]")
+users = node.run_state[:users].select do |u|
+  u[:tags] and
+  u[:tags].include?("hostmaster") and
+  u[:password]
+end
 
 template "/var/www/documentation/.htpasswd" do
   source "htpasswd"

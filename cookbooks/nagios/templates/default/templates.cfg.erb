@@ -32,6 +32,7 @@ define host {
   notification_period 24x7
   notification_interval 30
   notification_options d,u,r
+  contacts <%= @hostmasters %>
   contact_groups hostmasters
   register 0
 }
@@ -57,6 +58,7 @@ define service {
   notification_period 24x7
   notification_options w,u,c,r
   notifications_enabled 1
+  contacts <%= @hostmasters %>
   contact_groups hostmasters
   register 0
 }
@@ -74,5 +76,6 @@ define serviceescalation {
   first_notification 3
   last_notification 0
   notification_interval 60
+  contacts <%= @hostmasters %>
   contact_groups hostmasters
 }

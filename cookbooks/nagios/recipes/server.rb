@@ -112,38 +112,54 @@ if slave
 end
 
 # retrieve data from the search index
-contacts = search(:users, "nagios_contact_groups:[* TO *]").sort { |a,b| a[:id] <=> b[:id] }
-hostmasters = search(:users, "nagios_contact_groups:hostmasters").sort { |a,b| a[:id] <=> b[:id] }
+contacts = node.run_state[:users].select do |u|
+  u[:nagios_contact_groups] or
+  (u[:tags] and u[:tags].include?("hostmaster"))
+end.sort_by do |u|
+  u[:id]
+end
+
+hostmasters = contacts.select do |c|
+  c[:tags].include?("hostmaster")
+end.map do |c|
+  c[:id]
+end.join(",")
 
 hosts = node.run_state[:nodes].select do |n|
   n[:tags].include?("nagios-client")
-end.sort do |a,b|
-  a[:fqdn] <=> b[:fqdn]
+end.sort_by do |n|
+  n[:fqdn]
 end
 
-roles = search(:role, "NOT name:base").sort { |a,b| a.name <=> b.name }
+roles = node.run_state[:roles].reject do |r|
+  r.name == "base"
+end.sort_by do |r|
+  r.name
+end
+
+# build hostgroups
 hostgroups = {}
 
-roles.each do |role|
-  hostgroups[role.name] = []
-end
-
-hosts.each do |host|
-  cluster = host[:cluster][:name] or "default"
+hosts.each do |h|
+  # group per cluster
+  cluster = h[:cluster][:name] or "default"
 
   hostgroups[cluster] ||= []
-  hostgroups[cluster] << host[:fqdn]
+  hostgroups[cluster] << h[:fqdn]
 
-  host[:roles] ||= []
-  host[:roles].each do |role|
-    hostgroups[role] ||= []
-    hostgroups[role] << host[:fqdn] unless role == "base"
+  # group per role (except base)
+  h[:roles] ||= []
+  h[:roles].each do |r|
+    next if r == "base"
+    hostgroups[r] ||= []
+    hostgroups[r] << h[:fqdn]
   end
 end
 
+# build service groups
 servicegroups = []
-hosts.each do |host|
-  host[:nagios][:services].each do |name, params|
+hosts.each do |h|
+  h[:nagios][:services].each do |name, params|
     if params[:servicegroups]
       servicegroups |= params[:servicegroups].split(",")
     end
@@ -171,8 +187,10 @@ nagios_conf "cgi" do
 end
 
 # create nagios objects
-%w(templates commands).each do |f|
-  nagios_conf f
+nagios_conf "commands"
+
+nagios_conf "templates" do
+  variables :hostmasters => hostmasters
 end
 
 nagios_conf "contacts" do
@@ -214,14 +232,11 @@ group "nagios" do
   append true
 end
 
-users = search(:users, "nagios_contact_groups:[* TO *] AND password:[* TO *]", "id asc")
-
-template "/etc/nagios/users" do
-  source "users.erb"
+file "/etc/nagios/users" do
+  content contacts.map { |c| "#{c[:id]}:#{c[:password]}" }.join("\n")
   owner "root"
   group "apache"
   mode "0640"
-  variables :users => users
 end
 
 node[:apache][:default_redirect] = "https://#{node[:fqdn]}"
