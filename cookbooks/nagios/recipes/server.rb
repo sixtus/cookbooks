@@ -14,6 +14,7 @@ include_recipe "nagios::nrpe"
 include_recipe "nagios::nsca"
 
 package "net-analyzer/nagios"
+package "net-analyzer/mk-livestatus"
 
 directory "/etc/nagios" do
   owner "nagios"
@@ -232,7 +233,7 @@ ssl_certificate "/etc/ssl/apache2/server" do
 end
 
 apache_vhost "nagios" do
-  template "nagios.vhost.conf.erb"
+  template "apache.conf"
 end
 
 file "/var/www/localhost/htdocs/index.php" do
@@ -248,11 +249,31 @@ end
 
 template "/usr/share/nagios/htdocs/index.php" do
   source "index.php"
-  owner "root"
-  group "root"
+  owner "nagios"
+  group "nagios"
   mode "0644"
 end
 
+# jNag server (for mobile interface)
+cookbook_file "/usr/share/nagios/htdocs/jNag.php" do
+  source "jnag/jNag.php"
+  owner "nagios"
+  group "nagios"
+  mode "0644"
+end
+
+remote_directory "/usr/share/nagios/htdocs/jNag/images" do
+  source "jnag/images"
+  owner "nagios"
+  group "nagios"
+  mode "0755"
+end
+
+nagios_conf "jnag" do
+  subdir false
+end
+
+# nagios health check
 nrpe_command "check_nagios" do
   command "/usr/lib/nagios/plugins/check_nagios -F /var/nagios/status.dat -C /usr/sbin/nagios -e 5"
 end
