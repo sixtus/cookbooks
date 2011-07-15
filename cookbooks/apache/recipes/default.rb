@@ -4,7 +4,7 @@ end
 
 portage_package_use "www-servers/apache" do
   use([
-    "static",
+    "-*", "ssl", "static",
     "apache2_mpms_#{node[:apache][:mpm]}",
     node[:apache][:modules].map { |m| "apache2_modules_#{m}" }
   ].flatten.sort.join(" "))
