@@ -36,3 +36,12 @@ directory "/root/.dotfiles" do
   action :delete
   recursive true
 end
+
+query = Proc.new do |u|
+  u[:tags] and u[:tags].include?("hostmaster")
+end
+
+accounts_from_databag "hostmasters" do
+  groups %w(cron portage wheel)
+  query query
+end

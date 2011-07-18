@@ -9,7 +9,6 @@ run_list(%w(
   recipe[ssh]
   recipe[duply]
   recipe[account]
-  recipe[account::hostmasters]
   recipe[postfix::satelite]
   recipe[chef::client]
   recipe[nagios::client]

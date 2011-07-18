@@ -68,9 +68,9 @@ define :account,
     mode "0700"
   end
 
-  # don't create a authorized keys file if authorized_keys is nil, if it's empty
-  # i.e. [], then we would create an empty authorized keys but with nil, the file
-  # is not created.
+  # don't create a authorized keys file if authorized_keys is nil.
+  # if it's empty -- i.e. [] -- then we would create an empty
+  # authorized keys but with nil, the file is not created.
   unless params[:authorized_keys].nil?
     template "#{home}/.ssh/authorized_keys" do
       source "authorized_keys.erb"
@@ -83,32 +83,30 @@ define :account,
   end
 end
 
-define :account_from_databag,
-  :databag => :users,
-  :seed => false do
-  user = if params[:seed]
-           params[:seed]
-         else
-           search(params[:databag], "id:#{params[:name]}").first
-         end
+define :account_from_databag do
+  user = node.run_state[:users].select do |u|
+           u[:id] == params[:name]
+         end.first
+
+  # "rename" params, otherwise the scope in the account
+  # block below will have empty params
+  p = params
 
   account user[:id] do
-    user.each do |k, v|
-      next if k.to_s == "id"
-      v ||= params[k]
+    [user.keys + p.keys].flatten.each do |k|
+      next if [:id, :name].include?(k.to_sym)
+      v = user[k]
+      v ||= p[k]
       send k.to_sym, v if v
     end
   end
 end
 
 define :accounts_from_databag,
-  :groups => [],
-  :databag => :users do
-  search(params[:databag], params[:name]) do |user|
-    account_from_databag user[:id] do
-      databag params[:databag]
-      seed user
-    end
+  :groups => [] do
+
+  node.run_state[:users].select(&params[:query]).each do |user|
+    account_from_databag user[:id]
 
     params[:groups].each do |g|
       group g do
