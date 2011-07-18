@@ -355,6 +355,7 @@ if node[:virtualization][:role] == "host"
   nagios_service "LINK" do
     check_command "check_nrpe!check_link_usage"
     servicegroups "system"
+    check_interval 10
   end
 
   execute "check_link_usage" do

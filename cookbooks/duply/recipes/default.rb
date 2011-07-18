@@ -53,7 +53,7 @@ node[:backup][:configs].each do |name, params|
 
   nagios_service "DUPLYBACKUP-#{name.upcase}" do
     check_command "check_nrpe!check_duplybackup_#{name}"
-    normal_check_interval 1440
+    check_interval 1440
     notification_interval 180
   end
 end
