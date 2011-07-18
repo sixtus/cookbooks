@@ -35,13 +35,12 @@ node[:packages] = %w(
   app-admin/lib_users
   app-admin/pwgen
   app-admin/pydf
-  app-admin/superadduser
   app-arch/atool
   app-arch/xz-utils
   app-misc/colordiff
   app-misc/mc
-  app-misc/tmux
   app-shells/bash-completion
+  dev-util/strace
   mail-client/mailx
   net-analyzer/bwm-ng
   net-analyzer/iptraf-ng
@@ -51,9 +50,7 @@ node[:packages] = %w(
   net-analyzer/traceroute
   net-dns/bind-tools
   net-misc/keychain
-  net-misc/rsync
   net-misc/telnet-bsd
-  net-misc/wget
   net-misc/whois
   sys-apps/hdparm
   sys-apps/iproute2
