@@ -1,0 +1,23 @@
+#!/bin/bash
+
+V=11.0
+ORIGIN=http://github.com/hollow/zentoo.git
+ARCH=$(portageq envvar ARCH)
+
+rm -rf /usr/portage/.git
+
+tmpdir=$(mktemp -d)
+git clone --branch $V --no-checkout $ORIGIN $tmpdir
+mv ${tmpdir}/.git /usr/portage/.git
+rm -rf ${tmpdir}
+
+cd /usr/portage
+
+git checkout -f
+git clean -df
+
+emerge --sync
+eix-update
+
+rm /etc/make.profile
+ln -s /usr/portage/profiles/default/linux/$ARCH/$V /etc/make.profile
