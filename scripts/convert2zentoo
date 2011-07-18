@@ -16,8 +16,7 @@ cd /usr/portage
 git checkout -f
 git clean -df
 
+ln -nfs /usr/portage/profiles/default/linux/$ARCH/$V /etc/make.profile
+
 emerge --sync
 eix-update
-
-rm /etc/make.profile
-ln -s /usr/portage/profiles/default/linux/$ARCH/$V /etc/make.profile
