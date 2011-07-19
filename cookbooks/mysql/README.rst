@@ -367,6 +367,11 @@ external resources are mentioned to help in optimizing server performance.
   needed in the buffer pool, saving disk I/O. But larger log files also mean
   that recovery is slower in case of a crash.
 
+  See also:
+
+  * http://www.mysqlperformanceblog.com/2008/11/21/how-to-calculate-a-good-innodb-log-file-size/
+  * http://www.mysqlperformanceblog.com/2006/07/03/choosing-proper-innodb_log_file_size/
+
 ``mysql[:server][:innodb_flush_log_at_trx_commit] = "1"``
   If the value of ``innodb_flush_log_at_trx_commit`` is 0, the log buffer is
   written out to the log file once per second and the flush to disk operation
