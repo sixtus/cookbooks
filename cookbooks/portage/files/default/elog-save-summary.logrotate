@@ -1,0 +1,6 @@
+/var/log/portage/elog/summary.log {
+	su portage portage
+	missingok
+	nocreate
+	delaycompress
+}

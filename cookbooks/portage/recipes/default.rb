@@ -84,6 +84,12 @@ cookbook_file "/etc/logrotate.d/portage" do
   backup 0
 end
 
+cookbook_file "/etc/logrotate.d/elog-save-summary" do
+  source "elog-save-summary.logrotate"
+  mode "0644"
+  backup 0
+end
+
 cookbook_file "/etc/dispatch-conf.conf" do
   source "dispatch-conf.conf"
   mode "0644"
