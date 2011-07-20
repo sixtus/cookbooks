@@ -1,5 +1,8 @@
 #!/bin/bash
 
+STAGE4_FILE="stage4-current.tar.bz2"
+MIRROR="http://www.zentoo.org/downloads/amd64"
+
 source /etc/init.d/functions.sh
 
 if [[ $# -lt 3 ]]; then
@@ -11,18 +14,19 @@ NAME=$1 && shift
 FQDN=$1 && shift
 INTERFACE=$1 && shift
 
-STAGE4_DATE=20110522
-
 if [[ -z $1 || "$1" = "--" ]]; then
-	TEMPLATE=/vservers/stage4-x86-64-gentoo-lts-${STAGE4_DATE}.tar.bz2
+	TEMPLATE=/vservers/${STAGE4_FILE}
 	pushd /vservers >/dev/null
-	wget -N http://bb.xnull.de/projects/gentoo/stage4-x86-64-gentoo-lts-${STAGE4_DATE}.tar.bz2
+	wget -N ${MIRROR}/${STAGE4_FILE}
 	popd >/dev/null
 else
 	TEMPLATE="$1"
 fi
 
 shift
+
+VDIR=/vservers/$NAME
+CDIR=/etc/vservers/$NAME
 
 IP=${INTERFACE/\/*}
 IP=${IP##*:}
@@ -42,25 +46,31 @@ vserver $NAME build \
 echo
 
 # start vserver on boot
-echo default > /etc/vservers/$NAME/apps/init/mark
+echo default > $CDIR/apps/init/mark
 
-# make binary packages available
-echo "/usr/portage/packages /usr/portage/packages none bind,rw 0 0" >> /etc/vservers/$NAME/fstab
+# do not use shared portage tree
+rm -rf $VDIR/usr/portage
+sed -i -e '/^\/usr\/portage \/usr\/portage/d' $CDIR/fstab
+
+# use zentoo.org tree and shared binpkgs
+git clone http://github.com/hollow/zentoo.git $VDIR/usr/portage
+mkdir $VDIR/usr/portage/{distfiles,packages}
+echo "/usr/portage/packages /usr/portage/packages none bind,rw 0 0" >> $CDIR/fstab
 
 # use hosts resolv.conf to make sure we have DNS resolution
-cp /etc/resolv.conf /vservers/$NAME/etc/resolv.conf
+cp /etc/resolv.conf $VDIR/etc/resolv.conf
 
 # set proper /etc/hosts entries
-echo "127.0.0.1 localhost" > /vservers/$NAME/etc/hosts
-echo "$IP $FQDN ${FQDN/.*}" >> /vservers/$NAME/etc/hosts
+echo "127.0.0.1 localhost" > $VDIR/etc/hosts
+echo "$IP $FQDN ${FQDN/.*}" >> $VDIR/etc/hosts
 
 # disable kmsg polling in syslog-ng (not allowed in vservers)
-if [[ -e /vservers/$NAME/etc/syslog-ng/syslog-ng.conf ]]; then
-	sed -i -e '/kmsg/d' /vservers/$NAME/etc/syslog-ng/syslog-ng.conf
+if [[ -e $VDIR/etc/syslog-ng/syslog-ng.conf ]]; then
+	sed -i -e '/kmsg/d' $VDIR/etc/syslog-ng/syslog-ng.conf
 fi
 
 # enable sshd
-ln -sf /etc/init.d/sshd /vservers/$NAME/etc/runlevels/default/sshd
+ln -sf /etc/init.d/sshd $VDIR/etc/runlevels/default/sshd
 
 # remerge openssl to get USE=-bindist
 vserver $NAME start
