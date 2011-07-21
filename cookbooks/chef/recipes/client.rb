@@ -1,5 +1,11 @@
 package "app-admin/chef"
 
+directory "/var/log/chef" do
+  owner "chef"
+  group "chef"
+  mode "0755"
+end
+
 directory "/var/lib/chef/cache" do
   group "root"
   mode "0750"
