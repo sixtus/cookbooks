@@ -27,4 +27,23 @@ end.each do |u|
       directory "/backup"
     end
   end
+
+  # special case for user backup:
+  #
+  # create directories for all hosts that want to do backup via duply since
+  # duplicity does not create directories recusrively ... *sigh*
+  #
+  if u[:id] == "backup"
+    node.run_state[:nodes].each do |n|
+      next unless n[:backup]
+      next unless n[:backup][:configs]
+      next if n[:backup][:configs].empty?
+
+      directory "/backup/backup/#{n[:fqdn]}" do
+        owner "backup"
+        group "backup"
+        mode "0700"
+      end
+    end
+  end
 end
