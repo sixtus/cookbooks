@@ -27,6 +27,7 @@ user "nginx" do
   gid 82
   home "/dev/null"
   shell "/sbin/nologin"
+  comment "added by portage for nginx"
 end
 
 package "www-servers/nginx"

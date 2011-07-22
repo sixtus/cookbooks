@@ -6,21 +6,9 @@ node.run_state[:users] = search(:users)
 # load ohai plugins first
 include_recipe "ohai"
 
-# load base recipes
-include_recipe "portage"
-include_recipe "portage::porticron"
-include_recipe "openssl"
-include_recipe "git"
-include_recipe "lftp"
-include_recipe "tmux"
-include_recipe "vim"
-
-# install base packages
-node[:packages].each do |pkg|
-  package pkg
-end
-
 # initialize /etc with git to keep track of changes
+include_recipe "git"
+
 execute "git init" do
   cwd "/etc"
   creates "/etc/.git"
@@ -55,6 +43,50 @@ git commit -m 'automatic commit during chef-client run'
 git gc
 EOS
   not_if { %x(env GIT_DIR=/etc/.git GIT_WORK_TREE=/etc git status --porcelain).strip.empty? }
+end
+
+# ensure that system users/groups from baselayout are always correct
+# (just in case somebody has given login shells to system accounts etc)
+node[:base][:groups].each do |name, params|
+  group name do
+    gid params[:gid]
+    members params[:members].split(",")
+  end
+end
+
+group "wheel" do
+  gid 10
+  append true
+  members %w(root)
+end
+
+group "users" do
+  gid 100
+  append true
+end
+
+node[:base][:users].each do |name, params|
+  user name do
+    password "*"
+    uid params[:uid]
+    gid params[:gid]
+    comment name
+    home params[:home]
+    shell params[:shell]
+  end
+end
+
+# load base recipes
+include_recipe "portage"
+include_recipe "portage::porticron"
+include_recipe "openssl"
+include_recipe "lftp"
+include_recipe "tmux"
+include_recipe "vim"
+
+# install base packages
+node[:packages].each do |pkg|
+  package pkg
 end
 
 # configure the resolver

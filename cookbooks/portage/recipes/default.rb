@@ -1,3 +1,22 @@
+group "portage" do
+  gid 250
+  append true
+end
+
+user "portage" do
+  uid 250
+  gid 250
+  comment "portage"
+  home "/var/tmp/portage"
+  shell "/bin/false"
+end
+
+group "portage" do
+  gid 250
+  append true
+  members %w(portage)
+end
+
 link "/etc/make.profile" do
   to node[:portage][:profile]
 end

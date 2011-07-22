@@ -13,7 +13,7 @@ action :create do
   end
 
   account user do
-    comment user.upcase
+    comment "capistrano skeleton for #{user}"
     shell "/bin/bash"
     home homedir
     home_mode "0755"
