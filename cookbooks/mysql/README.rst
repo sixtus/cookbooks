@@ -26,6 +26,21 @@ external resources are mentioned to help in optimizing server performance.
 
 .. rubric:: Startup & Security
 
+``mysql[:server][:startup_timeout] = 900``
+  This setting (in seconds) should be high enough to allow InnoDB to do a full
+  checkpoint recovery. 900 is the default used in the upstream RPM startup
+  scripts. 30 seconds should be sufficent if you just have a tiny <1GiB
+  database. After the core startup is done, we wait this long for the UNIX
+  socket to appear.
+
+``mysql[:server][:startup_early_timeout] = 1000``
+  This is how long, in milliseconds, we wait for pidfile to be created, early
+  in the startup.
+
+``mysql[:server][:stop_timeout] = 120``
+  This setting (in seconds) should be high enough to allow any pages in memory
+  to be flushed to disk.
+
 ``mysql[:server][:skip_networking] = false``
   Do not listen for TCP/IP connections at all. All interaction with mysqld must
   be made using Unix socket files. This option is highly recommended for
@@ -127,6 +142,20 @@ external resources are mentioned to help in optimizing server performance.
   Tells the slave SQL thread to restrict replication to the specified array of
   tables. This works for both cross-database updates and default database
   updates.
+
+``mysql[:server][:auto_increment_increment] = 1``
+  auto_increment_increment and auto_increment_offset are intended for use with
+  master-to-master replication, and can be used to control the operation of
+  AUTO_INCREMENT columns.
+
+``mysql[:server][:auto_increment_offset] = 1``
+  auto_increment_increment and auto_increment_offset are intended for use with
+  master-to-master replication, and can be used to control the operation of
+  AUTO_INCREMENT columns.
+
+  See the `MySQL manual
+  <http://dev.mysql.com/doc/refman/5.1/en/replication-options-master.html#sysvar_auto_increment_increment>`_
+  for details.
 
 .. rubric:: General Performance Options
 

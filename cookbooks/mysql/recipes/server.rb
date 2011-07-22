@@ -23,6 +23,13 @@ template "/etc/mysql/my.cnf" do
   mode "0644"
 end
 
+template "/etc/conf.d/mysql" do
+  source "mysql.confd"
+  owner "root"
+  group "root"
+  mode "0644"
+end
+
 # create initial database and users
 mysql_root_pass = get_password("mysql/root")
 

@@ -12,6 +12,9 @@ default[:mysql][:server][:datadir] = "/var/lib/mysql"
 default[:mysql][:server][:tmpdir] = "/var/tmp"
 
 # Startup & Security
+default[:mysql][:server][:startup_timeout] = 900
+default[:mysql][:server][:startup_early_timeout] = 1000
+default[:mysql][:server][:stop_timeout] = 120
 default[:mysql][:server][:skip_networking] = false
 default[:mysql][:server][:bind_address] = "127.0.0.1"
 default[:mysql][:server][:skip_innodb] = false
@@ -27,6 +30,8 @@ default[:mysql][:server][:log_slave_updates] = false
 default[:mysql][:server][:replicate_do_db] = false
 default[:mysql][:server][:replicate_do_table] = false
 default[:mysql][:server][:slave_transaction_retries] = 10
+default[:mysql][:server][:auto_increment_increment] = 1
+default[:mysql][:server][:auto_increment_offset] = 1
 
 if node[:mysql][:server][:slave_enabled]
   default[:mysql][:server][:log_bin] = true
