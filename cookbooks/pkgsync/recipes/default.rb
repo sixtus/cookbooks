@@ -13,7 +13,7 @@ if master
   end
 
   template "/etc/rsyncd.conf" do
-    source "rsyncd.conf.erb"
+    source "rsyncd.conf"
     owner "root"
     group "root"
     mode "0640"

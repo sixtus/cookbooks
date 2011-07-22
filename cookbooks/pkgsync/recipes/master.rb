@@ -14,7 +14,7 @@ file "/etc/pkgsync.secret" do
 end
 
 template "/usr/sbin/pkgsync" do
-  source "pkgsync.erb"
+  source "pkgsync.sh"
   owner "root"
   group "root"
   mode "0755"
