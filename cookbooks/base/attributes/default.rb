@@ -235,19 +235,6 @@ default[:base][:users] = {
 # block upgrades with p.mask entries
 default[:gentoo][:upgrade_blockers] = []
 
-# backwards compatibility (ohai-0.6 introduces linux-vserver detection)
-if File.exists?("/proc/self/vinfo")
-  set[:virtualization][:emulator] = "linux-vserver"
-  set[:virtualization][:system] = "linux-vserver"
-  if File.exists?("/proc/virtual")
-    set[:virtualization][:role] = "host"
-  else
-    set[:virtualization][:role] = "guest"
-  end
-else
-  set[:virtualization][:role] = "host"
-end
-
 # rc_sys
 if node[:virtualization][:role] == "guest"
   default[:openrc][:sys] = case node[:virtualization][:system]
