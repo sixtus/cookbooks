@@ -7,5 +7,5 @@ end
 actions :create, :delete
 
 attribute :host,           :kind_of => String, :default => "localhost"
-attribute :password,       :kind_of => String
+attribute :password,       :kind_of => String, :default => nil
 attribute :force_password, :kind_of => [TrueClass, FalseClass], :default => false

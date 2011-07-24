@@ -10,14 +10,13 @@ action :create do
       password = get_password("mysql/#{new_resource.name}_#{new_resource.host}", 16)
     end
   end
-  if new_resource.force_password
-    if mysql_user_exists?(new_resource)
-      mysql_force_password(new_resource, password)
-    else
-      mysql_create_user(new_resource, password)
-    end
-  elsif !mysql_user_exists?(new_resource)
+
+  unless mysql_user_exists?(new_resource)
     mysql_create_user(new_resource, password)
+  end
+
+  if new_resource.force_password
+    mysql_force_password(new_resource, password)
   end
 end
 

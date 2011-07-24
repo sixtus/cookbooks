@@ -1,3 +1,5 @@
+.. _chef-cookbook-mysql:
+
 =====
 MySQL
 =====
@@ -13,8 +15,8 @@ development headers.
 On server nodes ``recipe[mysql::server]`` will install and preseed a MySQL
 server instance with a random root password and the usual ``mysql_install_db``
 steps. Additionally the ``mysql::server`` recipe will install configuration
-files for :ref:`syslog-ng<chef-cookbooks-syslog-ng>`, :ref:`Nagios
-<chef-cookbooks-nagios>` and :ref:`Munin <chef-cookbooks-munin>`.
+files for :ref:`syslog-ng <chef-cookbook-syslog-ng>`, :ref:`Nagios
+<chef-cookbook-nagios>` and :ref:`Munin <chef-cookbook-munin>`.
 
 Attributes
 ==========
@@ -142,6 +144,12 @@ external resources are mentioned to help in optimizing server performance.
   Tells the slave SQL thread to restrict replication to the specified array of
   tables. This works for both cross-database updates and default database
   updates.
+
+``mysql[:server][:slave_transaction_retries] = 10``
+  If a replication slave SQL thread fails to execute a transaction because of
+  an InnoDB deadlock or because the transaction's execution time exceeded
+  InnoDB's innodb_lock_wait_timeout, it automatically retries
+  slave_transaction_retries times before stopping with an error.
 
 ``mysql[:server][:auto_increment_increment] = 1``
   auto_increment_increment and auto_increment_offset are intended for use with
@@ -401,6 +409,13 @@ external resources are mentioned to help in optimizing server performance.
   * http://www.mysqlperformanceblog.com/2008/11/21/how-to-calculate-a-good-innodb-log-file-size/
   * http://www.mysqlperformanceblog.com/2006/07/03/choosing-proper-innodb_log_file_size/
 
+``mysql[:server][:innodb_log_buffer_size] = "1M"``
+  The size in bytes of the buffer that InnoDB uses to write to the log files on
+  disk. Sensible values range from 1MB to 8MB. A large log buffer enables large
+  transactions to run without a need to write the log to disk before the
+  transactions commit. Thus, if you have big transactions, making the log
+  buffer larger saves disk I/O.
+
 ``mysql[:server][:innodb_flush_log_at_trx_commit] = "1"``
   If the value of ``innodb_flush_log_at_trx_commit`` is 0, the log buffer is
   written out to the log file once per second and the flush to disk operation
@@ -461,6 +476,23 @@ external resources are mentioned to help in optimizing server performance.
 ``mysql[:server][:default_storage_engine] = "MyISAM"``
   Set the default storage engine (table type) for tables.
 
+.. rubric:: Nagios
+
+``mysql[:server][:detailed_monitoring] = false``
+  Enable more detailed nagios service checks which mostly depend on the
+  application running queries and creating indexes etc. Since these metrics may
+  not be optimized by the Operations team alone, these are disabled by default.
+
+``mysql[:server][:nagios][...][:enabled] = ...``
+``mysql[:server][:nagios][...][:warning] = ...``
+``mysql[:server][:nagios][...][:critical] = ...``
+``mysql[:server][:nagios][...][:check_interval] = ...``
+``mysql[:server][:nagios][...][:notification_interval] = ...``
+  Configuration of nagios service check thresholds and intervals. For a
+  detailed list of available service checks and their default thresholds and
+  intervals see the ``attributes/server.rb`` file in the ``mysql`` cookbook.
+
+
 Resources & Providers
 =====================
 
@@ -483,13 +515,15 @@ Configure MySQL users and possibly generate a random password for it.
 
 .. rubric:: Attributes
 
-``password``
-  The password for the specified user. ``nil`` will generate a random password.
-  See :ref:`chef-cookbooks-core_ext-passwords` for details. (default: nil)
+``host = "localhost"``
+  The host this user is allowed to connect from.
 
-``force_password``
+``password = nil``
+  The password for the specified user. ``nil`` will generate a random password.
+  See :ref:`chef-cookbooks-core_ext-passwords` for details.
+
+``force_password = false``
   Set the specified password even if the user already has a password.
-  (default: false, unless password attribute is set)
 
 .. rubric:: Examples
 
@@ -579,61 +613,68 @@ Nagios Service Checks
 =====================
 
 The ``mysql::server`` recipe will register the following nagios service checks
-with the chef server.
+with the chef server. Most service checks are based on ``check_mysql_health``
+by ConSol Labs. For details see the `check_mysql_health project page
+<http://labs.consol.de/lang/en/nagios/check_mysql_health/>`_.
 
-MYSQL-CTIME
------------
+**MYSQL**
+  Checks if the mysqld process is running
 
-MYSQL-CONNS
------------
+**MYSQL-CTIME**
+  Determines how long connection establishment and login take
 
-MYSQL-TCHIT
------------
+**MYSQL-CONNS**
+  Number of open connections
 
-MYSQL-QCHIT
------------
+**MYSQL-TCHIT**
+  Hitrate in the Thread-Cache
 
-MYSQL-QCLOW
------------
+**MYSQL-QCHIT**
+  Hitrate in the Query Cache
 
-MYSQL-SLOW
-----------
+**MYSQL-QCLOW**
+  Displacement out of the Query Cache due to memory shortness
 
-MYSQL-LONG
-----------
+**MYSQL-SLOW**
+  Rate of queries that were detected as 'slow'
 
-MYSQL-TABHIT
-------------
+**MYSQL-LONG**
+  Sum of processes that are runnning longer than 1 minute
 
-MYSQL-LOCK
-----------
+**MYSQL-TABHIT**
+  Hitrate in the Table-Cache
 
-MYSQL-INDEX
------------
+**MYSQL-LOCK**
+  Rate of failed table locks
 
-MYSQL-TMPTAB
-------------
+**MYSQL-INDEX**
+  Sum of the Index-Utilization (in contrast to Full Table Scans)
 
-MYSQL-KCHIT
------------
+**MYSQL-TMPTAB**
+  Percent of the temporary tables that were created on the disk instead in
+  memory
 
-MYSQL-BPHIT
------------
+**MYSQL-KCHIT**
+  Hitrate in the Myisam Key Cache
 
-MYSQL-BPWAIT
-------------
+**MYSQL-BPHIT**
+  Hitrate in the InnoDB Buffer Pool
 
-MYSQL-LOGWAIT
--------------
+**MYSQL-BPWAIT**
+  Rate of the InnoDB Buffer Pool Waits
 
-MYSQL-SLAVEIO
--------------
+**MYSQL-LOGWAIT**
+  Rate of the InnoDB Log Waits
 
-MYSQL-SLAVESQL
---------------
+**MYSQL-SLAVEIO**
+  Checks if the IO-Thread of the Slave-DB is running
 
-MYSQL-SLAVELAG
---------------
+**MYSQL-SLAVESQL**
+  Checks if the SQL-Thread of the Slave-DB is running
+
+**MYSQL-SLAVELAG**
+  Delay between Master and Slave
+
 
 Munin Metrics
 =============
