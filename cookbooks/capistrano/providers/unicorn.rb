@@ -95,10 +95,7 @@ EOS
               :logfile => logfile
   end
 
-  nginx_server "capistrano_unicorn-#{rvm[:user]}" do
-    template "unicorn.nginx.conf"
-    cookbook "capistrano"
-    user rvm[:user]
+  nginx_unicorn rvm[:user] do
     homedir rvm[:homedir]
     port config[:port]
   end
