@@ -3,6 +3,8 @@
 #
 
 require 'rubygems'
+require 'bundler/setup'
+
 require 'chef'
 require 'highline/import'
 
