@@ -132,6 +132,8 @@ end
 
 # nagios service checks
 if tagged?("nagios-client")
+
+  # simple process check
   nrpe_command "check_mysql" do
     command "/usr/lib/nagios/plugins/check_pidfile /var/run/mysqld/mysqld.pid /usr/sbin/mysqld"
   end
@@ -146,7 +148,16 @@ if tagged?("nagios-client")
     notification_interval 15
   end
 
+  # MySQL user for check_mysql_health and others
   mysql_nagios_password = get_password("mysql/nagios")
+
+  file "/var/nagios/home/.my.cnf" do
+    content "[client]\nuser = nagios\npass = #{mysql_nagios_password}\n"
+    owner "nagios"
+    group "nagios"
+    mode "0600"
+    backup 0
+  end
 
   mysql_user "nagios" do
     force_password true
@@ -159,21 +170,24 @@ if tagged?("nagios-client")
     database "*"
   end
 
-  package "net-analyzer/nagios-check_mysql_health"
+  # do not use upstream version with wrapper hack
+  package "net-analyzer/nagios-check_mysql_health" do
+    action :remove
+  end
 
   nagios_plugin "check_mysql_health_wrapper" do
-    content "#!/bin/bash\n" +
-            "exec /usr/lib/nagios/plugins/check_mysql_health " +
-            "--hostname localhost --username nagios " +
-            "--password #{mysql_nagios_password} \"$@\""
+    action :delete
   end
+
+  # instead use patched version with my.cnf support
+  nagios_plugin "check_mysql_health"
 
   node[:mysql][:server][:nagios].each do |name, params|
     command_name = "check_mysql_#{name}"
     service_name = "MYSQL-#{name.upcase}"
 
     nrpe_command command_name do
-      command "/usr/lib/nagios/plugins/check_mysql_health_wrapper --mode #{params[:command]} --warning #{params[:warning]} --critical #{params[:critical]}"
+      command "/usr/lib/nagios/plugins/check_mysql_health --mode #{params[:command]} --warning #{params[:warning]} --critical #{params[:critical]}"
     end
 
     nagios_service service_name do
