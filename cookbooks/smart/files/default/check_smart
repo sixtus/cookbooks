@@ -196,6 +196,8 @@ if ($interface eq 'ata'){
 		#    9 Power_On_Minutes        0x0032   241   241   000    Old_age   Always       -       113h+12m
 		next unless $line =~ /^\s*\d+\s(\S+)\s+(?:\S+\s+){6}(\S+)\s+(\d+)/;
 		my ($attribute_name, $when_failed, $raw_value) = ($1, $2, $3);
+		# ignore temperature attribute, it fails everywhere all the time.
+		next if $attribute_name == 'Airflow_Temperature_Cel';
 		if ($when_failed ne '-'){
 			push(@error_messages, "Attribute $attribute_name failed at $when_failed");
 			escalate_status('WARNING');
