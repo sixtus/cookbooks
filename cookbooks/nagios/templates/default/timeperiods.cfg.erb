@@ -40,7 +40,7 @@ def convert_timeperiod(wday, periods)
 
   periods.map do |p|
     p = timeperiods[p]
-    "#{wday} #{p[:start]} - #{p[:end]}"
+    "#{wday} #{p[:start]}-#{p[:end]}"
   end
 end
 %>
