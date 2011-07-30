@@ -2,6 +2,13 @@ require 'chef/node'
 require 'chef/data_bag'
 require 'chef/data_bag_item'
 
+# monkeypatch data_bag_item for better DSL
+class Chef::DataBagItem
+  def method_missing(sym, *args, &block)
+    self.raw_data.store(sym, *args, &block)
+  end
+end
+
 task :require_clean_working_tree do
   sh("git update-index -q --ignore-submodules --refresh")
   err = false
