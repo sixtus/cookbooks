@@ -7,11 +7,7 @@ Key Contacts
 
 The IT Operations Team consists of the following people:
 
-+------------------+-----------------------------------+----------------+--------------------------+
-| Name             | E-Mail address                    | Mobile         | Role                     |
-+==================+===================================+================+==========================+
-|                  |                                   |                |                          |
-+------------------+-----------------------------------+----------------+--------------------------+
+<%= contacts %>
 
 
 Hours of Operations
@@ -21,8 +17,8 @@ The IT Operations Team is responsible for monitoring the computer systems 24
 hours a day, 7 days a week. However, non-critical computer systems and other
 enquiries will only be handled during office hours, which are as follows:
 
-* **Office Hours**: 7:00 - 22:00 CET
-* **Non-office Hours**: 22:00 - 7:00 CET
+* **Office Hours**: <%= tp["daytime"]["start"] %> - <%= tp["daytime"]["end"] %> CET
+* **Non-office Hours**: <%= tp["nighttime"]["start"] %> - <%= tp["nighttime"]["end"] %> CET
 
 
 Emergency Response Team
@@ -45,13 +41,7 @@ handled by the Operations Team during office hours.
 First-level support is handled according to the following schedule. It may,
 however, be escalated to any of the key contacts specified above.
 
-+------------------+-----+-----+-----+-----+-----+-----+-----+
-| Time Period      | Mon | Tue | Wed | Thu | Fri | Sat | Sun |
-+==================+=====+=====+=====+=====+=====+=====+=====+
-| Office Hours     |     |     |     |     |     |     |     |
-+------------------+-----+-----+-----+-----+-----+-----+-----+
-| Non-office Hours |     |     |     |     |     |     |     |
-+------------------+-----+-----+-----+-----+-----+-----+-----+
+<%= ert %>
 
 
 System Classification
