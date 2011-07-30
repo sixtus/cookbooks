@@ -105,7 +105,7 @@ use_ssl_authentication=0
 # not use authorization.  You may use an asterisk (*) to
 # authorize any user who has authenticated to the web server.
 
-authorized_for_system_information=<%= @hostmasters %>
+authorized_for_system_information=<%= @hostmasters.join(",") %>
 
 
 
@@ -117,7 +117,7 @@ authorized_for_system_information=<%= @hostmasters %>
 # an asterisk (*) to authorize any user who has authenticated
 # to the web server.
 
-authorized_for_configuration_information=<%= @hostmasters %>
+authorized_for_configuration_information=<%= @hostmasters.join(",") %>
 
 
 
@@ -130,7 +130,7 @@ authorized_for_configuration_information=<%= @hostmasters %>
 # You may use an asterisk (*) to authorize any user who has
 # authenticated to the web server.
 
-authorized_for_system_commands=<%= @hostmasters %>
+authorized_for_system_commands=<%= @hostmasters.join(",") %>
 
 
 
@@ -143,8 +143,8 @@ authorized_for_system_commands=<%= @hostmasters %>
 # to authorize any user who has authenticated to the web server.
 
 
-authorized_for_all_services=<%= @hostmasters %>
-authorized_for_all_hosts=<%= @hostmasters %>
+authorized_for_all_services=<%= @hostmasters.join(",") %>
+authorized_for_all_hosts=<%= @hostmasters.join(",") %>
 
 
 
@@ -157,8 +157,8 @@ authorized_for_all_hosts=<%= @hostmasters %>
 # authorization).  You may use an asterisk (*) to authorize any
 # user who has authenticated to the web server.
 
-authorized_for_all_service_commands=<%= @hostmasters %>
-authorized_for_all_host_commands=<%= @hostmasters %>
+authorized_for_all_service_commands=<%= @hostmasters.join(",") %>
+authorized_for_all_host_commands=<%= @hostmasters.join(",") %>
 
 
 

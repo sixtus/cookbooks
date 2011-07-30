@@ -54,5 +54,13 @@ define serviceescalation {
   <%= key %> <%= value %>
 <% end %>
 }
+define serviceescalation {
+  use emergency-serviceescalation
+  host_name <%= params[:host_name] %>
+  service_description <%= service_description %>
+<% eparams.sort.each do |key, value| %>
+  <%= key %> <%= value %>
+<% end %>
+}
 <% end %>
 <% end %>

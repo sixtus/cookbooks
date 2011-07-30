@@ -123,7 +123,7 @@ hostmasters = contacts.select do |c|
   c[:tags].include?("hostmaster")
 end.map do |c|
   c[:id]
-end.join(",")
+end
 
 hosts = node.run_state[:nodes].select do |n|
   n[:tags].include?("nagios-client")
