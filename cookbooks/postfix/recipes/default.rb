@@ -4,6 +4,18 @@ end
 
 package "mail-mta/postfix"
 
+group "postmaster" do
+  gid 249
+end
+
+user "postmaster" do
+  uid 14
+  gid 249
+  comment "added by portage for mailbase"
+  home "/var/spool/mail"
+  shell "/sbin/nologin"
+end
+
 group "postfix" do
   gid 207
 end
@@ -15,7 +27,9 @@ end
 user "postfix" do
   uid 207
   gid 207
+  comment "added by portage for postfix"
   home "/var/spool/postfix"
+  shell "/sbin/nologin"
 end
 
 group "mail" do
@@ -27,7 +41,9 @@ end
 user "mail" do
   uid 8
   gid 12
+  comment "added by portage for mailbase"
   home "/var/spool/mail"
+  shell "/sbin/nologin"
 end
 
 directory "/etc/mail" do

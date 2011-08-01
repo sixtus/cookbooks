@@ -67,11 +67,17 @@ group "users" do
 end
 
 node[:base][:users].each do |name, params|
+  comment = if params[:comment]
+              params[:comment]
+            else
+              name
+            end
+
   user name do
     password "*"
     uid params[:uid]
     gid params[:gid]
-    comment name
+    comment comment
     home params[:home]
     shell params[:shell]
   end

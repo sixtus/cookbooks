@@ -155,6 +155,10 @@ default[:base][:groups] = {
     :gid => 65534,
     :members => "",
   },
+  :man => {
+    :gid => 15,
+    :members => "",
+  },
 }
 
 default[:base][:users] = {
@@ -229,6 +233,13 @@ default[:base][:users] = {
     :gid => 65534,
     :home => "/var/empty",
     :shell => "/bin/false",
+  },
+  :man => {
+    :uid => 13,
+    :gid => 15,
+    :home => "/usr/share/man",
+    :shell => "/sbin/nologin",
+    :comment => "added by portage for man",
   },
 }
 
