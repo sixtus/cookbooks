@@ -50,8 +50,9 @@ namespace :doc do
     ert = table do |tbl|
       tbl << [
         "**Weekday**",
+        "**After Hours**",
         "**Office Hours**",
-        "**Non-office Hours**",
+        "**Party Hours**",
       ]
 
       oc = {}
@@ -59,17 +60,13 @@ namespace :doc do
       Chef::Search::Query.new.search(:users, "on_call:[* TO *]")[0].each do |u|
         u[:on_call].each do |wday, periods|
           wday = wday.to_sym
-
           oc[wday] ||= {}
-          oc[wday][:day] ||= []
-          oc[wday][:night] ||= []
 
-          if periods.include?("daytime")
-            oc[wday][:day] |= [u[:comment]]
-          end
-
-          if periods.include?("nighttime")
-            oc[wday][:night] |= [u[:comment]]
+          [:after_hours, :office_hours, :party_hours].each do |h|
+            oc[wday][h] ||= []
+            if periods.include?(h.to_s)
+              oc[wday][h] |= [u[:comment]]
+            end
           end
         end
       end
@@ -86,14 +83,17 @@ namespace :doc do
 
       [:mon, :tue, :wed, :thu, :fri, :sat, :sun].each do |wday|
         oc[wday] ||= {}
-        oc[wday][:day] ||= []
-        oc[wday][:night] ||= []
+
+        [:after_hours, :office_hours, :party_hours].each do |h|
+          oc[wday][h] ||= []
+        end
 
         tbl.add_separator
         tbl << [
           long[wday],
-          oc[wday][:day].join(","),
-          oc[wday][:night].join(","),
+          oc[wday][:after_hours].join(","),
+          oc[wday][:office_hours].join(","),
+          oc[wday][:party_hours].join(","),
         ]
       end
     end

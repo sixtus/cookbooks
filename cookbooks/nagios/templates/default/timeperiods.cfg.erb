@@ -38,10 +38,12 @@ def convert_timeperiod(wday, periods)
     c[:id] == "timeperiods"
   end.first
 
-  periods.map do |p|
+  periods = periods.map do |p|
     p = timeperiods[p]
-    "#{wday} #{p[:start]}-#{p[:end]}"
-  end
+    "#{p[:start]}-#{p[:end]}"
+  end.join(",")
+
+  "#{wday} #{periods}"
 end
 %>
 
@@ -51,7 +53,7 @@ define timeperiod {
   alias <%= c[:id] %>-on-call
 <% if c.include?(:on_call) %>
 <% c[:on_call].sort.each do |wday, periods| %>
-  <%= convert_timeperiod(wday, periods).join("\n  ") %>
+  <%= convert_timeperiod(wday, periods) %>
 <% end %>
 <% else %>
   use 24x7
