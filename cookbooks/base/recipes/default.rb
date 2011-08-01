@@ -281,7 +281,7 @@ end
 end
 
 # vservers don't have hardware access
-if node[:virtualization][:role] == "host"
+if node[:virtualization][:role] == "host" and not node[:skip][:hardware]
   include_recipe "hwraid"
   include_recipe "mdadm"
   include_recipe "ntp"

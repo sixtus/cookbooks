@@ -30,6 +30,9 @@ default_unless[:sysctl][:kernel][:shmall] = 2*1024*1024 #pages
 default_unless[:sysctl][:kernel][:shmmax] = 32*1024*1024 #bytes
 default_unless[:sysctl][:kernel][:shmmni] = 4096
 
+# skip hardware cookbooks
+default[:skip][:hardware] = false
+
 # base packages
 node[:packages] = %w(
   app-admin/lib_users
