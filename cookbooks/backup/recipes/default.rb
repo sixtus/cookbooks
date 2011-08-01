@@ -12,7 +12,7 @@ end.each do |u|
     home "/backup/#{u[:id]}"
     home_owner u[:id]
     home_group "backup"
-    home_mode "0700"
+    home_mode "0711"
   end
 
   group "backup" do
