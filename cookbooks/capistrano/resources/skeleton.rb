@@ -11,3 +11,4 @@ attribute :groups, :kind_of => Array, :default => ['cron']
 attribute :shared, :kind_of => Array, :default => []
 attribute :rvm, :kind_of => String, :default => nil
 attribute :ruby, :kind_of => Hash, :default => nil
+attribute :authorized_keys_for, :kind_of => [Symbol, Array], :default => []

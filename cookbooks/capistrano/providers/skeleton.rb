@@ -1,3 +1,5 @@
+include ChefUtils::Account
+
 action :create do
   user = new_resource.name
   uid = new_resource.uid
@@ -7,6 +9,11 @@ action :create do
             else
               new_resource.homedir
             end
+
+  akf = new_resource.authorized_keys_for
+  akf = [akf] unless akf.is_a?(Array)
+
+  authorized_keys = authorized_keys_for(akf)
 
   group user do
     gid uid if uid
@@ -20,14 +27,7 @@ action :create do
     uid uid if uid
     gid user
     groups groups
-    authorized_keys nil
-  end
-
-  template "#{homedir}/.ssh/authorized_keys" do
-    source "authorized_keys"
-    owner user
-    group user
-    mode "0644"
+    authorized_keys authorized_keys
   end
 
   cookbook_file "#{homedir}/.ssh/id_rsa" do

@@ -73,7 +73,7 @@ define :account,
   # authorized keys but with nil, the file is not created.
   unless params[:authorized_keys].nil?
     file "#{home}/.ssh/authorized_keys" do
-      content params[:authorized_keys].join("\n")
+      content(params[:authorized_keys].join("\n") + "\n")
       owner home_owner
       group home_group
       mode "0600"
