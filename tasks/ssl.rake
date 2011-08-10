@@ -92,13 +92,14 @@ EOH
 
   desc "Create a new SSL certificate"
   task :cert, :cn do |t, args|
-    Rake::Task["ssl:do_cert"].invoke(args.cn)
+    Rake::Task["ssl:do_cert"].execute(args)
   end
 
   desc "Create missing SSL certificates"
   task :create_missing_certs do
     Chef::Node.list.keys.each do |fqdn|
-      Rake::Task["ssl:do_cert"].invoke(fqdn)
+      args = Rake::TaskArguments.new([:cn], [fqdn])
+      Rake::Task["ssl:do_cert"].execute(args)
     end
   end
 
