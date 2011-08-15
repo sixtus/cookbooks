@@ -2,7 +2,14 @@
 
 use strict;
 
-open(PS, "ps --no-headers --sort start -o pid,etime,cmd --ppid `cat /var/run/crond.pid`|") or die( "open: $!" );
+# decide which processes to check depending on ourname: check_long_running_cronjobs checks children of crond,
+# check_long_runners_like_<xxx> greps the processlist for xxx
+if ($0 =~ /check_long_runners_like_([a-z]*)/ ) {
+	open(PS, "ps --no-headers --sort start -o pid,etime,cmd | grep \"$1\" |") or die( "open: $!" );
+}
+else {
+	open(PS, "ps --no-headers --sort start -o pid,etime,cmd --ppid `cat /var/run/crond.pid`|") or die( "open: $!" );
+}
 
 my $wrn_secs = 3600*6;
 my $crt_secs = 24*3600;
@@ -19,7 +26,7 @@ while (<PS>) {
 	my $sec = $s + (60*($m+60*($h+24*$d)));
 	#print "pid ".$fields[0]." d=$d,h=$h,m=$m,s=$s = $sec\n";
 	if ($sec > $wrn_secs) {
-		push @output, "PID ".$fields[0]." is ".$sec."s old";
+		push @output, "PID ".$fields[0]." is ".$sec."s old (".join(" ",@fields[2..$#fields]).")";
 		if ($sec >= $crt_secs) {
 			$criticals++;
 		}
