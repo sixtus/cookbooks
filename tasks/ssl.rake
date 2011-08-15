@@ -92,14 +92,20 @@ EOH
 
   desc "Create a new SSL certificate"
   task :cert, :cn do |t, args|
-    Rake::Task["ssl:do_cert"].invoke(args.cn)
+    Rake::Task["ssl:do_cert"].execute(args)
   end
 
   desc "Create missing SSL certificates"
   task :create_missing_certs do
+    old_batch = ENV['BATCH']
+    ENV['BATCH'] = "1"
+
     Chef::Node.list.keys.each do |fqdn|
-      Rake::Task["ssl:do_cert"].invoke(fqdn)
+      args = Rake::TaskArguments.new([:cn], [fqdn])
+      Rake::Task["ssl:do_cert"].execute(args)
     end
+
+    ENV['BATCH'] = old_batch
   end
 
   desc "Revoke an existing SSL certificate"
@@ -109,5 +115,24 @@ EOH
     sh("openssl ca -config #{SSL_CONFIG_FILE} -revoke #{SSL_CERT_DIR}/#{keyfile}.crt")
     sh("openssl ca -config #{SSL_CONFIG_FILE} -gencrl -out #{SSL_CERT_DIR}/ca.crl")
     sh("rm #{SSL_CERT_DIR}/#{keyfile}.{csr,crt,key}")
+  end
+
+  desc "Renew expiring certificates"
+  task :renew => [ :pull ]
+  task :renew do
+    old_batch = ENV['BATCH']
+    ENV['BATCH'] = "1"
+
+    Dir[SSL_CERT_DIR + "/*.crt"].each do |crt|
+      %x(#{TOPDIR}/scripts/ssl-cert-check -n -c #{crt})
+      if $?.exitstatus != 0
+        fqdn = File.basename(crt).gsub(/\.crt$/, '')
+        args = Rake::TaskArguments.new([:cn], [fqdn])
+        Rake::Task["ssl:revoke"].execute(args)
+        Rake::Task["ssl:do_cert"].execute(args)
+      end
+    end
+
+    ENV['BATCH'] = old_batch
   end
 end
