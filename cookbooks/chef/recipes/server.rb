@@ -223,7 +223,7 @@ end
 
 # nagios service checks
 nrpe_command "check_chef_server_ssl" do
-  command "/usr/lib/nagios/plugins/check_ssl_cert -H localhost -n #{node[:fqdn]} -p 443 -r /etc/ssl/nginx/#{node[:fqdn]}-ca.crt -w 21 -c 7"
+  command "/usr/lib/nagios/plugins/check_ssl_server -H localhost -n #{node[:fqdn]} -p 443 -r /etc/ssl/nginx/#{node[:fqdn]}-ca.crt -w 21 -c 7"
 end
 
 nrpe_command "check_chef_solr" do
@@ -241,7 +241,7 @@ end
 
 nagios_service "CHEF-SERVER-SSL" do
   check_command "check_nrpe!check_chef_server_ssl"
-  servicegroups "chef"
+  servicegroups "chef,openssl"
 end
 
 nagios_service "CHEF-SOLR" do

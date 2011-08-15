@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+
+expired = []
+exitstatus = 0
+
+Dir["/etc/ssl/ca/*.crt"].each do |crt|
+  out = %x(/usr/lib/nagios/plugins/check_ssl_cert -n -c #{crt})
+  exitstatus = $?.exitstatus if $?.exitstatus > exitstatus
+
+  if $?.exitstatus != 0
+    out =~ /days=([-0-9]+)/
+      days = $1
+    cn = File.basename(crt).gsub(/\.crt/, '')
+    expired << "#{cn} in #{days}d"
+  end
+end
+
+if expired.empty?
+  puts "OK: All certificates valid"
+else
+  puts expired.join(', ')
+end
+
+exit(exitstatus)

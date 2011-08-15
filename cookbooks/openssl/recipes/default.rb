@@ -7,4 +7,4 @@ template "/etc/ssl/openssl.cnf" do
   mode "0644"
 end
 
-nagios_plugin "check_ssl_cert"
+nagios_plugin "check_ssl_server"
