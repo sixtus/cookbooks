@@ -5,7 +5,7 @@ use strict;
 # decide which processes to check depending on ourname: check_long_running_cronjobs checks children of crond,
 # check_long_runners_like_<xxx> greps the processlist for xxx
 if ($0 =~ /check_long_runners_like_([a-z]*)/ ) {
-	open(PS, "ps --no-headers --sort start -o pid,etime,cmd | grep \"$1\" |") or die( "open: $!" );
+	open(PS, "ps --no-headers --sort start -o pid,etime,cmd -e | grep \"$1\" |") or die( "open: $!" );
 }
 else {
 	open(PS, "ps --no-headers --sort start -o pid,etime,cmd --ppid `cat /var/run/crond.pid`|") or die( "open: $!" );
