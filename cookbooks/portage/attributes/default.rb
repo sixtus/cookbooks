@@ -19,6 +19,7 @@ when "gentoo"
   default[:portage][:ACCEPT_KEYWORDS] = nil
 
   # mirror settings
+  default[:portage][:BINHOST] = "http://chef.#{node[:domain]}/${ARCH}/"
   default[:portage][:MIRRORS] = %w(
     ftp://ftp.spline.de/pub/gentoo
   )
