@@ -1,7 +1,18 @@
 /bin/bash -c '
+
+fqdn=<%= @config[:server_name] %>
+hostname=${fqdn/.*}
+domainname=${fqdn#*.}
+
+echo "127.0.0.1 ${hostname}.${domainname} ${hostname} localhost" > /etc/hosts
+sed -i -e "s/^hostname.*/hostname=\"${hostname}\"/" /etc/conf.d/hostname
+hostname ${hostname}
+
 emerge --sync
 
 emerge --nospinner --keep-going=n --noreplace --quiet app-admin/chef
+
+mkdir -p /var/log/chef
 
 cat <<'EOF' > /etc/chef/client.rb
 log_level        :info
