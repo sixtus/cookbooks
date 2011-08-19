@@ -1,1 +1,1 @@
-default[:chef][:client][:server_url] = "https://chef.#{node[:domain]}"
+default[:chef][:client][:server_url] = Chef::Config[:chef_server_url]
