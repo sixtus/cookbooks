@@ -26,7 +26,7 @@ namespace :node do
   desc "Bootstrap the specified node"
   task :bootstrap, :fqdn, :role do |t, args|
     Rake::Task['node:create'].invoke(args.fqdn, args.role)
-    sh("knife bootstrap #{args.fqdn} --distro gentoo")
+    sh("knife bootstrap #{args.fqdn} --distro gentoo -P tux")
   end
 
   desc "Delete the specified node, client key and SSL certificates"
@@ -35,14 +35,23 @@ namespace :node do
 
     # revoke SSL cert
     ENV['BATCH'] = "1"
-    Rake::Task['ssl:revoke'].invoke(fqdn)
+
+    begin
+      Rake::Task['ssl:revoke'].invoke(fqdn)
+    rescue
+      # do nothing
+    end
+
     Rake::Task['load:cookbook'].invoke('openssl')
 
-    # remove new node
-    File.unlink(File.join(TOPDIR, "nodes", "#{fqdn}.rb"))
-    sh("knife node delete -y #{fqdn}")
+    # remove node
+    begin
+      File.unlink(File.join(TOPDIR, "nodes", "#{fqdn}.rb"))
+    rescue
+      # do nothing
+    end
 
-    # remove client cert
+    sh("knife node delete -y #{fqdn}")
     sh("knife client delete -y #{fqdn}")
   end
 
