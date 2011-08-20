@@ -21,7 +21,7 @@ when "gentoo"
   # mirror settings
   default[:portage][:BINHOST] = "http://chef.#{node[:domain]}/${ARCH}/"
   default[:portage][:MIRRORS] = %w(
-    ftp://ftp.spline.de/pub/gentoo
+    http://www.zentoo.org
   )
 
   # advanced features
