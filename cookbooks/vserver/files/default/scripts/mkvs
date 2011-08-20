@@ -1,6 +1,6 @@
 #!/bin/bash
 
-STAGE4_FILE="stage4-current.tar.bz2"
+IMAGE_FILE="zentoo-base-amd64-current.tar.bz2"
 MIRROR="http://www.zentoo.org/downloads/amd64"
 
 source /etc/init.d/functions.sh
@@ -15,9 +15,9 @@ FQDN=$1 && shift
 INTERFACE=$1 && shift
 
 if [[ -z $1 || "$1" = "--" ]]; then
-	TEMPLATE=/vservers/${STAGE4_FILE}
+	TEMPLATE=/vservers/${IMAGE_FILE}
 	pushd /vservers >/dev/null
-	wget -N ${MIRROR}/${STAGE4_FILE}
+	wget -N ${MIRROR}/${IMAGE_FILE}
 	popd >/dev/null
 else
 	TEMPLATE="$1"
