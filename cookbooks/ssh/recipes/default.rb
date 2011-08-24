@@ -47,7 +47,7 @@ end
 
 allowed_hosts = node.run_state[:nodes].map do |n|
   n[:ipaddress]
-end
+end + node[:denyhosts][:whitelist]
 
 file "/var/lib/denyhosts/allowed-hosts" do
   content allowed_hosts.sort.join("\n")

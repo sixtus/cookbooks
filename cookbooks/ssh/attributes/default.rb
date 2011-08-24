@@ -7,3 +7,5 @@ default[:ssh][:server][:x11_forwarding] = "no"
 default[:ssh][:server][:use_lpk] = "no"
 default[:ssh][:server][:allow_local_root] = "no"
 default[:ssh][:server][:matches] = {}
+
+default[:denyhosts][:whitelist] = []
