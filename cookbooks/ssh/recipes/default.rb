@@ -56,6 +56,14 @@ file "/var/lib/denyhosts/allowed-hosts" do
   mode "0644"
 end
 
+# Need this during bootstrap when syslog-ng has not created the file, but
+# denyhosts fails if it does not exist. d'oh
+file "/var/log/auth.log" do
+  owner "root"
+  group "wheel"
+  mode "0640"
+end
+
 service "denyhosts" do
   action [:enable, :start]
 end
