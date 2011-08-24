@@ -1,6 +1,7 @@
 #!/usr/bin/perl -w
 
 use strict;
+use POSIX;
 
 # decide which processes to check depending on ourname: check_long_running_cronjobs checks children of crond,
 # check_long_runners_like_<xxx> greps the processlist for xxx
@@ -26,7 +27,7 @@ while (<PS>) {
 	my $sec = $s + (60*($m+60*($h+24*$d)));
 	#print "pid ".$fields[0]." d=$d,h=$h,m=$m,s=$s = $sec\n";
 	if ($sec > $wrn_secs) {
-		push @output, "PID ".$fields[0]." is ".$sec."s old (".join(" ",@fields[2..$#fields]).")";
+		push @output, "PID ".$fields[0]." is >".floor($sec/3600)."h old (".join(" ",@fields[2..$#fields]).")";
 		if ($sec >= $crt_secs) {
 			$criticals++;
 		}
@@ -39,7 +40,10 @@ while (<PS>) {
 close(PS);
 
 if ($criticals > 0 || $warnings > 0) {
-	print join(", ", @output)."\n";
+	my $out = join(", ", @output);
+	# replace pipes in output because nagios will mistake everything thereafter as "performance data"
+	$out =~ s/\|/\\\|/g;
+	print $out."\n";
 	if ($criticals>0) {
 		exit 2;
 	} else {
