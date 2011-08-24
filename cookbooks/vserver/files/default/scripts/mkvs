@@ -76,9 +76,8 @@ ln -sf /etc/init.d/sshd $VDIR/etc/runlevels/default/sshd
 vserver $NAME start
 vserver $NAME exec emerge --oneshot --usepkg=n openssl
 
-einfo ""
-einfo "Please set the initial root password:"
-vserver $NAME exec passwd root
+# set rootpw to tux
+echo "root:tux" | vserver $NAME exec chpasswd 2>/dev/null
 
 einfo ""
 einfo "All done. Use 'vserver $NAME enter' to login."
