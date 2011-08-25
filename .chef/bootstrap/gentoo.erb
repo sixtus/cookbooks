@@ -25,4 +25,5 @@ cat <<'EOF' > /etc/chef/validation.pem
 <%= IO.read(Chef::Config[:client_key]) %>
 EOF
 
+/usr/bin/chef-client
 /usr/bin/chef-client'
