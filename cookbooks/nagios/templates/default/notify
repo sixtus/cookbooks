@@ -1,39 +1,96 @@
-#!/bin/bash
+#!/usr/bin/env ruby
+
+require "net/smtp"
+require "cgi"
 
 BASE_URL="https://<%= node[:fqdn] %>/nagios"
-FROM="nagios <<%= node[:nagios][:from_address] %>>"
-RCPT="${NAGIOS_CONTACTALIAS} <${NAGIOS_CONTACTEMAIL}>"
 
-if [[ $1 == "host" ]]; then
-	URL="${BASE_URL}/cgi-bin/extinfo.cgi?type=1&host=${NAGIOS_HOSTNAME}"
-	SUBJECT="Host ${NAGIOS_NOTIFICATIONTYPE}: ${NAGIOS_HOSTNAME} is ${NAGIOS_HOSTSTATE}"
-	CONTENT="State: ${NAGIOS_HOSTSTATE}Info: ${NAGIOS_HOSTOUTPUT}"
-
-	if [[ ${NAGIOS_NOTIFICATIONTYPE} == "ACKNOWLEDGEMENT" ]]; then
-		CONTENT="${CONTENT}Comment by ${NAGIOS_HOSTACKAUTHOR}:${NAGIOS_HOSTACKCOMMENT}"
-	fi
-else
-	URL="${BASE_URL}/cgi-bin/extinfo.cgi?type=2&host=${NAGIOS_HOSTNAME}&service=${NAGIOS_SERVICEDESC}"
-	SUBJECT="Service ${NAGIOS_NOTIFICATIONTYPE}: ${NAGIOS_HOSTNAME}/${NAGIOS_SERVICEDESC} is ${NAGIOS_SERVICESTATE}"
-	CONTENT="Service: ${NAGIOS_SERVICEDESC}State: ${NAGIOS_SERVICESTATE}Additional Info:${NAGIOS_SERVICEOUTPUT}"
-
-	if [[ ${NAGIOS_NOTIFICATIONTYPE} == "ACKNOWLEDGEMENT" ]]; then
-		CONTENT="${CONTENT}Comment by ${NAGIOS_SERVICEACKAUTHOR}:${NAGIOS_SERVICEACKCOMMENT}"
-	fi
-fi
-
-MAIL_BODY="From: ${FROM}
-To: ${RCPT}
-Subject: ** ${SUBJECT} **
+def notify_by_email(subject, message)
+  msg = <<EOM
+From: nagios <<%= node[:nagios][:from_address] %>>
+Reply-To: hostmaster <<%= node[:contacts][:hostmaster] %>>
+To: #{ENV['NAGIOS_CONTACTALIAS']} <#{ENV['NAGIOS_CONTACTEMAIL']}>
+Subject: #{subject}
 
 ***** nagios *****
 
-Notification Type: ${NAGIOS_NOTIFICATIONTYPE}
-Date/Time: ${NAGIOS_LONGDATETIME}
-Host: ${NAGIOS_HOSTNAME} (${NAGIOS_HOSTADDRESS})
-URL: ${URL}
+Notification Type: #{ENV['NAGIOS_NOTIFICATIONTYPE']}
+Escalated: #{ENV['NAGIOS_NOTIFICATIONISESCALATED']}
+Date/Time: #{ENV['NAGIOS_LONGDATETIME']}
+Host: #{ENV['NAGIOS_HOSTNAME']} (#{ENV['NAGIOS_HOSTADDRESS']})
+URL: #{URL}
 
-${CONTENT}
-"
+#{message}
+EOM
 
-/usr/sbin/sendmail -t -f "<%= node[:nagios][:from_address] %>" <<< "${MAIL_BODY}"
+  Net::SMTP.start('localhost') do |smtp|
+    smtp.send_message msg, "<%= node[:nagios][:from_address] %>", ENV['NAGIOS_CONTACTEMAIL']
+  end
+end
+
+def notify_by_sms(message)
+<% if node[:nagios][:sms_request_url] %>
+  if ENV['NAGIOS_NOTIFICATIONISESCALATED'] == "0"
+    return
+  end
+
+  if ENV['NAGIOS_NOTIFICATIONTYPE'] == "RECOVERY"
+    return
+  end
+
+  if ENV['NAGIOS_NOTIFICATIONTYPE'] == "ACKNOWLEDGEMENT"
+    return
+  end
+
+  if ENV['NAGIOS_HOSTSTATE'] == "WARNING"
+    return
+  end
+
+  if ENV['NAGIOS_SERVICESTATE'] == "WARNING"
+    return
+  end
+
+  unless ENV['NAGIOS_CONTACTPAGER']
+    return
+  end
+
+  if ENV['NAGIOS_CONTACTPAGER'].strip.empty?
+    return
+  end
+
+  sms_url = "<%= node[:nagios][:sms_request_url] %>"
+  sms_url.gsub!("{to}", ENV['NAGIOS_CONTACTPAGER'].strip)
+  sms_url.gsub!("{message}", CGI.escape(message))
+
+  %x(curl -o /dev/null '#{sms_url}')
+<% end %>
+end
+
+if ARGV[0] == "host"
+  URL = "#{BASE_URL}/cgi-bin/extinfo.cgi?type=1&host=#{ENV['NAGIOS_HOSTNAME']}"
+
+  subject = "Host #{ENV['NAGIOS_NOTIFICATIONTYPE']}: #{ENV['NAGIOS_HOSTNAME']} is #{ENV['NAGIOS_HOSTSTATE']}"
+
+  content  = "State: #{ENV['NAGIOS_HOSTSTATE']}\n"
+  content += "Info: #{ENV['NAGIOS_HOSTOUTPUT']}\n"
+
+  if ENV['NAGIOS_NOTIFICATIONTYPE'] == "ACKNOWLEDGEMENT"
+    content += "\nComment by #{ENV['NAGIOS_HOSTACKAUTHOR']}:\n\n#{ENV['NAGIOS_HOSTACKCOMMENT']}\n"
+  end
+
+else
+  URL = "#{BASE_URL}/cgi-bin/extinfo.cgi?type=2&host=#{ENV['NAGIOS_HOSTNAME']}&service=#{ENV['NAGIOS_SERVICEDESC']}"
+
+  subject = "Service #{ENV['NAGIOS_NOTIFICATIONTYPE']}: #{ENV['NAGIOS_HOSTNAME']}/#{ENV['NAGIOS_SERVICEDESC']} is #{ENV['NAGIOS_SERVICESTATE']}"
+
+  content  = "Service: #{ENV['NAGIOS_SERVICEDESC']}\n"
+  content += "State: #{ENV['NAGIOS_SERVICESTATE']}\n"
+  content += "\nAdditional Info:\n\n#{ENV['NAGIOS_SERVICEOUTPUT']}\n"
+
+  if ENV['NAGIOS_NOTIFICATIONTYPE'] == "ACKNOWLEDGEMENT"
+    content += "\nComment by #{ENV['NAGIOS_SERVICEACKAUTHOR']}:\n\n#{ENV['NAGIOS_SERVICEACKCOMMENT']}"
+  end
+end
+
+notify_by_sms(subject)
+notify_by_email(subject, content)
