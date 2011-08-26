@@ -57,6 +57,9 @@ git clone http://github.com/hollow/zentoo.git $VDIR/usr/portage
 mkdir $VDIR/usr/portage/{distfiles,packages}
 echo "/usr/portage/packages /usr/portage/packages none bind,rw 0 0" >> $CDIR/fstab
 
+# add /dev/shm to fstab, so sem_open & friends work
+echo "none /dev/shm tmpfs defaults 0 0" >> $CDIR/fstab
+
 # use hosts resolv.conf to make sure we have DNS resolution
 cp /etc/resolv.conf $VDIR/etc/resolv.conf
 
