@@ -2,12 +2,17 @@ package "net-misc/openvpn"
 
 directory "/etc/ssl/openvpn"
 
-ssl_dh "/etc/ssl/openvpn/dh.pem"
+ssl_dh "/etc/ssl/openvpn/dh.pem" do
+  notifies :restart, "service[openvpn]"
+end
 
-ssl_ca "/etc/ssl/openvpn/ca"
+ssl_ca "/etc/ssl/openvpn/ca" do
+  notifies :restart, "service[openvpn]"
+end
 
 ssl_certificate "/etc/ssl/openvpn/server" do
   cn node[:fqdn]
+  notifies :restart, "service[openvpn]"
 end
 
 template "/etc/openvpn/openvpn.conf" do

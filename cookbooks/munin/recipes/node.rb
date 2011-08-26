@@ -11,12 +11,14 @@ end
 ssl_ca "/etc/ssl/munin/ca" do
   owner "munin"
   group "munin"
+  notifies :restart, "service[munin-node]"
 end
 
 ssl_certificate "/etc/ssl/munin/node" do
   cn node[:fqdn]
   owner "munin"
   group "munin"
+  notifies :restart, "service[munin-node]"
 end
 
 template "/etc/munin/munin-node.conf" do

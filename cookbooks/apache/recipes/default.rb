@@ -12,11 +12,21 @@ end
 
 package "www-servers/apache"
 
+ssl_ca "/etc/ssl/apache2/ca" do
+  notifies :restart, "service[apache2]"
+end
+
+ssl_certificate "/etc/ssl/apache2/server" do
+  cn node[:fqdn]
+  notifies :restart, "service[apache2]"
+end
+
 template "/etc/apache2/httpd.conf" do
   source "httpd.conf"
   mode "0644"
   owner "root"
   group "root"
+  notifies :restart, "service[apache2]"
 end
 
 %w(common_redirect log_rotate extract_forwarded).each do |pkg|
@@ -30,12 +40,14 @@ end
 ).each do |conf|
   file "/etc/apache2/vhosts.d/#{conf}" do
     action :delete
+    notifies :restart, "service[apache2]"
   end
 end
 
 # old cruft, filename is actually 20_mod_fastcgi_handler.conf
 file "/etc/apache2/modules.d/10_mod_fastcgi_handler.conf" do
   action :delete
+  notifies :restart, "service[apache2]"
 end
 
 %w(
@@ -99,16 +111,14 @@ file "/var/log/apache2/error_log" do
 end
 
 # nagios service checks
-if tagged?("nagios-client")
-  package "dev-perl/libwww-perl"
+package "dev-perl/libwww-perl"
 
-  nagios_plugin "check_apache2"
+nagios_plugin "check_apache2"
 
-  nrpe_command "check_apache2" do
-    command "/usr/lib/nagios/plugins/check_apache2 -H localhost -p 8031 -u / -w 20 -c 3"
-  end
+nrpe_command "check_apache2" do
+  command "/usr/lib/nagios/plugins/check_apache2 -H localhost -p 8031 -u / -w 20 -c 3"
+end
 
-  nagios_service "APACHE2" do
-    check_command "check_nrpe!check_apache2"
-  end
+nagios_service "APACHE2" do
+  check_command "check_nrpe!check_apache2"
 end

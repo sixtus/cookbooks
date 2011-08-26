@@ -60,6 +60,7 @@ ssl_certificate "/etc/ssl/nginx/nginx" do
   cn node[:fqdn]
   owner "nginx"
   group "nginx"
+  notifies :reload, "service[nginx]"
 end
 
 %w(csr pem).each do |f|

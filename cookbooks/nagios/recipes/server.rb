@@ -242,12 +242,6 @@ end
 
 node[:apache][:default_redirect] = "https://#{node[:fqdn]}"
 
-ssl_ca "/etc/ssl/apache2/ca"
-
-ssl_certificate "/etc/ssl/apache2/server" do
-  cn node[:fqdn]
-end
-
 apache_vhost "nagios" do
   template "apache.conf"
 end

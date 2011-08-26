@@ -152,19 +152,13 @@ template "/var/www/documentation/.htpasswd" do
 end
 
 # nginx SSL proxy
-ssl_ca "/etc/ssl/nginx/#{node[:fqdn]}-ca"
+ssl_ca "/etc/ssl/nginx/#{node[:fqdn]}-ca" do
+  notifies :reload, "service[nginx]"
+end
 
 ssl_certificate "/etc/ssl/nginx/#{node[:fqdn]}" do
   cn node[:fqdn]
-end
-
-%w(
-  modules/passenger.conf
-  servers/chef-server-webui.conf
-).each do |f|
-  file "/etc/nginx/#{f}" do
-    action :delete
-  end
+  notifies :reload, "service[nginx]"
 end
 
 nginx_server "chef-server-api" do
