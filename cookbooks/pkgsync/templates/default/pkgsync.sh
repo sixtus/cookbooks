@@ -22,4 +22,9 @@ rsync() {
 		rsync -au pkgsync@${remote}::pkgsync/ ${PKGDIR}/
 	done
 
+	# regenerate Packages files
+	for arch in amd64 x86; do
+		env PKGDIR=${PKGDIR}/${arch} emaint -f binhost
+	done
+
 ) 9>/var/lock/${PROGRAM}.lock
