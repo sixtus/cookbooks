@@ -1,3 +1,5 @@
+include_recipe "nginx"
+
 php_fpm_pool "nginx" do
   user "nginx"
   group "nginx"
