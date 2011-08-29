@@ -4,6 +4,7 @@ module ChefUtils
       users.map! { |u| u.to_sym }
       node.run_state[:users].select do |u|
         users.include?(u[:id].to_sym) and
+        u[:authorized_keys] and
         not u[:authorized_keys].empty?
       end.map do |u|
         u[:authorized_keys]
