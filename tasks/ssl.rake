@@ -124,7 +124,7 @@ EOH
     ENV['BATCH'] = "1"
 
     Dir[SSL_CERT_DIR + "/*.crt"].each do |crt|
-      %x(#{TOPDIR}/scripts/ssl-cert-check -n -c #{crt})
+      %x(#{TOPDIR}/cookbooks/openssl/files/default/check_ssl_cert -n -c #{crt})
       if $?.exitstatus != 0
         fqdn = File.basename(crt).gsub(/\.crt$/, '')
         args = Rake::TaskArguments.new([:cn], [fqdn])
