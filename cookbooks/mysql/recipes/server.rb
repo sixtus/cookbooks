@@ -80,51 +80,6 @@ end
   end
 end
 
-# backup
-node[:mysql][:backups].each do |name, params|
-  params[:use_xtrabackup] ||= false
-  params[:dbnames] ||= "all"
-  params[:backupdir] ||= File.join(node[:mysql][:backupdir], name)
-  params[:dbexclude] ||= ""
-  params[:tabignore] ||= ""
-
-  unless params[:use_xtrabackup]
-    params[:opts] ||= "--single-transaction"
-  end
-
-  directory "#{params[:backupdir]}" do
-    owner "root"
-    group "root"
-    mode "0700"
-    recursive true
-  end
-
-  if params[:use_xtrabackup]
-    file "#{node[:mysql][:backupdir]}/#{name}.sh" do
-      content "#!/bin/bash\n/usr/bin/innobackupex #{params[:opts]} #{params[:backupdir]}\n"
-      owner "root"
-      group "root"
-      mode "0700"
-    end
-  else
-    template "#{node[:mysql][:backupdir]}/#{name}.sh" do
-      source "mysqlbackup"
-      owner "root"
-      group "root"
-      mode "0700"
-      variables params
-    end
-  end
-
-  cron_daily "00-mysqlbackup-#{name}" do
-    command "/usr/bin/lockrun --lockfile=/var/lock/mysqlbackup-#{name}.cron -- #{node[:mysql][:backupdir]}/#{name}.sh"
-  end
-
-  cron_daily "mysqlbackup-#{name}" do
-    action :delete
-  end
-end
-
 # init script
 service "mysql" do
   action [:enable, :start]
