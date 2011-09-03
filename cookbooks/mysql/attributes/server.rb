@@ -1,4 +1,4 @@
-default[:contacts][:mysql] = "root@#{node[:fqdn]}"
+default_unless[:contacts][:mysql] = "root@#{node[:fqdn]}"
 
 # paths
 default[:mysql][:server][:sharedstatedir] = "/usr/share/mysql"
