@@ -23,7 +23,7 @@ define command {
 
 # service commands
 define command {
-  command_name check-host-alive
+  command_name check_host_alive
   command_line $USER1$/check_ping -H $HOSTADDRESS$ -w 2000.0,80% -c 3000.0,100% -p 1
 }
 
@@ -35,6 +35,12 @@ define command {
 define command {
   command_name check_nrpe
   command_line $USER1$/check_nrpe -H $HOSTADDRESS$ -c $ARG1$
+}
+
+# event handlers
+define command {
+  command_name submit_check_result
+  command_line $USER1$/queue_check_result $HOSTNAME$ '$SERVICEDESC$' $SERVICESTATE$ '$SERVICEOUTPUT$'
 }
 
 # TODO: these should be defined in cookbooks
@@ -56,10 +62,4 @@ define command {
 define command {
   command_name check_munin_node
   command_line $USER1$/check_tcp -H $HOSTADDRESS$ -p 4949 -e 'munin node at $HOSTNAME$'
-}
-
-# event handlers
-define command {
-  command_name submit_check_result
-  command_line $USER1$/queue_check_result $HOSTNAME$ '$SERVICEDESC$' $SERVICESTATE$ '$SERVICEOUTPUT$'
 }
