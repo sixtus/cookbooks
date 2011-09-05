@@ -37,6 +37,11 @@ define command {
   command_line $USER1$/check_nrpe -H $HOSTADDRESS$ -c $ARG1$
 }
 
+define command {
+  command_name check_http
+  command_line $USER1$/check_http -H $HOSTADDRESS$ $ARG1$
+}
+
 # event handlers
 define command {
   command_name submit_check_result
@@ -52,11 +57,6 @@ define command {
 define command {
   command_name check_smtp
   command_line $USER1$/check_smtp -H $HOSTADDRESS$ -p $ARG1$ -t $ARG2$
-}
-
-define command {
-  command_name check_chef_server
-  command_line $USER1$/check_http -H $HOSTADDRESS$ -S -p 443 -s 'This is the Chef API Server.'
 }
 
 define command {
