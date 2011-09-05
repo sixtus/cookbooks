@@ -20,6 +20,7 @@ define host {
   params[:enabled] = true if params[:enabled] == nil
 
   next unless params.delete(:enabled)
+  next unless params[:host_name] == @host[:fqdn]
 
   dependencies = params.delete(:dependencies)
   dependencies ||= []

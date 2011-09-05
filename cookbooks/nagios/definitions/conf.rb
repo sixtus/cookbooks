@@ -20,5 +20,6 @@ define :nagios_conf,
     variables params[:variables]
     notifies :restart, "service[nagios]"
     action params[:action]
+    cookbook params[:cookbook] if params[:cookbook]
   end
 end

@@ -1,7 +1,7 @@
 define :nagios_service do
   name = params.delete(:name)
 
-  params[:service_description] = name
+  params[:service_description] ||= name
   params[:host_name] ||= node[:fqdn]
 
   node.default[:nagios][:services][name] = params
