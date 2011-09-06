@@ -34,7 +34,7 @@ action :create do
   end
 
   service "monit.#{user[:name]}" do
-    action [:enable, :start]
+    action :nothing
   end
 
   if new_resource.manage
@@ -60,6 +60,10 @@ action :create do
     mode "0600"
     variables :user => user
     notifies :restart, resources(:service => "monit.#{user[:name]}")
+  end
+
+  service "monit.#{user[:name]}" do
+    action [:enable, :start]
   end
 
   nrpe_command "check_monit_#{user[:name]}" do
