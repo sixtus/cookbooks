@@ -25,7 +25,7 @@ fi
 # first try to resolve preserved-libs with binpkgs. if this fails, the second
 # run will pick up remaining libs.
 emerge @preserved-rebuild
-emerge @preserved-rebuild --usepkg=n
+emerge @preserved-rebuild --usepkg=n --getbinpkg=n
 
 # this fucker needs to be run after every upgrade, since noone can be sure what
 # has been broken. dude, srsly - can't we simply have PYTHON_TARGETS?
@@ -33,13 +33,13 @@ eselect python update --python2
 
 if [[ $(qlist -Ive dev-lang/python | wc -l) != 1 ]]; then
 	python-updater -dmanual -- --usepkg
-	python-updater -dmanual -- --usepkg=n
+	python-updater -dmanual -- --usepkg=n --getbinpkg=n
 fi
 
 # same crap as with python ...
 if [[ $(qlist -Ive dev-lang/perl | wc -l) != 1 ]]; then
 	perl-cleaner --all -- --usepkg
-	perl-cleaner --all -- --usepkg=n
+	perl-cleaner --all -- --usepkg=n --getbinpkg=n
 fi
 
 # run lafilefixer to get rid of fucking annoying libtool archive dependency
@@ -49,7 +49,7 @@ lafilefixer --justfixit
 
 # finally, after all this crap, run revdep-rebuild to pick up remaining
 # packages that have broken lib dependencies.
-EMERGE_DEFAULT_OPTS="" revdep-rebuild -i -- --quiet-build --with-bdeps=y --binpkg-respect-use=y --usepkg=n
+EMERGE_DEFAULT_OPTS="" revdep-rebuild -i -- --quiet-build --with-bdeps=y --binpkg-respect-use=y --usepkg=n --getbinpkg=n
 
 # force latest gcc version
 gcc-config $(gcc-config -l|tail -n1|awk '{print $2}')
