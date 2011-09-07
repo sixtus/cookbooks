@@ -53,7 +53,7 @@ rm -rf $VDIR/usr/portage
 sed -i -e '/^\/usr\/portage \/usr\/portage/d' $CDIR/fstab
 
 # use zentoo.org tree and shared binpkgs
-git clone http://github.com/hollow/zentoo.git $VDIR/usr/portage
+git clone https://github.com/zentoo/zentoo.git $VDIR/usr/portage
 mkdir $VDIR/usr/portage/{distfiles,packages}
 echo "/usr/portage/packages /usr/portage/packages none bind,rw 0 0" >> $CDIR/fstab
 

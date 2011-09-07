@@ -1,7 +1,7 @@
 #!/bin/bash
 
 V=11.0
-ORIGIN=http://github.com/hollow/zentoo.git
+ORIGIN=https://github.com/zentoo/zentoo.git
 ARCH=$(portageq envvar ARCH)
 
 rm -rf /usr/portage/.git
