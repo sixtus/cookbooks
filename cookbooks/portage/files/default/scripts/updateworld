@@ -2,6 +2,10 @@
 
 set -e
 
+# force unicode locale
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
 # commit any changes to /etc
 cd /etc
 git add -A .
