@@ -61,7 +61,7 @@ end
 file "/var/log/auth.log" do
   owner "root"
   group "wheel"
-  mode "0640"
+  mode "0644"
 end
 
 service "denyhosts" do
