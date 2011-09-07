@@ -21,6 +21,17 @@ link "/etc/make.profile" do
   to node[:portage][:profile]
 end
 
+pgit = "env GIT_DIR=#{node[:portage][:portdir]}/.git GIT_WORK_TREE=#{node[:portage][:portdir]} git"
+
+execute "usr-portage-remote" do
+  command "#{pgit} remote set-url origin #{node[:portage][:remote]}"
+  not_if do
+    remote = %x(#{pgit} remote show -n origin)
+    remote = remote.grep(/Fetch URL/).first.chomp.gsub(/.*Fetch URL: /, '')
+    remote == node[:portage][:remote]
+  end
+end
+
 include_recipe "portage::layman"
 
 directory node[:portage][:distdir] do

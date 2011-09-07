@@ -6,6 +6,9 @@ when "gentoo"
   set[:portage][:portdir] = "/usr/portage"
   set[:portage][:distdir] = "#{set[:portage][:portdir]}/distfiles"
   set[:portage][:pkgdir] = "#{set[:portage][:portdir]}/packages/${ARCH}"
+
+  # repository
+  default[:portage][:remote] = "https://github.com/zentoo/zentoo.git"
   default[:portage][:profile] = "#{set[:portage][:portdir]}/profiles/default/linux/amd64/11.0"
 
   # compiler settings
