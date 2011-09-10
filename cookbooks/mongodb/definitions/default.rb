@@ -30,11 +30,6 @@ define :mongodb_instance do
   tag("mongodb")
   node[:mongodb][:instances][params[:name]] = params
 
-  # sanity check
-  if node[:mongodb][:instances].size > 1 and not node[:mongodb][:instances]['mongodb'].nil?
-    raise "cannot use mongodb_instance and mongodb::server at the same time"
-  end
-
   directory dbpath do
     owner "mongodb"
     group "root"
