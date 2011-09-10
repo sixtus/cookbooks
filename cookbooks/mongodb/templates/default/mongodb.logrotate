@@ -1,7 +1,7 @@
-/var/log/mongodb/<%= @svcname %>.log {
+/var/log/mongodb/<%= @name %>.log {
 	missingok
 	sharedscripts
 	postrotate
-		kill -SIGUSR1 `cat /var/run/mongodb/<%= @svcname %>.pid`
+		kill -SIGUSR1 `cat /var/run/mongodb/<%= @name %>.pid`
 	endscript
 }

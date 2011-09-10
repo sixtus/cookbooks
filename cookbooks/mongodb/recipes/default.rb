@@ -4,7 +4,5 @@ end
 
 package "dev-db/mongodb"
 
-if tagged?("nagios-client")
-  package "dev-python/pymongo"
-  nagios_plugin "check_mongodb"
-end
+package "dev-python/pymongo"
+nagios_plugin "check_mongodb"

@@ -11,3 +11,5 @@ default[:mongoc][:dbpath] = "/var/lib/mongoc"
 default[:mongos][:bind_ip] = "127.0.0.1"
 default[:mongos][:port] = "27217"
 default[:mongos][:configdb] = []
+
+default[:mongodb][:instances] = {}
