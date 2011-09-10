@@ -66,10 +66,6 @@ action :create do
     end
   end
 
-  file "/etc/logrotate.d/rvm_passenger-#{user}" do
-    action :delete
-  end
-
   file "/etc/logrotate.d/capistrano-#{user}" do
     content <<-EOS
 #{homedir}/shared/log/*.log {
