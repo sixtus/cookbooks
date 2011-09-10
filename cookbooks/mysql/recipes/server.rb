@@ -180,20 +180,33 @@ if tagged?("munin-node")
     password mysql_munin_password
   end
 
-  mysql_grant "munin" do
+  mysql_grant "munin-global" do
     user "munin"
-    privileges ["PROCESS", "REPLICATION CLIENT"]
+    privileges ["SUPER", "PROCESS", "REPLICATION CLIENT"]
     database "*"
   end
 
-  munin_plugin "mysql_slave_status" do
-    source "mysql_slave_status"
-    config ["env.mysqlopts --user=munin --password=#{mysql_munin_password}"]
+  mysql_grant "munin-mysql" do
+    user "munin"
+    privileges ["SELECT"]
+    database "mysql"
   end
 
-  %w(bytes queries slowqueries threads).each do |p|
+  # remove old plugins
+  %w(bytes queries slave_status slowqueries threads).each do |p|
     munin_plugin "mysql_#{p}" do
-      config ["env.mysqlopts --user=munin --password=#{mysql_munin_password}"]
+      action :delete
     end
+  end
+
+  # use advanced mysql graphs
+  package "net-analyzer/munin-mysql"
+
+  munin_plugin "mysql" do
+    config [
+      "env.mysqlconnection DBI:mysql:mysql",
+      "env.mysqluser munin",
+      "env.mysqlpassword #{mysql_munin_password}",
+    ]
   end
 end
