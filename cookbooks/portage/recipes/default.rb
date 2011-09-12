@@ -21,6 +21,11 @@ link "/etc/make.profile" do
   to node[:portage][:profile]
 end
 
+directory "/usr/portage/.git" do
+  action :delete
+  recursive true
+end
+
 include_recipe "portage::layman"
 
 directory node[:portage][:distdir] do

@@ -7,8 +7,7 @@ when "gentoo"
   set[:portage][:distdir] = "#{set[:portage][:portdir]}/distfiles"
   set[:portage][:pkgdir] = "#{set[:portage][:portdir]}/packages/${ARCH}"
 
-  # repository
-  default[:portage][:remote] = "https://github.com/zentoo/zentoo.git"
+  # profile
   default[:portage][:profile] = "#{set[:portage][:portdir]}/profiles/default/linux/amd64/11.0"
 
   # compiler settings
@@ -22,9 +21,11 @@ when "gentoo"
   default[:portage][:ACCEPT_KEYWORDS] = nil
 
   # mirror settings
+  default[:portage][:SYNC] = "rsync://rsync.zentoo.org/zentoo-portage"
   default[:portage][:BINHOST] = "http://chef.#{node[:domain]}/${ARCH}/"
   default[:portage][:MIRRORS] = %w(
     http://www.zentoo.org
+    http://ftp.spline.de/pub/gentoo
   )
 
   # advanced features
