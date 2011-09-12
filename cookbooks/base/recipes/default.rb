@@ -289,10 +289,6 @@ if node[:virtualization][:role] == "host" and not node[:skip][:hardware]
   include_recipe "smart"
 end
 
-if File.writable?("/usr/portage")
-  include_recipe "pkgsync"
-end
-
 # enable munin plugins
 munin_plugin "cpu"
 munin_plugin "entropy"

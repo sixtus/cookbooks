@@ -7,11 +7,11 @@ exec 1> >(logger -i -p "${LOG_FACILITY}.info" -t "${PROGRAM}")
 exec 2> >(logger -i -p "${LOG_FACILITY}.error" -t "${PROGRAM}")
 
 PKGDIR=/var/cache/portage/packages
-REMOTES="<%= @clients.map { |c| c[:ipaddress] }.join("\n") %>"
+REMOTES="<%= @clients.join("\n") %>"
 
 rsync() {
 	/usr/bin/timeout --kill=1h 30m \
-		/usr/bin/rsync --password-file /etc/pkgsync.secret "$@"
+		/usr/bin/rsync "$@"
 }
 
 (
@@ -19,7 +19,7 @@ rsync() {
 
 	# pull new packages
 	for remote in ${REMOTES}; do
-		rsync -au pkgsync@${remote}::pkgsync/ ${PKGDIR}/
+		rsync -au ${remote}::portage-packages/ ${PKGDIR}/
 	done
 
 	# regenerate Packages files

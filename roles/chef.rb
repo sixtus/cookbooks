@@ -3,7 +3,7 @@ description "Chef Servers"
 run_list(%w(
   role[base]
   recipe[chef::server]
-  recipe[pkgsync::master]
+  recipe[portage::binhost]
   recipe[openssl::certmaster]
 ))
 

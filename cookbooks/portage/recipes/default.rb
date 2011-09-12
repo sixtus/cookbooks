@@ -21,17 +21,6 @@ link "/etc/make.profile" do
   to node[:portage][:profile]
 end
 
-pgit = "env GIT_DIR=#{node[:portage][:portdir]}/.git GIT_WORK_TREE=#{node[:portage][:portdir]} git"
-
-execute "usr-portage-remote" do
-  command "#{pgit} remote set-url origin #{node[:portage][:remote]}"
-  not_if do
-    remote = %x(#{pgit} remote show -n origin)
-    remote = remote.grep(/Fetch URL/).first.chomp.gsub(/.*Fetch URL: /, '')
-    remote == node[:portage][:remote]
-  end
-end
-
 include_recipe "portage::layman"
 
 directory node[:portage][:distdir] do
@@ -78,6 +67,12 @@ cookbook_file "#{node[:portage][:confdir]}/bashrc" do
   owner "root"
   group "root"
   mode "0644"
+end
+
+directory "/var/cache/portage" do
+  owner "root"
+  group "root"
+  mode "0755"
 end
 
 directory "#{node[:portage][:make_conf]}.d" do
@@ -147,5 +142,20 @@ end
 ).each do |f|
   file "/usr/local/sbin/#{f}" do
     action :delete
+  end
+end
+
+binhosts = node.run_state[:nodes].select do |n|
+  n[:tags].include?("portage-binhost")
+end.map do |h|
+  h[:ipaddress]
+end
+
+unless binhosts.empty?
+  rsync_module "portage-packages" do
+    path "/usr/portage/packages"
+    hosts_allow binhosts.join(" ")
+    uid "nobody"
+    gid "nobody"
   end
 end

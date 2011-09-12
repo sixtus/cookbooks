@@ -28,7 +28,6 @@ Cookbooks
   * :ref:`chef-cookbook-ntp`
   * :ref:`chef-cookbook-shorewall`
   * :ref:`chef-cookbook-smart`
-  * :ref:`chef-cookbook-pkgsync`
 
 ``/etc/.git``
   On all nodes ``/etc`` is managed with git, so changes can be tracked easily.

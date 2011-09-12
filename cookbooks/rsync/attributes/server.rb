@@ -1,0 +1,1 @@
+default[:rsync][:modules] = {}

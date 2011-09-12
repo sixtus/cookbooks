@@ -16,23 +16,21 @@ node[:shorewall6][:zones] = {}
 
 include_recipe "shorewall::rules"
 
-# pkgsync rules
-if tagged?("pkgsync-client")
-  node.run_state[:nodes].select do |n|
-    n[:tags].include?("pkgsync-master")
-  end.each do |n|
-    shorewall_rule "pkgsync-master@#{n[:fqdn]}" do
-      source "net:#{n[:ipaddress]}"
-      dest "$FW:#{node[:ipaddress]}"
-      destport "rsync"
-    end
+# binhost rules
+node.run_state[:nodes].select do |n|
+  n[:tags].include?("portage-binhost")
+end.each do |n|
+  shorewall_rule "portage-binhost@#{n[:fqdn]}" do
+    source "net:#{n[:ipaddress]}"
+    dest "$FW:#{node[:ipaddress]}"
+    destport "rsync"
+  end
 
-    if n[:ip6address]
-      shorewall6_rule "pkgsync-master@#{n[:fqdn]}" do
-        source "net:<#{n[:ip6address]}>"
-        dest "$FW:<#{node[:ip6address]}>"
-        destport "rsync"
-      end
+  if n[:ip6address]
+    shorewall6_rule "portage-binhost@#{n[:fqdn]}" do
+      source "net:<#{n[:ip6address]}>"
+      dest "$FW:<#{node[:ip6address]}>"
+      destport "rsync"
     end
   end
 end
