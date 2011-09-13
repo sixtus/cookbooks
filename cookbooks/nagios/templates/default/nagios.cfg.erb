@@ -785,12 +785,7 @@ enable_event_handlers=1
 # performance data.
 # Values: 1 = process performance data, 0 = do not process performance data
 
-process_performance_data=1
-service_perfdata_file=/var/nagios/perfdata.log
-service_perfdata_file_template=$LASTSERVICECHECK$||$HOSTNAME$||$SERVICEDESC$||$SERVICEOUTPUT$||$SERVICEPERFDATA$
-service_perfdata_file_mode=a
-service_perfdata_file_processing_interval=30
-service_perfdata_file_processing_command=process-service-perfdata
+process_performance_data=0
 
 
 

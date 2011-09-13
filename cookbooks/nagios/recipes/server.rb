@@ -14,7 +14,6 @@ include_recipe "nagios::nrpe"
 include_recipe "nagios::nsca"
 
 package "net-analyzer/nagios"
-package "net-analyzer/nagiosgraph"
 package "net-analyzer/mk-livestatus"
 
 directory "/etc/nagios" do
