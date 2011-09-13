@@ -53,8 +53,8 @@ rm -rf $VDIR/usr/portage
 sed -i -e '/^\/usr\/portage \/usr\/portage/d' $CDIR/fstab
 
 # use zentoo.org tree and shared binpkgs
-git clone https://github.com/zentoo/zentoo.git $VDIR/usr/portage
-mkdir $VDIR/usr/portage/{distfiles,packages}
+mkdir -p $VDIR/usr/portage/{distfiles,packages}
+echo 'SYNC="rsync://rsync.zentoo.org/zentoo-portage"' >> $VDIR/etc/make.conf
 echo "/usr/portage/packages /usr/portage/packages none bind,rw 0 0" >> $CDIR/fstab
 
 # add /dev/shm to fstab, so sem_open & friends work
@@ -77,6 +77,7 @@ ln -sf /etc/init.d/sshd $VDIR/etc/runlevels/default/sshd
 
 # remerge openssl to get USE=-bindist
 vserver $NAME start
+vserver $NAME exec emerge --sync
 vserver $NAME exec emerge --oneshot --usepkg=n openssl
 
 # set rootpw to tux
