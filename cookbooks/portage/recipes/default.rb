@@ -24,6 +24,7 @@ end
 directory "/usr/portage/.git" do
   action :delete
   recursive true
+  only_if { FileTest.writable?("/usr/portage/.git") }
 end
 
 include_recipe "portage::layman"
