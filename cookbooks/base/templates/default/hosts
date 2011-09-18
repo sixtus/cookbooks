@@ -14,7 +14,7 @@
 # this node
 <%= node[:ipaddress] %> <%= node[:fqdn] %> <%= node[:hostname] %>
 <% if node[:local_ipaddress] %>
-<%= node[:local_ipaddress] %> <%= node[:hostname] %>.local
+<%= node[:local_ipaddress] %> <%= node[:hostname] %>.local<%= node[:resolv][:aliases].map { |a| " #{a}.local" } %>
 <% end %>
 <% if node[:ip6address] %>
 <%= node[:ip6address] %> <%= node[:fqdn] %> <%= node[:hostname] %>
@@ -30,8 +30,9 @@
 end.sort_by do |n|
   n[:hostname]
 end.each do |n|
+  n[:resolv][:aliases] ||= []
 %>
-<%= n[:local_ipaddress] %> <%= n[:hostname] %>.local
+<%= n[:local_ipaddress] %> <%= n[:hostname] %>.local<%= n[:resolv][:aliases].map { |a| " #{a}.local" } %>
 <% end %>
 <% end %>
 

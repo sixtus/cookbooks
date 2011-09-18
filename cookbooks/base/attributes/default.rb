@@ -18,6 +18,7 @@ default[:locales] = [
 default[:resolv][:search] = [node[:domain]]
 default[:resolv][:nameservers] = %w(8.8.8.8 8.8.4.4)
 default[:resolv][:hosts] = []
+default[:resolv][:aliases] = []
 
 # sysctl attributes
 default[:sysctl][:net][:ipv4][:ip_forward] = 0

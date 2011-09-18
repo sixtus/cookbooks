@@ -94,7 +94,7 @@ provided by Gentoo Linux including locales, timezones, resolver config etc.
   If there are multiple servers, the resolver library queries them in the order
   listed. The default is using Googles Public Anycast DNS service.
 
-``resolv[:search] = [node[:domain]``
+``resolv[:search] = [node[:domain]]``
   Search list for host-name lookup. The search list is normally determined from
   the local domain name; by default, it contains only the local domain name.
   This may be changed by listing the desired domain search path. Resolver
@@ -105,6 +105,10 @@ provided by Gentoo Linux including locales, timezones, resolver config etc.
 ``resolv[:hosts] = []``
   List of additional entries in ``/etc/hosts`` which cannot be generated from
   Chefs SOLR index.
+
+``resolv[:aliases] = []``
+  List of additional hostname aliases for this node. These are added as entries
+  in ``/etc/hosts`` for nodes in the same cluster.
 
 .. rubric:: Sysctl
 
