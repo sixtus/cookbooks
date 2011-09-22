@@ -137,18 +137,14 @@ remote_directory "/var/www/documentation" do
   mode "0755"
 end
 
-users = node.run_state[:users].select do |u|
+query = Proc.new do do |u|
   u[:tags] and
-  u[:tags].include?("hostmaster") and
-  u[:password]
+  u[:tags].include?("hostmaster")
 end
 
-template "/var/www/documentation/.htpasswd" do
-  source "htpasswd"
-  owner "root"
-  group "nginx"
-  mode "0640"
-  variables :users => users
+htpasswd_from_databag "/var/www/documentation/.htpasswd" do
+  query query
+  owner "nginx"
 end
 
 # nginx SSL proxy
