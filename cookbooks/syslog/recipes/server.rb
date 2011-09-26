@@ -13,12 +13,14 @@ syslog_config "00-server" do
   template "server.conf"
 end
 
-cron "rsyslog_gz" do
-  action :delete
-end
-
 cron "syslog_gz" do
   minute "0"
   hour "4"
   command "find #{node[:syslog][:archivedir]}/$(date +\\%Y) -type f -mtime +1 -exec gzip -q {} \\;"
+end
+
+cron "syslog_archive_current" do
+  minute "1"
+  hour "0"
+  command "ln -nfs #{node[:syslog][:archivedir]}/$(date +%Y/%m/%d) #{node[:syslog][:archivedir]}/current"
 end
