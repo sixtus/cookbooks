@@ -122,6 +122,23 @@ define :mongodb_instance do
       node.default[:nagios][:services]["#{nagname}-REPL-LAG"][:enabled] = false
     end
   end
+
+  %w(
+    btree
+    conn
+    lock
+    mem
+    ops
+  ).each do |p|
+    munin_plugin "mongo_#{name}_#{p}" do
+      plugin "mongo_#{p}"
+      source "mongo_#{p}"
+      config [
+        "env.name #{name}",
+        "env.port #{port.to_i + 1000}",
+      ]
+    end
+  end
 end
 
 define :mongos_instance do
