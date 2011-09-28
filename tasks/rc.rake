@@ -18,6 +18,13 @@ namespace :rc do
     end
   end
 
+  desc "Update portage tree"
+  task :sync do
+    rc("platform:gentoo") do |node|
+      system("ssh -t #{node.name} '/usr/bin/sudo -H /usr/bin/eix-sync'")
+    end
+  end
+
   desc "Run chef-client"
   task :converge do
     rc("ipaddress:[* TO *]") do |node|
