@@ -31,6 +31,9 @@ export LC_COLLATE="C"
 # force a sane editor
 export EDITOR=/usr/bin/vim
 
+# include ~/bin in PATH
+export PATH="$PATH:~/bin"
+
 # pager options
 if hash less; then
 	export PAGER=less
