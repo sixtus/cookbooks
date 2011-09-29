@@ -2,6 +2,6 @@
 	missingok
 	sharedscripts
 	postrotate
-		kill -SIGUSR1 `cat /var/run/mongodb/<%= @name %>.pid`
+		/bin/kill -USR1 `cat /var/run/mongodb/<%= @name %>.pid`
 	endscript
 }

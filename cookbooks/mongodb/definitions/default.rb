@@ -50,6 +50,11 @@ define :mongodb_instance do
     variables :name => name
   end
 
+  syslog_config "90-#{svcname}" do
+    template "syslog.conf"
+    variables :name => name
+  end
+
   cookbook_file "/etc/init.d/#{svcname}" do
     source "mongodb.initd"
     owner "root"
@@ -151,6 +156,11 @@ define :mongos_instance do
     owner "root"
     group "root"
     mode "0644"
+    variables :name => name
+  end
+
+  syslog_config "90-#{svcname}" do
+    template "syslog.conf"
     variables :name => name
   end
 
