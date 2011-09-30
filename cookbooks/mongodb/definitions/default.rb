@@ -162,6 +162,8 @@ define :mongos_instance do
 
   include_recipe "mongodb::default"
 
+  tag("mongos")
+
   file "/var/log/mongodb/#{name}.log" do
     owner "mongodb"
     group "mongodb"
