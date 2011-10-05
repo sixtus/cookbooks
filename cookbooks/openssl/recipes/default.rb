@@ -18,6 +18,8 @@ ruby_block "cleanup-ca-certificates" do
   end
 
   only_if do
+    require 'find'
+
     result = false
 
     Find.find('/etc/ssl/certs') do |path|
