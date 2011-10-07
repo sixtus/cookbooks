@@ -137,7 +137,7 @@ remote_directory "/var/www/documentation" do
   mode "0755"
 end
 
-query = Proc.new do do |u|
+query = Proc.new do |u|
   u[:tags] and
   u[:tags].include?("hostmaster")
 end
