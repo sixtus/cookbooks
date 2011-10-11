@@ -12,6 +12,7 @@
 
 fw firewall
 net ipv6
+nodes:net ipv6
 
 <% if node[:local_ip6address] %>
 <% if node[:local_interface] == "eth0" %>

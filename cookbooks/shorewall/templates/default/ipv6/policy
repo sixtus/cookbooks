@@ -18,6 +18,7 @@
 loc all ACCEPT - -
 <% end %>
 
+nodes all ACCEPT - -
 $FW all ACCEPT
 <% unless @ipsec_nodes.empty? %>
 vpn $FW ACCEPT
