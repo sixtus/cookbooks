@@ -22,14 +22,12 @@ node.run_state[:nodes].select do |n|
 end.each do |n|
   shorewall_rule "portage-binhost@#{n[:fqdn]}" do
     source "net:#{n[:ipaddress]}"
-    dest "$FW:#{node[:ipaddress]}"
     destport "rsync"
   end
 
   if n[:ip6address]
     shorewall6_rule "portage-binhost@#{n[:fqdn]}" do
       source "net:<#{n[:ip6address]}>"
-      dest "$FW:<#{node[:ip6address]}>"
       destport "rsync"
     end
   end
