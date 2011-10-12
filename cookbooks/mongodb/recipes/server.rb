@@ -7,5 +7,4 @@ mongodb_instance "mongodb" do
   bind_ip node[:mongodb][:bind_ip]
   port node[:mongodb][:port]
   opts opts
-  replset true if node[:mongodb][:replication][:set]
 end

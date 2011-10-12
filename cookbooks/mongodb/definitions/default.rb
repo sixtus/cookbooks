@@ -117,7 +117,7 @@ define :mongodb_instance do
       end
     end
 
-    unless params[:replset]
+    unless params[:opts].include?("--replSet")
       node.default[:nagios][:services]["#{nagname}-REPL-STATE"][:enabled] = false
       node.default[:nagios][:services]["#{nagname}-REPL-LAG"][:enabled] = false
     end
