@@ -19,6 +19,12 @@ cron "syslog_gz" do
   command "find #{node[:syslog][:archivedir]}/$(date +\\%Y) -type f -mtime +1 -exec gzip -q {} \\;"
 end
 
+cron "syslog_punt_old" do
+  minute "0"
+  hour "2"
+  command "find #{node[:syslog][:archivedir]} -type f -mtime +180 -delete"
+end
+
 cron "syslog_archive_current" do
   minute "1"
   hour "0"
