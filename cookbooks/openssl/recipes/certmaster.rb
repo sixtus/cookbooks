@@ -22,4 +22,5 @@ end
 nagios_service "CA-CERTS" do
   check_command "check_nrpe!check_ssl_certs"
   servicegroups "openssl"
+  notification_interval 1440
 end
