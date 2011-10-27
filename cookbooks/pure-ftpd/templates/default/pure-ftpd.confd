@@ -4,14 +4,11 @@
 IS_CONFIGURED="yes"
 
 ## FTP Server,Port (separated by comma) ##
-## If you prefer host names over IP addresses, it's your choice:
-## SERVER="-S ftp.rtchat.com,21"
-## IPv6 addresses are supported.
 SERVER="-S 21"
 
 ## Number of simultaneous connections in total, and per IP ##
-MAX_CONN="-c 30"
-MAX_CONN_IP="-C 10"
+MAX_CONN="-c <%= node[:pureftpd][:connections] %>"
+MAX_CONN_IP="-C <%= node[:pureftpd][:ip_connections] %>"
 
 ## Start daemonized in background ##
 DAEMON="-B"
@@ -19,13 +16,15 @@ DAEMON="-B"
 ## Don't allow uploads if the partition is more full then this var ##
 DISK_FULL="-k 90%"
 
-## Authentication mechanisms (others are 'pam', ...) ##
-## Further infos can be found in the README file.
+## Authentication mechanisms ##
+<% if node[:pureftpd][:auth].empty? %>
 AUTH="-l puredb:/etc/pureftpd.pdb"
+<% else %>
+AUTH="<% node[:pureftpd][:auth].each do |auth| %>-l <%= auth %> <% end %>"
+<% end %>
 
 ## Change the maximum idle time (in minutes) ##
-## If this variable is not defined, it will default to 15 minutes.
-TIMEOUT="-I 5"
+TIMEOUT="-I <%= node[:pureftpd][:idle_timeout] %>"
 
 ## Misc. Others ##
-MISC_OTHER="-A -E -x -j -Z"
+MISC_OTHER="<%= node[:pureftpd][:options] %>"

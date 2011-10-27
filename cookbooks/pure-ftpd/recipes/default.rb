@@ -1,5 +1,5 @@
 portage_package_use "net-ftp/pure-ftpd" do
-  use %w(vchroot)
+  use %w(vchroot) + node[:pureftpd][:use_flags]
 end
 
 package "net-ftp/pure-ftpd"
