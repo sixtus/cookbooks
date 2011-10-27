@@ -1,4 +1,7 @@
-node[:postfix][:use_flags].push("dovecot-sasl").sort!.uniq!
+portage_package_use "mail-mta/postfix|dovecot" do
+  package "mail-mta/postfix"
+  use %w(dovecot-sasl)
+end
 
 include_recipe "postfix"
 
