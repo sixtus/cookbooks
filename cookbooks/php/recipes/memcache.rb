@@ -1,4 +1,4 @@
-include_recipe "php"
+include_recipe "php::base"
 
 package "dev-php5/pecl-memcache"
 
