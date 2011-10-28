@@ -8,8 +8,14 @@ template "/etc/smartd.conf" do
   notifies :restart, "service[smartd]"
 end
 
-service "smartd" do
-  action [:enable, :start]
+if node[:smart][:devices].empty?
+  service "smartd" do
+    action [:disable, :stop]
+  end
+else
+  service "smartd" do
+    action [:enable, :start]
+  end
 end
 
 nagios_plugin "check_smart"
