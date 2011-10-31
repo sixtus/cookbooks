@@ -11,9 +11,3 @@ postconf "Dovecot SASL/LDA" do
       :smtpd_sasl_path => "private/auth",
       :smtpd_sasl_auth_enable => "yes"
 end
-
-postmaster "dovecot" do
-  unpriv "n"
-  command "pipe"
-  args "flags=DRhu user=mail:mail argv=/usr/libexec/dovecot/deliver -f ${sender} -d ${recipient}"
-end
