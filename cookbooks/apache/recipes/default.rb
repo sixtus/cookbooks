@@ -88,6 +88,13 @@ apache_vhost "00-default" do
   action default_action
 end
 
+cookbook_file "/etc/init.d/apache2" do
+  source "apache2.initd"
+  owner "root"
+  group "root"
+  mode "0755"
+end
+
 template "/etc/conf.d/apache2" do
   source "apache2.confd"
   mode "0644"
