@@ -11,3 +11,9 @@ template "/etc/nsswitch.conf" do
   group "root"
   mode "0644"
 end
+
+package "sys-apps/unscd"
+
+service "unscd" do
+  action [:enable, :start]
+end
