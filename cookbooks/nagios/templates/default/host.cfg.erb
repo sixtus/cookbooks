@@ -53,13 +53,14 @@ define serviceescalation {
   use generic-serviceescalation
   host_name <%= params[:host_name] %>
   service_description <%= service_description %>
-  contact_groups <%= params[:contact_groups] %>
+  contact_groups <%= params[:contact_groups] %>,on-call
 }
+
 define serviceescalation {
   use emergency-serviceescalation
   host_name <%= params[:host_name] %>
   service_description <%= service_description %>
-  contact_groups <%= params[:contact_groups] %>
+  contact_groups <%= params[:contact_groups] %>,on-call,emergency
 }
 <% end %>
 <% end %>

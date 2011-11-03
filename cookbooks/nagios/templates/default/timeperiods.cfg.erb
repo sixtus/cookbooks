@@ -21,43 +21,14 @@ define timeperiod {
   alias           No Time Is A Good Time
 }
 
-<%
-# TODO: this looks like it needs refactoring
-def convert_timeperiod(wday, periods)
-  wday = {
-    "mon" => "monday",
-    "tue" => "tuesday",
-    "wed" => "wednesday",
-    "thu" => "thursday",
-    "fri" => "friday",
-    "sat" => "saturday",
-    "sun" => "sunday"
-  }[wday]
-
-  timeperiods = node.run_state[:config].select do |c|
-    c[:id] == "timeperiods"
-  end.first
-
-  periods = periods.map do |p|
-    p = timeperiods[p]
-    "#{p[:start]}-#{p[:end]}"
-  end.join(",")
-
-  "#{wday} #{periods}"
-end
-%>
-
 <% @contacts.each do |c| %>
+<% if c.include?(:on_call) and not c[:on_call].empty? %>
 define timeperiod {
   timeperiod_name <%= c[:id] %>-on-call
-  alias <%= c[:id] %>-on-call
-<% if c.include?(:on_call) %>
-<% c[:on_call].sort.each do |wday, periods| %>
-  <%= convert_timeperiod(wday, periods) %>
-<% end %>
-<% else %>
-  use 24x7
+  alias on-call timeperiod for <%= c[:id] %>
+<% c[:on_call].sort.each do |date, time| %>
+  <%= date %> <%= time %>
 <% end %>
 }
-
+<% end %>
 <% end %>

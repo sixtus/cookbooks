@@ -2,7 +2,6 @@
 node.run_state[:nodes] = search(:node, "ipaddress:[* TO *]")
 node.run_state[:roles] = search(:role)
 node.run_state[:users] = search(:users)
-node.run_state[:config] = search(:config)
 
 # load ohai plugins first
 include_recipe "ohai"

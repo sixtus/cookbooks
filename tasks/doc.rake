@@ -19,95 +19,10 @@ namespace :doc do
   end
 
   desc "Generate all documentation sources"
-  task :generate => [ :contacts, :nodes ]
+  task :generate => [ :nodes ]
   task :generate do
     system("rm -rf #{TOPDIR}/cookbooks/chef/files/default/documentation/html/*")
     system("make -C #{TOPDIR}/documentation html")
-  end
-
-  desc "Generate contacts"
-  task :contacts do
-    contacts = table do |tbl|
-      # heading
-      tbl << [
-        "**Name**",
-        "**E-Mail**",
-        "**Mobile Phone**",
-        "**Role**"
-      ]
-
-      Chef::Search::Query.new.search(:users, "role:[* TO *]")[0].each do |u|
-        tbl.add_separator
-        tbl << [
-          u[:comment],
-          u[:email],
-          u[:pager],
-          u[:role],
-        ]
-      end
-    end
-
-    ert = table do |tbl|
-      tbl << [
-        "**Weekday**",
-        "**After Hours**",
-        "**Office Hours**",
-        "**Party Hours**",
-      ]
-
-      oc = {}
-
-      Chef::Search::Query.new.search(:users, "on_call:[* TO *]")[0].each do |u|
-        u[:on_call].each do |wday, periods|
-          wday = wday.to_sym
-          oc[wday] ||= {}
-
-          [:after_hours, :office_hours, :party_hours].each do |h|
-            oc[wday][h] ||= []
-            if periods.include?(h.to_s)
-              oc[wday][h] |= [u[:comment]]
-            end
-          end
-        end
-      end
-
-      long = {
-        :mon => "Monday",
-        :tue => "Tuesday",
-        :wed => "Wednesday",
-        :thu => "Thursday",
-        :fri => "Friday",
-        :sat => "Saturday",
-        :sun => "Sunday"
-      }
-
-      [:mon, :tue, :wed, :thu, :fri, :sat, :sun].each do |wday|
-        oc[wday] ||= {}
-
-        [:after_hours, :office_hours, :party_hours].each do |h|
-          oc[wday][h] ||= []
-        end
-
-        tbl.add_separator
-        tbl << [
-          long[wday],
-          oc[wday][:after_hours].join(","),
-          oc[wday][:office_hours].join(","),
-          oc[wday][:party_hours].join(","),
-        ]
-      end
-    end
-
-    tp = Chef::Search::Query.new.search(:config, "id:timeperiods")[0][0]
-
-    erb = Erubis::Eruby.new(File.read(File.join(DOC_SOURCE_DIR, "local", "overview.rst.erb")))
-    open(File.join(DOC_SOURCE_DIR, "local", "overview.rst"), "w") do |f|
-      f.puts erb.result({
-        :contacts => contacts,
-        :ert => ert,
-        :tp => tp,
-      })
-    end
   end
 
   desc "Generate Node List"

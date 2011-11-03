@@ -10,5 +10,4 @@ Contents
 .. toctree::
    :maxdepth: 1
 
-   overview
    nodes/index
