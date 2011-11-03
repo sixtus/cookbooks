@@ -367,9 +367,7 @@ if node[:virtualization][:role] == "host"
     servicegroups "system"
   end
 
-  nagios_service_escalation "DISKS" do
-    notification_interval 15
-  end
+  nagios_service_escalation "DISKS"
 
   nrpe_command "check_swap" do
     command "/usr/lib/nagios/plugins/check_swap -w 75% -c 50%"

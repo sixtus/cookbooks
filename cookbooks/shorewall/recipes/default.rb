@@ -105,6 +105,4 @@ nagios_service "CONNTRACK" do
   servicegroups "system"
 end
 
-nagios_service_escalation "CONNTRACK" do
-  notification_interval 15
-end
+nagios_service_escalation "CONNTRACK"
