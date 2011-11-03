@@ -20,7 +20,9 @@ nagios_plugin "check_beanstalkd"
 nrpe_command "check_beanstalkd" do
   command "/usr/lib/nagios/plugins/check_beanstalkd -S localhost:11300 " +
           "-w #{node[:beanstalkd][:nagios][:warning]} " +
-          "-c #{node[:beanstalkd][:nagios][:critical]}"
+          "-c #{node[:beanstalkd][:nagios][:critical]} " +
+          "-W #{node[:beanstalkd][:nagios][:growth_warning]} " +
+          "-C #{node[:beanstalkd][:nagios][:growth_critical]}"
 end
 
 nagios_service "BEANSTALKD" do
