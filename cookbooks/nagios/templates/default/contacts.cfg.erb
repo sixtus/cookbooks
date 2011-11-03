@@ -2,9 +2,11 @@
 # CONTACTS.CFG - CONTACTS & CONTACT GROUPS
 ###############################################################################
 
-<% @contactgroups = %w(hostmasters) %>
+<% @contactgroups = [] %>
 
 <% @contacts.each do |c| %>
+<% c[:nagios_contact_groups] |= %w(everyone) %>
+<% @contactgroups |= c[:nagios_contact_groups] %>
 define contact {
   use generic-contact
   contact_name <%= c[:id] %>
@@ -13,10 +15,7 @@ define contact {
 <% if c.include?(:pager) %>
   pager <%= c[:pager] %>
 <% end %>
-<% if c.include?(:nagios_contact_groups) %>
-<% @contactgroups |= c[:nagios_contact_groups] %>
-  contactgroups <%= c[:nagios_contact_groups].join(",") %>
-<% end %>
+  contactgroups <%= c[:nagios_contact_groups].sort.join(",") %>
   service_notification_period <%= c[:id] %>-on-call
   host_notification_period <%= c[:id] %>-on-call
 }
@@ -29,9 +28,7 @@ define contact {
 <% if c.include?(:pager) %>
   pager <%= c[:pager] %>
 <% end %>
-<% if c.include?(:nagios_contact_groups) %>
-  contactgroups <%= c[:nagios_contact_groups].join(",") %>
-<% end %>
+  contactgroups <%= c[:nagios_contact_groups].sort.join(",") %>
   service_notification_period 24x7
   host_notification_period 24x7
 }

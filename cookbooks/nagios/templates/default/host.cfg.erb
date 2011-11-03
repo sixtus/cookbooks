@@ -2,6 +2,8 @@
 # HOST.CFG - OBJECTS FOR HOST <%= @host[:fqdn] %>
 ###############################################################################
 
+<% @host[:nagios][:contact_groups] ||= node[:nagios][:host][:contact_groups] %>
+
 define host {
   use generic-host
   address <%= @host[:fqdn] %>
@@ -9,9 +11,7 @@ define host {
 <% if @host[:virtualization][:host] %>
   parents <%= @host[:virtualization][:host] %>
 <% end %>
-<% if @host[:nagios][:contact_groups] %>
-  contact_groups <%= @host[:nagios][:contact_groups].join(",") %>
-<% end %>
+  contact_groups <%= @host[:nagios][:contact_groups].sort.join(",") %>
 }
 
 <%
@@ -21,6 +21,8 @@ define host {
 
   next unless params.delete(:enabled)
   next unless params[:host_name] == @host[:fqdn]
+
+  params[:contact_groups] ||= node[:nagios][:service][:contact_groups].join(',')
 
   dependencies = params.delete(:dependencies)
   dependencies ||= []
@@ -51,17 +53,13 @@ define serviceescalation {
   use generic-serviceescalation
   host_name <%= params[:host_name] %>
   service_description <%= service_description %>
-<% eparams.sort.each do |key, value| %>
-  <%= key %> <%= value %>
-<% end %>
+  contact_groups <%= params[:contact_groups] %>
 }
 define serviceescalation {
   use emergency-serviceescalation
   host_name <%= params[:host_name] %>
   service_description <%= service_description %>
-<% eparams.sort.each do |key, value| %>
-  <%= key %> <%= value %>
-<% end %>
+  contact_groups <%= params[:contact_groups] %>
 }
 <% end %>
 <% end %>

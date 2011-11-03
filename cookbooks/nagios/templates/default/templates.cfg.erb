@@ -32,8 +32,6 @@ define host {
   notification_period 24x7
   notification_interval 30
   notification_options d,u,r
-  contacts <%= @hostmasters.join(",") %>
-  contact_groups hostmasters
   register 0
 }
 
@@ -58,8 +56,6 @@ define service {
   notification_period 24x7
   notification_options w,u,c,r
   notifications_enabled 1
-  contacts <%= @hostmasters.join(",") %>
-  contact_groups hostmasters
   register 0
 }
 
@@ -76,8 +72,6 @@ define serviceescalation {
   first_notification 1
   last_notification 3
   notification_interval 15
-  contacts <%= @hostmasters.join(",") %>
-  contact_groups hostmasters
 }
 
 define serviceescalation {
@@ -85,6 +79,4 @@ define serviceescalation {
   first_notification 4
   last_notification 0
   notification_interval 15
-  contacts <%= @hostmasters.map { |h| "#{h}-emergency" }.join(",") %>
-  contact_groups hostmasters
 }
