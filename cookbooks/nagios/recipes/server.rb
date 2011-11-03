@@ -113,14 +113,13 @@ end
 
 # retrieve data from the search index
 contacts = node.run_state[:users].select do |u|
-  u[:nagios_contact_groups] or
-  (u[:tags] and u[:tags].include?("hostmaster"))
+  u.include?(:nagios_contact_groups)
 end.sort_by do |u|
   u[:id]
 end
 
 hostmasters = contacts.select do |c|
-  c[:tags].include?("hostmaster")
+  c[:tags] and c[:tags].include?("hostmaster")
 end.map do |c|
   c[:id]
 end
