@@ -88,6 +88,21 @@ end
 # nagios service checks
 if tagged?("nagios-client")
 
+  # simple helper class for custom nagios checks
+  directory "/usr/lib/ruby/site_ruby/nagios/plugin" do
+    owner "root"
+    group "root"
+    mode "0755"
+    recursive true
+  end
+
+  cookbook_file "/usr/lib/ruby/site_ruby/nagios/plugin/mysql.rb" do
+    source "nagios-mysql.rb"
+    owner "root"
+    group "root"
+    mode "0644"
+  end
+
   # simple process check
   nrpe_command "check_mysql" do
     command "/usr/lib/nagios/plugins/check_pidfile /var/run/mysqld/mysqld.pid /usr/sbin/mysqld"
