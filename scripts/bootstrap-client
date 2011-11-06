@@ -4,7 +4,8 @@
 CHEF_DIR=$(python -c 'import os,sys;print os.path.realpath(sys.argv[1])' $(dirname $0)/../)
 
 # bootstrap repository first
-source "${CHEF_DIR}"/scripts/bootstrap-repo
+source "${CHEF_DIR}"/scripts/bootstrap-rvm
+source "${CHEF_DIR}"/scripts/bootstrap-openssl
 
 read -p "Your chef server API username: [$(whoami)] " node_name
 : ${node_name:=$(whoami)}
