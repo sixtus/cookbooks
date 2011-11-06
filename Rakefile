@@ -4,10 +4,10 @@
 
 require 'rubygems'
 
-begin
-  require 'bundler'
-rescue LoadError
-  if Process.euid > 0
+if Process.euid > 0
+  begin
+    require 'bundler'
+  rescue LoadError
     $stderr.puts "Bundler could not be loaded. Please make sure to run ./scripts/bootstrap"
     exit(1)
   end
