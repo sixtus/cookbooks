@@ -209,7 +209,13 @@ class Chef
         def load_current_resource
           @current_resource = Chef::Resource::Package.new(@new_resource.name)
           @current_resource.package_name(@new_resource.package_name)
-          @current_resource.version(package_info[:current_version])
+
+          begin
+            @current_resource.version(package_info[:current_version])
+          rescue Chef::Exceptions::Package
+            # not available
+          end
+
           @current_resource
         end
 
