@@ -111,7 +111,7 @@ end
 
 execute "chef-solr-installer" do
   command "chef-solr-installer -c /etc/chef/solr.rb -u chef -g chef -f"
-  only_if "echo '2e275746307c89bcf2f18671da2d4f3d /var/lib/chef/solr/jetty/webapps/solr.war' | md5sum -c --quiet"
+  creates "/var/lib/chef/solr/jetty"
 end
 
 %w(
