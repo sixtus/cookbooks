@@ -39,6 +39,9 @@ if [[ ! -e "${CHEF_DIR}"/.chef/client.pem ]]; then
 	echo "!!!"
 	echo "!!! You can generate one on the chef server with the following command:"
 	echo "!!!"
-	echo "!!! sudo knife client -a -n create ${node_name} | tail -n +2 > ${CHEF_DIR}/.chef/client.pem"
+	echo "!!! sudo knife client -a -n create ${node_name} | tail -n +2"
 	echo "!!!"
+	echo "!!! Put the generated key into ${CHEF_DIR}/.chef/client.pem"
+	echo "!!!"
+	echo
 fi

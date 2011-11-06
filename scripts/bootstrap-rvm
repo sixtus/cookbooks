@@ -18,6 +18,11 @@ source ~/.rvm/scripts/rvm
 rvm rvmrc trust "${CHEF_DIR}"
 source "${CHEF_DIR}"/.rvmrc
 
+# prevent epic fail in gentoo
+for i in ~/.rvm/rubies/*/lib/ruby/site_ruby; do
+	touch "${i}"/auto_gem.rb
+done
+
 if ! gem query -i -n ^bundler$ > /dev/null; then
 	gem install bundler
 fi
