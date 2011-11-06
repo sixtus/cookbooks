@@ -1,28 +1,5 @@
 # Configure the Rakefile's tasks.
 
-# License for new Cookbooks
-NEW_COOKBOOK_LICENSE = :apachev2
-
-# The top of the repository checkout
-TOPDIR = File.expand_path(File.join(File.dirname(__FILE__), ".."))
-
-# directories for entities
-NODES_DIR = File.expand_path(File.join(TOPDIR, "nodes"))
-ROLES_DIR = File.expand_path(File.join(TOPDIR, "roles"))
-BAGS_DIR = File.expand_path(File.join(TOPDIR, "databags"))
-
-# documentation directories
-DOC_DIR = File.expand_path(File.join(TOPDIR, "documentation"))
-DOC_SOURCE_DIR = File.expand_path(File.join(DOC_DIR, "source"))
-DOC_BUILD_DIR = File.expand_path(File.join(TOPDIR, "cookbooks", "chef", "files", "default", "documentation", "html"))
-
-# Directories needed by the SSL tasks
-SSL_CA_DIR = File.expand_path(File.join(TOPDIR, "ca"))
-SSL_CERT_DIR = File.expand_path(File.join(TOPDIR, "site-cookbooks/openssl/files/default/certificates"))
-
-# OpenSSL config file
-SSL_CONFIG_FILE = File.expand_path(File.join(TOPDIR, "config", "openssl.cnf"))
-
 # The company name - used for SSL certificates, and in srvious other places
 COMPANY_NAME = "Example Com"
 
@@ -44,3 +21,24 @@ SSL_EMAIL_ADDRESS = "hostmaster@example.com"
 # make rake more silent
 RakeFileUtils.verbose_flag = false
 Chef::Log.level = :error
+
+# The top of the repository checkout
+TOPDIR = File.expand_path(File.join(File.dirname(__FILE__), ".."))
+
+# directories for entities
+NODES_DIR = File.expand_path(File.join(TOPDIR, "nodes"))
+ROLES_DIR = File.expand_path(File.join(TOPDIR, "roles"))
+BAGS_DIR = File.expand_path(File.join(TOPDIR, "databags"))
+
+# documentation directories
+DOC_DIR = File.expand_path(File.join(TOPDIR, "documentation"))
+DOC_SOURCE_DIR = File.expand_path(File.join(DOC_DIR, "source"))
+DOC_BUILD_DIR = File.expand_path(File.join(TOPDIR, "cookbooks", "chef", "files", "default", "documentation", "html"))
+
+# Directories needed by the SSL tasks
+SSL_CA_DIR = File.expand_path(File.join(TOPDIR, "ca"))
+SSL_CERT_DIR = File.expand_path(File.join(TOPDIR, "site-cookbooks/openssl/files/default/certificates"))
+
+# OpenSSL config file
+SSL_CONFIG_FILE = File.expand_path(File.join(TOPDIR, "config", "openssl.cnf"))
+

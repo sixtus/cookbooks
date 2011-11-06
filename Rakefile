@@ -3,17 +3,26 @@
 #
 
 require 'rubygems'
-require 'bundler/setup'
+
+begin
+  require 'bundler'
+rescue LoadError
+  if Process.euid > 0
+    $stderr.puts "Bundler could not be loaded. Please make sure to run ./scripts/bootstrap"
+    exit(1)
+  end
+end
+
+Bundler.setup if defined?(Bundler)
 
 require 'chef'
-require 'highline/import'
 
 # load constants from rake config file.
-require File.join(File.dirname(__FILE__), 'config', 'rake')
+require File.expand_path('../config/rake', __FILE__)
 
 # load chef config
 begin
-  Chef::Config.from_file(File.join(File.dirname(__FILE__), '.chef', 'knife.rb'))
+  Chef::Config.from_file(File.expand_path('../.chef/knife.rb', __FILE__))
 rescue
   # do nothing
 end

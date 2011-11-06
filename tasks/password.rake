@@ -1,4 +1,4 @@
-require "highline"
+require "highline/import"
 
 desc "Generate a crypt(3) compatible password"
 task :password do

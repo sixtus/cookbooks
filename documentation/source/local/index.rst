@@ -9,5 +9,3 @@ Contents
 
 .. toctree::
    :maxdepth: 1
-
-   nodes/index
