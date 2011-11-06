@@ -1,8 +1,52 @@
+require "highline/import"
+
 namespace :server do
 
   desc "Bootstrap a Chef Server infrastructure"
   task :bootstrap do
-    fqdn = %x(hostname -f).chomp
+    # sanity check
+    if Process.euid > 0
+      $stderr.puts "You need to be root for server bootstrap"
+      exit(1)
+    end
+
+    # collect data
+    hostname = ask('Enter the hostname: ') do |q|
+      q.default = 'chef'
+      q.validate = /^\w+$/
+    end
+
+    domainname = ask('Enter the domain name: ') do |q|
+      q.default = 'example.com'
+      q.validate = /^[\w.]+$/
+    end
+
+    fqdn = "#{hostname}.#{domainname}"
+
+    username = ask('Enter your username: ') do |q|
+      q.validate = /^\w+$/
+    end
+
+    p1 = ask('Enter Password: ') do |q|
+      q.echo = false
+      q.validate = /^.{6}/
+    end
+
+    p2 = ask('Confirm: ') do |q|
+      q.echo = false
+    end
+
+    raise "passwords do not match" unless p1 == p2
+
+    salt = SecureRandom.hex(4)
+    password = p1.crypt("$6$#{salt}$")
+
+    # set FQDN
+    %x(hostname #{hostname})
+
+    File.open("/etc/hosts", 'w')  do |f|
+      f.write("127.0.0.1 #{fqdn} #{hostname} localhost\n")
+    end
 
     # create CA & SSL certificate for the server
     ENV['BATCH'] = "1"
@@ -12,7 +56,7 @@ namespace :server do
     scfg = File.join(TOPDIR, "bootstrap", "solo.rb")
     sjson = File.join(TOPDIR, "bootstrap", "bootstrap.json")
 
-    sh("chef-solo -c #{scfg} -j #{sjson}")
+    sh("chef-solo -c #{scfg} -j #{sjson} -N #{fqdn}")
 
     # run chef-client to register a client key
     sh("chef-client")
@@ -28,13 +72,11 @@ namespace :server do
     end
 
     # create initial user account
-    print "Please enter your username: "
-    username = STDIN.gets.chomp
-
     uf = File.join(BAGS_DIR, "users", "#{username}.rb")
 
     File.open(uf, "w") do |fd|
-      fd.puts "self[:tags] = %w(hostmaster)"
+      fd.puts "tags %w(hostmaster)"
+      fd.puts "password '#{password}'"
     end
 
     begin
@@ -43,10 +85,10 @@ namespace :server do
     end
 
     # deploy initial repository
-    Rake::Task['deploy'].invoke
+    Rake::Task['load:all'].invoke
 
     # run final chef-client
-    sh("chef-client -V")
+    sh("chef-client")
   end
 
 end
