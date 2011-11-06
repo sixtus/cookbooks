@@ -142,6 +142,7 @@ namespace "load" do
       b = Chef::DataBag.new
       b.name(name)
       b.create
+      b = Chef::DataBag.load(name)
     end
 
     items = Dir[ File.join(BAGS_DIR, name, "*.rb") ].map do |f|
