@@ -11,9 +11,13 @@ if Process.euid > 0
     $stderr.puts "Bundler could not be loaded. Please make sure to run ./scripts/bootstrap"
     exit(1)
   end
-end
 
-Bundler.setup if defined?(Bundler)
+  Bundler.setup if defined?(Bundler)
+
+  knife_config = File.expand_path('../.chef/knife.rb', __FILE__)
+else
+  knife_config = "/root/.chef/knife.rb"
+end
 
 require 'chef'
 
@@ -22,7 +26,7 @@ require File.expand_path('../config/rake', __FILE__)
 
 # load chef config
 begin
-  Chef::Config.from_file(File.expand_path('../.chef/knife.rb', __FILE__))
+  Chef::Config.from_file(knife_config)
 rescue
   # do nothing
 end
