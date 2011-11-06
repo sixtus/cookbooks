@@ -12,10 +12,10 @@ namespace :server do
     scfg = File.join(TOPDIR, "bootstrap", "solo.rb")
     sjson = File.join(TOPDIR, "bootstrap", "bootstrap.json")
 
-    sh("chef-solo -L /dev/stdout -c #{scfg} -j #{sjson}")
+    sh("chef-solo -c #{scfg} -j #{sjson}")
 
     # run chef-client to register a client key
-    sh("chef-client -V")
+    sh("chef-client")
 
     # setup a client key for root
     sh("knife client create root -a -n -u chef-webui -k /etc/chef/webui.pem | tail -n+2 > /root/.chef/client.pem")
