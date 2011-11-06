@@ -1,7 +1,5 @@
 {
 	"run_list": [
-		"recipe[core_ext]",
-		"recipe[portage]",
-		"recipe[chef::server]"
+		"role[chef]"
 	]
 }
