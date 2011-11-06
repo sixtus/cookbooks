@@ -4,6 +4,8 @@ namespace :server do
 
   desc "Bootstrap a Chef Server infrastructure"
   task :bootstrap do
+    ENV['BOOTSTRAP'] = "1"
+
     # sanity check
     if Process.euid > 0
       $stderr.puts "You need to be root for server bootstrap"

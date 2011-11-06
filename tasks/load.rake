@@ -35,8 +35,10 @@ end
 
 desc "Pull changes from the remote repository"
 task :pull do
-  sh("git checkout master")
-  sh("git pull")
+  unless ENV.include?('BOOTSTRAP')
+    sh("git checkout master")
+    sh("git pull")
+  end
 end
 
 namespace "load" do
