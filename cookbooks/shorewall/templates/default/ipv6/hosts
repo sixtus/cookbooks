@@ -20,7 +20,3 @@ nodes eth0:<%= n[:ip6address] %>
 # <%= name %>
 <%= [ :zone, :hosts, :options ].map { |a| host[a] }.join(" ") %>
 <% end %>
-
-<% @ipsec_nodes.each do |n| %>
-vpn eth0:<<%= n[:ip6address] %>/<%= n[:ip6prefixlen] %>> ipsec
-<% end %>

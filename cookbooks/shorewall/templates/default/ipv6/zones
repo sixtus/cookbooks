@@ -25,7 +25,3 @@ loc ipv6
 <% node[:shorewall6][:zones].each do |zone, ztype| %>
 <%= zone %> <%= ztype %>
 <% end %>
-
-<% unless @ipsec_nodes.empty? %>
-vpn ipv6
-<% end %>

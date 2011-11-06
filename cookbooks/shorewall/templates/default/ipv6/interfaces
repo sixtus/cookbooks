@@ -9,11 +9,11 @@
 ###############################################################################
 #ZONE	INTERFACE	ANYCAST		OPTIONS
 
-net eth0 - tcpflags,nosmurfs
+net eth0
 
 <% if node[:local_ip6address] %>
 <% if node[:local_interface] != "eth0" %>
-loc <%= node[:local_interface] %> - tcpflags,nosmurfs
+loc <%= node[:local_interface] %>
 <% end %>
 <% end %>
 

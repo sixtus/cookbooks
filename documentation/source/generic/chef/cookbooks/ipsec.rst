@@ -1,1 +1,0 @@
-../../../../../cookbooks/ipsec/README.rst

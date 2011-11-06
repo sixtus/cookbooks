@@ -19,16 +19,6 @@ template "/etc/shorewall6/shorewall6.conf" do
   notifies :run, "execute[shorewall6-restart]"
 end
 
-if tagged?("ipsec")
-  ipsec_nodes = node.run_state[:nodes].select do |n|
-    n[:tags].include?("ipsec") and
-    n[:ipv6_enabled] == true and
-    n[:fqdn] != node[:fqdn]
-  end
-else
-  ipsec_nodes = []
-end
-
 %w(
   hosts
   interfaces
@@ -42,7 +32,6 @@ end
     owner "root"
     group "root"
     mode "0600"
-    variables :ipsec_nodes => ipsec_nodes
     notifies :run, "execute[shorewall6-restart]"
   end
 end
