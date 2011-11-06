@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# MacOS does not have realpath ... sigh
+CHEF_DIR=$(python -c 'import os,sys;print os.path.realpath(sys.argv[1])' $(dirname $0)/../)
+
+# bootstrap repository first
+source "${CHEF_DIR}"/scripts/bootstrap-repo
+
+read -p "Your chef server API username: [$(whoami)] " node_name
+: ${node_name:=$(whoami)}
+
+read -p "Hostname of your chef server: [$(hostname -f)] " chef_server_url
+: ${chef_server_url:=$(hostname -f)}
+
+# setup knife
+cat <<EOF > ${CHEF_DIR}/.chef/knife.rb
+log_level :info
+log_location STDOUT
+
+node_name "${node_name}"
+client_key "${CHEF_DIR}/.chef/client.pem"
+
+chef_server_url "https://${chef_server_url}"
+
+cache_type 'BasicFile'
+cache_options(:path => "${CHEF_DIR}/.chef/checksums")
+
+cookbook_path [
+  "${CHEF_DIR}/cookbooks",
+  "${CHEF_DIR}/site-cookbooks"
+]
+EOF
+
+if [[ ! -e "${CHEF_DIR}"/.chef/client.pem ]]; then
+	echo
+	echo "!!!"
+	echo "!!! No API client key has been found!"
+	echo "!!!"
+	echo "!!! You can generate one on the chef server with the following command:"
+	echo "!!!"
+	echo "!!! sudo knife client -a -n create ${node_name} | tail -n +2 > ${CHEF_DIR}/.chef/client.pem"
+	echo "!!!"
+fi
