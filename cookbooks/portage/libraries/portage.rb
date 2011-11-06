@@ -68,79 +68,45 @@ module Gentoo
     module Emerge
       include Gentoo::Portage::PackageConf
 
-      # Memoize package info
-      attr_accessor :package_info
       def package_info
-        @package_info ||= package_info_from_eix(@new_resource.name)
+        @package_info ||= package_info_from_eix(@new_resource.package_name)
       end
 
-      def emerge_cmd(pkg, emerge_options = nil)
-        "/usr/bin/emerge --color=n --nospinner --quiet #{emerge_options} #{pkg}"
-      end
-
-      # Sets portage attributes and then emerges the package only if necessary.
-      def conditional_emerge(new_resource, action)
-        package_data = package_info
-
-        if package_data[:candidate_version].to_s == ""
-          raise Chef::Exceptions::Package, "No candidate version available for #{new_resource.name}"
+      def emerge(action)
+        if package_info[:candidate_version].to_s == ""
+          raise Chef::Exceptions::Package, "No candidate version available for #{@new_resource.name}"
         end
 
-        package_atom = "#{package_data[:category]}/#{package_data[:package_name]}"
-        package_atom = "=#{package_atom}-#{new_resource.version}" if new_resource.version
-
-        emerge(package_data[:package_atom], new_resource.options) if emerge?(action, package_data, new_resource.version)
+        if emerge?(action)
+          Chef::Mixin::Command.run_command_with_systems_locale(
+            :command => "/usr/bin/emerge --color=n --nospinner --quiet #{@new_resource.options} #{package_info[:package_atom]}"
+          )
+        end
       end
-
 
       private
 
-      def emerge?(action, package_data, requested_version)
-        version = requested_version.to_s
+      def emerge?(action, package_info)
+        version = @new_resource.version.to_s
 
-        # If we find no version, regardless of action emerge this package
-        if package_data[:current_version] == ""
-          Chef::Log.info("No version found. Installing package[#{package_data[:package_atom]}].")
+        if package_info[:current_version] == ""
+          Chef::Log.info("No version found. Installing package[#{package_info[:package_atom]}].")
           return true
         end
 
         case action
         when :install
-          # If we requested any version, then do nothing
           return false if version == ""
-          # If we have the same version, then do nothing
-          return false if package_data[:current_version] == version
+          return false if package_info[:current_version] == version
+          Chef::Log.info("Installing package[#{package_info[:package_atom]}] (version requirements unmet).")
+          true
 
-          Chef::Log.info("Installing package[#{package_data[:package_atom]}] (version requirements unmet).")
-          true
-        when :reinstall
-          Chef::Log.info("Reinstalling package[#{package_data[:package_atom]}].")
-          true
         when :upgrade
-          # Do not upgrade if the version is the same.
-          return false if package_data[:current_version] == package_data[:candidate_version]
+          return false if package_info[:current_version] == package_info[:candidate_version]
           true
+
         else
           raise Chef::Exceptions::Package, "Unknown action :#{action}"
-        end
-      end
-
-      # Emerges "package_atom" with additional "options".
-      def emerge(package_atom, options)
-        Chef::Mixin::Command.run_command_with_systems_locale(
-          :command => emerge_cmd(package_atom, options)
-        )
-      end
-
-      def full_package_atom(category, name, version = nil)
-        package_atom = "#{category}/#{name}"
-        return package_atom unless version
-
-        if version =~ /^\~(.+)/
-          # If we start with a tilde
-          "~#{package_name}-#{$1}"
-        else
-          "=#{package_name}-#{version}"
         end
       end
 
@@ -172,7 +138,7 @@ module Gentoo
         eix_update = "/usr/bin/eix-update"
 
         unless ::File.executable?(eix)
-          raise Chef::Exceptions::Package, "You should install app-portage/eix for fast package searches."
+          raise Chef::Exceptions::Package, "You need to install app-portage/eix for fast package searches."
         end
 
         # We need to update the eix database if it's older than the current portage
@@ -182,9 +148,16 @@ module Gentoo
           Chef::Mixin::Command.run_command_with_systems_locale(:command => eix_update)
         end
 
-        query_command = [eix, "--nocolor", "--pure-packages", "--stable", "--exact",
+        query_command = [
+          eix,
+          "--nocolor",
+          "--pure-packages",
+          "--stable",
+          "--exact",
           '--format "<category>\t<name>\t<installedversions:VERSION>\t<bestversion:VERSION>\n"',
-          package_name.count("/") > 0 ? "--category-name" : "--name", package_name].join(" ")
+          package_name.count("/") > 0 ? "--category-name" : "--name",
+          package_name
+        ].join(" ")
 
         eix_out = eix_stderr = nil
 
@@ -207,11 +180,21 @@ module Gentoo
           raise Chef::Exceptions::Package, "eix search failed: `#{query_command}`\n#{eix_stderr}\n#{status.inspect}!"
         end
 
-        Chef::Log.debug("eix search for #{package_name} returned: category: \"#{eix_out[:category]}\", package_name: \"#{eix_out[:package_name]}\", current_version: \"#{eix_out[:current_version]}\", candidate_version: \"#{eix_out[:candidate_version]}\".")
-
-        eix_out[:package_atom] = full_package_atom(eix_out[:category], eix_out[:package_name], new_resource.version)
+        eix_out[:package_atom] = full_package_atom(eix_out[:category], eix_out[:package_name], @new_resource.version)
         eix_out
       end
+
+      def full_package_atom(category, name, version = nil)
+        package_atom = "#{category}/#{name}"
+        return package_atom unless version
+
+        if version =~ /^\~(.+)/
+          "~#{package_name}-#{$1}"
+        else
+          "=#{package_name}-#{version}"
+        end
+      end
+
     end
   end
 end
@@ -226,44 +209,20 @@ class Chef
         def load_current_resource
           @current_resource = Chef::Resource::Package.new(@new_resource.name)
           @current_resource.package_name(@new_resource.package_name)
-
-          @current_resource.version(nil)
-
-          _, category_with_slash, category, pkg = %r{^#{PACKAGE_NAME_PATTERN}$}.match(@new_resource.package_name).to_a
-
-          possibilities = Dir["/var/db/pkg/#{category || "*"}/#{pkg}-*"].map {|d| d.sub(%r{/var/db/pkg/}, "") }
-          versions = possibilities.map do |entry|
-            if(entry =~ %r{[^/]+/#{Regexp.escape(pkg)}\-(\d[\.\d]*((_(alpha|beta|pre|rc|p)\d*)*)?(-r\d+)?)})
-              [$&, $1]
-            end
-          end.compact
-
-          if versions.size > 1
-            if category
-              @current_resource.version(versions.last.last)
-            else
-              atoms = versions.map {|v| v.first }.sort
-              raise Chef::Exceptions::Package, "Multiple packages found for #{@new_resource.package_name}: #{atoms.join(" ")}. Specify a category."
-            end
-          elsif versions.size == 1
-            @current_resource.version(versions.first.last)
-          end
-
-          Chef::Log.debug("#{@new_resource} current version #{$1}")
-
+          @current_resource.version(package_info[:current_version])
           @current_resource
         end
 
         def install_package(name, version)
-          conditional_emerge(new_resource, :install)
+          emerge(:install)
         end
 
         def upgrade_package(name, version)
-          conditional_emerge(new_resource, :upgrade)
+          emerge(:upgrade)
         end
 
         def candidate_version
-          @candidate_version ||= self.package_info[:candidate_version]
+          @candidate_version ||= package_info[:candidate_version]
         end
 
       end
