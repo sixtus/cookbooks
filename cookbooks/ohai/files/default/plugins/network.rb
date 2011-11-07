@@ -8,19 +8,13 @@ network[:interfaces] = Mash.new unless network[:interfaces]
 require_plugin "hostname"
 require_plugin "#{os}::network"
 
-ipaddress Socket.getaddrinfo(fqdn, nil)[0][3]
-
-network[:interfaces][network[:default_interface]][:addresses].each do |adr, net|
-  next unless net[:family] =~ /^inet/
-  next if rfc1918?(adr)
-
-  if net[:family] == "inet6" and net[:scope] != "link" and net[:primary]
-    ip6address adr
-    ip6prefixlen net[:prefixlen]
-  end
-
-  if net[:family] == "link"
-    macaddress adr
+# simply rely on the resolver, if that doesn't work you have a problem anyway.
+Socket.getaddrinfo(fqdn, nil).each do |family, _, _, ip, _, _, _|
+  case family
+  when "AF_INET"
+    ipaddress ip
+  when "AF_INET6"
+    ip6address ip
   end
 end
 
