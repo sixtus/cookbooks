@@ -12,9 +12,9 @@ require_plugin "#{os}::network"
 Resolv::DNS.open(:nameserver => ['8.8.8.8', '8.8.4.4']) do |dns|
   dns.getaddresses(fqdn).each do |r|
     if r.is_a?(Resolv::IPv4)
-      ipaddress r.address
+      ipaddress r.to_s
     elsif r.is_a?(Resolv::IPv6)
-      ip6address r.address
+      ip6address r.to_s
     end
   end
 end
