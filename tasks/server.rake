@@ -90,7 +90,9 @@ namespace :server do
     Rake::Task['load:all'].invoke
 
     # run final chef-client
-    sh("chef-client")
+    3.times do
+      sh("chef-client")
+    end
   end
 
 end
