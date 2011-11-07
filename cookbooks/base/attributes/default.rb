@@ -170,12 +170,6 @@ default[:base][:groups] = {
 }
 
 default[:base][:users] = {
-  :root => {
-    :uid => 0,
-    :gid => 0,
-    :home => "/root",
-    :shell => "/bin/bash",
-  },
   :bin => {
     :uid => 1,
     :gid => 1,

@@ -89,6 +89,17 @@ node[:base][:users].each do |name, params|
   end
 end
 
+# special case: for chef-solo runs we don't touch roots password, since we
+# don't have any other user databags that could have sudo
+user "root" do
+  uid 0
+  gid 0
+  comment "root"
+  home "/root"
+  shell "/bin/bash"
+  password "*" unless node.run_state[:users].empty?
+end
+
 # load base recipes
 include_recipe "portage"
 include_recipe "portage::porticron"
