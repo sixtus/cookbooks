@@ -1,12 +1,5 @@
-#!/bin/bash
-
-# MacOS does not have realpath ... sigh
-CHEF_DIR=$(python -c 'import os,sys;print os.path.realpath(sys.argv[1])' $(dirname $0)/../)
-
-# generate openssl.cnf
-cat <<EOF > ${CHEF_DIR}/config/openssl.cnf
-SSL_CA_DIR = ${CHEF_DIR}/ca
-SSL_CERT_DIR = ${CHEF_DIR}/site-cookbooks/openssl/files/default/certificates
+SSL_CA_DIR = <%= SSL_CA_DIR %>
+SSL_CERT_DIR = <%= SSL_CERT_DIR %>
 
 
 [ ca ]
@@ -14,17 +7,17 @@ default_ca = CA_default
 
 
 [ CA_default ]
-database         = \$SSL_CA_DIR/index
-new_certs_dir    = \$SSL_CA_DIR/newcerts
+database         = $SSL_CA_DIR/index
+new_certs_dir    = $SSL_CA_DIR/newcerts
 
-certificate      = \$SSL_CERT_DIR/ca.crt
-serial           = \$SSL_CA_DIR/serial
-private_key      = \$SSL_CA_DIR/ca.key
-RANDFILE         = \$SSL_CA_DIR/.rand
+certificate      = $SSL_CERT_DIR/ca.crt
+serial           = $SSL_CA_DIR/serial
+private_key      = $SSL_CA_DIR/ca.key
+RANDFILE         = $SSL_CA_DIR/.rand
 
-crl              = \$SSL_CERT_DIR/ca.crl
-crl_dir          = \$SSL_CA_DIR/crl
-crlnumber        = \$SSL_CA_DIR/crlnumber
+crl              = $SSL_CERT_DIR/ca.crl
+crl_dir          = $SSL_CA_DIR/crl
+crlnumber        = $SSL_CA_DIR/crlnumber
 
 default_days     = 365
 default_crl_days = 30
@@ -62,21 +55,21 @@ x509_extensions    = v3_ca
 
 [ req_distinguished_name ]
 countryName                     = Country Name (2 letter code)
-countryName_default             = 
+countryName_default             = <%= SSL_COUNTRY_NAME %>
 countryName_min                 = 2
 countryName_max                 = 2
 
 stateOrProvinceName             = State or Province Name (full name)
-stateOrProvinceName_default     = 
+stateOrProvinceName_default     = <%= SSL_STATE_NAME %>
 
 localityName                    = Locality Name (eg, city)
-localityName_default            = 
+localityName_default            = <%= SSL_LOCALITY_NAME %>
 
 0.organizationName              = Organization Name (eg, company)
-0.organizationName_default      = 
+0.organizationName_default      = <%= COMPANY_NAME %>
 
 organizationalUnitName          = Organizational Unit Name (eg, section)
-organizationalUnitName_default  = 
+organizationalUnitName_default  = <%= SSL_ORGANIZATIONAL_UNIT_NAME %>
 
 commonName                      = Common Name (eg, YOUR name)
 commonName_max                  = 64
@@ -84,7 +77,7 @@ commonName_default              =
 
 emailAddress                    = Email Address
 emailAddress_max                = 64
-emailAddress_default            = 
+emailAddress_default            = <%= SSL_EMAIL_ADDRESS %>
 
 
 [ usr_cert ]
@@ -101,4 +94,3 @@ basicConstraints       = CA:true
 
 [ crl_ext ]
 authorityKeyIdentifier = keyid:always,issuer:always
-EOF

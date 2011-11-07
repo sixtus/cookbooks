@@ -1,5 +1,6 @@
-require 'tempfile'
 require 'chef'
+require 'erubis'
+require 'tempfile'
 
 namespace :ssl do
   desc "Initialize the OpenSSL CA"
@@ -9,6 +10,13 @@ namespace :ssl do
     FileUtils.mkdir_p(File.join(SSL_CA_DIR, "crl"))
     FileUtils.mkdir_p(File.join(SSL_CA_DIR, "newcerts"))
     FileUtils.touch(File.join(SSL_CA_DIR, "index"))
+
+    b = binding()
+    erb = Erubis::Eruby.new(File.read(SSL_CONFIG_FILE + ".erb"))
+
+    File.open(SSL_CONFIG_FILE, "w") do |f|
+      f.puts(erb.result(b))
+    end
 
     unless File.exists?(File.join(SSL_CA_DIR, "serial"))
       File.open(File.join(SSL_CA_DIR, "serial"), "w") do |f|
@@ -23,7 +31,13 @@ namespace :ssl do
     end
 
     unless File.exists?(File.join(SSL_CERT_DIR, "ca.crt"))
-      subject = "/C=#{SSL_COUNTRY_NAME}/ST=#{SSL_STATE_NAME}/L=#{SSL_LOCALITY_NAME}/O=#{COMPANY_NAME}/OU=#{SSL_ORGANIZATIONAL_UNIT_NAME}/CN=Certificate Signing Authority/emailAddress=#{SSL_EMAIL_ADDRESS}"
+      subject =  "/C=#{SSL_COUNTRY_NAME}"
+      subject += "/ST=#{SSL_STATE_NAME}"
+      subject += "/L=#{SSL_LOCALITY_NAME}"
+      subject += "/O=#{COMPANY_NAME}"
+      subject += "/OU=#{SSL_ORGANIZATIONAL_UNIT_NAME}"
+      subject += "/CN=Certificate Signing Authority"
+      subject += "/emailAddress=#{SSL_EMAIL_ADDRESS}"
       sh("openssl req -config #{SSL_CONFIG_FILE} -new -nodes -x509 -days 3650 -subj '#{subject}' -newkey rsa:4096 -out #{SSL_CERT_DIR}/ca.crt -keyout #{SSL_CA_DIR}/ca.key")
       sh("openssl ca -config #{SSL_CONFIG_FILE} -gencrl -out #{SSL_CERT_DIR}/ca.crl")
     end
