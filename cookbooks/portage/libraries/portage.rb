@@ -86,7 +86,7 @@ module Gentoo
 
       private
 
-      def emerge?(action, package_info)
+      def emerge?(action)
         version = @new_resource.version.to_s
 
         if package_info[:current_version] == ""
@@ -211,7 +211,9 @@ class Chef
           @current_resource.package_name(@new_resource.package_name)
 
           begin
-            @current_resource.version(package_info[:current_version])
+            unless package_info[:current_version].strip.empty?
+              @current_resource.version(package_info[:current_version])
+            end
           rescue Chef::Exceptions::Package
             # not available
           end
