@@ -1,4 +1,4 @@
-require 'socket'
+require 'resolv'
 
 provides "network"
 
@@ -9,12 +9,13 @@ require_plugin "hostname"
 require_plugin "#{os}::network"
 
 # simply rely on the resolver, if that doesn't work you have a problem anyway.
-Socket.getaddrinfo(fqdn, nil).each do |family, _, _, ip, _, _, _|
-  case family
-  when "AF_INET"
-    ipaddress ip
-  when "AF_INET6"
-    ip6address ip
+Resolv::DNS.open(:nameserver => ['8.8.8.8', '8.8.4.4']) do |dns|
+  dns.getaddresses(fqdn).each do |r|
+    if r.is_a?(Resolv::IPv4)
+      ipaddress r.address
+    elsif r.is_a?(Resolv::IPv6)
+      ip6address r.address
+    end
   end
 end
 
