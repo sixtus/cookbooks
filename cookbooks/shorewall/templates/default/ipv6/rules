@@ -22,7 +22,7 @@ Ping(ACCEPT) $FW net
 Ping(ACCEPT) net $FW
 
 # accept ssh connections
-ACCEPT net $FW tcp ssh
+ACCEPT all all tcp ssh
 
 <% node[:shorewall6][:rules].each do |name, rule| %>
 # <%= name %>
