@@ -27,6 +27,6 @@ if ! gem query -i -n ^bundler$ > /dev/null; then
 	gem install bundler
 fi
 
-pushd ${CHEF_DIR} > /dev/null
+pushd "${CHEF_DIR}" > /dev/null
 bundle install
 popd > /dev/null
