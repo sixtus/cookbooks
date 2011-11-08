@@ -24,7 +24,8 @@ task :init do
   unless File.exist?(CLIENT_KEY_FILE)
     File.open(CLIENT_KEY_FILE, "w") do |f|
       Net::SSH.start(chef_server_url, node_name) do |ssh|
-        f.puts(ssh.exec!("sudo knife client -a -n create #{node_name} | tail -n +2"))
+        cmd = "sudo knife client create #{node_name} -a -n -u root -k /root/.chef/client.pem | tail -n+2"
+        f.write(ssh.exec!(cmd))
       end
     end
   end
