@@ -74,16 +74,16 @@ namespace :server do
     end
 
     # create initial user account
+    begin
+      File.unlink(File.join(BAGS_DIR, "users", "john.rb"))
+    rescue
+    end
+
     uf = File.join(BAGS_DIR, "users", "#{username}.rb")
 
     File.open(uf, "w") do |fd|
       fd.puts "tags %w(hostmaster)"
       fd.puts "password '#{password}'"
-    end
-
-    begin
-      File.unlink(File.join(BAGS_DIR, "users", "john.rb"))
-    rescue
     end
 
     # deploy initial repository
