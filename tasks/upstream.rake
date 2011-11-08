@@ -10,7 +10,8 @@ namespace :upstream do
     end
 
     # add public cookbooks as upstream branch
-    sh("git remote add -f upstream https://github.com/zentoo/cookbooks.git")
+    sh("git remote rm upstream")
+    sh("git remote add -f upstream https://github.com/zenops/cookbooks.git")
     sh("git branch -t upstream upstream/master")
     sh("git config push.default tracking")
   end

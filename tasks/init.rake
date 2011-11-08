@@ -1,4 +1,5 @@
 require "highline/import"
+require "net/ssh"
 
 desc "Initialize the Chef repository"
 task :init do
