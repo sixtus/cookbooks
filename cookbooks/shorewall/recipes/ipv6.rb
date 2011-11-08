@@ -36,6 +36,8 @@ end
   end
 end
 
+directory "/var/lock/subsys"
+
 service "shorewall6" do
   action [:enable, :start]
 end
