@@ -13,10 +13,6 @@ if Process.euid > 0
   end
 
   Bundler.setup if defined?(Bundler)
-
-  knife_config = File.expand_path('../.chef/knife.rb', __FILE__)
-else
-  knife_config = "/root/.chef/knife.rb"
 end
 
 require 'chef'
@@ -26,7 +22,7 @@ require File.expand_path('../config/rake', __FILE__)
 
 # load chef config
 begin
-  Chef::Config.from_file(knife_config)
+  Chef::Config.from_file(KNIFE_CONFIG_FILE)
 rescue
   # do nothing
 end

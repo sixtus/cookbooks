@@ -25,6 +25,15 @@ Chef::Log.level = :error
 # The top of the repository checkout
 TOPDIR = File.expand_path(File.join(File.dirname(__FILE__), ".."))
 
+# chef config files
+if Process.euid > 0
+  KNIFE_CONFIG_FILE = File.expand_path(File.join(TOPDIR, ".chef", "knife.rb"))
+  CLIENT_KEY_FILE = File.expand_path(File.join(TOPDIR, ".chef", "client.pem"))
+else
+  KNIFE_CONFIG_FILE = "/root/.chef/knife.rb"
+  CLIENT_KEY_FILE = "/root/.chef/client.pem"
+end
+
 # directories for entities
 NODES_DIR = File.expand_path(File.join(TOPDIR, "nodes"))
 ROLES_DIR = File.expand_path(File.join(TOPDIR, "roles"))
@@ -41,4 +50,3 @@ SSL_CERT_DIR = File.expand_path(File.join(TOPDIR, "site-cookbooks/openssl/files/
 
 # OpenSSL config file
 SSL_CONFIG_FILE = File.expand_path(File.join(TOPDIR, "config", "openssl.cnf"))
-
