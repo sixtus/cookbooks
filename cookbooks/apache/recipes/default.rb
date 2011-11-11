@@ -104,6 +104,7 @@ template "/etc/conf.d/apache2" do
 end
 
 service "apache2" do
+  supports [:reload]
   action [:start, :enable]
 end
 
