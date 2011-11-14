@@ -85,14 +85,6 @@ EOS
     rvm_instance user do
       version version
     end
-
-    if new_resource.ruby
-      ruby_config = new_resource.ruby
-
-      rvm_ruby user do
-        ruby_config ruby_config
-      end
-    end
   end
 
 end
