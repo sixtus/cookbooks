@@ -63,11 +63,11 @@ namespace "load" do
   task :cookbooks_clear => [ :pull ]
   task :cookbooks_clear do
     rest = Chef::REST.new(Chef::Config[:chef_server_url])
-    rest.get_rest('cookbooks').keys.each do |cb|
-      puts("Deleting cookbook #{cb} ...")
-      rest.get_rest("cookbooks/#{cb}").values.flatten.each do |v|
-        puts("  v#{v}")
-        rest.delete_rest("cookbooks/#{cb}/#{v}")
+    rest.get_rest('cookbooks').each do |name, cb|
+      puts("Deleting cookbook #{name} ...")
+      cb['versions'].each do |vcb|
+        puts("  v#{vcb['version']}")
+        rest.delete_rest("cookbooks/#{name}/#{vcb['version']}")
       end
     end
     sh("rm -rf #{Chef::Config[:cache_options][:path]}")
