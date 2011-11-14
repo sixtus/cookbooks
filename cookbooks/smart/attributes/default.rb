@@ -1,4 +1,4 @@
-default[:smart][:devices] = node[:block_device].select do |name, dev|
+default[:smart][:devices] = (node[:block_device] or {}).select do |name, dev|
   dev[:vendor] == 'ATA'
 end.reject do |name, dev|
   [
