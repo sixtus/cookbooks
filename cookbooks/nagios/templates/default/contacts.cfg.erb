@@ -6,7 +6,7 @@
 
 <% @contacts.each do |c| %>
 <% @contactgroups |= c[:nagios_contact_groups] %>
-<% c[:nagios_contact_groups] |= %w(everyone) %>
+<% c[:nagios_contact_groups] = %w(everyone) if c[:nagios_contact_groups].empty? %>
 define contact {
   use generic-contact
   contact_name <%= c[:id] %>
