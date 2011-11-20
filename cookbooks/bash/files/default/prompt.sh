@@ -271,12 +271,18 @@ PS1="${PS1}\n${COL_user}\$ ${COL_none}"
 
 # screen/tmux title magic
 set_screen_title() {
-	echo -ne "\ek${USER}@${HOSTNAME}:${BASH_COMMAND/ *}\e\\"
+	if [[ -z ${BASHRC_NO_SCREEN_MAGIC} ]]; then
+		echo -ne "\ek${USER}@${HOSTNAME}:${BASH_COMMAND/ *}\e\\"
+	fi
 }
 
-if [[ -z ${BASHRC_NO_SCREEN_MAGIC} ]]; then
-	if [[ "${TERM/-256color}" == "screen" ]]; then
-		PROMPT_COMMAND='echo -ne "\ek${USER}@${HOSTNAME}\e\\"'
-		trap set_screen_title DEBUG
+reset_screen_title() {
+	if [[ -z ${BASHRC_NO_SCREEN_MAGIC} ]]; then
+		echo -ne "\ek${USER}@${HOSTNAME}\e\\"
 	fi
+}
+
+if [[ "${TERM/-256color}" == "screen" ]]; then
+	PROMPT_COMMAND=reset_screen_title
+	trap set_screen_title DEBUG
 fi

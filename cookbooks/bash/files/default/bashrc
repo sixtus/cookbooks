@@ -3,6 +3,11 @@
 # test for interactive shell
 [[ $- != *i* ]] && return
 
+# do not run if user has own bashrc
+if [[ -e "${HOME}"/.bashrc || -e "${HOME}"/.bash_profile ]]; then
+	return
+fi
+
 _BASHRC_DIR="${_BASHRC_DIR:-/etc/bash}"
 
 source "${_BASHRC_DIR}/detect.sh"
