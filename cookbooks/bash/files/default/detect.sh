@@ -35,4 +35,8 @@ elif [[ -f /etc/debian_version ]]; then
 	_DISTNAME="debian"
 elif [[ -d /Applications ]]; then
 	_DISTNAME="macos"
+
+	if [[ -z ${EPREFIX} && -d ${HOME}/Gentoo ]]; then
+		export EPREFIX=${HOME}/Gentoo
+	fi
 fi

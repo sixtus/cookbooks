@@ -1,8 +1,3 @@
-edigest() {
-	set -- *.ebuild
-	ebuild $1 manifest
-}
-
 eportdir() {
 	if [[ -n "${PORTDIR_CACHE}" ]]; then
 		echo "${PORTDIR_CACHE}"
@@ -67,4 +62,3 @@ usedesc() {
 	echo "local:"
 	grep ":$1 - " ${d}/profiles/use.local.desc
 }
-

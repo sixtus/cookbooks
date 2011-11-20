@@ -18,11 +18,11 @@ _bashcomp_gentoo() {
 	# ensure that wanted completions are loaded if available
 	CHANGED=0
 	for w in $(<${_BASHRC_DIR}/bashcomp-modules); do
-		if [[ -e /etc/bash_completion.d/${w} || -e ~/.bash_completion.d/${w} ]]; then
+		if [[ -e ${EPREFIX}/etc/bash_completion.d/${w} || -e ~/.bash_completion.d/${w} ]]; then
 			continue
 		fi
 
-		if [[ -e /usr/share/bash-completion/${w} ]]; then
+		if [[ -e ${EPREFIX}/usr/share/bash-completion/${w} ]]; then
 			if hash eselect 2>/dev/null; then
 				eselect bashcomp enable ${w}
 				CHANGED=1
@@ -40,7 +40,13 @@ _bashcomp_gentoo() {
 
 	# this is for backwards-compatibility only, gentoo has bash completion enabled
 	# by default nowadays.
-	[[ -f /etc/profile.d/bash-completion.sh ]] && source /etc/profile.d/bash-completion.sh
+	[[ -f ${EPREFIX}/etc/profile.d/bash-completion.sh ]] && source ${EPREFIX}/etc/profile.d/bash-completion.sh
+}
+
+_bashcomp_macos() {
+	if [[ -d ${EPREFIX} ]]; then
+		_bashcomp_gentoo
+	fi
 }
 
 if type -t _bashcomp_${_DISTNAME} &>/dev/null; then
