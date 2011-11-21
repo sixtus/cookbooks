@@ -70,10 +70,13 @@ module Gentoo
 
       def package_info
         @@packages_info ||= packages_info_from_eix
-        pkg = @@packages_info[@new_resource.package_name]
-        pkg.merge({
-          :package_atom => full_package_atom(pkg[:category], pkg[:package_name], @new_resource.version)
-        })
+        @@packages_info[@new_resource.package_name].tap do |pkg|
+          if pkg
+            pkg.merge({
+              :package_atom => full_package_atom(pkg[:category], pkg[:package_name], @new_resource.version)
+            })
+          end
+        end
       end
 
       def emerge(action)
@@ -186,12 +189,8 @@ class Chef
           @current_resource = Chef::Resource::Package.new(@new_resource.name)
           @current_resource.package_name(@new_resource.package_name)
 
-          begin
-            unless package_info[:current_version].strip.empty?
-              @current_resource.version(package_info[:current_version])
-            end
-          rescue Chef::Exceptions::Package
-            # not available
+          if package_info and package_info[:current_version]
+            @current_resource.version(package_info[:current_version])
           end
 
           @current_resource
