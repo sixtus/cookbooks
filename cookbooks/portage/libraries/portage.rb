@@ -69,7 +69,11 @@ module Gentoo
       include Gentoo::Portage::PackageConf
 
       def package_info
-        @package_info ||= package_info_from_eix(@new_resource.package_name)
+        @@packages_info ||= packages_info_from_eix
+        pkg = @@packages_info[@new_resource.package_name]
+        pkg.merge({
+          :package_atom => full_package_atom(pkg[:category], pkg[:package_name], @new_resource.version)
+        })
       end
 
       def emerge(action)
@@ -110,30 +114,7 @@ module Gentoo
         end
       end
 
-      # Searches for "package_name" and returns a hash with parsed information
-      # returned by eix.
-      #
-      #   # git is installed on the system
-      #   package_info_from_eix("git")
-      #   => {
-      #        :category => "dev-vcs",
-      #        :package_name => "git",
-      #        :current_version => "1.6.3.3",
-      #        :candidate_version => "1.6.4.4"
-      #      }
-      #   # git isn't installed
-      #   package_info_from_eix("git")
-      #   => {
-      #        :category => "dev-vcs",
-      #        :package_name => "git",
-      #        :current_version => "",
-      #        :candidate_version => "1.6.4.4"
-      #      }
-      #   package_info_from_eix("dev-vcs/git") == package_info_from_eix("git")
-      #   => true
-      #   package_info_from_eix("package/doesnotexist")
-      #   => nil
-      def package_info_from_eix(package_name)
+      def packages_info_from_eix
         eix = "/usr/bin/eix"
         eix_update = "/usr/bin/eix-update"
 
@@ -153,35 +134,30 @@ module Gentoo
           "--nocolor",
           "--pure-packages",
           "--stable",
-          "--exact",
-          '--format "<category>\t<name>\t<installedversions:VERSION>\t<bestversion:VERSION>\n"',
-          package_name.count("/") > 0 ? "--category-name" : "--name",
-          package_name
+          '--format "<category>/<name>\t<installedversions:VERSION>\t<bestversion:VERSION>\n"',
         ].join(" ")
 
-        eix_out = eix_stderr = nil
+        eix_stderr = nil
+        packages_info = {}
 
         Chef::Log.debug("Calling `#{query_command}`.")
         status = Chef::Mixin::Command.popen4(query_command) do |pid, stdin, stdout, stderr|
           eix_stderr = stderr.read
-          if stdout.read.split("\n").first =~ /\A(\S+)\t(\S+)\t(\S*)\t(\S+)\Z/
-            eix_out = {
-              :category => $1,
-              :package_name => $2,
-              :current_version => $3,
-              :candidate_version => $4
-            }
+          stdout.readlines.each do |line|
+            if line.chomp =~ /\A(\S+)\t(.*)\t(\S+)\Z/
+              packages_info[$1] = {
+                :current_version => $2.split(/\s/).last,
+                :candidate_version => $3
+              }
+            end
           end
         end
-
-        eix_out ||= {}
 
         unless status.exitstatus == 0
           raise Chef::Exceptions::Package, "eix search failed: `#{query_command}`\n#{eix_stderr}\n#{status.inspect}!"
         end
 
-        eix_out[:package_atom] = full_package_atom(eix_out[:category], eix_out[:package_name], @new_resource.version)
-        eix_out
+        return packages_info
       end
 
       def full_package_atom(category, name, version = nil)
