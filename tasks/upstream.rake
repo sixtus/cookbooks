@@ -16,42 +16,28 @@ namespace :upstream do
     sh("git config push.default tracking")
   end
 
-  desc "Show changes to upstream"
-  task :changes do
-    sh("git diff --diff-filter=DMT upstream master")
-  end
-
   task :pull => [ :require_clean_working_tree ]
   task :pull do
-    sh("git checkout upstream")
-    sh("git pull")
+    sh("git fetch upstream")
+    sh("git branch -f upstream upstream/master")
+  end
+
+  desc "Show changes to upstream"
+  task :changes => [ :pull ]
+  task :changes do
+    sh("git diff --diff-filter=DMTUXB upstream master")
   end
 
   desc "Show new upstream commits"
-  task :cherry => [ :pull ]
-  task :cherry do
-    sh("git checkout master")
-    sh("git cherry master upstream | sed 's/^+ //;tn;d;:n' | xargs git show")
+  task :log => [ :pull ]
+  task :log do
+    sh("git log --reverse -p master..upstream")
   end
 
   desc "Merge upstream branch"
   task :merge => [ :pull ]
   task :merge do
-    sh("git checkout master")
-
-    %x(git cherry master upstream | sed 's/^+ //;tn;d;:n').chomp.split("\n").each do |ref|
-      sh("git cherry-pick #{ref} || :")
-    end
-
-    sh("git push")
+    sh("git merge upstream")
   end
 
-  desc "Pick downstream commits"
-  task :pick => [ :pull ]
-  task :pick, :commit do |t, args|
-    args.with_defaults({:commit => "master"})
-    sh("git cherry-pick #{args.commit}")
-    sh("git push")
-    sh("git checkout master")
-  end
 end
