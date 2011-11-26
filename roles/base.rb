@@ -13,5 +13,4 @@ run_list(%w(
   recipe[chef::client]
   recipe[nagios::client]
   recipe[munin::node]
-  recipe[node::default]
 ))
