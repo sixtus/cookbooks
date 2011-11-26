@@ -22,9 +22,9 @@ OpenVPN server::
 
 The following files need to be copied to the client node:
 
- * site-cookbooks/openssl/files/default/certificates/ca.crt
- * site-cookbooks/openssl/files/default/certificates/openvpn-myuser.key
- * site-cookbooks/openssl/files/default/certificates/openvpn-myuser.crt
+ * cookbooks/openssl/files/default/certificates/ca.crt
+ * cookbooks/openssl/files/default/certificates/openvpn-myuser.key
+ * cookbooks/openssl/files/default/certificates/openvpn-myuser.crt
 
 A simple client configuration might looks like this::
 

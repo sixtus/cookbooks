@@ -72,8 +72,8 @@ folders:
 
 **site-cookbooks/**
    This directory contains site-specific cookbooks and recipes. This is the
-   place where you can override public cookbooks and add recipes specific to
-   your infrastructure. See :ref:`chef-cookbooks` for details.
+   place where you can add recipes specific to your infrastructure. See
+   :ref:`chef-cookbooks` for details.
 
 **tasks/**
    Contains all available rake tasks. See :ref:`chef-tasks` for details.
