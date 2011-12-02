@@ -13,7 +13,7 @@ end
 
 provides "network"
 
-ipv6_enabled File.read("/proc/net/protocols").match(/TCPv6/)
+ipv6_enabled !File.read("/proc/net/protocols").match(/TCPv6/).nil?
 
 # collect all known interfaces and addresses
 iface = Mash.new
