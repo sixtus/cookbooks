@@ -31,7 +31,7 @@ service "sshd" do
 end
 
 execute "root-ssh-key" do
-  command "ssh-keygen -f /root/.ssh/id_rsa -N ''"
+  command "ssh-keygen -f /root/.ssh/id_rsa -N '' -C root@#{node[:fqdn]}"
   creates "/root/.ssh/id_rsa"
 end
 
