@@ -10,5 +10,5 @@
 # spaces and tabs for white space. You may use '\' to continue lines.
 #
 <% node[:smart][:devices].each do |device| %>
-<%= device %> -a -m <%= node[:contacts][:hostmaster] %> -s L/../../7/04
+<%= device %> -a -s L/../../7/04
 <% end %>
