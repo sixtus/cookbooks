@@ -72,8 +72,8 @@ module Gentoo
         @@packages_info ||= packages_info_from_eix
         @@packages_info[@new_resource.package_name].tap do |pkg|
           if pkg
-            pkg.merge({
-              :package_atom => full_package_atom(pkg[:category], pkg[:package_name], @new_resource.version)
+            pkg.merge!({
+              :package_atom => full_package_atom(@new_resource.package_name, @new_resource.version)
             })
           end
         end
@@ -96,7 +96,7 @@ module Gentoo
       def emerge?(action)
         version = @new_resource.version.to_s
 
-        if package_info[:current_version] == ""
+        unless package_info[:current_version]
           Chef::Log.info("No version found. Installing package[#{package_info[:package_atom]}].")
           return true
         end
@@ -137,7 +137,7 @@ module Gentoo
           "--nocolor",
           "--pure-packages",
           "--stable",
-          '--format "<category>/<name>\t<installedversions:VERSION>\t<bestversion:VERSION>\n"',
+          '--format "<category>/<name>\t<bestversion:VERSION>\t<installedversions:VERSION>\n"',
         ].join(" ")
 
         eix_stderr = nil
@@ -147,12 +147,11 @@ module Gentoo
         status = Chef::Mixin::Command.popen4(query_command) do |pid, stdin, stdout, stderr|
           eix_stderr = stderr.read
           stdout.readlines.each do |line|
-            if line.chomp =~ /\A(\S+)\t(.*)\t(\S+)\Z/
-              packages_info[$1] = {
-                :current_version => $2.split(/\s/).last,
-                :candidate_version => $3
-              }
-            end
+            pn, candidate, current = line.split(/\t/)
+            packages_info[pn] = {
+              :current_version => current.split(/\s/).last,
+              :candidate_version => candidate
+            }
           end
         end
 
@@ -163,14 +162,13 @@ module Gentoo
         return packages_info
       end
 
-      def full_package_atom(category, name, version = nil)
-        package_atom = "#{category}/#{name}"
+      def full_package_atom(package_atom, version = nil)
         return package_atom unless version
 
         if version =~ /^\~(.+)/
-          "~#{package_name}-#{$1}"
+          "~#{package_atom}-#{$1}"
         else
-          "=#{package_name}-#{version}"
+          "=#{package_atom}-#{version}"
         end
       end
 
