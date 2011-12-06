@@ -31,4 +31,5 @@ default[:php][:upload][:max_filesize] = "2M"
 default[:php][:upload][:tmp_dir] = "#{node[:php][:tmp_dir]}/uploads"
 
 # create default fpm pool
+default[:php][:fpm][:conf] = nil
 default[:php][:fpm][:pools][:default] = {}

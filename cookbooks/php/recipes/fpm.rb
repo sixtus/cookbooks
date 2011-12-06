@@ -31,6 +31,21 @@ template "/etc/php/fpm-php#{PHP.slot}/php-fpm.conf" do
   notifies :restart, "service[php-fpm]"
 end
 
+cookbook_file "/etc/init.d/php-fpm" do
+  source "php-fpm.initd"
+  owner "root"
+  group "root"
+  mode "0755"
+end
+
+template "/etc/conf.d/php-fpm" do
+  source "php-fpm.confd"
+  owner "root"
+  group "root"
+  mode "0644"
+  notifies :restart, "service[php-fpm]"
+end
+
 service "php-fpm" do
   action [:enable, :start]
 end
