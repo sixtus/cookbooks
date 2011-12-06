@@ -1,5 +1,6 @@
 # this nodes chef environment
 default[:chef_environment] = "production"
+default[:classification] = :normal
 
 # cluster support
 default[:cluster][:name] = "default"
