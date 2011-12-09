@@ -1,14 +1,14 @@
+# remove old attributes
+node.normal_attrs[:php].delete(:extension_dir)
+
 portage_package_use "dev-lang/php" do
   use node[:php][:default_use_flags] + node[:php][:use_flags] + node[:php][:sapi]
 end
 
 package "dev-lang/php"
 
-ruby_block "php-extension-dir" do
-  block do
-    node.set[:php][:extension_dir] = %x(/usr/lib/php#{PHP.slot}/bin/php-config --extension-dir).strip
-  end
-end
+# reload attributes files to make the magic happen
+node.load_attribute_by_short_filename('default', 'php')
 
 [
   node[:php][:tmp_dir],
@@ -22,8 +22,8 @@ end
   end
 end
 
-template "/etc/php/cli-php#{PHP.slot}/php.ini" do
-  source "#{PHP.slot}/php.ini"
+template "/etc/php/cli-php#{node[:php][:slot]}/php.ini" do
+  source "#{node[:php][:slot]}/php.ini"
   owner "root"
   group "root"
   mode "0644"

@@ -11,7 +11,9 @@ define :php_extension, :template => nil, :active => true do
                 nil
               end
 
-    template "/etc/php/#{sapi}-php#{PHP.slot}/ext/#{params[:name]}.ini" do
+    params[:template] ||= params[:name] + ".ini"
+
+    template "/etc/php/#{sapi}-php#{node[:php][:slot]}/ext/#{params[:name]}.ini" do
       source params[:template]
       owner "root"
       group "root"
@@ -20,12 +22,12 @@ define :php_extension, :template => nil, :active => true do
     end
 
     if params[:active]
-      link "/etc/php/#{sapi}-php#{PHP.slot}/ext-active/#{params[:name]}.ini" do
-        to "/etc/php/#{sapi}-php#{PHP.slot}/ext/#{params[:name]}.ini"
+      link "/etc/php/#{sapi}-php#{node[:php][:slot]}/ext-active/#{params[:name]}.ini" do
+        to "/etc/php/#{sapi}-php#{node[:php][:slot]}/ext/#{params[:name]}.ini"
         notifies :restart, "service[#{service}]" if service
       end
     else
-      file "/etc/php/#{sapi}-php#{PHP.slot}/ext-active/#{params[:name]}.ini" do
+      file "/etc/php/#{sapi}-php#{node[:php][:slot]}/ext-active/#{params[:name]}.ini" do
         action :delete
         notifies :restart, "service[#{service}]" if service
       end
