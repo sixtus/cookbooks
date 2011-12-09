@@ -71,7 +71,8 @@ postconf "base" do
   set :myhostname => node[:fqdn],
       :mydomain => node[:domain],
       :mynetworks_style => "host",
-      :inet_protocols => "ipv4#{ipv6_str}"
+      :inet_protocols => "ipv4#{ipv6_str}",
+      :message_size_limit => node[:postfix][:message_size_limit].to_i * 1024 * 1024
 end
 
 postmaster "smtp" do
