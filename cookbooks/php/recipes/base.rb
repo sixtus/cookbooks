@@ -7,6 +7,12 @@ end
 
 package "dev-lang/php"
 
+execute "eselect php set cli php#{node[:php][:slot]}" do
+  user "root"
+  group "root"
+  not_if { %x(eselect php show cli).chomp == "php#{node[:php][:slot]}" }
+end
+
 # reload attributes files to make the magic happen
 node.load_attribute_by_short_filename('default', 'php')
 
