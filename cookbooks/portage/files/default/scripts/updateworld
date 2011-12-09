@@ -26,6 +26,12 @@ if [[ "${eout}" != "" ]]; then
 	emerge @world -NDu
 fi
 
+# force latest gcc version
+gcc-config $(gcc-config -l|tail -n1|awk '{print $2}')
+
+# cleanup unneeded dependencies
+emerge --depclean -aq
+
 # first try to resolve preserved-libs with binpkgs. if this fails, the second
 # run will pick up remaining libs.
 emerge @preserved-rebuild
@@ -54,9 +60,6 @@ lafilefixer --justfixit
 # finally, after all this crap, run revdep-rebuild to pick up remaining
 # packages that have broken lib dependencies.
 EMERGE_DEFAULT_OPTS="" revdep-rebuild -i -- --quiet-build --with-bdeps=y --binpkg-respect-use=y --usepkg=n --getbinpkg=n
-
-# force latest gcc version
-gcc-config $(gcc-config -l|tail -n1|awk '{print $2}')
 
 # cleanup unneeded dependencies
 emerge --depclean -aq
