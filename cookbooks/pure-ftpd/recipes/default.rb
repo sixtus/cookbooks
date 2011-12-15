@@ -20,7 +20,7 @@ end
 
 execute "pure-pw-mkdb" do
   command "pure-pw mkdb /etc/pureftpd.pdb -f /etc/pureftpd.passwd"
-  only_if { FileUtils.uptodate?("/etc/pureftpd.pdb", %w(/etc/pureftpd.passwd)) }
+  not_if { FileUtils.uptodate?("/etc/pureftpd.pdb", %w(/etc/pureftpd.passwd)) }
 end
 
 service "pure-ftpd" do
