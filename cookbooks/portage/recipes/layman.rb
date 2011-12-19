@@ -15,7 +15,9 @@ directory "/var/lib/layman" do
 end
 
 file "/var/lib/layman/make.conf" do
+  content %{PORTDIR_OVERLAY=""\n}
   owner "root"
   group "root"
   mode "0644"
+  only_if { File.size?("/var/lib/layman/make.conf").nil? }
 end
