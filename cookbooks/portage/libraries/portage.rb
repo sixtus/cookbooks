@@ -69,8 +69,8 @@ module Gentoo
       include Gentoo::Portage::PackageConf
 
       def package_info
-        @@packages_info ||= packages_info_from_eix
-        @@packages_info[@new_resource.package_name].tap do |pkg|
+        packages_cache_from_eix
+        @@packages_cache[@new_resource.package_name].tap do |pkg|
           if pkg
             pkg.merge!({
               :package_atom => full_package_atom(@new_resource.package_name, @new_resource.version)
@@ -90,8 +90,6 @@ module Gentoo
           )
         end
       end
-
-      private
 
       def emerge?(action)
         version = @new_resource.version.to_s
@@ -117,7 +115,12 @@ module Gentoo
         end
       end
 
-      def packages_info_from_eix
+      def packages_cache_from_eix
+        @@packages_cache ||= {}
+        packages_cache_from_eix! if @@packages_cache.empty?
+      end
+
+      def packages_cache_from_eix!
         eix = "/usr/bin/eix"
         eix_update = "/usr/bin/eix-update"
 
@@ -141,14 +144,14 @@ module Gentoo
         ].join(" ")
 
         eix_stderr = nil
-        packages_info = {}
+        @@packages_cache = {}
 
         Chef::Log.debug("Calling `#{query_command}`.")
         status = Chef::Mixin::Command.popen4(query_command) do |pid, stdin, stdout, stderr|
           eix_stderr = stderr.read
           stdout.readlines.each do |line|
             pn, candidate, current = line.split(/\t/)
-            packages_info[pn] = {
+            @@packages_cache[pn] = {
               :current_version => current.split(/\s/).last,
               :candidate_version => candidate
             }
@@ -158,9 +161,8 @@ module Gentoo
         unless status.exitstatus == 0
           raise Chef::Exceptions::Package, "eix search failed: `#{query_command}`\n#{eix_stderr}\n#{status.inspect}!"
         end
-
-        return packages_info
       end
+      module_function :packages_cache_from_eix!
 
       def full_package_atom(package_atom, version = nil)
         return package_atom unless version

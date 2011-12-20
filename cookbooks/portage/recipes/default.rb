@@ -109,6 +109,13 @@ execute "eix-update" do
   end
 end
 
+ruby_block "update-packages-cache" do
+  action :nothing
+  block do
+    Gentoo::Portage::Emerge.packages_cache_from_eix!
+  end
+end
+
 cookbook_file "/etc/logrotate.d/portage" do
   source "portage.logrotate"
   mode "0644"
