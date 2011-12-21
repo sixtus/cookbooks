@@ -27,7 +27,7 @@ default[:sysctl][:net][:netfilter][:nf_conntrack_max] = 262144
 default[:sysctl][:kernel][:sysrq] = 1
 default[:sysctl][:kernel][:panic] = 60
 default[:sysctl][:vm][:overcommit_ratio] = 95
-default[:sysctl][:vm][:overcommit_memory] = 2
+default[:sysctl][:vm][:overcommit_memory] = 0
 
 # shared memory sizes
 default_unless[:sysctl][:kernel][:shmall] = 2*1024*1024 #pages
