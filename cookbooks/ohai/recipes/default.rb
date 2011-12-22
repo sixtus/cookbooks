@@ -1,6 +1,7 @@
-# load custom plugins
+# add custom plugin path
 Ohai::Config[:plugin_path].unshift("/var/lib/chef/ohai")
 
+# create directories during compile phase
 d = directory "/var/lib/chef/ohai" do
   owner "root"
   group "root"
@@ -21,6 +22,7 @@ end
 
 rd.run_action(:create)
 
+# replace automatic attributes with new data
 o = Ohai::System.new
 o.all_plugins
 node.automatic_attrs.merge! o.data

@@ -1,3 +1,10 @@
+description "This cookbook installs and configures the Gentoo base system"
+long_description IO.read(File.join(File.dirname(__FILE__), 'README.rst'))
+
+maintainer "Benedikt Böhm"
+maintainer_email "bb@xnull.de"
+license "Apache v2.0"
+
 depends "core_ext"
 depends "git"
 depends "hwraid"

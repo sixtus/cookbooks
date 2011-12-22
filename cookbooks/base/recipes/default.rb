@@ -100,6 +100,45 @@ user "root" do
   password "*" unless node.run_state[:users].empty?
 end
 
+%w(/root /root/.ssh).each do |dir|
+  directory dir do
+    owner "root"
+    group "root"
+    mode "0700"
+  end
+end
+
+# remove obsolete root dotfiles
+%w(
+  .bash_profile
+  .bash
+  .cvsrc
+  .gitconfig
+  .screenrc
+  .tmux.conf
+  .vimrc
+).each do |f|
+  file "/root/#{f}" do
+    action :delete
+    backup 0
+  end
+end
+
+directory "/root/.vim" do
+  action :delete
+  recursive true
+  only_if { File.symlink?("/root/.vim") }
+end
+
+execute "rm -f /root/.bashrc" do
+  only_if { File.symlink?("/root/.bashrc") }
+end
+
+directory "/root/.dotfiles" do
+  action :delete
+  recursive true
+end
+
 # load base recipes
 include_recipe "portage"
 include_recipe "portage::porticron"
@@ -185,15 +224,6 @@ template "/etc/locale.gen" do
   mode "0644"
   source "locale.gen"
   notifies :run, "execute[locale-gen]"
-end
-
-# TODO: move to account cookbook
-%w(/root /root/.ssh).each do |dir|
-  directory dir do
-    owner "root"
-    group "root"
-    mode "0700"
-  end
 end
 
 # these links are missing in udev

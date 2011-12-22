@@ -1,33 +1,25 @@
-.. _chef-cookbook-base:
-
-===========
-Base System
-===========
-
-This cookbook installs and configures the Gentoo base system.
-
 Usage
 =====
 
-The base system cookbook should be used by all nodes. It is available -- together
-with various other common services -- in ``role[base]`` and will configure the
-following programs and services:
+The base system cookbook should be used by all nodes. It is added to the run
+list -- together with various other common services -- in ``role[base]`` and
+will configure the following programs and services:
 
 Cookbooks
   These cookbooks are included by ``recipe[base]`` depending on the
   virtualization type and hardware support:
 
-  * :ref:`chef-cookbook-portage`
-  * :ref:`chef-cookbook-openssl`
-  * :ref:`chef-cookbook-git`
-  * :ref:`chef-cookbook-lftp`
-  * :ref:`chef-cookbook-tmux`
-  * :ref:`chef-cookbook-vim`
-  * :ref:`chef-cookbook-hwraid`
-  * :ref:`chef-cookbook-mdadm`
-  * :ref:`chef-cookbook-ntp`
-  * :ref:`chef-cookbook-shorewall`
-  * :ref:`chef-cookbook-smart`
+  * git
+  * hwraid
+  * lftp
+  * mdadm
+  * ntp
+  * openssl
+  * portage
+  * shorewall
+  * smart
+  * tmux
+  * vim
 
 ``/etc/.git``
   On all nodes ``/etc`` is managed with git, so changes can be tracked easily.
