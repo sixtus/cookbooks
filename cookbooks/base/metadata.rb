@@ -1,5 +1,5 @@
 description "This cookbook installs and configures the Gentoo base system"
-long_description IO.read(File.join(File.dirname(__FILE__), 'README.rst'))
+long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 
 maintainer "Benedikt Böhm"
 maintainer_email "bb@xnull.de"
