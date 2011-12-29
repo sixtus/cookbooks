@@ -70,6 +70,12 @@ node[:packages] = %w(
   sys-process/lsof
 )
 
+if node[:virtualization][:role] == "host"
+  node[:packages] += %w(
+    sys-kernel/genkernel
+  )
+end
+
 # default system users/groups
 default[:base][:groups] = {
   :root => {

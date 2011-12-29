@@ -141,6 +141,11 @@ serve() {
 	python -m SimpleHTTPServer ${1:-8080}
 }
 
+# genkernel helper
+mklnx() {
+	genkernel --oldconfig --symlink kernel
+}
+
 # load local bashrc if it exists
 if [[ -e ${_BASHRC_DIR}/bashrc.local ]]; then
 	source ${_BASHRC_DIR}/bashrc.local
