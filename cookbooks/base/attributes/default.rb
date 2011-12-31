@@ -63,6 +63,7 @@ node[:packages] = %w(
   sys-apps/ethtool
   sys-apps/hdparm
   sys-apps/iproute2
+  sys-apps/less
   sys-apps/pciutils
   sys-fs/ncdu
   sys-process/htop
