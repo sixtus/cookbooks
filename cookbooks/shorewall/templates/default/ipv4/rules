@@ -20,7 +20,7 @@ ACCEPT net $FW icmp
 # accept ssh connections
 ACCEPT all all tcp ssh
 
-<% node[:shorewall][:rules].each do |name, rule| %>
+<% node[:shorewall][:rules].sort_by {|r| r[0]}.each do |name, rule| %>
 # <%= name %>
 <%= [ :action, :source, :dest, :proto, :destport, :sourceport ].map { |a| rule[a] }.join(" ") %>
 <% end %>

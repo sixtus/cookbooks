@@ -11,7 +11,7 @@
 #							PORT(S)		PORT(S)	GROUP
 #
 
-<% node[:shorewall][:accounting].each do |name, params| %>
+<% node[:shorewall][:accounting].sort_by {|a| a[0]}.each do |name, params| %>
 # <%= name %>
 act_<%= params[:target] %>:COUNT - <%= params[:address] %> -
 act_<%= params[:target] %>:COUNT - - <%= params[:address] %>
