@@ -4,6 +4,12 @@ nodes = Hash[node.run_state[:nodes].map do |n|
   [n[:fqdn], n[:ipaddress]]
 end]
 
+nodes6 = Hash[node.run_state[:nodes].select do |n|
+  n[:ip6address]
+end.map do |n|
+  [n[:fqdn], n[:ip6address]]
+end]
+
 case node[:fqdn]
 
 when "host.example.com"
