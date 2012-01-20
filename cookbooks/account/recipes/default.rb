@@ -1,5 +1,3 @@
-include_recipe "bash"
-
 directory "/home" do
   owner "root"
   group "root"

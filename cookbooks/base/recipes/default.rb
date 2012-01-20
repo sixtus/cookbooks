@@ -32,6 +32,7 @@ when "mac_os_x"
 end
 
 # load common recipes
+include_recipe "bash"
 include_recipe "openssl"
 include_recipe "lftp"
 include_recipe "tmux"
