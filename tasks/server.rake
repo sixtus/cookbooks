@@ -55,8 +55,8 @@ namespace :server do
     Rake::Task["ssl:do_cert"].invoke(fqdn)
 
     # bootstrap the chef server
-    scfg = File.join(TOPDIR, "bootstrap", "solo.rb")
-    sjson = File.join(TOPDIR, "bootstrap", "bootstrap.json")
+    scfg = File.join(TOPDIR, "bootstrap", "server", "solo.rb")
+    sjson = File.join(TOPDIR, "bootstrap", "server", "solo.json")
 
     sh("chef-solo -c #{scfg} -j #{sjson} -N #{fqdn}")
 
