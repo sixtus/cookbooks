@@ -71,6 +71,8 @@ node[:packages] = %w(
   sys-process/lsof
 )
 
+node.default[:virtualization] ||= {}
+
 if node[:virtualization][:role] == "host"
   node[:packages] += %w(
     sys-kernel/genkernel

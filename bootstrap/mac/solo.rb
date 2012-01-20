@@ -1,4 +1,4 @@
-cwd = File.expand_path(__FILE__, "../../")
+cwd = File.expand_path(File.join(File.dirname(__FILE__), "../../"))
 
 cookbook_path "#{cwd}/cookbooks"
 
