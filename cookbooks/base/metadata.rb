@@ -1,9 +1,11 @@
-description "This cookbook installs and configures the Gentoo base system"
-long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
+description "This cookbook installs and configures the base system"
 
 maintainer "Benedikt Böhm"
 maintainer_email "bb@xnull.de"
 license "Apache v2.0"
+
+supports "gentoo", ">= 2.0"
+supports "mac_os_x", ">= 10.7"
 
 depends "core_ext"
 depends "git"

@@ -7,7 +7,7 @@ configure the following programs and services:
 
 Cookbooks
   : These cookbooks are included by `recipe[base]` depending on the
-  virtualization type and hardware support:
+  platform, virtualization type and hardware support:
 
     * git
     * hwraid
@@ -31,7 +31,7 @@ Resolver Configuration
   Internet Domain Name System (DNS). See the attributes documentation below for
   details on how chef generates `/etc/hosts` and `/etc/resolv.conf`.
 
-System Initialization
+System Initialization (Linux only)
   : The inittab file describes which processes are started at bootup and during
   normal operation. This file is rarely modified since control is handed of to
   OpenRC once the system initialization has been done. OpenRC is a dependency
@@ -42,7 +42,7 @@ System Initialization
   documentation on how to write init scripts -- see [Chapter 2.4 of the Gentoo
   Handbook][].
 
-Localization
+Localization (Linux only)
   : Time zone information, system locales and character encodings are
   configured according to the attributes documented below. For a detailed
   description on localization support in Gentoo refer to the [Gentoo
@@ -56,7 +56,7 @@ Attributes
 ==========
 
 The base system cookbook contains various attributes for basic functionality
-provided by Gentoo Linux including locales, timezones, resolver config etc.
+provided by supported platforms including locales, timezones, resolver config etc.
 
 Cluster Support
 ---------------
