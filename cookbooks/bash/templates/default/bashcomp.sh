@@ -47,6 +47,10 @@ _bashcomp_macos() {
 	if [[ -d ${EPREFIX} ]]; then
 		_bashcomp_gentoo
 	fi
+
+	if [[ -d /usr/local/Cellar ]]; then
+		source /usr/local/etc/profile.d/bash_completion.sh
+	fi
 }
 
 if type -t _bashcomp_${_DISTNAME} &>/dev/null; then

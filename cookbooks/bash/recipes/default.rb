@@ -3,6 +3,10 @@ package value_for_platform(
   "mac_os_x" => {"default" => "bash"}
 )
 
+if platform?("mac_os_x")
+  package "bash-completion"
+end
+
 directory node[:bash][:rcdir] do
   mode "0755"
 end
@@ -23,7 +27,7 @@ end
   end
 end
 
-if node[:current_user] != "root"
+if platform?("mac_os_x")
   %w(.bashrc .bash_profile .profile).each do |f|
     link "#{node[:homedir]}/#{f}" do
       to "#{node[:bash][:rcdir]}/bashrc"
