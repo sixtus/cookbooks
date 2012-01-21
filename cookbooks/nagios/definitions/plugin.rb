@@ -4,6 +4,9 @@ define :nagios_plugin,
   :content => nil,
   :cookbook => nil do
 
+  next if Chef::Config[:solo]
+  next if node[:platform] == "mac_os_x"
+
   include_recipe "nagios::nrpe"
 
   directory "/usr/lib/nagios" do

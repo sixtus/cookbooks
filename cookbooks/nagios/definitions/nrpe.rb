@@ -2,6 +2,9 @@ define :nrpe_command,
   :command => nil,
   :action => :create do
 
+  next if Chef::Config[:solo]
+  next if node[:platform] == "mac_os_x"
+
   include_recipe "nagios::nrpe"
 
   file "/etc/nagios/nrpe.d/#{params[:name]}.cfg" do
