@@ -1,0 +1,33 @@
+[user]
+	email = <%= node[:current_email] %>
+	name = <%= node[:current_name] %>
+[color]
+	branch = auto
+	diff = auto
+	grep = auto
+	interactive = auto
+	showbranch = auto
+	status = auto
+	ui = auto
+[alias]
+	co = checkout
+	ci = commit
+	cp = cherry-pick
+	st = status
+	d = diff
+	dw = diff --color-words
+	dc = diff --cached
+	dcw = diff --cached --color-words
+	wn = !BRANCH=$(git symbolic-ref HEAD|sed s:refs/heads/::) && git fetch -q origin && git log --reverse --stat -p ${BRANCH}..origin/${BRANCH}
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %Cblue(%an)%Creset' --abbrev-commit --date=relative
+	log1 = log --pretty=oneline --abbrev-commit --decorate
+[push]
+	default = tracking
+[diff]
+	renames = true
+[core]
+	excludesfile = ~/.gitignore
+<% if node[:git][:github][:user] %>
+[github]
+	user = <%= node[:git][:github][:user] %>
+<% end %>

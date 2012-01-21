@@ -1,0 +1,11 @@
+*.la
+*.o
+*.pyc
+*.pyo
+*.so
+*.swp
+*~
+.Apple*
+.DS_Store
+.svn
+.swp

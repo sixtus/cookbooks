@@ -43,6 +43,8 @@ default_unless[:cpu][:total] = 1
 
 # support non-root runs
 default[:homedir] = node[:etc][:passwd][node[:current_user]][:dir]
+default[:current_email] = "#{node[:current_user]}@localhost"
+default[:current_name] = node[:current_user]
 
 # base packages
 case node[:platform]

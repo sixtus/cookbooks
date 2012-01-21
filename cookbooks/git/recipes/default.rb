@@ -1,8 +1,14 @@
-package "dev-vcs/git"
+package value_for_platform(
+  "gentoo" => {"default" => "dev-vcs/git"},
+  "mac_os_x" => {"default" => "git"},
+)
 
-cookbook_file "/etc/gitconfig" do
+template node[:git][:rcfile] do
   source "gitconfig"
-  owner "root"
-  group "root"
+  mode "0644"
+end
+
+cookbook_file node[:git][:exfile] do
+  source "gitignore"
   mode "0644"
 end
