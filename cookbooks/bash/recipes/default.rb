@@ -17,9 +17,21 @@ end
   gentoo.sh
   prompt.sh
 ).each do |f|
-  cookbook_file "#{node[:bash][:rcdir]}/#{f}" do
+  template "#{node[:bash][:rcdir]}/#{f}" do
     source f
     mode "0644"
+  end
+end
+
+if node[:current_user] != "root"
+  %w(.bashrc .bash_profile .profile).each do |f|
+    link "#{node[:homedir]}/#{f}" do
+      to "#{node[:bash][:rcdir]}/bashrc"
+    end
+  end
+
+  link "#{node[:homedir]}/.bash_logout" do
+    to "#{node[:bash][:rcdir]}/bash_logout"
   end
 end
 

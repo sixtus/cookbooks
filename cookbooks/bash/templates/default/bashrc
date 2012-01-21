@@ -3,7 +3,7 @@
 # test for interactive shell
 [[ $- != *i* ]] && return
 
-_BASHRC_DIR="${_BASHRC_DIR:-/etc/bash}"
+_BASHRC_DIR="${_BASHRC_DIR:-<%= node[:bash][:rcdir] %>}"
 
 source "${_BASHRC_DIR}/detect.sh"
 source "${_BASHRC_DIR}/color.sh"
