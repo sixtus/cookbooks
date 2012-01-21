@@ -1,39 +1,34 @@
-case platform
-when "gentoo"
-  # paths & directories
-  set[:portage][:make_conf] = "/etc/make.conf"
-  set[:portage][:confdir] = "/etc/portage"
-  set[:portage][:portdir] = "/usr/portage"
-  set[:portage][:distdir] = "#{set[:portage][:portdir]}/distfiles"
-  set[:portage][:pkgdir] = "#{set[:portage][:portdir]}/packages/${ARCH}"
+# paths & directories
+set[:portage][:make_conf] = "/etc/make.conf"
+set[:portage][:confdir] = "/etc/portage"
+set[:portage][:portdir] = "/usr/portage"
+set[:portage][:distdir] = "#{set[:portage][:portdir]}/distfiles"
+set[:portage][:pkgdir] = "#{set[:portage][:portdir]}/packages/${ARCH}"
 
-  # profile
-  default[:portage][:profile] = "#{set[:portage][:portdir]}/profiles/default/linux/amd64/11.0"
+# profile
+default[:portage][:profile] = "#{set[:portage][:portdir]}/profiles/default/linux/amd64/11.0"
 
-  # compiler settings
-  default[:portage][:CFLAGS] = "-O2 -pipe"
-  default[:portage][:CXXFLAGS] = "${CFLAGS}"
+# compiler settings
+default[:portage][:CFLAGS] = "-O2 -pipe"
+default[:portage][:CXXFLAGS] = "${CFLAGS}"
 
-  # build-time flags
-  default[:portage][:USE] = []
+# build-time flags
+default[:portage][:USE] = []
 
-  # advanced masking
-  default[:portage][:ACCEPT_KEYWORDS] = nil
+# advanced masking
+default[:portage][:ACCEPT_KEYWORDS] = nil
 
-  # mirror settings
-  default[:portage][:SYNC] = "rsync://rsync.zentoo.org/zentoo-portage"
-  default[:portage][:BINHOST] = "http://chef.#{node[:domain]}/${ARCH}/"
-  default[:portage][:MIRRORS] = %w(
-    http://www.zentoo.org
-    http://ftp.spline.de/pub/gentoo
-  )
+# mirror settings
+default[:portage][:SYNC] = "rsync://rsync.zentoo.org/zentoo-portage"
+default[:portage][:BINHOST] = "http://chef.#{node[:domain]}/${ARCH}/"
+default[:portage][:MIRRORS] = %w(
+http://www.zentoo.org
+http://ftp.spline.de/pub/gentoo
+)
 
-  # advanced features
-  default[:portage][:OPTS] = []
-  default[:portage][:MAKEOPTS] = "-j1"
+# advanced features
+default[:portage][:OPTS] = []
+default[:portage][:MAKEOPTS] = "-j1"
 
-  # language support
-  default[:portage][:LINGUAS] = %w(en)
-else
-  raise "This cookbook is Gentoo-only"
-end
+# language support
+default[:portage][:LINGUAS] = %w(en)
