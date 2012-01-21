@@ -10,30 +10,30 @@ rescue Chef::Exceptions::PrivateKeyMissing
   node.run_state[:users] = []
 end
 
-# load ohai plugins first
-include_recipe "ohai"
-
-# load base recipes
-include_recipe "base::etcgit"
-include_recipe "base::udev"
-include_recipe "base::locales"
-include_recipe "base::resolv"
-include_recipe "base::baselayout"
-include_recipe "base::sysvinit"
-include_recipe "base::openrc"
-
-# load package manager
+# load platform specific base recipes
 case node[:platform]
+
 when "gentoo"
+  include_recipe "ohai"
+  include_recipe "base::etcgit"
+  include_recipe "base::udev"
+  include_recipe "base::locales"
+  include_recipe "base::resolv"
+  include_recipe "base::sysctl"
+  include_recipe "baselayout"
+  include_recipe "sysvinit"
+  include_recipe "openrc"
   include_recipe "portage"
   include_recipe "portage::porticron"
+  include_recipe "openssl"
+
 when "mac_os_x"
   include_recipe "homebrew"
+
 end
 
 # load common recipes
 include_recipe "bash"
-include_recipe "openssl"
 include_recipe "lftp"
 include_recipe "tmux"
 include_recipe "vim"

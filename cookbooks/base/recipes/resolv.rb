@@ -6,11 +6,9 @@ template "/etc/hosts" do
   variables :nodes => node.run_state[:nodes]
 end
 
-unless platform?("mac_os_x")
-  template "/etc/resolv.conf" do
-    owner "root"
-    group "root"
-    mode "0644"
-    source "resolv.conf"
-  end
+template "/etc/resolv.conf" do
+  owner "root"
+  group "root"
+  mode "0644"
+  source "resolv.conf"
 end
