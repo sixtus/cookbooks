@@ -3,30 +3,22 @@ package value_for_platform(
   "mac_os_x" => {"default" => "lftp"}
 )
 
-template node[:lftp][:configfile] do
-  source "lftp.conf"
-  owner "root"
-  group "root"
-  mode "0644"
+directory "#{node[:homedir]}/.lftp" do
+  mode "0700"
 end
 
-unless platform?("mac_os_x")
-  directory "/root/.lftp" do
-    owner "root"
-    group "root"
-    mode "0700"
-  end
+bookmarks = []
 
-  bookmarks = []
+node[:lftp][:bookmarks].each do |name, url|
+  bookmarks << "#{name} #{url}"
+end
 
-  node[:lftp][:bookmarks].each do |name, url|
-    bookmarks << "#{name} #{url}"
-  end
+file "#{node[:homedir]}/.lftp/bookmarks" do
+  content bookmarks.join("\n")
+  mode "0600"
+end
 
-  file "/root/.lftp/bookmarks" do
-    content bookmarks.join("\n")
-    owner "root"
-    group "root"
-    mode "0600"
-  end
+template node[:lftp][:configfile] do
+  source "lftp.conf"
+  mode "0644"
 end
