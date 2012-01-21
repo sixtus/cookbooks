@@ -6,8 +6,15 @@
 _BASHRC_DIR="${_BASHRC_DIR:-<%= node[:bash][:rcdir] %>}"
 
 source "${_BASHRC_DIR}/detect.sh"
-source "${_BASHRC_DIR}/color.sh"
 source "${_BASHRC_DIR}/bashcomp.sh"
+
+# needs to be loaded after bashcomp
+# https://gist.github.com/mxcl/homebrew/issues/2867
+if [[ -d /usr/local/Cellar ]]; then
+	source /usr/local/Cellar/coreutils/*/aliases
+fi
+
+source "${_BASHRC_DIR}/color.sh"
 source "${_BASHRC_DIR}/prompt.sh"
 
 if [[ -r "${_BASHRC_DIR}/${_DISTNAME}.sh" ]]; then
