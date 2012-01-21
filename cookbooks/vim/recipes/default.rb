@@ -1,15 +1,13 @@
-package "app-editors/vim"
+unless platform?("mac_os_x")
+  package "app-editors/vim"
+end
 
-cookbook_file "/etc/vim/vimrc.local" do
+cookbook_file node[:vim][:rcfile] do
   source "vimrc"
-  owner "root"
-  group "root"
   mode "0644"
 end
 
 cookbook_file "/usr/local/bin/mvim" do
   source "mvim"
-  owner "root"
-  group "root"
   mode "0755"
 end
