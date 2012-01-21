@@ -10,7 +10,7 @@ match_lhs=""
 [[ -f ~/.dir_colors   ]] && match_lhs="${match_lhs}$(<~/.dir_colors)"
 [[ -f /etc/DIR_COLORS ]] && match_lhs="${match_lhs}$(</etc/DIR_COLORS)"
 [[ -z ${match_lhs}    ]] \
-	&& type -P dircolors >/dev/null \
+	&& type dircolors >/dev/null \
 	&& match_lhs=$(dircolors --print-database)
 [[ $'\n'${match_lhs} == *$'\n'"TERM "${safe_term}* ]] && use_color=true
 
@@ -26,7 +26,13 @@ if ${use_color}; then
 		fi
 	fi
 
-	alias ls="ls --color=auto"
+
+	if type -P gls >/dev/null; then
+		alias ls="gls --color=auto"
+	else
+		alias ls="ls --color=auto"
+	fi
+
 	alias grep="grep --color=auto"
 
 	# this is a lot uglier than the old color() function, but should be more

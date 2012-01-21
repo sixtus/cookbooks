@@ -32,16 +32,16 @@ when "mac_os_x"
 
 end
 
+# install base packages
+node[:packages].each do |pkg|
+  package pkg
+end
+
 # load common recipes
 include_recipe "bash"
 include_recipe "lftp"
 include_recipe "tmux"
 include_recipe "vim"
-
-# install base packages
-node[:packages].each do |pkg|
-  package pkg
-end
 
 # vservers don't have hardware access
 if node[:virtualization][:role] == "host" and not node[:skip][:hardware]

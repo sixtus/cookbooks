@@ -87,5 +87,8 @@ when "gentoo"
   end
 
 when "mac_os_x"
-  node[:packages] = []
+  node[:packages] = %w(
+    xz
+    coreutils
+  )
 end

@@ -39,4 +39,8 @@ elif [[ -d /Applications ]]; then
 	if [[ -z ${EPREFIX} && -d ${HOME}/Gentoo ]]; then
 		export EPREFIX=${HOME}/Gentoo
 	fi
+
+	if [[ -d /usr/local/Cellar ]]; then
+		source /usr/local/Cellar/coreutils/*/aliases
+	fi
 fi

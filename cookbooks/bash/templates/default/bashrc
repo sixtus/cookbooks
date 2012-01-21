@@ -31,8 +31,12 @@ export LC_COLLATE="C"
 # force a sane editor
 export EDITOR=/usr/bin/vim
 
-# include ~/bin in path
+# make sure all important paths are in PATH
+<% if node[:platform] == "mac_os_x" %>
+export PATH="~/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:${PATH}"
+<% else %>
 export PATH="~/bin:${PATH}"
+<% end %>
 
 # pager options
 if hash less; then
