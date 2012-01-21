@@ -1,8 +1,9 @@
-package "app-misc/tmux"
+package value_for_platform(
+  "gentoo" => {"default" => "app-misc/tmux"},
+  "mac_os_x" => {"default" => "tmux"}
+)
 
-cookbook_file "/etc/tmux.conf" do
+cookbook_file node[:tmux][:configfile] do
   source "tmux.conf"
-  owner "root"
-  group "root"
   mode "0644"
 end
