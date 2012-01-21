@@ -34,9 +34,12 @@ default[:php][:upload][:tmp_dir] = "#{node[:php][:tmp_dir]}/uploads"
 default[:php][:fpm][:conf] = nil
 default[:php][:fpm][:pools][:default] = {}
 
-# infer extension dir
-default[:php][:slot] = %x(eix --pure-packages --format '<bestversion:NAMEASLOT>' -e dev-lang/php|cut -d: -f2).chomp
+# get current php slot
+if platform == "gentoo"
+  default[:php][:slot] = %x(eix --pure-packages --format '<bestversion:NAMEASLOT>' -e dev-lang/php|cut -d: -f2).chomp
+end
 
+# infer extension dir
 default[:php][:extension_dir] = if File.exist?("/usr/bin/php-config")
                                   %x(/usr/bin/php-config --extension-dir).chomp
                                 else
