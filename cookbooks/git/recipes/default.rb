@@ -1,6 +1,6 @@
 package value_for_platform(
   "gentoo" => {"default" => "dev-vcs/git"},
-  "mac_os_x" => {"default" => "git"},
+  "mac_os_x" => {"default" => "git"}
 )
 
 template node[:git][:rcfile] do

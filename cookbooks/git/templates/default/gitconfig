@@ -26,7 +26,7 @@
 [diff]
 	renames = true
 [core]
-	excludesfile = ~/.gitignore
+	excludesfile = <%= node[:git][:exfile] %>
 <% if node[:git][:github][:user] %>
 [github]
 	user = <%= node[:git][:github][:user] %>
