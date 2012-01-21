@@ -1,6 +1,6 @@
 # ensure that system users/groups from baselayout are always correct
 # (just in case somebody has given login shells to system accounts etc)
-node[:base][:groups].each do |name, params|
+node[:baselayout][:groups].each do |name, params|
   group name do
     gid params[:gid]
     members params[:members].split(",")
@@ -18,7 +18,7 @@ group "users" do
   append true
 end
 
-node[:base][:users].each do |name, params|
+node[:baselayout][:users].each do |name, params|
   comment = if params[:comment]
               params[:comment]
             else
