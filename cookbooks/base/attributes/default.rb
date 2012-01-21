@@ -37,6 +37,13 @@ default_unless[:sysctl][:kernel][:shmmni] = 4096
 # skip hardware cookbooks
 default[:skip][:hardware] = false
 
+# provide sane default values in case ohai didn't find them
+default_unless[:virtualization] = {}
+default_unless[:cpu][:total] = 1
+
+# support non-root runs
+default[:homedir] = node[:etc][:passwd][node[:current_user]][:dir]
+
 # base packages
 case node[:platform]
 when "gentoo"

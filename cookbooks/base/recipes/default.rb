@@ -1,13 +1,13 @@
 # to make things faster, add the node list to our run_state for later use
-begin
-  node.run_state[:nodes] = search(:node, "ipaddress:[* TO *]")
-  node.run_state[:roles] = search(:role)
-  node.run_state[:users] = search(:users)
-rescue Chef::Exceptions::PrivateKeyMissing
+if Chef::Config[:solo]
   # chef-solo does not have search access
   node.run_state[:nodes] = []
   node.run_state[:roles] = []
   node.run_state[:users] = []
+else
+  node.run_state[:nodes] = search(:node, "ipaddress:[* TO *]")
+  node.run_state[:roles] = search(:role)
+  node.run_state[:users] = search(:users)
 end
 
 # load platform specific base recipes
