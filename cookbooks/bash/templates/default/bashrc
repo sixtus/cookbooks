@@ -35,9 +35,6 @@ eval unset ${!LC_*} LANG
 export LANG="en_US.UTF-8"
 export LC_COLLATE="C"
 
-# force a sane editor
-export EDITOR=/usr/bin/vim
-
 # make sure all important paths are in PATH
 <% if node[:platform] == "mac_os_x" %>
 export PATH="~/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:${PATH}"
@@ -45,12 +42,27 @@ export PATH="~/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:
 export PATH="~/bin:${PATH}"
 <% end %>
 
+# force a sane editor
+export EDITOR=vim
+
 # pager options
 if hash less; then
 	export PAGER=less
 	export MANPAGER=less
 	export LESS="-R --ignore-case --long-prompt"
 fi
+
+<% if node[:current_user] != "root" %>
+# keychain for ssh
+if hash keychain; then
+	if [[ -r ~/.ssh/id_dsa ]]; then
+		eval `keychain --eval --quiet ~/.ssh/id_dsa`
+	fi
+	if [[ -r ~/.ssh/id_rsa ]]; then
+		eval `keychain --eval --quiet ~/.ssh/id_rsa`
+	fi
+fi
+<% end %>
 
 
 ########################
@@ -120,14 +132,14 @@ alias ..="dotdot 1"
 alias ...="dotdot 2"
 alias ....="dotdot 3"
 
+# mkdir + chdir
+mkcd() {
+	mkdir -p "$1" && cd "$1"
+}
+
 # make default what should be default
 alias sudo="sudo -H"
 alias root="sudo -i"
-
-# tmux helper
-function T() {
-	tmux attach -t ${1:-default} || tmux new -s ${1:-default}
-}
 
 # ssh helper
 alias sshlive='ssh -l root -o "StrictHostKeyChecking no" -o "UserKnownHostsFile /dev/null" -o "GlobalKnownHostsFile /dev/null"'
@@ -137,24 +149,28 @@ if hash pydf &>/dev/null; then
 	alias df=pydf
 fi
 
-# mkdir + chdir
-mkcd() {
-	mkdir -p "$1" && cd "$1"
+# diff helper
+cdu() {
+	colordiff -u "$@" | less
 }
 
-# init script helpers
-sva () { /etc/init.d/$1 start; }
-svo () { /etc/init.d/$1 stop; }
-svr () { /etc/init.d/$1 restart; }
+sl() {
+	sort -u | less
+}
+
+# tmux helper
+T() {
+	tmux attach -t ${1:-default} || tmux new -s ${1:-default}
+}
+
+# chef helper
+kcu() {
+	knife cookbook upload "$@"
+}
 
 # simple webserver
 serve() {
 	python -m SimpleHTTPServer ${1:-8080}
-}
-
-# genkernel helper
-mklnx() {
-	genkernel --oldconfig --symlink kernel
 }
 
 # load local bashrc if it exists

@@ -1,3 +1,9 @@
+# init script helpers
+sva () { /etc/init.d/$1 start; }
+svo () { /etc/init.d/$1 stop; }
+svr () { /etc/init.d/$1 restart; }
+
+# portdir helpers
 eportdir() {
 	if [[ -n "${PORTDIR_CACHE}" ]]; then
 		echo "${PORTDIR_CACHE}"
@@ -61,4 +67,9 @@ usedesc() {
 	
 	echo "local:"
 	grep ":$1 - " ${d}/profiles/use.local.desc
+}
+
+# genkernel helper
+mklnx() {
+	genkernel --oldconfig --symlink kernel
 }

@@ -66,6 +66,7 @@ when "gentoo"
     net-analyzer/mtr
     net-analyzer/netcat
     net-analyzer/tcpdump
+    net-analyzer/tcptraceroute
     net-analyzer/traceroute
     net-dns/bind-tools
     net-misc/keychain
@@ -89,8 +90,25 @@ when "gentoo"
   end
 
 when "mac_os_x"
-  node[:packages] = %w(
-    xz
-    coreutils
+  # coreutils is missing xz dependency
+  node[:packages] = %w(xz coreutils)
+
+  node[:packages] += %w(
+    atool
+    bwm-ng
+    colordiff
+    findutils
+    gawk
+    gnu-sed
+    gnu-tar
+    keychain
+    midnight-commander
+    mtr
+    ncdu
+    netcat
+    proctools
+    pwgen
+    ssh-copy-id
+    wget
   )
 end
