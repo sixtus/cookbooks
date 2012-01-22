@@ -1,5 +1,3 @@
-untag("nagios-CRON")
-
 %w(sys-process/dcron dev-util/lockrun).each do |p|
   package p
 end

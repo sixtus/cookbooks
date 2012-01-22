@@ -1,5 +1,3 @@
-untag("nagios-SWRAID")
-
 package "sys-fs/mdadm"
 
 service "mdadm" do

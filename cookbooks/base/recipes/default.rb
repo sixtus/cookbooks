@@ -28,10 +28,15 @@ when "gentoo"
   include_recipe "portage::porticron"
   include_recipe "openssl"
   include_recipe "nss"
+  include_recipe "syslog::client"
+  include_recipe "cron"
+  include_recipe "sudo"
+  include_recipe "ssh"
 
 when "mac_os_x"
   raise "running as root is not supported on mac os" if root?
   include_recipe "homebrew"
+
 end
 
 # install base packages

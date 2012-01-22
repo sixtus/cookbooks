@@ -1,5 +1,3 @@
-untag("nagios-SSH")
-
 package "net-misc/openssh"
 
 nodes = node.run_state[:nodes].select do |n|
