@@ -1,4 +1,4 @@
-default[:tmux][:configfile] = case platform
+default[:tmux][:configfile] = case node[:platform]
                               when "gentoo"
                                 "/etc/tmux.conf"
                               when "mac_os_x"

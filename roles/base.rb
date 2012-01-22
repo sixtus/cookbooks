@@ -2,8 +2,6 @@ description "base role for all nodes"
 
 run_list(%w(
   recipe[base]
-  recipe[account]
-  recipe[nss]
   recipe[syslog::client]
   recipe[cron]
   recipe[sudo]

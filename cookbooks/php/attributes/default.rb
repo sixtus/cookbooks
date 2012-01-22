@@ -35,7 +35,7 @@ default[:php][:fpm][:conf] = nil
 default[:php][:fpm][:pools][:default] = {}
 
 # get current php slot
-if platform == "gentoo"
+if node[:platform] == "gentoo"
   default[:php][:slot] = %x(eix --pure-packages --format '<bestversion:NAMEASLOT>' -e dev-lang/php|cut -d: -f2).chomp
 end
 

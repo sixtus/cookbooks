@@ -12,6 +12,7 @@ source "${_BASHRC_DIR}/bashcomp.sh"
 # https://gist.github.com/mxcl/homebrew/issues/2867
 if [[ -d /usr/local/Cellar ]]; then
 	source /usr/local/Cellar/coreutils/*/aliases
+	alias find="${brew_prefix}/bin/gfind"
 fi
 
 source "${_BASHRC_DIR}/color.sh"

@@ -1,7 +1,7 @@
 define :munin_plugin, :action => :create, :plugin => nil, :source => nil, :config => [] do
   next if not tagged?("munin-node")
-  next if Chef::Config[:solo]
-  next if node[:platform] == "mac_os_x"
+  next if platform?("mac_os_x")
+  next if solo?
 
   params[:plugin] = params[:name] unless params[:plugin]
   plugin_exec = "/usr/libexec/munin/plugins/#{params[:plugin]}"

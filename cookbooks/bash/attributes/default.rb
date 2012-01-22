@@ -1,4 +1,4 @@
-default[:bash][:rcdir] = case platform
+default[:bash][:rcdir] = case node[:platform]
                          when "gentoo"
                            "/etc/bash"
                          when "mac_os_x"

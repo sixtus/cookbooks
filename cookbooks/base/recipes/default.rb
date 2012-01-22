@@ -1,6 +1,5 @@
-# to make things faster, add the node list to our run_state for later use
-if Chef::Config[:solo]
-  # chef-solo does not have search access
+# to make things faster, load data from search index into run_state
+if solo?
   node.run_state[:nodes] = []
   node.run_state[:roles] = []
   node.run_state[:users] = []
@@ -14,6 +13,8 @@ end
 case node[:platform]
 
 when "gentoo"
+  raise "running as non-root is not supported on gentoo" unless root?
+
   include_recipe "ohai"
   include_recipe "base::etcgit"
   include_recipe "base::udev"
@@ -26,10 +27,11 @@ when "gentoo"
   include_recipe "portage"
   include_recipe "portage::porticron"
   include_recipe "openssl"
+  include_recipe "nss"
 
 when "mac_os_x"
+  raise "running as root is not supported on mac os" if root?
   include_recipe "homebrew"
-
 end
 
 # install base packages
@@ -52,6 +54,9 @@ if node[:os] == "linux" and node[:virtualization][:role] == "host" and not node[
   include_recipe "shorewall"
   include_recipe "smart"
 end
+
+# use account cookbook in root mode
+include_recipe "account" if root?
 
 # enable munin plugins
 munin_plugin "cpu"

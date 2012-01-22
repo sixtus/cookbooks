@@ -1,4 +1,4 @@
-default[:lftp][:configfile] = case platform
+default[:lftp][:configfile] = case node[:platform]
                               when "gentoo"
                                 "/etc/lftp/lftp.conf"
                               when "mac_os_x"

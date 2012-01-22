@@ -59,12 +59,14 @@ when "gentoo"
     app-misc/colordiff
     app-misc/mc
     app-shells/bash-completion
+    app-text/dos2unix
     dev-util/strace
     mail-client/mailx
     net-analyzer/bwm-ng
     net-analyzer/iptraf-ng
     net-analyzer/mtr
     net-analyzer/netcat
+    net-analyzer/nmap
     net-analyzer/tcpdump
     net-analyzer/tcptraceroute
     net-analyzer/traceroute
@@ -97,6 +99,7 @@ when "mac_os_x"
     atool
     bwm-ng
     colordiff
+    dos2unix
     findutils
     gawk
     gnu-sed
@@ -106,6 +109,7 @@ when "mac_os_x"
     mtr
     ncdu
     netcat
+    nmap
     proctools
     pwgen
     ssh-copy-id
