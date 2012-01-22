@@ -1,1 +1,0 @@
-../../../../../cookbooks/memcached/README.rst

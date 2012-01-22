@@ -1,1 +1,0 @@
-../../../../../cookbooks/openvpn/README.rst

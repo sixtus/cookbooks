@@ -1,1 +1,0 @@
-../../../../../cookbooks/chef/README.rst

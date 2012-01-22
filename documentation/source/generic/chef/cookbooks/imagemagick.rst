@@ -1,1 +1,0 @@
-../../../../../cookbooks/imagemagick/README.rst

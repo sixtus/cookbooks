@@ -1,1 +1,0 @@
-../../../../../cookbooks/mongodb/README.rst

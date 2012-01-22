@@ -1,1 +1,0 @@
-../../../../../cookbooks/ohai/README.rst

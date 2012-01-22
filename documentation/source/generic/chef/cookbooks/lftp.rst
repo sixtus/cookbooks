@@ -1,1 +1,0 @@
-../../../../../cookbooks/lftp/README.rst

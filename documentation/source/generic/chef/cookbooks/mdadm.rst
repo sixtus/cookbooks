@@ -1,1 +1,0 @@
-../../../../../cookbooks/mdadm/README.rst

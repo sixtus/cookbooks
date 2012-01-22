@@ -1,1 +1,0 @@
-../../../../../cookbooks/gitosis/README.rst

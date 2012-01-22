@@ -1,1 +1,0 @@
-../../../../../cookbooks/tomcat/README.rst

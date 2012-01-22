@@ -1,1 +1,0 @@
-../../../../../cookbooks/core_ext/README.rst

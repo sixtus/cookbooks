@@ -1,1 +1,0 @@
-../../../../../cookbooks/rvm/README.rst

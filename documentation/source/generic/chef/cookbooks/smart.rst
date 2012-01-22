@@ -1,1 +1,0 @@
-../../../../../cookbooks/smart/README.rst

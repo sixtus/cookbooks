@@ -99,4 +99,3 @@ attributes and libraries.
    nodes
    roles
    databags
-   cookbooks/index

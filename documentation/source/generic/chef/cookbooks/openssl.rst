@@ -1,1 +1,0 @@
-../../../../../cookbooks/openssl/README.rst

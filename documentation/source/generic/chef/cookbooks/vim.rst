@@ -1,1 +1,0 @@
-../../../../../cookbooks/vim/README.rst

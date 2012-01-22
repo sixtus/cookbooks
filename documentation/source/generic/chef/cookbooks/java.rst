@@ -1,1 +1,0 @@
-../../../../../cookbooks/java/README.rst

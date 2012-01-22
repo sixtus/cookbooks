@@ -1,1 +1,0 @@
-../../../../../cookbooks/ntp/README.rst

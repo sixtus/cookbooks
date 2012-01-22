@@ -1,1 +1,0 @@
-../../../../../cookbooks/rabbitmq/README.rst
