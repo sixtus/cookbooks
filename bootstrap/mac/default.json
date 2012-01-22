@@ -1,0 +1,14 @@
+{
+	"current_email": "john.doe@example.com",
+	"current_name": "John Doe",
+
+	"git": {
+		"github": {
+			"user": "jdoe"
+		}
+	},
+
+	"run_list": [
+		"recipe[base]"
+	]
+}
