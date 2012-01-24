@@ -5,7 +5,7 @@ class Chef
     end
 
     def root?
-      node[:current_user] == "root"
+      Process.euid == 0
     end
   end
 end
