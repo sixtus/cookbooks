@@ -42,7 +42,12 @@ default_unless[:virtualization] = {}
 default_unless[:cpu][:total] = 1
 
 # support non-root runs
-default[:homedir] = node[:etc][:passwd][node[:current_user]][:dir]
+if Process.euid == 0
+  default[:homedir] = "/root"
+else
+  default[:homedir] = node[:etc][:passwd][node[:current_user]][:dir]
+end
+
 default[:current_email] = "#{node[:current_user]}@localhost"
 default[:current_name] = node[:current_user]
 
