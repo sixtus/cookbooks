@@ -1,6 +1,11 @@
 # this file is sourced by all bash shells on startup
 
-# test for interactive shell
+# load rvm even if not interactive
+if [[ -r "${HOME}/.rvm/scripts/rvm" ]]; then
+	source "${HOME}/.rvm/scripts/rvm"
+fi
+
+# everything else is for interactive shells only
 [[ $- != *i* ]] && return
 
 _BASHRC_DIR="${_BASHRC_DIR:-<%= node[:bash][:rcdir] %>}"
@@ -20,10 +25,6 @@ source "${_BASHRC_DIR}/prompt.sh"
 
 if [[ -r "${_BASHRC_DIR}/${_DISTNAME}.sh" ]]; then
 	source "${_BASHRC_DIR}/${_DISTNAME}.sh"
-fi
-
-if [[ -r "${HOME}/.rvm/scripts/rvm" ]]; then
-	source "${HOME}/.rvm/scripts/rvm"
 fi
 
 
