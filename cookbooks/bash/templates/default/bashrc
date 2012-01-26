@@ -53,17 +53,17 @@ if hash less; then
 	export LESS="-R --ignore-case --long-prompt"
 fi
 
-<% if node[:current_user] != "root" %>
 # keychain for ssh
-if hash keychain; then
-	if [[ -r ~/.ssh/id_dsa ]]; then
-		eval `keychain --eval --quiet ~/.ssh/id_dsa`
-	fi
-	if [[ -r ~/.ssh/id_rsa ]]; then
-		eval `keychain --eval --quiet ~/.ssh/id_rsa`
+if [[ $USER != root ]]; then
+	if hash keychain; then
+		if [[ -r ~/.ssh/id_dsa ]]; then
+			eval `keychain --eval --quiet ~/.ssh/id_dsa`
+		fi
+		if [[ -r ~/.ssh/id_rsa ]]; then
+			eval `keychain --eval --quiet ~/.ssh/id_rsa`
+		fi
 	fi
 fi
-<% end %>
 
 
 ########################
