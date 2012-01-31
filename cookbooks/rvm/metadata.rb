@@ -5,4 +5,5 @@ maintainer_email "bb@xnull.de"
 license "Apache v2.0"
 
 depends "account"
+depends "core_ext"
 depends "portage"
