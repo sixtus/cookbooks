@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# install a sane GCC first
+if [[ ! -e /usr/bin/gcc-4.2 ]]; then
+	curl -L https://github.com/downloads/kennethreitz/osx-gcc-installer/GCC-10.7-v2.pkg > GCC-10.7-v2.pkg
+	sudo installer -pkg GCC-10.7-v2.pkg -target /
+	rm -f GCC-10.7-v2.pkg
+fi
+
+# now do the normal bootstrap
+exec $(dirname $0)/bootstrap

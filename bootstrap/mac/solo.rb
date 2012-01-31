@@ -12,3 +12,5 @@ cache_options({
   :path => "#{chef_root}/cache/checksums",
   :skip_expires => true
 })
+
+verbose_logging false
