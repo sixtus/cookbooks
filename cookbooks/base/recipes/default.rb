@@ -17,7 +17,6 @@ when "gentoo"
 
   include_recipe "ohai"
   include_recipe "base::etcgit"
-  include_recipe "base::udev"
   include_recipe "base::locales"
   include_recipe "base::resolv"
   include_recipe "base::sysctl"
@@ -31,7 +30,7 @@ when "gentoo"
   include_recipe "syslog::client"
   include_recipe "cron"
   include_recipe "sudo"
-  include_recipe "ssh"
+  include_recipe "ssh::server"
 
 when "mac_os_x"
   raise "running as root is not supported on mac os" if root?
@@ -48,6 +47,7 @@ end
 include_recipe "bash"
 include_recipe "git"
 include_recipe "lftp"
+include_recipe "ssh"
 include_recipe "tmux"
 include_recipe "vim"
 

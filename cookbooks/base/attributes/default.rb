@@ -65,6 +65,7 @@ when "gentoo"
     app-misc/mc
     app-shells/bash-completion
     app-text/dos2unix
+    dev-libs/libyaml
     dev-util/strace
     mail-client/mailx
     net-analyzer/bwm-ng
@@ -110,8 +111,8 @@ when "mac_os_x"
     gnu-sed
     gnu-tar
     keychain
+    libyaml
     midnight-commander
-    mtr
     ncdu
     netcat
     nmap
