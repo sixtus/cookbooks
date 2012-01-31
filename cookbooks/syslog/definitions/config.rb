@@ -1,4 +1,7 @@
 define :syslog_config, :source => nil, :variables => {} do
+  next if solo?
+  next if platform?("mac_os_x")
+
   include_recipe "syslog"
 
   template = if params[:template]

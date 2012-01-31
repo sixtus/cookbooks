@@ -81,6 +81,7 @@ when "gentoo"
     net-misc/keychain
     net-misc/telnet-bsd
     net-misc/whois
+    sys-apps/ack
     sys-apps/ethtool
     sys-apps/hdparm
     sys-apps/iproute2
@@ -103,6 +104,7 @@ when "mac_os_x"
   node[:packages] = %w(xz coreutils)
 
   node[:packages] += %w(
+    ack
     atool
     bwm-ng
     colordiff
