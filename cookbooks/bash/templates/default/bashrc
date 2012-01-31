@@ -7,14 +7,6 @@ _BASHRC_DIR="${_BASHRC_DIR:-<%= node[:bash][:rcdir] %>}"
 
 source "${_BASHRC_DIR}/detect.sh"
 source "${_BASHRC_DIR}/bashcomp.sh"
-
-# needs to be loaded after bashcomp
-# https://gist.github.com/mxcl/homebrew/issues/2867
-if [[ -d /usr/local/Cellar ]]; then
-	source /usr/local/Cellar/coreutils/*/aliases
-	alias find="${brew_prefix}/bin/gfind"
-fi
-
 source "${_BASHRC_DIR}/color.sh"
 source "${_BASHRC_DIR}/prompt.sh"
 
@@ -38,7 +30,8 @@ export LC_COLLATE="C"
 
 # make sure all important paths are in PATH
 <% if node[:platform] == "mac_os_x" %>
-export PATH="~/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:${PATH}"
+export PATH="~/bin:$(brew --prefix coreutils)/libexec/gnubin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:${PATH}"
+alias find="${brew_prefix}/bin/gfind"
 <% else %>
 export PATH="~/bin:${PATH}"
 <% end %>
