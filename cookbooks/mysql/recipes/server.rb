@@ -40,6 +40,17 @@ if platform?("mac_os_x")
     command "mysql_install_db --verbose --user=#{node[:current_user]} --basedir=$(brew --prefix mysql) --datadir=/usr/local/var/mysql --tmpdir=/tmp"
     creates "/usr/local/var/mysql/mysql"
   end
+
+  file "#{node[:homedir]}/.my.cnf" do
+    content "[client]\nuser = root\n"
+    mode "0600"
+    backup 0
+  end
+
+  # TODO: make it idempotent or replace with launchd provider
+  execute "launchctl-mysql" do
+    command "launchctl load -w $(brew --prefix mysql)/com.mysql.mysqld.plist"
+  end
 else
   mysql_root_pass = get_password("mysql/root")
 
