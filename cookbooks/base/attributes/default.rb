@@ -44,12 +44,13 @@ default_unless[:cpu][:total] = 1
 # support non-root runs
 if Process.euid == 0
   default[:homedir] = "/root"
+  default[:current_email] = "root@localhost"
+  default[:current_name] = "Hostmaster of the day"
 else
   default[:homedir] = node[:etc][:passwd][node[:current_user]][:dir]
+  default[:current_email] = "#{node[:current_user]}@localhost"
+  default[:current_name] = node[:current_user]
 end
-
-default[:current_email] = "#{node[:current_user]}@localhost"
-default[:current_name] = node[:current_user]
 
 # base packages
 case node[:platform]
