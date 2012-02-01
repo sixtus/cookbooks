@@ -1,6 +1,9 @@
 cwd = File.expand_path(File.join(File.dirname(__FILE__), "../../"))
 
-cookbook_path "#{cwd}/cookbooks"
+cookbook_path [
+  "#{cwd}/cookbooks",
+  "#{cwd}/site-cookbooks",
+]
 
 chef_root = File.expand_path("~/.chef")
 
