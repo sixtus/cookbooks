@@ -156,8 +156,15 @@ if has("autocmd")
 	" turn of previous search results
 	au VimEnter * nohls
 
+	" Always do a full syntax refresh
+	au BufEnter * syntax sync fromstart
+
 	" cd to buffer directory
 	au BufEnter * execute ":silent! lcd " . expand("%:p:h")
+
+	" restore cursor location
+	au BufWinLeave * mkview
+	au BufWinEnter * silent loadview
 
 	" custom file type mappings
 	au BufNewFile,BufRead *.tex set ft=tex
