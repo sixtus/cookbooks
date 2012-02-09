@@ -1,4 +1,4 @@
-fastcgi_buffers <%= node[:nginx][:worker_processes] %> 256k;
+fastcgi_buffers <%= node[:nginx][:fastcgi_buffers] %> 4k;
 
 fastcgi_param  SCRIPT_FILENAME    $document_root$fastcgi_script_name;
 fastcgi_param  QUERY_STRING       $query_string;
