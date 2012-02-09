@@ -1,1 +1,1 @@
-rvm use --create --install ruby-1.9.3-p0@chef
+rvm --create --install ruby-1.9.3-p0@chef
