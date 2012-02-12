@@ -205,7 +205,7 @@ class Chef
         end
 
         def candidate_version
-          @candidate_version ||= package_info[:candidate_version]
+          @candidate_version ||= package_info[:candidate_version] rescue nil
         end
 
       end
