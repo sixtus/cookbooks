@@ -1,5 +1,5 @@
 include_recipe "php::base"
 
-package "dev-php5/pecl-memcache"
+package "dev-php/pecl-memcache"
 
 php_extension "memcache"

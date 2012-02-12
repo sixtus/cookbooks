@@ -1,5 +1,5 @@
 include_recipe "php::base"
 
-package "dev-php5/pecl-http"
+package "dev-php/pecl-http"
 
 php_extension "http"
