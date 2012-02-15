@@ -7,7 +7,7 @@ directory "/etc/syslog-ng/conf.d" do
 end
 
 service "syslog-ng" do
-  action [:enable, :start]
+  action :nothing
 end
 
 template "/etc/syslog-ng/syslog-ng.conf" do
@@ -20,6 +20,10 @@ end
 
 syslog_config "00-local" do
   template "local.conf"
+end
+
+service "syslog-ng" do
+  action [:enable, :start]
 end
 
 include_recipe "syslog::logrotate"
