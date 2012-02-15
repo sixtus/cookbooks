@@ -1,4 +1,5 @@
 package "app-admin/chef"
+package "dev-ruby/airbrake_handler"
 
 directory "/var/log/chef" do
   owner "chef"
