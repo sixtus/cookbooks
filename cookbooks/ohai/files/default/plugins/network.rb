@@ -1,4 +1,5 @@
 require 'resolv'
+require 'open-uri'
 
 provides "network"
 
@@ -9,14 +10,21 @@ require_plugin "hostname"
 require_plugin "#{os}::network"
 
 # simply rely on the resolver, if that doesn't work you have a problem anyway.
+default_addresses = network[:interfaces][network[:default_interface]][:addresses].keys
+
 Resolv::DNS.open(:nameserver => ['8.8.8.8', '8.8.4.4']) do |dns|
   dns.getaddresses(fqdn).each do |r|
+    next unless default_addresses.include?(r)
     if r.is_a?(Resolv::IPv4)
       ipaddress r.to_s
     elsif r.is_a?(Resolv::IPv6)
       ip6address r.to_s
     end
   end
+end
+
+unless ipaddress
+  ipaddress open("http://ip.noova.de").read
 end
 
 # try to figure out the private IP address if it exists
