@@ -55,11 +55,11 @@ fi
 # run lafilefixer to get rid of fucking annoying libtool archive dependency
 # crap. aw man. this is getting worse every day.
 emerge -n dev-util/lafilefixer
-lafilefixer --justfixit
+lafilefixer --justfixit > /dev/null
 
 # finally, after all this crap, run revdep-rebuild to pick up remaining
 # packages that have broken lib dependencies.
-EMERGE_DEFAULT_OPTS="" revdep-rebuild -i -- --quiet-build --with-bdeps=y --binpkg-respect-use=y --usepkg=n --getbinpkg=n
+EMERGE_DEFAULT_OPTS="" revdep-rebuild -q -i -- --quiet-build --with-bdeps=y --binpkg-respect-use=y --usepkg=n --getbinpkg=n
 
 # cleanup unneeded dependencies
 emerge --depclean -aq
