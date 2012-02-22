@@ -50,6 +50,12 @@ if platform?("mac_os_x")
   # TODO: make it idempotent or replace with launchd provider
   execute "launchctl-mysql" do
     command "launchctl load -w $(brew --prefix mysql)/com.mysql.mysqld.plist"
+    only_if "test -e $(brew --prefix mysql)/com.mysql.mysqld.plist"
+  end
+
+  execute "launchctl-mysql-new" do
+    command "launchctl load -w $(brew --prefix mysql)/homebrew.mxcl.mysql.plist"
+    only_if "test -e $(brew --prefix mysql)/homebrew.mxcl.mysql.plist"
   end
 else
   mysql_root_pass = get_password("mysql/root")
