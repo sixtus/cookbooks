@@ -1,6 +1,6 @@
 #!/bin/bash
 
-KV="2.6.35-vserver-2.3.0.36.32"
+KV="3.2.7-zentoo"
 
 pushd /usr/src
 
@@ -15,12 +15,10 @@ ln -snf linux-${KV} linux
 
 pushd linux
 
-wget -q -O .config "http://gist.github.com/raw/510152/config-2.6.35-vs2.3.0.36.32-gentoo-x86_64"
+wget -q -O .config "https://raw.github.com/zentoo/quickstart/master/profiles/3.2.7-zentoo-generic.kconfig"
 make oldconfig
 
-make -j2
-make install
-make modules_install
+genkernel --oldconfig --symlink kernel
 
 popd
 popd
