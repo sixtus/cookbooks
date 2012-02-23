@@ -1,5 +1,4 @@
 package "sys-cluster/util-vserver"
-package "sys-kernel/vserver-sources"
 
 %w(vprocunhide util-vserver vservers.default).each do |s|
   service s do
