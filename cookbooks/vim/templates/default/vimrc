@@ -64,6 +64,11 @@ set noexpandtab
 " fold automatically on markers
 set foldmethod=marker
 
+<% if Chef::Config[:solo] %>
+" load bundles
+call pathogen#runtime_append_all_bundles()
+<% end %>
+
 " enable syntax highlighting
 if has("syntax")
 	syntax on

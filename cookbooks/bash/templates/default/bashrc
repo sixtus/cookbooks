@@ -168,6 +168,9 @@ serve() {
 	python -m SimpleHTTPServer ${1:-8080}
 }
 
+# ruby/rvm helpers
+alias be="bundle exec"
+
 # load local bashrc if it exists
 if [[ -e ${_BASHRC_DIR}/bashrc.local ]]; then
 	source ${_BASHRC_DIR}/bashrc.local
