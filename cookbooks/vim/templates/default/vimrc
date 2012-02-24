@@ -172,6 +172,7 @@ if has("autocmd")
 	au BufWinEnter * silent loadview
 
 	" custom file type mappings
+	au BufNewFile,BufRead *.md set ft=markdown
 	au BufNewFile,BufRead *.tex set ft=tex
 	au BufNewFile,BufRead *.coffee set ft=coffee
 	au BufRead,BufNewFile {Gemfile,Rakefile,Vagrantfile,Thorfile,config.ru} set ft=ruby
