@@ -3,6 +3,8 @@ define :munin_plugin, :action => :create, :plugin => nil, :source => nil, :confi
   next if platform?("mac_os_x")
   next if solo?
 
+  include_recipe "munin"
+
   params[:plugin] = params[:name] unless params[:plugin]
   plugin_exec = "/usr/libexec/munin/plugins/#{params[:plugin]}"
   plugin_link = "/etc/munin/plugins/#{params[:name]}"
