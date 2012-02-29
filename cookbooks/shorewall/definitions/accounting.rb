@@ -6,8 +6,10 @@ define :shorewall_accounting,
 
   node[:shorewall][:accounting][params[:name]] = params
 
-  munin_plugin "shorewall_accounting_#{params[:target]}" do
-    plugin "shorewall_accounting"
-    config ["user root"]
+  if tagged?("munin-node")
+    munin_plugin "shorewall_accounting_#{params[:target]}" do
+      plugin "shorewall_accounting"
+      config ["user root"]
+    end
   end
 end

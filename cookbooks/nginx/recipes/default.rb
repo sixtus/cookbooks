@@ -104,8 +104,10 @@ cookbook_file "/etc/logrotate.d/nginx" do
   mode "0644"
 end
 
-%w(memory request status).each do |p|
-  munin_plugin "nginx_#{p}" do
-    source "nginx_#{p}"
+if tagged?("munin-node")
+  %w(memory request status).each do |p|
+    munin_plugin "nginx_#{p}" do
+      source "nginx_#{p}"
+    end
   end
 end

@@ -90,27 +90,29 @@ end
 include_recipe "account" if root?
 
 # enable munin plugins
-munin_plugin "cpu"
-munin_plugin "entropy"
-munin_plugin "forks"
-munin_plugin "load"
-munin_plugin "memory"
-munin_plugin "open_files"
-munin_plugin "open_inodes"
-munin_plugin "processes"
+if tagged?("munin-node")
+  munin_plugin "cpu"
+  munin_plugin "entropy"
+  munin_plugin "forks"
+  munin_plugin "load"
+  munin_plugin "memory"
+  munin_plugin "open_files"
+  munin_plugin "open_inodes"
+  munin_plugin "processes"
 
-munin_plugin "df" do
-  source "df"
-  config [
-    "env.warning 90",
-    "env.critical 95"
-  ]
-end
+  munin_plugin "df" do
+    source "df"
+    config [
+      "env.warning 90",
+      "env.critical 95"
+    ]
+  end
 
-if node[:virtualization][:role] == "host"
-  munin_plugin "iostat"
-  munin_plugin "swap"
-  munin_plugin "vmstat"
+  if node[:virtualization][:role] == "host"
+    munin_plugin "iostat"
+    munin_plugin "swap"
+    munin_plugin "vmstat"
+  end
 end
 
 if tagged?("nagios-client")

@@ -1,5 +1,3 @@
-tag("munin-node")
-
 include_recipe "munin"
 
 directory "/etc/ssl/munin" do

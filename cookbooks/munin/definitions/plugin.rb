@@ -1,7 +1,12 @@
-define :munin_plugin, :action => :create, :plugin => nil, :source => nil, :config => [] do
-  next if not tagged?("munin-node")
-  next if platform?("mac_os_x")
-  next if solo?
+define :munin_plugin,
+  :action => :create,
+  :plugin => nil,
+  :source => nil,
+  :config => [] do
+
+  # this should already be handled in recipes,
+  # but we do it here again for good measure
+  next unless tagged?("munin-node")
 
   include_recipe "munin"
 
