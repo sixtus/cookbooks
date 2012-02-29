@@ -7,13 +7,18 @@ pushd /usr/src
 rm linux
 
 for i in *; do
-	if [[ $i == linux-${KV} ]]; then
+	if [[ $i != linux-${KV} ]]; then
 		echo "Cleaning ${i} ..."
 		rm -rf $i
 	fi
 done
 
 ln -snf linux-${KV} linux
+
+if [[ -e /usr/src/linux/vmlinux ]]; then
+	echo "!!! vmlinux exists. skipping ..."
+	exit 1
+fi
 
 pushd linux
 
