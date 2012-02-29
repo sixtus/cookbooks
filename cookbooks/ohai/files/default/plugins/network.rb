@@ -1,6 +1,3 @@
-require 'resolv'
-require 'open-uri'
-
 provides "network"
 
 network Mash.new unless network
@@ -9,22 +6,20 @@ network[:interfaces] = Mash.new unless network[:interfaces]
 require_plugin "hostname"
 require_plugin "#{os}::network"
 
-# simply rely on the resolver, if that doesn't work you have a problem anyway.
-default_addresses = network[:interfaces][network[:default_interface]][:addresses].keys
+default_ipaddress = network[:interfaces][network[:default_interface]][:addresses].select do |addr, opts|
+  opts[:family] == "inet" and opts[:primary]
+end.first
 
-Resolv::DNS.open(:nameserver => ['8.8.8.8', '8.8.4.4']) do |dns|
-  dns.getaddresses(fqdn).each do |r|
-    next unless default_addresses.include?(r)
-    if r.is_a?(Resolv::IPv4)
-      ipaddress r.to_s
-    elsif r.is_a?(Resolv::IPv6)
-      ip6address r.to_s
-    end
-  end
+if default_ipaddress
+  ipaddress default_ipaddress.first
 end
 
-unless ipaddress
-  ipaddress open("http://ip.noova.de").read
+default_ip6address = network[:interfaces][network[:default_interface]][:addresses].select do |addr, opts|
+  opts[:family] == "inet6" and opts[:scope] != "link" and opts[:primary]
+end.first
+
+if default_ip6address
+  ip6address default_ip6address.first
 end
 
 # try to figure out the private IP address if it exists
