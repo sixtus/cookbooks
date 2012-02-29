@@ -66,12 +66,14 @@ action :create do
     action [:enable, :start]
   end
 
-  nrpe_command "check_monit_#{user[:name]}" do
-    command "/usr/lib/nagios/plugins/check_pidfile #{pidfile} monit"
-  end
+  if tagged?("nagios-client")
+    nrpe_command "check_monit_#{user[:name]}" do
+      command "/usr/lib/nagios/plugins/check_pidfile #{pidfile} monit"
+    end
 
-  nagios_service "MONIT-#{user[:name].upcase}" do
-    check_command "check_nrpe!check_monit_#{user[:name]}"
-    servicegroups "monit"
+    nagios_service "MONIT-#{user[:name].upcase}" do
+      check_command "check_nrpe!check_monit_#{user[:name]}"
+      servicegroups "monit"
+    end
   end
 end

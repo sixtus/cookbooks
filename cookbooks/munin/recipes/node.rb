@@ -41,6 +41,8 @@ service "munin-node" do
   action [:enable, :start]
 end
 
-nagios_service "MUNIN-NODE" do
-  check_command "check_munin_node"
+if tagged?("nagios-client")
+  nagios_service "MUNIN-NODE" do
+    check_command "check_munin_node"
+  end
 end

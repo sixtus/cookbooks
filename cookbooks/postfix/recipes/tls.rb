@@ -20,19 +20,21 @@ postconf "TLS encryption" do
       :smtpd_tls_session_cache_timeout => "3600s"
 end
 
-nrpe_command "check_postfix_tls" do
-  command "/usr/lib/nagios/plugins/check_ssl_server -H localhost -n #{node[:fqdn]} -P smtp -p 25 -r /etc/ssl/postfix/ca.crt -w 21 -c 7"
-end
+if tagged?("nagios-client")
+  nrpe_command "check_postfix_tls" do
+    command "/usr/lib/nagios/plugins/check_ssl_server -H localhost -n #{node[:fqdn]} -P smtp -p 25 -r /etc/ssl/postfix/ca.crt -w 21 -c 7"
+  end
 
-nagios_service "POSTFIX-TLS" do
-  check_command "check_nrpe!check_postfix_tls"
-  check_interval 60
-  retry_interval 15
-  check_interval 1440
-  notification_interval 1440
-  servicegroups "postfix,openssl"
-end
+  nagios_service "POSTFIX-TLS" do
+    check_command "check_nrpe!check_postfix_tls"
+    check_interval 60
+    retry_interval 15
+    check_interval 1440
+    notification_interval 1440
+    servicegroups "postfix,openssl"
+  end
 
-nagios_service_dependency "POSTFIX-TLS" do
-  depends %w(POSTFIX)
+  nagios_service_dependency "POSTFIX-TLS" do
+    depends %w(POSTFIX)
+  end
 end

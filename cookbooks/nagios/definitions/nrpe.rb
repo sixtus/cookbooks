@@ -2,8 +2,9 @@ define :nrpe_command,
   :command => nil,
   :action => :create do
 
-  next if solo?
-  next if platform?("mac_os_x")
+  # this should already be handled in recipes,
+  # but we do it here again for good measure
+  next unless tagged?("nagios-client")
 
   include_recipe "nagios::nrpe"
 

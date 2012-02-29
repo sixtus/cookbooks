@@ -12,11 +12,13 @@ service "postgrey" do
   action [:enable, :start]
 end
 
-nrpe_command "check_postgrey" do
-  command "/usr/lib/nagios/plugins/check_pidfile /var/run/postgrey.pid /usr/sbin/postgrey"
-end
+if tagged?("nagios-client")
+  nrpe_command "check_postgrey" do
+    command "/usr/lib/nagios/plugins/check_pidfile /var/run/postgrey.pid /usr/sbin/postgrey"
+  end
 
-nagios_service "POSTGREY" do
-  check_command "check_nrpe!check_postgrey"
-  servicegroups "postfix"
+  nagios_service "POSTGREY" do
+    check_command "check_nrpe!check_postgrey"
+    servicegroups "postfix"
+  end
 end

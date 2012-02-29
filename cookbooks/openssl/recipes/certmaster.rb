@@ -12,15 +12,17 @@ remote_directory "/etc/ssl/ca" do
   mode "0755"
 end
 
-nagios_plugin "check_ssl_cert"
-nagios_plugin "check_ssl_certs"
+if tagged?("nagios-client")
+  nagios_plugin "check_ssl_cert"
+  nagios_plugin "check_ssl_certs"
 
-nrpe_command "check_ssl_certs" do
-  command "/usr/lib/nagios/plugins/check_ssl_certs"
-end
+  nrpe_command "check_ssl_certs" do
+    command "/usr/lib/nagios/plugins/check_ssl_certs"
+  end
 
-nagios_service "CA-CERTS" do
-  check_command "check_nrpe!check_ssl_certs"
-  servicegroups "openssl"
-  notification_interval 1440
+  nagios_service "CA-CERTS" do
+    check_command "check_nrpe!check_ssl_certs"
+    servicegroups "openssl"
+    notification_interval 1440
+  end
 end

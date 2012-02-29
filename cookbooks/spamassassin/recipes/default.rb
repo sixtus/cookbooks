@@ -38,10 +38,12 @@ service "spamd" do
   action [:enable, :start]
 end
 
-nrpe_command "check_spamd" do
-  command "/usr/bin/sa-check_spamd -H localhost -t 10 -w 5 -c 10"
-end
+if tagged?("nagios-client")
+  nrpe_command "check_spamd" do
+    command "/usr/bin/sa-check_spamd -H localhost -t 10 -w 5 -c 10"
+  end
 
-nagios_service "SPAMD" do
-  check_command "check_nrpe!check_spamd"
+  nagios_service "SPAMD" do
+    check_command "check_nrpe!check_spamd"
+  end
 end

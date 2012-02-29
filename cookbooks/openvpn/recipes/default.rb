@@ -27,10 +27,12 @@ service "openvpn" do
   action [:enable, :start]
 end
 
-nrpe_command "check_openvpn" do
-  command "/usr/lib/nagios/plugins/check_pidfile /var/run/openvpn.pid /usr/sbin/openvpn"
-end
+if tagged?("nagios-client")
+  nrpe_command "check_openvpn" do
+    command "/usr/lib/nagios/plugins/check_pidfile /var/run/openvpn.pid /usr/sbin/openvpn"
+  end
 
-nagios_service "OPENVPN" do
-  check_command "check_nrpe!check_openvpn"
+  nagios_service "OPENVPN" do
+    check_command "check_nrpe!check_openvpn"
+  end
 end

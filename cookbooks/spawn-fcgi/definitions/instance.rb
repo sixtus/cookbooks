@@ -34,11 +34,13 @@ define :spawn_fcgi do
     action [:enable, :start]
   end
 
-  nrpe_command "check_spawn-fcgi_#{name}" do
-    command "/usr/lib/nagios/plugins/check_pidfile /var/run/spawn-fcgi/#{name}"
-  end
+  if tagged?("nagios-client")
+    nrpe_command "check_spawn-fcgi_#{name}" do
+      command "/usr/lib/nagios/plugins/check_pidfile /var/run/spawn-fcgi/#{name}"
+    end
 
-  nagios_service "FCGI-#{name.upcase}" do
-    check_command "check_nrpe!check_spawn-fcgi_#{name}"
+    nagios_service "FCGI-#{name.upcase}" do
+      check_command "check_nrpe!check_spawn-fcgi_#{name}"
+    end
   end
 end

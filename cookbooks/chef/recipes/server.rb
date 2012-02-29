@@ -188,30 +188,32 @@ end
 end
 
 # nagios service checks
-nrpe_command "check_chef_solr" do
-  command "/usr/lib/nagios/plugins/check_pidfile /var/run/chef/solr.pid"
-end
+if tagged?("nagios-client")
+  nrpe_command "check_chef_solr" do
+    command "/usr/lib/nagios/plugins/check_pidfile /var/run/chef/solr.pid"
+  end
 
-nrpe_command "check_chef_expander" do
-  command "/usr/lib/nagios/plugins/check_pidfile /var/run/chef/expander.pid"
-end
+  nrpe_command "check_chef_expander" do
+    command "/usr/lib/nagios/plugins/check_pidfile /var/run/chef/expander.pid"
+  end
 
-nagios_service "CHEF-SERVER" do
-  check_command "check_http!-S -s 'This is the Chef API Server.'"
-  servicegroups "chef"
-end
+  nagios_service "CHEF-SERVER" do
+    check_command "check_http!-S -s 'This is the Chef API Server.'"
+    servicegroups "chef"
+  end
 
-nagios_service "CHEF-SERVER-SSL" do
-  check_command "check_http!-S -C 21"
-  servicegroups "chef"
-end
+  nagios_service "CHEF-SERVER-SSL" do
+    check_command "check_http!-S -C 21"
+    servicegroups "chef"
+  end
 
-nagios_service "CHEF-SOLR" do
-  check_command "check_nrpe!check_chef_solr"
-  servicegroups "chef"
-end
+  nagios_service "CHEF-SOLR" do
+    check_command "check_nrpe!check_chef_solr"
+    servicegroups "chef"
+  end
 
-nagios_service "CHEF-EXPANDER" do
-  check_command "check_nrpe!check_chef_expander"
-  servicegroups "chef"
+  nagios_service "CHEF-EXPANDER" do
+    check_command "check_nrpe!check_chef_expander"
+    servicegroups "chef"
+  end
 end

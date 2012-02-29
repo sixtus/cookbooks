@@ -33,5 +33,7 @@ if platform?("gentoo")
     end
   end
 
-  nagios_plugin "check_ssl_server"
+  if tagged?("nagios-client")
+    nagios_plugin "check_ssl_server"
+  end
 end

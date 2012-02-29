@@ -93,16 +93,18 @@ if node[:ipv6_enabled]
   include_recipe "shorewall::ipv6"
 end
 
-nagios_plugin "check_conntrack"
+if tagged?("nagios-client")
+  nagios_plugin "check_conntrack"
 
-nrpe_command "check_conntrack" do
-  command "/usr/lib/nagios/plugins/check_conntrack 75 90"
+  nrpe_command "check_conntrack" do
+    command "/usr/lib/nagios/plugins/check_conntrack 75 90"
+  end
+
+  nagios_service "CONNTRACK" do
+    check_command "check_nrpe!check_conntrack"
+    notification_interval 15
+    servicegroups "system"
+  end
+
+  nagios_service_escalation "CONNTRACK"
 end
-
-nagios_service "CONNTRACK" do
-  check_command "check_nrpe!check_conntrack"
-  notification_interval 15
-  servicegroups "system"
-end
-
-nagios_service_escalation "CONNTRACK"

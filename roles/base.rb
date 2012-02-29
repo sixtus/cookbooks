@@ -5,6 +5,4 @@ run_list(%w(
   recipe[duply]
   recipe[postfix::satelite]
   recipe[chef::client]
-  recipe[nagios::client]
-  recipe[munin::node]
 ))

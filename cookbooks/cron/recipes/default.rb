@@ -53,28 +53,30 @@ cron "run-crons" do
   command "/usr/bin/test -x /usr/sbin/run-crons && /usr/sbin/run-crons"
 end
 
-cron "heartbeat" do
-  command "/usr/bin/touch /tmp/.check_cron"
-end
+if tagged?("nagios-client")
+  cron "heartbeat" do
+    command "/usr/bin/touch /tmp/.check_cron"
+  end
 
-nagios_plugin "check_cron"
+  nagios_plugin "check_cron"
 
-nrpe_command "check_cron" do
-  command "/usr/lib/nagios/plugins/check_cron"
-end
+  nrpe_command "check_cron" do
+    command "/usr/lib/nagios/plugins/check_cron"
+  end
 
-nagios_service "CRON" do
-  check_command "check_nrpe!check_cron"
-  servicegroups "system"
-end
+  nagios_service "CRON" do
+    check_command "check_nrpe!check_cron"
+    servicegroups "system"
+  end
 
-nagios_plugin "check_long_running_cronjobs"
+  nagios_plugin "check_long_running_cronjobs"
 
-nrpe_command "check_long_running_cronjobs" do
-  command "/usr/lib/nagios/plugins/check_long_running_cronjobs"
-end
+  nrpe_command "check_long_running_cronjobs" do
+    command "/usr/lib/nagios/plugins/check_long_running_cronjobs"
+  end
 
-nagios_service "CRONJOBS" do
-  check_command "check_nrpe!check_long_running_cronjobs"
-  check_interval 60
+  nagios_service "CRONJOBS" do
+    check_command "check_nrpe!check_long_running_cronjobs"
+    check_interval 60
+  end
 end

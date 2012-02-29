@@ -50,10 +50,12 @@ service "php-fpm" do
   action [:enable, :start]
 end
 
-nrpe_command "check_php_fpm" do
-  command "/usr/lib/nagios/plugins/check_pidfile /var/run/php-fpm.pid php-fpm"
-end
+if tagged?("nagios-client")
+  nrpe_command "check_php_fpm" do
+    command "/usr/lib/nagios/plugins/check_pidfile /var/run/php-fpm.pid php-fpm"
+  end
 
-nagios_service "PHP-FPM" do
-  check_command "check_nrpe!check_php_fpm"
+  nagios_service "PHP-FPM" do
+    check_command "check_nrpe!check_php_fpm"
+  end
 end

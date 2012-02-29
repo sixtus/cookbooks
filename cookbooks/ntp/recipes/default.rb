@@ -43,11 +43,13 @@ service "ntpd" do
   action [:enable, :start]
 end
 
-nrpe_command "check_time" do
-  command "/usr/lib/nagios/plugins/check_ntp_time -H ptbtime1.ptb.de"
-end
+if tagged?("nagios-client")
+  nrpe_command "check_time" do
+    command "/usr/lib/nagios/plugins/check_ntp_time -H ptbtime1.ptb.de"
+  end
 
-nagios_service "TIME" do
-  check_command "check_nrpe!check_time"
-  servicegroups "system"
+  nagios_service "TIME" do
+    check_command "check_nrpe!check_time"
+    servicegroups "system"
+  end
 end
