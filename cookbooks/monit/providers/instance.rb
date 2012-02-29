@@ -66,7 +66,7 @@ action :create do
     action [:enable, :start]
   end
 
-  if tagged?("nagios-client")
+  if node[:tags].include?("nagios-client")
     nrpe_command "check_monit_#{user[:name]}" do
       command "/usr/lib/nagios/plugins/check_pidfile #{pidfile} monit"
     end
