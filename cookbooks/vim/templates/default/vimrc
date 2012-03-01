@@ -64,7 +64,7 @@ set noexpandtab
 " fold automatically on markers
 set foldmethod=marker
 
-<% if Chef::Config[:solo] %>
+<% if Chef::Config[:solo] and not Process.euid == 0 %>
 " load bundles
 call pathogen#runtime_append_all_bundles()
 <% end %>

@@ -6,7 +6,7 @@ directory node[:vim][:rcdir] do
   mode "0755"
 end
 
-if solo?
+if solo? and not root?
   directory "#{node[:vim][:rcdir]}/autoload" do
     mode "0755"
   end
