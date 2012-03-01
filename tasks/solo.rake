@@ -11,8 +11,8 @@ namespace :solo do
       sh("sudo chgrp admin /usr/local")
     end
 
-    scfg = File.join(TOPDIR, "bootstrap", "mac", "solo.rb")
-    sjson = File.join(TOPDIR, "bootstrap", "mac", "#{args.username}.json")
+    scfg = File.join(TOPDIR, "config", "solo.rb")
+    sjson = File.join(TOPDIR, "config", "solo", "#{args.username}.json")
 
     sh("chef-solo -c #{scfg} -j #{sjson}")
 
