@@ -123,30 +123,6 @@ end
   end
 end
 
-# documentation
-package "dev-python/sphinx"
-
-remote_directory "/var/www/documentation" do
-  source "documentation/html"
-  files_backup 0
-  files_owner "root"
-  files_group "root"
-  files_mode "0644"
-  owner "root"
-  group "root"
-  mode "0755"
-end
-
-query = Proc.new do |u|
-  u[:tags] and
-  u[:tags].include?("hostmaster")
-end
-
-htpasswd_from_databag "/var/www/documentation/.htpasswd" do
-  query query
-  owner "nginx"
-end
-
 # nginx SSL proxy
 ssl_ca "/etc/ssl/nginx/#{node[:fqdn]}-ca" do
   notifies :reload, "service[nginx]"
