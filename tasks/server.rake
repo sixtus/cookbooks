@@ -3,7 +3,7 @@ require "highline/import"
 namespace :server do
 
   desc "Bootstrap a Chef Server infrastructure"
-  task :bootstrap do
+  task :bootstrap, :fqdn, :username do |t, args|
     ENV['BOOTSTRAP'] = "1"
 
     # sanity check
@@ -12,36 +12,14 @@ namespace :server do
       exit(1)
     end
 
-    # collect data
-    hostname = ask('Enter the hostname: ') do |q|
-      q.default = 'chef'
-      q.validate = /^\w+$/
-    end
+    fqdn = args.fqdn
+    hostname = fqdn.split('.').first
+    domainname = fqdn.sub(/^#{hostname}\./, '')
 
-    domainname = ask('Enter the domain name: ') do |q|
-      q.default = 'example.com'
-      q.validate = /^[\w.]+$/
-    end
-
-    fqdn = "#{hostname}.#{domainname}"
-
-    username = ask('Enter your username: ') do |q|
-      q.validate = /^\w+$/
-    end
-
-    p1 = ask('Enter Password: ') do |q|
-      q.echo = false
-      q.validate = /^.{6}/
-    end
-
-    p2 = ask('Confirm: ') do |q|
-      q.echo = false
-    end
-
-    raise "passwords do not match" unless p1 == p2
+    username = args.username
 
     salt = SecureRandom.hex(4)
-    password = p1.crypt("$6$#{salt}$")
+    password = "tux".crypt("$6$#{salt}$")
 
     # set FQDN
     %x(hostname #{hostname})
@@ -55,8 +33,8 @@ namespace :server do
     Rake::Task["ssl:do_cert"].invoke(fqdn)
 
     # bootstrap the chef server
-    scfg = File.join(TOPDIR, "bootstrap", "server", "solo.rb")
-    sjson = File.join(TOPDIR, "bootstrap", "server", "solo.json")
+    scfg = File.join(TOPDIR, "config", "solo.rb")
+    sjson = File.join(TOPDIR, "config", "solo", "server.json")
 
     sh("chef-solo -c #{scfg} -j #{sjson} -N #{fqdn}")
 
