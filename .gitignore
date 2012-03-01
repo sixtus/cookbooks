@@ -1,4 +1,5 @@
 *~
+.vagrant
 .chef/checksums
 .chef/client.pem
 .chef/knife.rb
