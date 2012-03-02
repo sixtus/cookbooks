@@ -7,7 +7,11 @@ cookbook_path [
 
 role_path "#{cwd}/roles"
 
-chef_root = "/var/lib/chef"
+if Process.euid == 0
+  chef_root = "/var/lib/chef"
+else
+  File.expand_path("~/.chef")
+end
 
 sandbox_path "#{chef_root}/sandboxes"
 file_cache_path "#{chef_root}/cache/files"
