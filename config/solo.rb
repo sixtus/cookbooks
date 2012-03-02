@@ -10,7 +10,7 @@ role_path "#{cwd}/roles"
 if Process.euid == 0
   chef_root = "/var/lib/chef"
 else
-  File.expand_path("~/.chef")
+  chef_root = File.expand_path("~/.chef")
 end
 
 sandbox_path "#{chef_root}/sandboxes"
