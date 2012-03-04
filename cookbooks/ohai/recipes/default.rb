@@ -17,6 +17,7 @@ rd = remote_directory "/var/lib/chef/ohai" do
   owner "root"
   group "root"
   mode "0755"
+  purge true
   action :nothing
 end
 

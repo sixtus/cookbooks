@@ -35,7 +35,7 @@ mail-format {
 set httpd port <%= @user[:uid] + 2812 %> and
     use address localhost
     allow localhost
-    allow <%= @node[:ipaddress] %>
+    allow <%= node[:primary_ipaddress] %>
     allow admin:monit
 
 include <%= @user[:dir] %>/.monitrc.local

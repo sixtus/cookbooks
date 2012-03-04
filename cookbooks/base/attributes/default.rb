@@ -2,6 +2,10 @@
 default[:chef_environment] = "production"
 default[:classification] = :normal
 
+# make the primary IP address overridable
+default[:primary_ipaddress] = node[:ipaddress]
+default[:primary_ip6address] = nil
+
 # cluster support
 default[:cluster][:name] = "default"
 

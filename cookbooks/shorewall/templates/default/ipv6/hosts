@@ -11,8 +11,8 @@
 
 # chef nodes
 <% node.run_state[:nodes].each do |n| %>
-<% if n[:ip6address] %>
-nodes eth0:[<%= n[:ip6address] %>]
+<% if n[:primary_ip6address] %>
+nodes eth0:[<%= n[:primary_ip6address] %>]
 <% end %>
 <% end %>
 

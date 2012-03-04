@@ -29,8 +29,10 @@ cookbook_file "/etc/denyhosts.conf" do
   notifies :restart, "service[denyhosts]"
 end
 
-allowed_hosts = node.run_state[:nodes].map do |n|
-  n[:ipaddress]
+allowed_hosts = node.run_state[:nodes].select do |n|
+  n[:primary_ipaddress]
+end.map do |n|
+  n[:primary_ipaddress]
 end + node[:denyhosts][:whitelist]
 
 file "/var/lib/denyhosts/allowed-hosts" do

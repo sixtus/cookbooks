@@ -1,9 +1,9 @@
 tag("portage-binhost")
 
 clients = node.run_state[:nodes].select do |n|
-  n[:ipaddress]
+  n[:primary_ipaddress]
 end.map do |n|
-  n[:ipaddress]
+  n[:primary_ipaddress]
 end
 
 directory "/var/cache/portage/packages" do

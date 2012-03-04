@@ -1,13 +1,15 @@
 # use this recipe to define resources for shorewall rules
 
-nodes = Hash[node.run_state[:nodes].map do |n|
-  [n[:fqdn], n[:ipaddress]]
+nodes = Hash[node.run_state[:nodes].select do |n|
+  n[:primary_ipaddress]
+end.map do |n|
+  [n[:fqdn], n[:primary_ipaddress]]
 end]
 
 nodes6 = Hash[node.run_state[:nodes].select do |n|
-  n[:ip6address]
+  n[:primary_ip6address]
 end.map do |n|
-  [n[:fqdn], n[:ip6address]]
+  [n[:fqdn], n[:primary_ip6address]]
 end]
 
 case node[:fqdn]

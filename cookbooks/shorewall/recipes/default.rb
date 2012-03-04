@@ -20,14 +20,16 @@ include_recipe "shorewall::rules"
 node.run_state[:nodes].select do |n|
   n[:tags].include?("portage-binhost")
 end.each do |n|
-  shorewall_rule "portage-binhost@#{n[:fqdn]}" do
-    source "net:#{n[:ipaddress]}"
-    destport "rsync"
+  if n[:primary_ipaddress]
+    shorewall_rule "portage-binhost@#{n[:fqdn]}" do
+      source "net:#{n[:primary_ipaddress]}"
+      destport "rsync"
+    end
   end
 
-  if n[:ip6address]
+  if n[:primary_ip6address]
     shorewall6_rule "portage-binhost@#{n[:fqdn]}" do
-      source "net:<#{n[:ip6address]}>"
+      source "net:<#{n[:primary_ip6address]}>"
       destport "rsync"
     end
   end
@@ -37,14 +39,16 @@ end
 node.run_state[:nodes].select do |n|
   n[:tags].include?("nagios-master")
 end.each do |n|
-  shorewall_rule "nagios-master@#{n[:fqdn]}" do
-    source "net:#{n[:ipaddress]}"
-    destport "4949,5666"
+  if n[:primary_ipaddress]
+    shorewall_rule "nagios-master@#{n[:fqdn]}" do
+      source "net:#{n[:primary_ipaddress]}"
+      destport "4949,5666"
+    end
   end
 
-  if n[:ip6address]
+  if n[:primary_ip6address]
     shorewall6_rule "nagios-master@#{n[:fqdn]}" do
-      source "net:<#{n[:ip6address]}>"
+      source "net:<#{n[:primary_ip6address]}>"
       destport "5666"
     end
   end
@@ -54,14 +58,16 @@ end
 node.run_state[:nodes].select do |n|
   n[:tags].include?("munin-master")
 end.each do |n|
-  shorewall_rule "munin-master@#{n[:fqdn]}" do
-    source "net:#{n[:ipaddress]}"
-    destport "4949"
+  if n[:primary_ipaddress]
+    shorewall_rule "munin-master@#{n[:fqdn]}" do
+      source "net:#{n[:primary_ipaddress]}"
+      destport "4949"
+    end
   end
 
-  if n[:ip6address]
+  if n[:primary_ip6address]
     shorewall6_rule "munin-master@#{n[:fqdn]}" do
-      source "net:<#{n[:ip6address]}>"
+      source "net:<#{n[:primary_ip6address]}>"
       destport "4949"
     end
   end
@@ -69,6 +75,7 @@ end
 
 # accounting
 node[:network][:interfaces].each do |int, cfg|
+  next unless cfg[:addresses]
   cfg[:addresses].each do |adr, net|
     next unless net[:family] == "inet"
     next if cfg[:flags].include?("LOOPBACK")

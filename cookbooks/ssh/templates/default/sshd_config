@@ -6,12 +6,12 @@ Port 22
 <% if node[:virtualization][:role] == "host" and node[:virtualization][:system] == "linux-vserver" %>
 ListenAddress 127.0.0.1
 ListenAddress ::1
-ListenAddress <%= node[:ipaddress] %>
+ListenAddress <%= node[:primary_ipaddress] %>
 <% if node[:local_ipaddress] %>
 ListenAddress <%= node[:local_ipaddress] %>
 <% end %>
-<% if node[:ip6address] %>
-ListenAddress <%= node[:ip6address] %>
+<% if node[:primary_ip6address] %>
+ListenAddress <%= node[:primary_ip6address] %>
 <% end %>
 <% end %>
 Protocol 2

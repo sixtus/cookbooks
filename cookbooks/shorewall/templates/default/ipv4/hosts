@@ -11,7 +11,9 @@
 
 # chef nodes
 <% node.run_state[:nodes].each do |n| %>
-nodes eth0:<%= n[:ipaddress] %>
+<% if n[:primary_ipaddress] %>
+nodes eth0:<%= n[:primary_ipaddress] %>
+<% end %>
 <% end %>
 
 <% node[:shorewall][:hosts].each do |name, host| %>

@@ -1,3 +1,5 @@
+include_attribute "base"
+
 default_unless[:contacts][:mysql] = "root@#{node[:fqdn]}"
 
 # paths
@@ -20,7 +22,7 @@ default[:mysql][:server][:bind_address] = "127.0.0.1"
 default[:mysql][:server][:skip_innodb] = false
 
 # Replication & Binary Log
-default[:mysql][:server][:server_id] = IPAddr.new(node[:ipaddress]).to_i
+default[:mysql][:server][:server_id] = IPAddr.new(node[:primary_ipaddress]).to_i
 default[:mysql][:server][:slave_enabled] = false
 default[:mysql][:server][:active_master] = false
 default[:mysql][:server][:log_bin] = false

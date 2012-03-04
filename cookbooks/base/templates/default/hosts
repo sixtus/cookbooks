@@ -12,12 +12,11 @@
 ::1 localhost
 
 # this node
-<%= node[:ipaddress] %> <%= node[:fqdn] %> <%= node[:hostname] %>
-<% if node[:local_ipaddress] %>
-<%= node[:local_ipaddress] %> <%= node[:hostname] %>.local<%= node[:resolv][:aliases].map { |a| " #{a}.local" } %>
+<% if node[:primary_ipaddress] %>
+<%= node[:primary_ipaddress] %> <%= node[:fqdn] %> <%= node[:hostname] %>
 <% end %>
-<% if node[:ip6address] %>
-<%= node[:ip6address] %> <%= node[:fqdn] %> <%= node[:hostname] %>
+<% if node[:primary_ip6address] %>
+<%= node[:primary_ip6address] %> <%= node[:fqdn] %> <%= node[:hostname] %>
 <% end %>
 
 <% if node[:cluster][:name] != "default" %>

@@ -1,7 +1,12 @@
 include_recipe "postfix"
 include_recipe "postfix::munin"
 
-mynetworks = node.run_state[:nodes].map do |n| n[:ipaddress] end
+mynetworks = node.run_state[:nodes].select do |n|
+  n[:primary_ipaddress]
+end.map do |n|
+  n[:primary_ipaddress]
+end
+
 mynetworks += node[:postfix][:mynetworks]
 
 file "/etc/postfix/mynetworks" do
