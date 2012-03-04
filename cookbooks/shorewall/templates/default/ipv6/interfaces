@@ -11,12 +11,6 @@
 
 net eth0
 
-<% if node[:local_ip6address] %>
-<% if node[:local_interface] != "eth0" %>
-loc <%= node[:local_interface] %>
-<% end %>
-<% end %>
-
 <% node[:shorewall6][:interfaces].each do |zone, interface| %>
 <%= zone %> <%= interface %>
 <% end %>

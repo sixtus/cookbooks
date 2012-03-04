@@ -7,9 +7,6 @@ Port 22
 ListenAddress 127.0.0.1
 ListenAddress ::1
 ListenAddress <%= node[:primary_ipaddress] %>
-<% if node[:local_ipaddress] %>
-ListenAddress <%= node[:local_ipaddress] %>
-<% end %>
 <% if node[:primary_ip6address] %>
 ListenAddress <%= node[:primary_ip6address] %>
 <% end %>

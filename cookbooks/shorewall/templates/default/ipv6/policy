@@ -14,10 +14,6 @@
 <%= params[:source] %> <%= params[:dest] %> <%= params[:policy] %> - -
 <% end %>
 
-<% if node[:local_ip6address] %>
-loc all ACCEPT - -
-<% end %>
-
 nodes all ACCEPT - -
 $FW all ACCEPT - -
 net all DROP - -
