@@ -20,7 +20,6 @@ default[:portage][:ACCEPT_KEYWORDS] = nil
 
 # mirror settings
 default[:portage][:SYNC] = "rsync://rsync.zentoo.org/zentoo-portage"
-default[:portage][:BINHOST] = "http://chef.#{node[:domain]}/${ARCH}/"
 default[:portage][:MIRRORS] = %w(
 http://www.zentoo.org
 http://ftp.spline.de/pub/gentoo
