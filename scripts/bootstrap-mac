@@ -7,5 +7,8 @@ if [[ ! -e /usr/bin/gcc-4.2 ]]; then
 	rm -f GCC-10.7-v2.pkg
 fi
 
+# needed by ruby. does not compile with llvm-gcc
+export CC=/usr/bin/gcc-4.2
+
 # now do the normal bootstrap
 exec $(dirname $0)/bootstrap
