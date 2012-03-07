@@ -123,7 +123,6 @@ when "mac_os_x"
     ncdu
     netcat
     nmap
-    proctools
     pwgen
     ssh-copy-id
     wget
