@@ -1,4 +1,4 @@
-define :mongodb_instance do
+define :mongodb_instance, :nfiles => "1024" do
 
   # rebind since params is not a scope variable, but a method call, which may
   # not be available in other scopes
@@ -71,6 +71,7 @@ define :mongodb_instance do
     variables :bind_ip => params[:bind_ip],
               :port => port,
               :dbpath => dbpath,
+              :nfiles => params[:nfiles],
               :opts => params[:opts]
   end
 
