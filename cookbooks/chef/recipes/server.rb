@@ -114,13 +114,18 @@ execute "chef-solr-installer" do
   creates "/var/lib/chef/solr/jetty"
 end
 
-%w(
-  chef-server-api
-  chef-solr
-).each do |s|
-  service s do
-    action [:enable, :start]
-  end
+execute "wait-for-chef-solr" do
+  command "while ! netstat -tulpen | grep -q 8983; do sleep 1; done"
+  action :nothing
+end
+
+service "chef-solr" do
+  action [:enable, :start]
+  notifies :run, "execute[wait-for-chef-solr]"
+end
+
+service "chef-server-api" do
+  action [:enable, :start]
 end
 
 # nginx SSL proxy
