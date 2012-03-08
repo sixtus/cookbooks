@@ -15,4 +15,6 @@
 MAILADDR <%= node[:contacts][:hostmaster] %>
 
 DEVICE /dev/sd*
+<% if node[:madm] and node[:mdadm][:devices] %>
 <%= node[:mdadm][:devices].join("\n") %>
+<% end %>
