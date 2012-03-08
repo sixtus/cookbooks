@@ -2,7 +2,7 @@ namespace :node do
 
   desc "Create a new node with SSL certificates and chef client key"
   task :create => [ :pull ]
-  task :create, :fqdn, :role do |t, args|
+  task :create, :fqdn, :ipaddress, :role do |t, args|
     args.with_defaults(:role => "base")
 
     # create SSL cert
@@ -15,7 +15,13 @@ namespace :node do
 
     unless File.exists?(nf)
       File.open(nf, "w") do |fd|
-        fd.puts "run_list(%w(\n  role[#{args.role}]\n))"
+        fd.puts <<EOF
+set[:primary_ipaddress] = "#{args.ipaddress}"
+
+run_list(%w(
+  role[#{args.role}]
+))
+EOF
       end
     end
 
