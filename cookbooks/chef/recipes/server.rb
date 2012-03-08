@@ -120,12 +120,16 @@ execute "wait-for-chef-solr" do
 end
 
 service "chef-solr" do
-  action [:enable, :start]
+  action [:start, :enable]
   notifies :run, "execute[wait-for-chef-solr]", :immediately
 end
 
+service "chef-expander" do
+  action [:start, :enable]
+end
+
 service "chef-server-api" do
-  action [:enable, :start]
+  action [:start, :enable]
 end
 
 # nginx SSL proxy
