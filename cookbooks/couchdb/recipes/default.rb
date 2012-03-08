@@ -1,5 +1,11 @@
 package "dev-db/couchdb"
 
+directory "/var/log/couchdb" do
+  owner "couchdb"
+  group "couchdb"
+  mode "0770"
+end
+
 service "couchdb" do
   action [:enable, :start]
 end
