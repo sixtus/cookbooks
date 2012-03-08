@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# sync & update first
+emerge --sync
+eix-update
+
+# now pull the pristine cookbooks repo and bootstrap chef-server
 tmpdir=$(mktemp -d)
 
 pushd ${tmpdir} > /dev/null
