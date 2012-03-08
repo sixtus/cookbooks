@@ -121,7 +121,7 @@ end
 
 service "chef-solr" do
   action [:enable, :start]
-  notifies :run, "execute[wait-for-chef-solr]"
+  notifies :run, "execute[wait-for-chef-solr]", :immediately
 end
 
 service "chef-server-api" do
