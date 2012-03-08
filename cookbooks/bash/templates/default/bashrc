@@ -14,6 +14,11 @@ _BASHRC_DIR="${_BASHRC_DIR:-<%= node[:bash][:rcdir] %>}"
 <% if node[:platform] == "mac_os_x" %>
 export PATH="~/bin:$(brew --prefix coreutils)/libexec/gnubin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:${PATH}"
 alias find="$(brew --prefix)/bin/gfind"
+
+# use https://github.com/kennethreitz/osx-gcc-installer if it exists
+if [[ -e /usr/bin/gcc-4.2 ]]; then
+	export CC=/usr/bin/gcc-4.2
+fi
 <% else %>
 export PATH="~/bin:${PATH}"
 <% end %>
