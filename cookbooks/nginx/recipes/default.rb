@@ -60,7 +60,7 @@ ssl_certificate "/etc/ssl/nginx/nginx" do
   cn node[:fqdn]
   owner "nginx"
   group "nginx"
-  notifies :reload, "service[nginx]"
+  notifies :restart, "service[nginx]"
 end
 
 %w(csr pem).each do |f|
@@ -74,7 +74,7 @@ template "/etc/nginx/nginx.conf" do
   owner "root"
   group "root"
   mode "0644"
-  notifies :reload, "service[nginx]"
+  notifies :restart, "service[nginx]"
 end
 
 nginx_module "fastcgi" do
