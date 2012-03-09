@@ -51,7 +51,7 @@ template "/etc/chef/solr.rb" do
   owner "chef"
   group "chef"
   mode "0600"
-  notifies :restart, "service[chef-solr]"
+  notifies :restart, "service[chef-solr]", :immediately
   variables :amqp_pass => amqp_pass
 end
 
@@ -68,7 +68,7 @@ template "/etc/chef/server.rb" do
   owner "chef"
   group "chef"
   mode "0600"
-  notifies :restart, "service[chef-server-api]"
+  notifies :restart, "service[chef-server-api]", :immediately
   variables :amqp_pass => amqp_pass
 end
 
@@ -112,6 +112,7 @@ end
 execute "chef-solr-installer" do
   command "chef-solr-installer -c /etc/chef/solr.rb -u chef -g chef -f"
   creates "/var/lib/chef/solr/jetty"
+  action :nothing
 end
 
 execute "wait-for-chef-solr" do
@@ -121,18 +122,8 @@ end
 
 service "chef-solr" do
   action [:start, :enable]
+  notifies :run, "execute[chef-solr-installer]", :immediately
   notifies :run, "execute[wait-for-chef-solr]", :immediately
-end
-
-service "chef-expander" do
-  action [:start, :enable]
-end
-
-# somehow start-stop-daemon is stuck in starting state on the first run, so
-# restart it here if necessary
-service "chef-expander-restart" do
-  action :restart
-  not_if "/etc/init.d/chef-expander status 2>&1 | grep -q started"
 end
 
 service "chef-server-api" do
