@@ -124,6 +124,11 @@ service "chef-solr" do
   notifies :run, "execute[wait-for-chef-solr]", :immediately
 end
 
+cookbook_file "/etc/init.d/chef-expander" do
+  source "chef-expander.initd"
+  mode "0755"
+end
+
 service "chef-expander" do
   action [:start, :enable]
 end
