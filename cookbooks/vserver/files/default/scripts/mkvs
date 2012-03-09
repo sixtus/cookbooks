@@ -1,6 +1,6 @@
 #!/bin/bash
 
-IMAGE_FILE="zentoo-base-amd64-current.tar.bz2"
+IMAGE_FILE="stage3-current.tar.bz2"
 MIRROR="http://www.zentoo.org/downloads/amd64"
 
 source /etc/init.d/functions.sh
