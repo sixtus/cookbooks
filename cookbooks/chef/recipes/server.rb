@@ -46,32 +46,6 @@ end
 # install chef-server
 package "app-admin/chef-server"
 
-template "/etc/chef/solr.rb" do
-  source "solr.rb.erb"
-  owner "chef"
-  group "chef"
-  mode "0600"
-  notifies :restart, "service[chef-solr]", :immediately
-  variables :amqp_pass => amqp_pass
-end
-
-template "/etc/conf.d/chef-server-api" do
-  source "chef-server-api.confd"
-  owner "root"
-  group "root"
-  mode "0644"
-  notifies :restart, "service[chef-server-api]"
-end
-
-template "/etc/chef/server.rb" do
-  source "server.rb.erb"
-  owner "chef"
-  group "chef"
-  mode "0600"
-  notifies :restart, "service[chef-server-api]", :immediately
-  variables :amqp_pass => amqp_pass
-end
-
 directory "/root/.chef" do
   owner "root"
   group "root"
@@ -109,10 +83,18 @@ end
   end
 end
 
+template "/etc/chef/solr.rb" do
+  source "solr.rb.erb"
+  owner "chef"
+  group "chef"
+  mode "0600"
+  notifies :restart, "service[chef-solr]"
+  variables :amqp_pass => amqp_pass
+end
+
 execute "chef-solr-installer" do
   command "chef-solr-installer -c /etc/chef/solr.rb -u chef -g chef -f"
   creates "/var/lib/chef/solr/jetty"
-  action :nothing
 end
 
 execute "wait-for-chef-solr" do
@@ -122,12 +104,34 @@ end
 
 service "chef-solr" do
   action [:start, :enable]
-  notifies :run, "execute[chef-solr-installer]", :immediately
   notifies :run, "execute[wait-for-chef-solr]", :immediately
+end
+
+template "/etc/conf.d/chef-server-api" do
+  source "chef-server-api.confd"
+  owner "root"
+  group "root"
+  mode "0644"
+  notifies :restart, "service[chef-server-api]"
+end
+
+template "/etc/chef/server.rb" do
+  source "server.rb.erb"
+  owner "chef"
+  group "chef"
+  mode "0600"
+  notifies :restart, "service[chef-server-api]", :immediately
+  variables :amqp_pass => amqp_pass
 end
 
 service "chef-server-api" do
   action [:start, :enable]
+end
+
+ruby_block "die" do
+  block do
+    raise "foo"
+  end
 end
 
 # nginx SSL proxy

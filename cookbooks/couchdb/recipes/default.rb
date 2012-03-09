@@ -3,7 +3,7 @@ package "dev-db/couchdb"
 directory "/var/log/couchdb" do
   owner "couchdb"
   group "couchdb"
-  mode "0770"
+  mode "0750"
 end
 
 service "couchdb" do
