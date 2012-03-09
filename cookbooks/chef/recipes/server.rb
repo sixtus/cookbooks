@@ -124,13 +124,15 @@ service "chef-solr" do
   notifies :run, "execute[wait-for-chef-solr]", :immediately
 end
 
-cookbook_file "/etc/init.d/chef-expander" do
-  source "chef-expander.initd"
-  mode "0755"
-end
-
 service "chef-expander" do
   action [:start, :enable]
+end
+
+# somehow start-stop-daemon is stuck in starting state on the first run, so
+# restart it here if necessary
+service "chef-expander-restart" do
+  action :restart
+  only_if "/etc/init.d/chef-expander status 2>&1 | grep -q starting"
 end
 
 service "chef-server-api" do
