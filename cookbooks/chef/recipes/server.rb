@@ -128,12 +128,6 @@ service "chef-server-api" do
   action [:start, :enable]
 end
 
-ruby_block "die" do
-  block do
-    raise "foo"
-  end
-end
-
 # nginx SSL proxy
 ssl_ca "/etc/ssl/nginx/#{node[:fqdn]}-ca" do
   notifies :reload, "service[nginx]"
