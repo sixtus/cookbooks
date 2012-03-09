@@ -36,6 +36,12 @@ namespace :server do
     scfg = File.join(TOPDIR, "config", "solo.rb")
     sjson = File.join(TOPDIR, "config", "solo", "server.json")
 
+    sh("chef-solo -c #{scfg} -j #{sjson} -N #{fqdn} || :")
+
+    # now this one is really ugly. no idea why the init script is so damn
+    # broken that it is always stuck in starting state on the first run ...
+    sh("kill $(</var/run/chef/expander.pid)")
+    sh("/etc/init.d/chef-expander restart")
     sh("chef-solo -c #{scfg} -j #{sjson} -N #{fqdn}")
 
     # run chef-client to register a client key
