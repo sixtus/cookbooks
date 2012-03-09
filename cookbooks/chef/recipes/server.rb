@@ -132,7 +132,7 @@ end
 # restart it here if necessary
 service "chef-expander-restart" do
   action :restart
-  only_if "/etc/init.d/chef-expander status 2>&1 | grep -q starting"
+  not_if "/etc/init.d/chef-expander status 2>&1 | grep -q started"
 end
 
 service "chef-server-api" do
