@@ -6,7 +6,15 @@ end
 
 # create hostmaster accounts
 query = Proc.new do |u|
-  u[:tags] and u[:tags].include?("hostmaster")
+  if u[:tags] and u[:tags].include?("hostmaster")
+    true
+  elsif u[:nodes]
+    u[:nodes][node[:fqdn]] and
+    u[:nodes][node[:fqdn]][:tags] and
+    u[:nodes][node[:fqdn]][:tags].include?("hostmaster")
+  else
+    false
+  end
 end
 
 accounts_from_databag "hostmasters" do
@@ -16,7 +24,7 @@ end
 
 # create node specific accounts
 query = Proc.new do |u|
-  u[:hosts] and u[:hosts].include?(node[:fqdn])
+  u[:nodes] and u[:nodes][node[:fqdn]]
 end
 
 accounts_from_databag "node-specific" do
