@@ -53,3 +53,8 @@ end
     mode "0700"
   end
 end
+
+# we don't want no motd
+file "/etc/motd" do
+  action :delete
+end
