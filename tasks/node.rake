@@ -30,8 +30,8 @@ EOF
   end
 
   desc "Bootstrap the specified node"
-  task :bootstrap, :fqdn, :role do |t, args|
-    Rake::Task['node:create'].invoke(args.fqdn, args.role)
+  task :bootstrap, :fqdn, :ipaddress, :role do |t, args|
+    Rake::Task['node:create'].invoke(args.fqdn, args.ipaddress, args.role)
     sh("knife bootstrap #{args.fqdn} --distro gentoo -P tux")
   end
 
