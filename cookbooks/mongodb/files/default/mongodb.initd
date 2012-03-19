@@ -32,6 +32,8 @@ stop() {
 	MONGODB_NAME=${SVCNAME/mongodb.}
 
 	ebegin "Stopping ${SVCNAME}"
-	start-stop-daemon --stop --pidfile ${MONGODB_RUN:-/var/run/mongodb}/${MONGODB_NAME}.pid
+	start-stop-daemon --stop \
+		--pidfile ${MONGODB_RUN:-/var/run/mongodb}/${MONGODB_NAME}.pid \
+		--wait $((${MONGODB_STOP_WAIT:-30} * 1000))
 	eend $?
 }
