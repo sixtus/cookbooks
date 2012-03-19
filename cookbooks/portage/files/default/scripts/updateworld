@@ -27,7 +27,12 @@ if [[ "${eout}" != "" ]]; then
 fi
 
 # force latest gcc version
-gcc-config $(gcc-config -l|tail -n1|awk '{print $2}')
+latest_gcc=$(gcc-config -l|tail -n1|awk '{print $2}')
+current_gcc=$(gcc-config -c)
+
+if [[ $current_gcc != $latest_gcc ]]; then
+	gcc-config ${latest_gcc}
+fi
 
 # cleanup unneeded dependencies
 emerge --depclean -aq
