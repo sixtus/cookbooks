@@ -1,0 +1,13 @@
+#!/bin/bash
+
+source /usr/lib/nagios/plugins/utils.sh
+
+PIDS=$(sudo lib_users -m | awk -F\; '{print $1}' | paste -sd ',')
+
+if [[ -n $PIDS ]]; then
+	echo "WARNING - processes use old libraries (${PIDS})"
+	exit $STATE_WARNING
+fi
+
+echo "OK - no stale libraries found"
+exit $STATE_OK
