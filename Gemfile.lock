@@ -23,9 +23,9 @@ GIT
 
 GIT
   remote: https://github.com/zentoo/vagrant
-  revision: c6779581258ddda3c18f4b887807452d65e4a1c1
+  revision: ee306643ef7a10b2bc96f75cc588005734ec6942
   specs:
-    vagrant (0.9.99.2)
+    vagrant (1.0.1)
       archive-tar-minitar (= 0.5.2)
       childprocess (~> 0.3.1)
       erubis (~> 2.7.0)
@@ -46,9 +46,10 @@ GEM
     ffi (1.0.11)
     highline (1.6.11)
     i18n (0.6.0)
+    ipaddress (0.8.0)
     json (1.5.4)
     log4r (1.1.10)
-    mime-types (1.17.2)
+    mime-types (1.18)
     mixlib-authentication (1.1.4)
       mixlib-log
     mixlib-cli (1.2.2)
@@ -64,17 +65,18 @@ GEM
     net-ssh-multi (1.1)
       net-ssh (>= 2.1.4)
       net-ssh-gateway (>= 0.99.0)
-    ohai (0.6.10)
+    ohai (0.6.12)
+      ipaddress
       mixlib-cli
       mixlib-config
       mixlib-log
-      systemu (~> 2.2.0)
+      systemu
       yajl-ruby
     polyglot (0.3.3)
     rake (0.9.2.2)
     rest-client (1.6.7)
       mime-types (>= 1.16)
-    systemu (2.2.0)
+    systemu (2.5.0)
     treetop (1.4.10)
       polyglot
       polyglot (>= 0.3.1)
