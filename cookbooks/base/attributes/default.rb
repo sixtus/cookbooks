@@ -8,6 +8,16 @@ default[:primary_ip6address] = nil
 
 # cluster support
 default[:cluster][:name] = "default"
+default[:local_ipaddress] = nil
+
+if node[:local_ipaddress]
+  node[:network][:interfaces].each do |name, int|
+    if int[:addresses].keys.include?(node[:local_ipaddress])
+      set[:local_interface] = name
+      break
+    end
+  end
+end
 
 # this should be overriden globally or per-role
 default[:contacts][:hostmaster] = "root@#{node[:fqdn]}"

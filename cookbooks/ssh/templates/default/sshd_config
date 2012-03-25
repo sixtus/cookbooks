@@ -10,6 +10,9 @@ ListenAddress <%= node[:primary_ipaddress] %>
 <% if node[:primary_ip6address] %>
 ListenAddress <%= node[:primary_ip6address] %>
 <% end %>
+<% if node[:local_ipaddress] %>
+ListenAddress <%= node[:local_ipaddress] %>
+<% end %>
 <% end %>
 Protocol 2
 

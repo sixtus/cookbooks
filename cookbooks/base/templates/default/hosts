@@ -19,6 +19,22 @@
 <%= node[:primary_ip6address] %> <%= node[:fqdn] %> <%= node[:hostname] %>
 <% end %>
 
+<% if node[:cluster][:name] != "default" %>
+# local nodes in cluster <%= node[:cluster][:name] %>
+<%
+@nodes.select do |n|
+  n[:cluster] and
+  n[:cluster][:name] == node[:cluster][:name] and
+  n[:local_ipaddress]
+end.sort_by do |n|
+  n[:hostname]
+end.each do |n|
+  n[:resolv][:aliases] ||= []
+%>
+<%= n[:local_ipaddress] %> <%= n[:hostname] %>.local<%= n[:resolv][:aliases].map { |a| " #{a}.local" } %>
+<% end %>
+<% end %>
+
 # custom nodes
 <% node[:resolv][:hosts].each do |n| %>
 <%= n %>
