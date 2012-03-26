@@ -46,16 +46,28 @@ emerge @preserved-rebuild --usepkg=n --getbinpkg=n
 # has been broken. dude, srsly - can't we simply have PYTHON_TARGETS?
 eselect python update --python2
 
-if [[ $(qlist -Ive dev-lang/python | wc -l) != 1 ]]; then
+if [[ $(ls -1d /usr/lib/python* | wc -l) != 1 ]]; then
 	python-updater -dmanual -- --usepkg
 	python-updater -dmanual -- --usepkg=n --getbinpkg=n
 fi
 
-# same crap as with python ...
-if [[ $(qlist -Ive dev-lang/perl | wc -l) != 1 ]]; then
+# same crap as with python ... except that perl-cleaner is even crappier
+current_perl=$(ls -1d /usr/lib/perl5/5.* | sort --version-sort --reverse | head -n1 | xargs -n1 basename)
+old_perl_dirs=$(ls -1d /usr/lib/perl5/5.* /usr/lib/perl5/site_perl/5.* /usr/lib/perl5/vendor_perl/5.* | grep -v ${current_perl} || :)
+
+if [[ -n ${old_perl_dirs} ]]; then
 	perl-cleaner --all -- --usepkg
 	perl-cleaner --all -- --usepkg=n --getbinpkg=n
+
+	# perl-cleaner doesn't remove this crap
+	for i in ${old_perl_dirs}; do
+		rm -vf ${i}/x86_64-linux/Encode/ConfigLocal.pm
+		rmdir -vp ${i}/x86_64-linux/Encode || :
+	done
 fi
+
+# cleanup unneeded dependencies
+emerge --depclean -aq
 
 # run lafilefixer to get rid of fucking annoying libtool archive dependency
 # crap. aw man. this is getting worse every day.

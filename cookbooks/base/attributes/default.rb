@@ -12,6 +12,7 @@ default[:local_ipaddress] = nil
 
 if node[:local_ipaddress]
   node[:network][:interfaces].each do |name, int|
+    next unless int[:addresses]
     if int[:addresses].keys.include?(node[:local_ipaddress])
       set[:local_interface] = name
       break
