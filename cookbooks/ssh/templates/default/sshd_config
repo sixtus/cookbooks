@@ -59,9 +59,6 @@ ClientAliveInterval 30
 # enable sftp support
 Subsystem sftp internal-sftp
 
-# Allow client to pass locale environment variables
-AcceptEnv LANG LC_*
-
 <% node[:ssh][:server][:matches].sort.each do |name, params| %>
 # <%= name %>
 Match <%= params.delete(:match) %>
