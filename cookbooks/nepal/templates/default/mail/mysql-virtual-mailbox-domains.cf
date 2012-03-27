@@ -1,0 +1,5 @@
+user = nepal_mail_dom
+password = <%= @dom_password %>
+hosts = localhost
+dbname = nepal
+query = SELECT 1 FROM v_domains WHERE name = '%s'

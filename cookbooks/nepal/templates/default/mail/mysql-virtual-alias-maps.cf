@@ -1,0 +1,5 @@
+user = nepal_mail_alias
+password = <%= @alias_password %>
+hosts = localhost
+dbname = nepal
+query = SELECT destination FROM v_mail_aliases WHERE email = '%s'
