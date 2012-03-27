@@ -47,7 +47,7 @@ emerge @preserved-rebuild --usepkg=n --getbinpkg=n
 eselect python update --python2
 
 if [[ $(ls -1d /usr/lib/python* | wc -l) != 1 ]]; then
-	python-updater -dmanual -- --usepkg
+	python-updater -dmanual -- --usepkg --getbinpkg
 	python-updater -dmanual -- --usepkg=n --getbinpkg=n
 fi
 
@@ -56,7 +56,7 @@ current_perl=$(ls -1d /usr/lib/perl5/5.* | sort --version-sort --reverse | head 
 old_perl_dirs=$(ls -1d /usr/lib/perl5/5.* /usr/lib/perl5/site_perl/5.* /usr/lib/perl5/vendor_perl/5.* | grep -v ${current_perl} || :)
 
 if [[ -n ${old_perl_dirs} ]]; then
-	perl-cleaner --all -- --usepkg
+	perl-cleaner --all -- --usepkg --getbinpkg
 	perl-cleaner --all -- --usepkg=n --getbinpkg=n
 
 	# perl-cleaner doesn't remove this crap
