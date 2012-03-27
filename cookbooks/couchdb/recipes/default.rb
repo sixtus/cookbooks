@@ -1,5 +1,11 @@
 package "dev-db/couchdb"
 
+directory "/var/lib/couchdb" do
+  owner "couchdb"
+  group "root"
+  mode "0755"
+end
+
 directory "/var/run/couchdb" do
   owner "couchdb"
   group "couchdb"
