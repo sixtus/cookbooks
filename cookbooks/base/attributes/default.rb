@@ -36,11 +36,11 @@ default[:resolv][:nameservers] = %w(4.2.2.6 4.2.2.5)
 default[:resolv][:hosts] = []
 default[:resolv][:aliases] = []
 
-# sysctl attributes
-default[:sysctl][:net][:ipv4][:ip_forward] = 0
-default[:sysctl][:net][:netfilter][:nf_conntrack_max] = 262144
+# kernel options
 default[:sysctl][:kernel][:sysrq] = 1
 default[:sysctl][:kernel][:panic] = 60
+
+# virtual memory options
 default[:sysctl][:vm][:overcommit_ratio] = 95
 default[:sysctl][:vm][:overcommit_memory] = 0
 
@@ -48,6 +48,16 @@ default[:sysctl][:vm][:overcommit_memory] = 0
 default_unless[:sysctl][:kernel][:shmall] = 2*1024*1024 #pages
 default_unless[:sysctl][:kernel][:shmmax] = 32*1024*1024 #bytes
 default_unless[:sysctl][:kernel][:shmmni] = 4096
+
+# network tuning
+default[:sysctl][:net][:core][:somaxconn] = 128
+default[:sysctl][:net][:ipv4][:ip_local_port_range] = "32768 61000"
+default[:sysctl][:net][:ipv4][:tcp_fin_timeout] = 60
+default[:sysctl][:net][:ipv4][:tcp_max_syn_backlog] = 2048
+default[:sysctl][:net][:ipv4][:tcp_syncookies] = 1
+default[:sysctl][:net][:ipv4][:tcp_tw_recycle] = 0
+default[:sysctl][:net][:ipv4][:tcp_tw_reuse] = 0
+default[:sysctl][:net][:netfilter][:nf_conntrack_max] = 262144
 
 # skip hardware cookbooks
 default[:skip][:hardware] = false

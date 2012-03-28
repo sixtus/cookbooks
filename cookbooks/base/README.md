@@ -108,16 +108,8 @@ Resolver
   : List of additional hostname aliases for this node. These are added as
   entries in `/etc/hosts` for nodes in the same cluster.
 
-Sysctl
-------
-
-`sysctl[:net][:ipv4][:ip_forward] = 0`
-  : Enable IPv4 Forwarding (required for NAT).
-
-`sysctl[:net][:netfilter][:nf_conntrack_max] = 262144`
-  : The size of the Netfilter connection tracking table. If you have a lot of
-  connections (e.g. on a load balancer) this value has to be increased at the
-  cost of a few megabytes of memory (~30MiB for 100.000 connections).
+Kernel Options
+--------------
 
 `sysctl[:kernel][:sysrq] = 1`
   : Enable the SysRq key combination. See [Linux Documentation on SysRq][] for
@@ -129,6 +121,18 @@ Sysctl
   : The number of seconds the kernel waits before rebooting on a panic. When
   you use the software watchdog, the recommended setting is 60.
 
+Virtual Memory Options
+----------------------
+
+`sysctl[:vm][:overcommit_ratio] = 95`
+  : ..
+
+`sysctl[:vm][:overcommit_memory] = 0`
+  : ..
+
+Shared Memory Sizes
+-------------------
+
 `sysctl[:kernel][:shmall] = 2*1024*1024`
   : ..
 
@@ -139,6 +143,35 @@ Sysctl
 
 `sysctl[:kernel][:shmmni] = 4096`
   : ..
+
+Network Tuning
+--------------
+
+`sysctl[:net][:core][:somaxconn] = 128`
+  : ..
+
+`sysctl[:net][:ipv4][:ip_local_port_range] = "32768 61000"`
+  : ..
+
+`sysctl[:net][:ipv4][:tcp_fin_timeout] = 60`
+  : ..
+
+`sysctl[:net][:ipv4][:tcp_max_syn_backlog] = 2048`
+  : ..
+
+`sysctl[:net][:ipv4][:tcp_syncookies] = 1`
+  : ..
+
+`sysctl[:net][:ipv4][:tcp_tw_recycle] = 0`
+  : ..
+
+`sysctl[:net][:ipv4][:tcp_tw_reuse] = 0`
+  : ..
+
+`sysctl[:net][:netfilter][:nf_conntrack_max] = 262144`
+  : The size of the Netfilter connection tracking table. If you have a lot of
+  connections (e.g. on a load balancer) this value has to be increased at the
+  cost of a few megabytes of memory (~30MiB for 100.000 connections).
 
 Miscelaneous
 ------------
