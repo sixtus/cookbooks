@@ -1,3 +1,7 @@
+portage_package_use "dev-libs/beecrypt" do
+  use %w(-cxx)
+end
+
 package "sys-cluster/util-vserver"
 
 %w(vprocunhide util-vserver vservers.default).each do |s|
