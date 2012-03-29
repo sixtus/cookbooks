@@ -154,19 +154,32 @@ Network Tuning
   : ..
 
 `sysctl[:net][:ipv4][:tcp_fin_timeout] = 60`
-  : ..
+  : The tcp_fin_timeout variable tells kernel how long to keep sockets in the
+  state FIN-WAIT-2 if you were the one closing the socket. This is used if the
+  other peer is broken for some reason and don't close its side, or the other
+  peer may even crash unexpectedly. Each socket left in memory takes
+  approximately 1.5Kb of memory
 
 `sysctl[:net][:ipv4][:tcp_max_syn_backlog] = 2048`
-  : ..
+  : The `tcp_max_syn_backlog` variable tells your box how many SYN requests to
+  keep in memory that we have yet to get the third packet in a 3-way handshake
+  from. The `tcp_max_syn_backlog` variable is overridden by the
+  `tcp_syncookies` variable, which needs to be turned on for this variable to
+  have any effect.  If the server suffers from overloads at peak times, you may
+  want to increase this value a little bit.
 
 `sysctl[:net][:ipv4][:tcp_syncookies] = 1`
   : ..
 
 `sysctl[:net][:ipv4][:tcp_tw_recycle] = 0`
-  : ..
+  : This variable enables the fast recycling function of TIME-WAIT sockets.
+  Unless you know what you are doing you should not touch this function at all.
 
 `sysctl[:net][:ipv4][:tcp_tw_reuse] = 0`
-  : ..
+  : This allows reusing sockets in TIME-WAIT state for new connections when it
+  is safe from protocol viewpoint. Default value is 0 (disabled). It is
+  generally a safer alternative to `tcp_tw_recycle`.
+
 
 `sysctl[:net][:netfilter][:nf_conntrack_max] = 262144`
   : The size of the Netfilter connection tracking table. If you have a lot of
