@@ -1,4 +1,4 @@
-description "Chef Servers"
+description "Chef Server"
 
 run_list(%w(
   role[base]
@@ -6,9 +6,3 @@ run_list(%w(
   recipe[portage::binhost]
   recipe[openssl::certmaster]
 ))
-
-default_attributes({
-  "munin" => {
-    "group" => "chef"
-  },
-})

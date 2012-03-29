@@ -1,12 +1,6 @@
-description "Syslog Servers"
+description "Syslog Server"
 
 run_list(%w(
   role[base]
   recipe[syslog::server]
 ))
-
-default_attributes({
-  "munin" => {
-    "group" => "logger"
-  },
-})

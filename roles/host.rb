@@ -1,4 +1,4 @@
-description "Linux-VServer Hosts"
+description "Linux-VServer Host"
 
 run_list(%w(
   role[base]
