@@ -70,7 +70,7 @@ end
 end
 
 template "/etc/nginx/nginx.conf" do
-  source "nginx.conf.erb"
+  source "nginx.conf"
   owner "root"
   group "root"
   mode "0644"
@@ -78,7 +78,7 @@ template "/etc/nginx/nginx.conf" do
 end
 
 nginx_module "fastcgi" do
-  template "fastcgi.conf.erb"
+  template "fastcgi.conf"
 end
 
 link "/etc/nginx/fastcgi.conf" do
