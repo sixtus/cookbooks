@@ -108,10 +108,6 @@ service "apache2" do
   action [:start, :enable]
 end
 
-syslog_config "90-apache" do
-  template "syslog.conf"
-end
-
 cookbook_file "/etc/logrotate.d/apache2" do
   source "logrotate.conf"
   owner "root"
