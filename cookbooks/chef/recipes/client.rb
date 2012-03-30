@@ -17,7 +17,7 @@ end
 
 unless solo?
   template "/etc/chef/client.rb" do
-    source "client.rb.erb"
+    source "client.rb"
     owner "root"
     group "root"
     mode "0644"

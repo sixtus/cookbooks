@@ -84,7 +84,7 @@ end
 end
 
 template "/etc/chef/solr.rb" do
-  source "solr.rb.erb"
+  source "solr.rb"
   owner "chef"
   group "chef"
   mode "0600"
@@ -116,7 +116,7 @@ template "/etc/conf.d/chef-server-api" do
 end
 
 template "/etc/chef/server.rb" do
-  source "server.rb.erb"
+  source "server.rb"
   owner "chef"
   group "chef"
   mode "0600"
@@ -139,7 +139,7 @@ ssl_certificate "/etc/ssl/nginx/#{node[:fqdn]}" do
 end
 
 nginx_server "chef-server-api" do
-  template "chef-server-api.nginx.erb"
+  template "nginx.conf"
 end
 
 # CouchDB maintenance
@@ -194,14 +194,6 @@ end
 
 # nagios service checks
 if tagged?("nagios-client")
-  nrpe_command "check_chef_solr" do
-    command "/usr/lib/nagios/plugins/check_pidfile /var/run/chef/solr.pid"
-  end
-
-  nrpe_command "check_chef_expander" do
-    command "/usr/lib/nagios/plugins/check_pidfile /var/run/chef/expander.pid"
-  end
-
   nagios_service "CHEF-SERVER" do
     check_command "check_http!-S -s 'This is the Chef API Server.'"
     servicegroups "chef"
@@ -212,9 +204,17 @@ if tagged?("nagios-client")
     servicegroups "chef"
   end
 
+  nrpe_command "check_chef_solr" do
+    command "/usr/lib/nagios/plugins/check_pidfile /var/run/chef/solr.pid"
+  end
+
   nagios_service "CHEF-SOLR" do
     check_command "check_nrpe!check_chef_solr"
     servicegroups "chef"
+  end
+
+  nrpe_command "check_chef_expander" do
+    command "/usr/lib/nagios/plugins/check_pidfile /var/run/chef/expander.pid"
   end
 
   nagios_service "CHEF-EXPANDER" do
