@@ -9,6 +9,7 @@ nginx_default_use_flags = %w(
   -nginx_modules_http_userid
   aio
   nginx_modules_http_empty_gif
+  nginx_modules_http_gzip_static
   nginx_modules_http_realip
   nginx_modules_http_stub_status
 )
@@ -75,6 +76,10 @@ template "/etc/nginx/nginx.conf" do
   group "root"
   mode "0644"
   notifies :restart, "service[nginx]"
+end
+
+nginx_module "log" do
+  template "log.conf"
 end
 
 nginx_module "fastcgi" do
