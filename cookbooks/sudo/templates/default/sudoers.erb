@@ -13,7 +13,7 @@ Defaults env_keep="EDITOR"
 root    ALL = (ALL) ALL
 %wheel  ALL = (ALL) <% if node[:sudo][:nopasswd] == "true" %>NOPASSWD: <% end %>ALL
 
-<% node[:sudo][:rules].each do |name, params| %>
+<% node[:sudo][:rules].sort_by {|r| r[0] }.each do |name, params| %>
 # <%= name %>
 <%= "%s %s = (%s) %s" % [:user, :host, :runas, :command].map { |i| params[i] } %>
 <% end %>
