@@ -12,7 +12,7 @@ si::sysinit:/sbin/rc sysinit
 rc::bootwait:/sbin/rc boot
 
 l0:0:wait:/sbin/rc shutdown
-l0s:0:wait:/sbin/halt -dhip
+l0s:0:wait:/sbin/halt -dhp
 l1:S1:wait:/sbin/rc single
 l2:2:wait:/sbin/rc nonetwork
 l3:3:wait:/sbin/rc default

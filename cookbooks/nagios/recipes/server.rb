@@ -221,6 +221,13 @@ service "nagios" do
   action [:enable, :start]
 end
 
+cookbook_file "/etc/init.d/nsca" do
+  source "nsca.initd"
+  owner "root"
+  group "root"
+  mode "0755"
+end
+
 service "nsca" do
   action [:enable, :start]
 end

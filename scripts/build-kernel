@@ -1,6 +1,6 @@
 #!/bin/bash
 
-KV="3.2.7-zentoo"
+KV="3.2.14-zentoo"
 
 pushd /usr/src
 
@@ -22,10 +22,17 @@ fi
 
 pushd linux
 
-wget -q -O .config "https://raw.github.com/zentoo/quickstart/master/profiles/3.2.7-zentoo-generic.kconfig"
-make oldconfig
+wget -q -O .config "https://raw.github.com/zentoo/quickstart/master/profiles/${KV}-generic.kconfig"
 
-genkernel --oldconfig --symlink kernel
+genkernel --oldconfig \
+	--install \
+	--symlink \
+	--no-ramdisk-modules \
+	--no-splash \
+	--no-keymap \
+	--lvm \
+	--mdadm \
+	all
 
 popd
 popd

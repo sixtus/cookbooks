@@ -71,5 +71,13 @@ usedesc() {
 
 # genkernel helper
 mklnx() {
-	genkernel --oldconfig --symlink kernel
+	genkernel --oldconfig \
+		--install \
+		--symlink \
+		--no-ramdisk-modules \
+		--no-splash \
+		--no-keymap \
+		--lvm \
+		--mdadm \
+		all
 }

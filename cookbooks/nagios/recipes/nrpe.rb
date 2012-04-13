@@ -21,6 +21,13 @@ template "/etc/nagios/nrpe.cfg" do
   notifies :restart, "service[nrpe]"
 end
 
+cookbook_file "/etc/init.d/nrpe" do
+  source "nrpe.initd"
+  owner "root"
+  group "root"
+  mode "0755"
+end
+
 service "nrpe" do
   action [:enable, :start]
 end
