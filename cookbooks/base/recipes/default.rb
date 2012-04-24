@@ -154,6 +154,7 @@ if tagged?("nagios-client")
   nagios_service "LIB-USERS" do
     check_command "check_nrpe!check_lib_users"
     servicegroups "system"
+    notifications_enabled 0
   end
 
   if node[:virtualization][:role] == "host"
