@@ -2,6 +2,7 @@ node.default[:apache][:default_vhost] = false
 node.default[:apache][:mpm] = "prefork"
 
 node.set[:php][:fpm][:conf] = "/srv/system/etc/php/fpm.conf"
+include_recipe "php::fpm"
 
 directory "/srv/system/etc/apache" do
   owner "root"
