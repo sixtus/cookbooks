@@ -90,6 +90,9 @@ default[:mysql][:server][:innodb_flush_log_at_trx_commit] = "1"
 default[:mysql][:server][:innodb_thread_concurrency] = node[:cpu][:total] * 2 + 1
 default[:mysql][:server][:innodb_lock_wait_timeout] = "50"
 
+# Fulltext Search Options
+default[:mysql][:server][:ft_min_word_len] = 4
+
 # Miscellaneous Options
 default[:mysql][:server][:default_storage_engine] = "MyISAM"
 

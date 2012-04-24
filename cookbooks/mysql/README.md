@@ -460,6 +460,13 @@ external resources are mentioned to help in optimizing server performance.
   : When a lock wait timeout occurs, the current statement is not executed. The
   current transaction is not rolled back.
 
+## Fulltext Search Options
+
+`mysql[:server][:ft_min_word_len] = 4`
+  : The minimum length of the word to be included in a FULLTEXT index.
+  `FULLTEXT` indexes must be rebuilt after changing this variable. Use `REPAIR
+  TABLE tbl_name QUICK`.
+
 ## Miscellaneous Options
 
 `mysql[:server][:default_storage_engine] = "MyISAM"`
