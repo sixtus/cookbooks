@@ -164,9 +164,7 @@ T() {
 }
 
 # chef helper
-kcu() {
-	knife cookbook upload "$@"
-}
+alias kcu="knife cookbook upload"
 
 # simple webserver
 serve() {
@@ -175,6 +173,8 @@ serve() {
 
 # ruby/rvm helpers
 alias be="bundle exec"
+
+alias ports="netstat -tulpen"
 
 # load local bashrc if it exists
 if [[ -e ${_BASHRC_DIR}/bashrc.local ]]; then
