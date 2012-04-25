@@ -27,6 +27,12 @@ if munin_masters.any?
   tag("munin-node")
 end
 
+# create script path
+directory node[:script_path] do
+  owner node[:current_user]
+  mode "0755"
+end
+
 # load platform specific base recipes
 case node[:platform]
 

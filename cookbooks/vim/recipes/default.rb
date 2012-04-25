@@ -36,14 +36,15 @@ if solo? and not root?
       action :sync
     end
   end
+
+  overridable_template "#{node[:homedir]}/.vimrc.local" do
+    source "vimrc.local"
+    namespace :user
+    instance node[:current_user]
+  end
 end
 
 template node[:vim][:rcfile] do
   source "vimrc"
   mode "0644"
-end
-
-cookbook_file "/usr/local/bin/mvim" do
-  source "mvim"
-  mode "0755"
 end

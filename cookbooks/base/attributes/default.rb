@@ -71,10 +71,12 @@ if Process.euid == 0
   default[:homedir] = "/root"
   default[:current_email] = "root@localhost"
   default[:current_name] = "Hostmaster of the day"
+  default[:script_path] = "/usr/local/bin"
 else
   default[:homedir] = node[:etc][:passwd][node[:current_user]][:dir]
   default[:current_email] = "#{node[:current_user]}@localhost"
   default[:current_name] = node[:current_user]
+  default[:script_path] = "#{node[:homedir]}/bin"
 end
 
 # base packages

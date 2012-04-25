@@ -27,7 +27,7 @@ end
   end
 end
 
-if platform?("mac_os_x")
+if solo? and not root?
   %w(.bashrc .bash_profile .profile).each do |f|
     link "#{node[:homedir]}/#{f}" do
       to "#{node[:bash][:rcdir]}/bashrc"
@@ -36,6 +36,12 @@ if platform?("mac_os_x")
 
   link "#{node[:homedir]}/.bash_logout" do
     to "#{node[:bash][:rcdir]}/bash_logout"
+  end
+
+  overridable_template "#{node[:homedir]}/.bashrc.local" do
+    source "bashrc.local"
+    namespace :user
+    instance node[:current_user]
   end
 end
 
@@ -46,7 +52,7 @@ end
   mktar
   urlscript
 ).each do |f|
-  cookbook_file "/usr/local/bin/#{f}" do
+  cookbook_file "#{node[:script_path]}/#{f}" do
     source "scripts/#{f}"
     mode "0755"
   end

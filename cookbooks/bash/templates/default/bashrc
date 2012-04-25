@@ -177,10 +177,6 @@ alias be="bundle exec"
 alias ports="netstat -tulpen"
 
 # load local bashrc if it exists
-if [[ -e ${_BASHRC_DIR}/bashrc.local ]]; then
-	source ${_BASHRC_DIR}/bashrc.local
-fi
-
 if [[ -e ${HOME}/.bashrc.local ]]; then
 	source ${HOME}/.bashrc.local
 fi
