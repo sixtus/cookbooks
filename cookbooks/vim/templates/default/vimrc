@@ -151,8 +151,8 @@ if has("autocmd")
 	au BufEnter * execute ":silent! lcd " . expand("%:p:h")
 
 	" restore cursor location
-	au BufWinLeave * mkview
-	au BufWinEnter * silent loadview
+	au BufWinLeave *.* mkview
+	au BufWinEnter *.* silent loadview
 
 	" custom file type mappings
 	au BufNewFile,BufRead *.md set ft=markdown
