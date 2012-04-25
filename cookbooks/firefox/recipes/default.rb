@@ -20,4 +20,6 @@ portage_package_use "x11-libs/gdk-pixbuf" do
   use %w(X)
 end
 
+portage_package_keywords "www-client/firefox"
+
 package "www-client/firefox"
