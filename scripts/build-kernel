@@ -6,7 +6,7 @@ pushd /usr/src
 
 rm linux
 
-for i in *; do
+for i in linux-*; do
 	if [[ $i != linux-${KV} ]]; then
 		echo "Cleaning ${i} ..."
 		rm -rf $i
