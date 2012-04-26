@@ -22,8 +22,10 @@ class Chef
         # Homebrew doesn't really have a notion of upgrading packages, just
         # install the latest version?
         def upgrade_package(name, version)
-          if @current_resource.version != candidate_version
-            brew('upgrade', name)
+          if @current_resource.version
+            brew('upgrade', name) if @current_resource.version != candidate_version
+          else
+            install_package(name, version)
           end
         end
 
