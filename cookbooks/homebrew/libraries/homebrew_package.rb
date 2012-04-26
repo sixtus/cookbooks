@@ -12,7 +12,6 @@ class Chef
           @current_resource = Chef::Resource::Package.new(@new_resource.name)
           @current_resource.package_name(@new_resource.package_name)
           @current_resource.version(current_installed_version)
-
           @current_resource
         end
 
@@ -23,7 +22,9 @@ class Chef
         # Homebrew doesn't really have a notion of upgrading packages, just
         # install the latest version?
         def upgrade_package(name, version)
-          install_package(name, version)
+          if @current_resource.version != candidate_version
+            brew('upgrade', name)
+          end
         end
 
         def remove_package(name, version)
@@ -43,7 +44,7 @@ class Chef
         end
 
         def current_installed_version
-          get_version_from_command("brew list --versions | awk '/^#{@new_resource.package_name} / { print $2 }'")
+          get_version_from_command("brew list --versions | awk '/^#{@new_resource.package_name} / { print $NF }'")
         end
 
         def candidate_version
