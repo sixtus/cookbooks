@@ -14,13 +14,11 @@ default[:vim][:rcdir] = case node[:platform]
 
 default[:vim][:plugins] = {
   :auto_mkdir => "https://github.com/DataWraith/auto_mkdir",
-  :closetag => "https://github.com/vim-scripts/closetag.vim",
   :coffee_script => "https://github.com/kchmck/vim-coffee-script",
   :endwise => "https://github.com/tpope/vim-endwise",
   :haml => "https://github.com/tpope/vim-haml",
   :javascript => "https://github.com/pangloss/vim-javascript",
+  :json => "https://github.com/avakhov/vim-json.git",
   :matchit => "https://github.com/vim-scripts/matchit.zip",
   :ruby => "https://github.com/vim-ruby/vim-ruby",
-  :ctrlp => "https://github.com/kien/ctrlp.vim.git",
-  :"vim-rails" => "https://github.com/tpope/vim-rails.git",
 }
