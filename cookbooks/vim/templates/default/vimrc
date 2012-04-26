@@ -140,11 +140,14 @@ endif
 call pathogen#runtime_append_all_bundles()
 <% end %>
 
-if has("autocmd")
+" some basic commands
+augroup basics
+	au!
+
 	" turn of previous search results
 	au VimEnter * nohls
 
-	" Always do a full syntax refresh
+	" always do a full syntax refresh
 	au BufEnter * syntax sync fromstart
 
 	" cd to buffer directory
@@ -153,19 +156,16 @@ if has("autocmd")
 	" restore cursor location
 	au BufWinLeave *.* mkview
 	au BufWinEnter *.* silent loadview
+augroup END
 
-	" custom file type mappings
-	au BufNewFile,BufRead *.md set ft=markdown
-	au BufNewFile,BufRead *.tex set ft=tex
-	au BufNewFile,BufRead *.coffee set ft=coffee
-	au BufRead,BufNewFile {Gemfile,Rakefile,Vagrantfile,Thorfile,config.ru} set ft=ruby
-
-	" file type specific settings
-	au FileType {coffee,css,scss,haml,html,javascript,ruby,eruby,yaml} set ts=2 sw=2 et
-	au FileType make set noet
+" file type specific settings
+augroup filetype_settings
+	au FileType {css,scss} set ts=2 sw=2 et
+	au FileType {coffee,javascript,json} set ts=2 sw=2 et
+	au FileType {haml,html} set ts=2 sw=2 et
+	au FileType {ruby,eruby,yaml} set ts=2 sw=2 et
 	au FileType python set ts=4 sw=4 tw=79 et
-	au FileType vim set ts=4 sw=4
-endif
+augroup END
 
 <% if Chef::Config[:solo] and not Process.euid == 0 %>
 " load custom vimrc

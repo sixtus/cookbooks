@@ -19,6 +19,7 @@ default[:vim][:plugins] = {
   :haml => "https://github.com/tpope/vim-haml",
   :javascript => "https://github.com/pangloss/vim-javascript",
   :json => "https://github.com/avakhov/vim-json.git",
+  :markdown => "https://github.com/tpope/vim-markdown",
   :matchit => "https://github.com/vim-scripts/matchit.zip",
   :ruby => "https://github.com/vim-ruby/vim-ruby",
 }
