@@ -7,6 +7,10 @@ template "/etc/rc.conf" do
   mode "0644"
 end
 
+file "/etc/conf.d/rc" do
+  action :delete
+end
+
 %w(shutdown reboot).each do |t|
   template "/etc/init.d/#{t}.sh" do
     source "#{t}.sh"
