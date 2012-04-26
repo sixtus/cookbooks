@@ -1,4 +1,8 @@
-package value_for_platform({
-  "gentoo" => {"default" => "dev-db/mysql"},
-  "mac_os_x" => {"default" => "mysql"},
-})
+if platform?("mac_os_x")
+  package "mysql" do
+    action :upgrade
+    notifies :run, "execute[mysql-link-plist]"
+  end
+else
+  package "dev-db/mysql"
+end

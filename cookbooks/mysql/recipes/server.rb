@@ -36,6 +36,11 @@ end
 
 # create initial database and users
 if platform?("mac_os_x")
+  template "/usr/local/etc/my.cnf" do
+    source "my.cnf"
+    mode "0644"
+  end
+
   execute "mysql_install_db" do
     command "mysql_install_db --verbose --user=#{node[:current_user]} --basedir=$(brew --prefix mysql) --datadir=/usr/local/var/mysql --tmpdir=/tmp"
     creates "/usr/local/var/mysql/mysql"
@@ -47,15 +52,14 @@ if platform?("mac_os_x")
     backup 0
   end
 
-  # TODO: make it idempotent or replace with launchd provider
-  execute "launchctl-mysql" do
-    command "launchctl load -w $(brew --prefix mysql)/com.mysql.mysqld.plist"
-    only_if "test -e $(brew --prefix mysql)/com.mysql.mysqld.plist"
+  execute "mysql-link-plist" do
+    command "ln -nfs $(brew --prefix mysql)/homebrew.mxcl.mysql.plist #{node[:homedir]}/Library/LaunchAgents/homebrew.mxcl.mysql.plist"
+    action :nothing
   end
 
-  execute "launchctl-mysql-new" do
-    command "launchctl load -w $(brew --prefix mysql)/homebrew.mxcl.mysql.plist"
-    only_if "test -e $(brew --prefix mysql)/homebrew.mxcl.mysql.plist"
+  service "mysql" do
+    service_name "homebrew.mxcl.mysql"
+    action :start
   end
 else
   mysql_root_pass = get_password("mysql/root")
