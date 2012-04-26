@@ -20,6 +20,10 @@ if platform?("mac_os_x")
     mode "0755"
   end
 else
+  portage_package_use "app-editors/vim" do
+    use %w(ruby)
+  end
+
   package "app-editors/vim"
   package "dev-util/ctags"
 end
