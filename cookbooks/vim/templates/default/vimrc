@@ -160,6 +160,7 @@ augroup END
 
 " file type specific settings
 augroup filetype_settings
+	au BufRead,BufNewFile *.json set ft=javascript
 	au FileType {css,scss} set ts=2 sw=2 et
 	au FileType {coffee,javascript,json} set ts=2 sw=2 et
 	au FileType {haml,html} set ts=2 sw=2 et
