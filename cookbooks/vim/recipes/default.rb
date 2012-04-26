@@ -1,5 +1,27 @@
-unless platform?("mac_os_x")
+if platform?("mac_os_x")
+  package "macvim" do
+    action :upgrade
+    notifies :create, "ruby_block[macvim-to-app]"
+  end
+
+  package "ctags"
+
+  ruby_block "macvim-to-app" do
+    action :nothing
+    block do
+      installed_path = %x(brew --prefix macvim).chomp + "/MacVim.app"
+      destination_path = "/Applications/MacVim.app"
+      system("rsync -a --delete #{installed_path}/ #{destination_path}/")
+    end
+  end
+
+  file "/usr/local/bin/vim" do
+    content "#!/bin/sh\nexec /Applications/MacVim.app/Contents/MacOS/Vim $*"
+    mode "0755"
+  end
+else
   package "app-editors/vim"
+  package "dev-util/ctags"
 end
 
 directory node[:vim][:rcdir] do

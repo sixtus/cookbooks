@@ -49,6 +49,9 @@ set showfulltag
 " speed up macros
 set lazyredraw
 
+" use hidden buffers
+set hidden
+
 " scrolling context
 set scrolloff=6
 set sidescrolloff=5
