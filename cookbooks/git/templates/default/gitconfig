@@ -21,6 +21,8 @@
 	wn = !BRANCH=$(git symbolic-ref HEAD|sed s:refs/heads/::) && git fetch -q origin && git log --reverse --stat -p ${BRANCH}..origin/${BRANCH}
 	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %Cblue(%an)%Creset' --abbrev-commit --date=relative
 	log1 = log --pretty=oneline --abbrev-commit --decorate
+	eu = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; $EDITOR `f`"
+	au = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
 [push]
 	default = tracking
 [diff]
