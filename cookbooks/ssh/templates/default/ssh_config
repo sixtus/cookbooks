@@ -1,7 +1,7 @@
 # This is the ssh client configuration file.  See
 # ssh_config(5) for more information.
 
-<% if Chef::Config[:solo] %>
+<% if solo? and not root? %>
 ForwardAgent yes
 ForwardX11Trusted yes
 <% end %>
