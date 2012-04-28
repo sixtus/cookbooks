@@ -28,7 +28,16 @@ else
   end
 end
 
-template node[:ssh][:config] do
-  source "ssh_config"
-  mode "0644"
+if solo? and not root?
+  overridable_template node[:ssh][:config] do
+    source "ssh_config"
+    mode "0600"
+    namespace :user
+    instance node[:current_user]
+  end
+else
+  template node[:ssh][:config] do
+    source "ssh_config"
+    mode "0644"
+  end
 end
