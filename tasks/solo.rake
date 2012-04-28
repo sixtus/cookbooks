@@ -1,9 +1,8 @@
 namespace :solo do
 
   desc "Bootstrap local Mac OS X node with chef-colo"
-  task :mac, :username do |t, args|
+  task :mac do |t, args|
     whoami = %x(whoami).chomp
-    args.with_defaults(:username => whoami)
 
     unless File.directory?("/usr/local")
       sh("sudo mkdir -p /usr/local")
@@ -12,7 +11,7 @@ namespace :solo do
     end
 
     scfg = File.join(TOPDIR, "config", "solo.rb")
-    sjson = File.join(TOPDIR, "config", "solo", "#{args.username}.json")
+    sjson = File.join(TOPDIR, "config", "solo", "#{whoami}.json")
 
     sh("chef-solo -c #{scfg} -j #{sjson}")
 
