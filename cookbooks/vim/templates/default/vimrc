@@ -156,10 +156,19 @@ augroup basics
 
 	" cd to buffer directory
 	au BufEnter * execute ":silent! lcd " . expand("%:p:h")
+augroup END
 
-	" restore cursor location
-	au BufWinLeave *.* mkview
-	au BufWinEnter *.* silent loadview
+" restore cursor without mkview overhead (and bugs)
+function! ResCur()
+	if line("'\"") <= line("$")
+		normal! g`"
+		return 1
+	endif
+endfunction
+
+augroup resCur
+	au!
+	au BufWinEnter * call ResCur()
 augroup END
 
 " file type specific settings
