@@ -34,7 +34,7 @@
 	user = <%= node[:git][:github][:user] %>
 <% end %>
 <% if node.platform?("mac_os_x") %>
-[credentials]
+[credential]
 	helper = osxkeychain
 <% end %>
 <% if solo? and not root? %>
