@@ -144,6 +144,15 @@ alias root="sudo -i"
 # ssh helper
 alias sshlive='ssh -l root -o "StrictHostKeyChecking no" -o "UserKnownHostsFile /dev/null" -o "GlobalKnownHostsFile /dev/null"'
 
+# chef helper
+alias kcu="knife cookbook upload"
+
+# ruby/rvm helpers
+alias be="bundle exec"
+
+# easy port listing
+alias ports="netstat -tulpen"
+
 # pydf has nicer output
 if hash pydf &>/dev/null; then
 	alias df=pydf
@@ -163,18 +172,10 @@ T() {
 	tmux attach -t ${1:-default} || tmux new -s ${1:-default}
 }
 
-# chef helper
-alias kcu="knife cookbook upload"
-
 # simple webserver
 serve() {
 	python -m SimpleHTTPServer ${1:-8080}
 }
-
-# ruby/rvm helpers
-alias be="bundle exec"
-
-alias ports="netstat -tulpen"
 
 # load local bashrc if it exists
 if [[ -e ${HOME}/.bashrc.local ]]; then
