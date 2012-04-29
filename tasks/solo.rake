@@ -1,6 +1,6 @@
-def solo(user)
+def solo(config)
   scfg = File.join(TOPDIR, "config", "solo.rb")
-  sjson = File.join(TOPDIR, "config", "solo", "#{user}.json")
+  sjson = File.join(TOPDIR, "config", "solo", "#{config}.json")
   sh("chef-solo -c #{scfg} -j #{sjson}")
 end
 
@@ -9,6 +9,7 @@ namespace :solo do
   desc "Bootstrap local Mac OS X node with chef-solo"
   task :mac do
     user = %x(whoami).chomp
+    raise "running as root is not supported on mac os" if user == "root"
 
     unless File.directory?("/usr/local")
       sh("sudo mkdir -p /usr/local")
@@ -29,7 +30,13 @@ namespace :solo do
   desc "Bootstrap local Gentoo node with chef-solo"
   task :gentoo do
     user = %x(whoami).chomp
-    solo(user)
+    fqdn = %x(hostname -f).chomp
+
+    if user == "root"
+      solo(fqdn)
+    else
+      solo(user)
+    end
   end
 
 end
