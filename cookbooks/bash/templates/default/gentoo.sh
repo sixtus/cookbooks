@@ -7,9 +7,6 @@ svr () { /etc/init.d/$1 restart; }
 eportdir() {
 	if [[ -n "${PORTDIR_CACHE}" ]]; then
 		echo "${PORTDIR_CACHE}"
-	elif [[ -d ${HOME}/work/gentoo/cvs ]]; then
-		PORTDIR_CACHE="${HOME}/projects/gentoo/cvs"
-		eportdir
 	elif [[ -d /usr/portage ]]; then
 		PORTDIR_CACHE="/usr/portage"
 		eportdir
