@@ -7,7 +7,7 @@ end
 namespace :solo do
 
   desc "Bootstrap local Mac OS X node with chef-solo"
-  task :mac do
+  task :mac_os_x do
     user = %x(whoami).chomp
     raise "running as root is not supported on mac os" if user == "root"
 
@@ -19,11 +19,11 @@ namespace :solo do
 
     solo(user)
 
-    current_shell = %x(dscl . -read /Users/#{whoami} | grep '^UserShell:' | awk '{print $2}').chomp
+    current_shell = %x(dscl . -read /Users/#{user} | grep '^UserShell:' | awk '{print $2}').chomp
     new_shell = "/usr/local/bin/bash"
 
     if File.exist?(new_shell) and current_shell != new_shell
-      sh("sudo chsh -s #{new_shell} #{whoami}")
+      sh("sudo chsh -s #{new_shell} #{user}")
     end
   end
 
