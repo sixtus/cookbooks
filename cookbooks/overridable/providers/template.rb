@@ -10,7 +10,6 @@ action :create do
 
   if filenames.include?(new_resource.source)
     template_source = ::File.join(override_dir, new_resource.source)
-    Chef::Log.info("Using override from #{template_source} for overridable_template[#{new_resource.name}]")
   else
     template_source = new_resource.source
   end
