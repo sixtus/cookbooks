@@ -54,14 +54,6 @@ when "gentoo"
     include_recipe "cron"
     include_recipe "sudo"
     include_recipe "ssh::server"
-
-    if tagged?("nagios-client")
-      include_recipe "nagios::client"
-    end
-
-    if tagged?("munin-node")
-      include_recipe "munin::node"
-    end
   end
 
 when "mac_os_x"
@@ -97,6 +89,8 @@ include_recipe "account" if root?
 
 # enable munin plugins
 if tagged?("munin-node")
+  include_recipe "munin::node"
+
   munin_plugin "cpu"
   munin_plugin "entropy"
   munin_plugin "forks"
@@ -122,6 +116,8 @@ if tagged?("munin-node")
 end
 
 if tagged?("nagios-client")
+  include_recipe "nagios::client"
+
   nagios_service "PING" do
     check_command "check_ping!100.0,20%!500.0,60%"
     servicegroups "system"
