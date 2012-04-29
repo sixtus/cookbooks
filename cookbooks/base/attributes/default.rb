@@ -67,7 +67,7 @@ default_unless[:virtualization] = {}
 default_unless[:cpu][:total] = 1
 
 # support non-root runs
-if Process.euid == 0
+if root?
   default[:homedir] = "/root"
   default[:current_email] = "root@localhost"
   default[:current_name] = "Hostmaster of the day"

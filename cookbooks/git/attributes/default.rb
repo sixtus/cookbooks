@@ -5,14 +5,14 @@ default[:git][:github][:user] = nil
 
 default[:git][:rcfile] = case node[:platform]
                          when "gentoo"
-                           "/etc/gitconfig"
+                           root? ? "/etc/gitconfig" : "#{node[:homedir]}/.gitconfig"
                          when "mac_os_x"
                            "#{node[:homedir]}/.gitconfig"
                          end
 
 default[:git][:exfile] = case node[:platform]
                          when "gentoo"
-                           "/etc/gitignore"
+                           root? ? "/etc/gitignore" : "#{node[:homedir]}/.gitignore"
                          when "mac_os_x"
                            "#{node[:homedir]}/.gitignore"
                          end

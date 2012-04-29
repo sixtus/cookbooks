@@ -14,4 +14,8 @@ class Chef
   class Recipe
     include SoloHelpers
   end
+
+  class Node
+    include SoloHelpers
+  end
 end

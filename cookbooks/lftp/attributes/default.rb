@@ -1,6 +1,6 @@
 default[:lftp][:configfile] = case node[:platform]
                               when "gentoo"
-                                "/etc/lftp/lftp.conf"
+                                root? ? "/etc/lftp/lftp.conf" : "#{node[:homedir]}/.lftp/rc"
                               when "mac_os_x"
                                 "#{node[:homedir]}/.lftp/rc"
                               end

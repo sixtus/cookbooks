@@ -37,31 +37,31 @@ end
 case node[:platform]
 
 when "gentoo"
-  raise "running as non-root is not supported on gentoo" unless root?
+  if root?
+    include_recipe "ohai"
+    include_recipe "base::etcgit"
+    include_recipe "base::locales"
+    include_recipe "base::resolv"
+    include_recipe "base::sysctl"
+    include_recipe "baselayout"
+    include_recipe "sysvinit"
+    include_recipe "openrc"
+    include_recipe "portage"
+    include_recipe "portage::porticron"
+    include_recipe "openssl"
+    include_recipe "nss"
+    include_recipe "syslog::client"
+    include_recipe "cron"
+    include_recipe "sudo"
+    include_recipe "ssh::server"
 
-  include_recipe "ohai"
-  include_recipe "base::etcgit"
-  include_recipe "base::locales"
-  include_recipe "base::resolv"
-  include_recipe "base::sysctl"
-  include_recipe "baselayout"
-  include_recipe "sysvinit"
-  include_recipe "openrc"
-  include_recipe "portage"
-  include_recipe "portage::porticron"
-  include_recipe "openssl"
-  include_recipe "nss"
-  include_recipe "syslog::client"
-  include_recipe "cron"
-  include_recipe "sudo"
-  include_recipe "ssh::server"
+    if tagged?("nagios-client")
+      include_recipe "nagios::client"
+    end
 
-  if tagged?("nagios-client")
-    include_recipe "nagios::client"
-  end
-
-  if tagged?("munin-node")
-    include_recipe "munin::node"
+    if tagged?("munin-node")
+      include_recipe "munin::node"
+    end
   end
 
 when "mac_os_x"
@@ -84,7 +84,7 @@ include_recipe "tmux"
 include_recipe "vim"
 
 # vservers don't have hardware access
-if node[:os] == "linux" and node[:virtualization][:role] == "host" and not node[:skip][:hardware]
+if root? and node[:os] == "linux" and node[:virtualization][:role] == "host" and not node[:skip][:hardware]
   include_recipe "hwraid"
   include_recipe "mdadm"
   include_recipe "ntp"

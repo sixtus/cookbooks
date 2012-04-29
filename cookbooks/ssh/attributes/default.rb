@@ -1,6 +1,6 @@
 default[:ssh][:config] = case node[:platform]
                          when "gentoo"
-                           "/etc/ssh/ssh_config"
+                           root? ? "/etc/ssh/ssh_config" : "#{node[:homedir]}/.ssh/config"
                          when "mac_os_x"
                            "#{node[:homedir]}/.ssh/config"
                          end
