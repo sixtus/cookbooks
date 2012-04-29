@@ -33,6 +33,10 @@ namespace :solo do
     fqdn = %x(hostname -f).chomp
 
     if user == "root"
+      # create SSL cert
+      ENV['BATCH'] = "1"
+      Rake::Task['ssl:do_cert'].invoke(fqdn)
+
       solo(fqdn)
     else
       solo(user)

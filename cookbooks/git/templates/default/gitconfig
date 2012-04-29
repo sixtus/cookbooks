@@ -33,7 +33,7 @@
 [github]
 	user = <%= node[:git][:github][:user] %>
 <% end %>
-<% if node.platform?("mac_os_x") %>
+<% if node[:platform] == "mac_os_x" %>
 [credential]
 	helper = osxkeychain
 <% end %>

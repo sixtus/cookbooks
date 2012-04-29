@@ -76,7 +76,7 @@ include_recipe "tmux"
 include_recipe "vim"
 
 # vservers don't have hardware access
-if root? and node[:os] == "linux" and node[:virtualization][:role] == "host" and not node[:skip][:hardware]
+if root? and not solo? and node[:os] == "linux" and node[:virtualization][:role] == "host" and not node[:skip][:hardware]
   include_recipe "hwraid"
   include_recipe "mdadm"
   include_recipe "ntp"

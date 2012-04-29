@@ -27,22 +27,28 @@ end
   end
 end
 
-%w(
-  /etc/conf.d/local
-  /etc/init.d/net.lo
-  /etc/init.d/net.eth0
-  /etc/init.d/net.eth1
-  /etc/runlevels/boot/net.lo
-  /etc/runlevels/boot/net.eth0
-  /etc/runlevels/boot/net.eth1
-  /etc/runlevels/default/net.lo
-  /etc/runlevels/default/net.eth0
-  /etc/runlevels/default/net.eth1
-  /etc/conf.d/net
-).each do |f|
-  file f do
-    action :delete
-    backup 0
+if node[:portage][:repo] == "zentoo"
+  %w(
+    /etc/conf.d/local
+    /etc/init.d/net.lo
+    /etc/init.d/net.eth0
+    /etc/init.d/net.eth1
+    /etc/runlevels/boot/net.lo
+    /etc/runlevels/boot/net.eth0
+    /etc/runlevels/boot/net.eth1
+    /etc/runlevels/default/net.lo
+    /etc/runlevels/default/net.eth0
+    /etc/runlevels/default/net.eth1
+    /etc/conf.d/net
+  ).each do |f|
+    file f do
+      action :delete
+      backup 0
+    end
+  end
+
+  link "/etc/runlevels/boot/network" do
+    to "/etc/init.d/network"
   end
 end
 
@@ -62,7 +68,6 @@ end
   localmount
   modules
   mtab
-  network
   procfs
   root
   swap

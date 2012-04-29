@@ -85,6 +85,8 @@ emerge --depclean -aq
 etc-update
 
 # run chef-client to fixup configs overwritten by etc-update
-chef-client
+if [[ -e /etc/chef/client.pem ]]; then
+	chef-client
+fi
 
 exit 0
