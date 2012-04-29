@@ -105,7 +105,13 @@ execute "eix-update" do
   not_if do
     check_files = Dir.glob("/var/lib/layman/*/.git/index")
     check_files << "/usr/portage/metadata/timestamp.chk"
-    FileUtils.uptodate?("/var/cache/eix", check_files)
+    cache_file = if File.exist?("/var/cache/eix/portage.eix")
+                   "/var/cache/eix/portage.eix"
+                 else
+                   "/var/cache/eix"
+                 end
+
+    FileUtils.uptodate?(cache_file, check_files)
   end
 end
 

@@ -139,7 +139,13 @@ module Gentoo
 
         # We need to update the eix database if it's older than the current portage
         # tree or the eix binary.
-        unless ::FileUtils.uptodate?("/var/cache/eix", [eix, "/usr/portage/metadata/timestamp"])
+        cache_file = if File.exist?("/var/cache/eix/portage.eix")
+                       "/var/cache/eix/portage.eix"
+                     else
+                       "/var/cache/eix"
+                     end
+
+        unless ::FileUtils.uptodate?(cache_file, [eix, "/usr/portage/metadata/timestamp"])
           Chef::Log.debug("eix database outdated, calling `#{eix_update}`.")
           Chef::Mixin::Command.run_command_with_systems_locale(:command => eix_update)
         end
