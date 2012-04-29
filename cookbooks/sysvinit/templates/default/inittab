@@ -25,7 +25,7 @@ l6r:6:wait:/sbin/reboot -dk
 su0:S:wait:/sbin/rc single
 su1:S:wait:/sbin/sulogin
 
-<% if node[:virtualization][:role] == "host" %>
+<% if node[:virtualization][:role] != "guest" %>
 # TERMINALS
 c1:12345:respawn:/sbin/agetty 38400 tty1 linux
 c2:2345:respawn:/sbin/agetty 38400 tty2 linux
