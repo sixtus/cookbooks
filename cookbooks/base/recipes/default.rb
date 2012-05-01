@@ -29,7 +29,7 @@ end
 
 # create script path
 directory node[:script_path] do
-  owner node[:current_user]
+  owner Process.euid
   mode "0755"
 end
 
@@ -156,7 +156,7 @@ if tagged?("nagios-client")
   nagios_service "LIB-USERS" do
     check_command "check_nrpe!check_lib_users"
     servicegroups "system"
-    notifications_enabled 0
+    notification_period "never"
   end
 
   if node[:virtualization][:role] == "host"

@@ -21,7 +21,7 @@ if platform?("mac_os_x")
   end
 else
   portage_package_use "app-editors/vim" do
-    use %w(ruby)
+    use %w(python ruby)
   end
 
   package "app-editors/vim"
