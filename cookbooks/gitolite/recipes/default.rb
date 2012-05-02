@@ -68,6 +68,7 @@ end
 
 %w(
   pre-receive
+  post-receive
 ).each do |hook|
   cookbook_file "/var/lib/gitolite/.gitolite/hooks/common/#{hook}" do
     source "hooks/#{hook}"

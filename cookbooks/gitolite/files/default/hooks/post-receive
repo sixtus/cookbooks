@@ -1,0 +1,9 @@
+#!/usr/bin/ruby -w
+
+def config(key)
+  %x(git config --get #{key.to_s}).chomp
+end
+
+STDIN.each_line do |line|
+  rev_old, rev_new, ref = line.split(" ")
+end
