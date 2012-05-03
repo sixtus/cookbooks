@@ -1,5 +1,3 @@
-require "highline/import"
-
 namespace :server do
 
   desc "Bootstrap a Chef Server infrastructure"
