@@ -22,8 +22,9 @@ directory "/var/lib/spamassassin" do
   group "spamd"
 end
 
-execute "/usr/bin/sa-update" do
-  creates "/etc/spamassassin/sa-update-keys"
+execute "sa-update" do
+  command "/usr/bin/sa-update || :"
+  notifies :reload, "service[spamd]"
 end
 
 template "/etc/conf.d/spamd" do
@@ -36,6 +37,7 @@ end
 
 service "spamd" do
   action [:enable, :start]
+  supports [:reload]
 end
 
 if tagged?("nagios-client")
