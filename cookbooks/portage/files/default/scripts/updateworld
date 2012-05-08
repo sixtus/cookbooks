@@ -16,7 +16,7 @@ eselect news read new | grep -v '^No news is good news.' || :
 
 # dummy run emerge first, so global updates don't clutter the output.
 emerge --info &>/dev/null
-eout=$(emerge @world -NDuqvp --color=y)
+eout=$(emerge @world -NDup --color=y --nospinner | grep --color=never '^\[' || :)
 
 if [[ "${eout}" != "" ]]; then
 	echo "${eout}"
