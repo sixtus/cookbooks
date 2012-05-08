@@ -14,21 +14,21 @@ namespace :rc do
   desc "Update gentoo packages"
   task :updateworld do
     rc("platform:gentoo") do |node|
-      system("ssh -t #{node.name} '/usr/bin/sudo -H /usr/local/sbin/updateworld'")
+      system("ssh -t #{node.name} '/usr/bin/sudo -i /usr/local/sbin/updateworld'")
     end
   end
 
   desc "Update portage tree"
   task :sync do
     rc("platform:gentoo") do |node|
-      system("ssh -t #{node.name} '/usr/bin/sudo -H /usr/bin/eix-sync'")
+      system("ssh -t #{node.name} '/usr/bin/sudo -i /usr/bin/eix-sync'")
     end
   end
 
   desc "Run chef-client"
   task :converge do
     rc("ipaddress:[* TO *]") do |node|
-      system("ssh -t #{node.name} '/usr/bin/sudo -H /usr/bin/chef-client'")
+      system("ssh -t #{node.name} '/usr/bin/sudo -i /usr/bin/chef-client'")
     end
   end
 
@@ -38,7 +38,7 @@ namespace :rc do
       if ENV.key?('NOSUDO')
         system("ssh -t #{node.name}'")
       else
-        system("ssh -t #{node.name} '/usr/bin/sudo -Hi'")
+        system("ssh -t #{node.name} '/usr/bin/sudo -i'")
       end
     end
   end
@@ -51,7 +51,7 @@ namespace :rc do
       if ENV.key?('NOSUDO')
         system("cat '#{script}' | ssh #{node.name} '/bin/bash -s'")
       else
-        system("cat '#{script}' | ssh #{node.name} '/usr/bin/sudo -H /bin/bash -s'")
+        system("cat '#{script}' | ssh #{node.name} '/usr/bin/sudo -i /bin/bash -s'")
       end
     end
   end
