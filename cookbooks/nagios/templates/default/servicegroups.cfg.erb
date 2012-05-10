@@ -2,7 +2,7 @@
 # SERVICEGROUPS.CFG - SERVICE GROUP OBJECTS
 ###############################################################################
 
-<% @servicegroups.each do |sg| %>
+<% @servicegroups.sort.each do |sg| %>
 define servicegroup {
   servicegroup_name <%= sg %>
   alias <%= sg %>

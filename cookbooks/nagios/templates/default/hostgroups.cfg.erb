@@ -2,7 +2,7 @@
 # HOSTGROUPS.CFG - HOST GROUP OBJECTS
 ###############################################################################
 
-<% @hostgroups.each do |name, hosts| %>
+<% @hostgroups.sort_by {|name, hosts| name }.each do |name, hosts| %>
 <% unless hosts.empty? %>
 define hostgroup {
   hostgroup_name <%= name %>
