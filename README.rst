@@ -27,35 +27,35 @@ This repository contains several directories, and each directory contains a
 README file that describes what it is for in greater detail, and how to use it
 for managing your systems with Chef.
 
-*ca*
+**ca**
    This directory contains an OpenSSL Certificate Authority. It is managed with
    rake tasks and provides seamless deployments of inter-node trust and public
    SSL certificates on chef nodes.
 
-*config*
+**config**
    Miscellaneous configuration files for Chef, OpenSSL and others.
 
-*cookbooks*
+**cookbooks**
    This directory contains all public cookbooks and recipes.
 
-*databags*
+**databags**
    This directory contains site-specific databags (simple JSON dictionaries
    uploaded to the Chef server).
 
-*nodes*
+**nodes**
    Contains one file per node that is managed with chef.
 
-*roles*
+**roles**
    Contains roles that can be applied to nodes.
 
-*scripts*
+**scripts**
    A collection of scripts that can be used for daily administration tasks.
 
-*site-cookbooks*
+**site-cookbooks**
    This directory contains site-specific cookbooks and recipes. This is the
    place where you can add recipes specific to your infrastructure.
 
-*tasks*
+**tasks**
    Contains all available rake tasks.
 
 External Resources
