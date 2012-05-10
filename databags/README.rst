@@ -1,5 +1,3 @@
-.. _chef-databags:
-
 Data Bags
 =========
 
@@ -13,19 +11,19 @@ Data Bag Files
 
 Each Data Bag contains zero or more items uniquely identified by an arbitrary
 id. By default ``knife`` will load JSON files from the repository to store them
-on the Chef server. However, everything else being Ruby, the authors of this
-manual choose to implement a simple Data Bag DSL on top of Chefs DSL support.
+on the Chef server. However, everything else being Ruby, the ZenOps repository
+implements a simple Data Bag DSL on top of Chefs DSL support.
 
 Data Bags are stored in the ``databags`` directory in the Chef repository. Each
 Data Bag is represented as a folder containing zero or more Ruby files
-represenging the Data Bag Items.
+representing the Data Bag Items.
 
-Contents of the Data Bag Item can be specified with the ``self`` method. A
+Contents of the Data Bag Item can be specified with simple method calls. A
 simple Data Bag Item for a user account might look like this::
 
-  self[:name] = "John Doe"
-  self[:email] = "doe@example.com"
-  self[:authorized_keys] = [
+  name "John Doe"
+  email "doe@example.com"
+  authorized_keys [
     "ssh-dsa ...",
     "ssh-rsa ..."
   ]

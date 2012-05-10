@@ -1,5 +1,3 @@
-.. _chef-nodes:
-
 Nodes
 =====
 
@@ -47,8 +45,7 @@ directory of the Chef repository. There should be one file per node and the
 filename must be equal to the nodes fully qualified hostname (``<fqdn>.rb``).
 
 Node attributes can be specified with the ``default``, ``set`` or ``override``
-methods. For details refer to the :ref:`Attributes in Nodes <chef-attributes-nodes>`
-documentation.
+methods.
 
 The run list can be specified with the ``run_list`` method. A simple node file
 might look similar to the following::
@@ -56,16 +53,6 @@ might look similar to the following::
   run_list(%w(
     role[base]
   ))
-
-The run list may contain :ref:`Roles <chef-roles>` and :ref:`Recipes
-<chef-recipes>`.
-
-Bootstrapping a Node
---------------------
-
-For detailed instructions on how to bootstrap the Chef server and clients refer
-to :ref:`tutorial-chef-bootstrap`. This tutorial will also explain how to
-remove obsolete nodes.
 
 Managing Nodes
 --------------
@@ -89,9 +76,9 @@ command line client:
    upload via ``rake load:nodes``.
 
    There is, however, an exception to this rule: Sometimes attributes that have
-   been set previously with the ``set`` or ``override`` need to be deleted. In
-   This case ``knife node edit my.example.com`` will allow editing the nodes
-   JSON source directly.
+   been set previously with the ``set`` or ``override`` methods need to be
+   deleted. In This case ``knife node edit my.example.com`` will allow editing
+   the nodes JSON source directly.
 
 External Resources
 ------------------

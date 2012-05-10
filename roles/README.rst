@@ -1,13 +1,10 @@
-.. _chef-roles:
-
 Roles
 =====
 
 A role provides a means of grouping similar features of similar nodes,
 providing a mechanism for easily composing sets of functionality. At web scale,
 you almost never have just one of something, so you use roles to express the
-parts of the configuration that are shared by a group of :ref:`Nodes
-<chef-nodes>`.
+parts of the configuration that are shared by a group of nodes.
 
  * Roles consist of the same parts as a node: Attributes and a Run List.
  * Nodes can have multiple roles applied, and they will be expanded in place,
@@ -23,8 +20,7 @@ directory of the Chef repository. There should be one file per role and the
 filename must be equal to the role name (``<role>.rb``).
 
 Role attributes can be specified with the ``default_attributes`` and
-``override_attributes`` methods. For details refer to the :ref:`Attributes in Roles
-<chef-attributes-role>` documentation.
+``override_attributes`` methods.
 
 The run list can be specified with the ``run_list`` method. A simple node file
 might look similar to the following::
@@ -34,9 +30,6 @@ might look similar to the following::
     recipe[cron]
     recipe[syslog]
   ))
-
-The run list may contain other :ref:`Roles <chef-roles>` and :ref:`Recipes
-<chef-recipes>`.
 
 Managing Roles
 --------------
