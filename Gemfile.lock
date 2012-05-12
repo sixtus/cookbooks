@@ -18,7 +18,7 @@ GEM
   specs:
     archive-tar-minitar (0.5.2)
     bunny (0.7.9)
-    chef (0.10.10.rc.2)
+    chef (0.10.10)
       bunny (>= 0.6.0)
       erubis
       highline (>= 1.6.9)
@@ -40,7 +40,7 @@ GEM
       ffi (~> 1.0.6)
     erubis (2.7.0)
     ffi (1.0.11)
-    highline (1.6.11)
+    highline (1.6.12)
     i18n (0.6.0)
     ipaddress (0.8.0)
     json (1.5.4)
