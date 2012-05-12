@@ -14,7 +14,7 @@ namespace :solo do
     if ENV['SOLO_USER'] == "root"
       ENV['SOLO_CONFIG'] = File.join(TOPDIR, "config", "solo", "#{ENV['SOLO_FQDN']}.json")
       ENV['BATCH'] = "1"
-      Rake::Task['ssl:do_cert'].invoke(fqdn)
+      Rake::Task['ssl:do_cert'].invoke(ENV['SOLO_FQDN'])
     else
       ENV['SOLO_CONFIG'] = File.join(TOPDIR, "config", "solo", "#{ENV['SOLO_USER']}.json")
     end
