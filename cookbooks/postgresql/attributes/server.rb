@@ -12,6 +12,7 @@ default[:postgresql][:server][:maintenance_work_mem] = "16MB"
 
 # Write Ahead Log
 default[:postgresql][:server][:wal_level] = "minimal"
+default[:postgresql][:server][:checkpoint_segments] = 3
 default[:postgresql][:server][:max_wal_senders] = 0
 default[:postgresql][:server][:wal_keep_segments] = 0
 default[:postgresql][:server][:hot_standby] = "off"
