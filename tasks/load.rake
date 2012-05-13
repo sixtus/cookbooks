@@ -44,7 +44,7 @@ end
 namespace "load" do
 
   desc "Upload all entities"
-  task :all => [ :documentation, :cookbooks, :nodes, :roles, :databags ]
+  task :all => [ :cookbooks, :nodes, :roles, :databags ]
 
   desc "Upload a single cookbook"
   task :cookbook => [ :pull ]
