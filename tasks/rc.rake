@@ -2,7 +2,7 @@
 
 def rc(default_query)
   ENV['QUERY'] = default_query if not ENV.key?('QUERY')
-  Chef::Search::Query.new.search(:node, ENV['QUERY']).first.sort_by { |n| n[:fqdn] }.each do |node|
+  Chef::Search::Query.new.search(:node, ENV['QUERY']).first.compact.sort_by { |n| n[:fqdn] }.each do |node|
     next if node[:skip] and node[:skip][:rc]
     puts(">>> #{node.name}")
     yield node
