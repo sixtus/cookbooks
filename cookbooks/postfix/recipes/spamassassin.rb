@@ -11,7 +11,7 @@ end
 # XXX: this is ugly
 t = resources(:template => "/etc/postfix/master.cf")
 t.variables[:services].each do |s|
-  if s[:name] == "smtp"
-    s[:args] = "-o content_filter=spamassassin"
+  if s[:name] == "smtp" or s[:name] == "smtps"
+    s[:args] += " -o content_filter=spamassassin"
   end
 end

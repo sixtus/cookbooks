@@ -81,6 +81,13 @@ postmaster "smtp" do
   command "smtpd"
 end
 
+postmaster "smtps" do
+  stype "inet"
+  priv "n"
+  command "smtpd"
+  args "-o smtpd_tls_wrappermode=yes -o smtpd_sasl_auth_enable=yes -o smtpd_client_restrictions=permit_sasl_authenticated,reject"
+end
+
 service "postfix" do
   action [:enable, :start]
 end

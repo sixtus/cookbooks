@@ -3,7 +3,7 @@
 #       :inet_interfaces => loopback-only
 # end
 
-define :postmaster, :stype => "unix", :priv => "-", :unpriv => "-", :chroot => "n", :wakeup => "-", :maxproc => "-", :command => nil, :args => nil do
+define :postmaster, :stype => "unix", :priv => "-", :unpriv => "-", :chroot => "n", :wakeup => "-", :maxproc => "-", :command => nil, :args => "" do
   include_recipe "postfix"
 
   t = nil
