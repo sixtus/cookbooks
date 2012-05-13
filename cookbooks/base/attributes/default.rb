@@ -32,7 +32,7 @@ default[:locales] = [
 
 # nameservers and search domain
 default[:resolv][:search] = [node[:domain]]
-default[:resolv][:nameservers] = %w(4.2.2.6 4.2.2.5)
+default[:resolv][:nameservers] = %w(8.8.8.8 8.8.4.4)
 default[:resolv][:hosts] = []
 default[:resolv][:aliases] = []
 
