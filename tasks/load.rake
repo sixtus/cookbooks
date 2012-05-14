@@ -49,14 +49,13 @@ namespace "load" do
   desc "Upload a single cookbook"
   task :cookbook => [ :pull ]
   task :cookbook, :name do |t, args|
-    sh("knife cookbook upload #{args.name}")
+    sh("knife cookbook upload -o cookbooks #{args.name}")
   end
 
   desc "Upload all cookbooks"
   task :cookbooks => [ :pull ]
   task :cookbooks do
-    sh("knife cookbook metadata --all")
-    sh("knife cookbook upload --all")
+    sh("knife cookbook upload -o cookbooks --all")
   end
 
   desc "Delete and upload all cookbooks"
