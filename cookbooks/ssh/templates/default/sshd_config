@@ -3,7 +3,7 @@
 
 # listen address and protocol version
 Port 22
-<% if node[:virtualization][:role] == "host" and node[:virtualization][:system] == "linux-vserver" %>
+<% if node[:virtualization][:role] == "host" and node[:virtualization][:system] == "linux-vserver" and node[:virtualization][:guests] > 0 %>
 ListenAddress 127.0.0.1
 ListenAddress ::1
 ListenAddress <%= node[:primary_ipaddress] %>
