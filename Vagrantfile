@@ -16,7 +16,7 @@ Vagrant::Config.run do |config|
   end
 
   # Boot with a GUI so you can see the screen. (Default is headless)
-  config.vm.boot_mode = :gui
+  # config.vm.boot_mode = :gui
 
   # Forward a port from the guest to the host, which allows for outside
   # computers to access the VM, whereas host only networking does not.

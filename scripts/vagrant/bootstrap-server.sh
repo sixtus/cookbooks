@@ -1,23 +1,31 @@
 #!/bin/bash
 
+# make sure udev is activated
+rc-update add udev sysinit &>/dev/null
+rc
+
 # sync & update first
 emerge --sync
 eix-update
 
-# now pull the pristine cookbooks repo and bootstrap chef-server
-tmpdir=$(mktemp -d)
+if [[ -d /home/vagrant/chef ]]; then
+	echo "VM has already been bootstrapped, just calling chef-client"
+	chef-client
+else
+	echo "VM is pristine, bootstrapping with rake server:bootstrap"
 
-pushd ${tmpdir} > /dev/null
+	tmpdir=$(mktemp -d)
+	pushd ${tmpdir} > /dev/null
 
-git clone https://github.com/zenops/cookbooks chef
+	git clone https://github.com/zenops/cookbooks chef
 
-pushd chef > /dev/null
-rake server:bootstrap[chef.local,vagrant]
-popd > /dev/null
+	pushd chef > /dev/null
+	rake server:bootstrap[chef.local,vagrant] || exit 1
+	popd > /dev/null
 
-mv chef /home/vagrant/chef
-chown vagrant: -R /home/vagrant/chef
+	mv chef /home/vagrant/chef
+	chown vagrant: -R /home/vagrant/chef
 
-popd > /dev/null
-
-rm -rf ${tmpdir}
+	popd > /dev/null
+	rm -rf ${tmpdir}
+fi
