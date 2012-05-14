@@ -4,7 +4,6 @@ require 'tempfile'
 
 namespace :ssl do
   desc "Initialize the OpenSSL CA"
-  task :init => [ :pull ]
   task :init do
     FileUtils.mkdir_p(SSL_CERT_DIR)
     FileUtils.mkdir_p(File.join(SSL_CA_DIR, "crl"))
@@ -43,7 +42,7 @@ namespace :ssl do
     end
   end
 
-  task :do_cert => [ :init, :pull ]
+  task :do_cert => [ :init ]
   task :do_cert, :cn do |t, args|
     cn = args.cn
     keyfile = cn.gsub("*", "wildcard")
@@ -123,7 +122,6 @@ EOH
   end
 
   desc "Revoke an existing SSL certificate"
-  task :revoke => [ :pull ]
   task :revoke, :cn do |t, args|
     keyfile = args.cn.gsub("*", "wildcard")
     sh("openssl ca -config #{SSL_CONFIG_FILE} -revoke #{SSL_CERT_DIR}/#{keyfile}.crt")
@@ -132,7 +130,6 @@ EOH
   end
 
   desc "Renew expiring certificates"
-  task :renew => [ :pull ]
   task :renew do
     old_batch = ENV['BATCH']
     ENV['BATCH'] = "1"
