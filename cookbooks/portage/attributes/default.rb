@@ -16,6 +16,7 @@ default[:portage][:USE] = []
 default[:portage][:ACCEPT_KEYWORDS] = nil
 
 # advanced features
+default[:portage][:FEATURES] = []
 default[:portage][:OPTS] = []
 default[:portage][:MAKEOPTS] = "-j1"
 
