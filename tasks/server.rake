@@ -46,7 +46,7 @@ namespace :server do
     sh("chef-client")
 
     # setup a client key for root
-    sh("env EDITOR=vim knife client create root -a -n -u chef-webui -k /etc/chef/webui.pem | tail -n+2 > /root/.chef/client.pem")
+    sh("env EDITOR=vim knife client create root -a -d -u chef-webui -k /etc/chef/webui.pem | tail -n+2 > /root/.chef/client.pem")
 
     # create new node
     nf = File.join(NODES_DIR, "#{fqdn}.rb")
