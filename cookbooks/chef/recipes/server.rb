@@ -37,7 +37,7 @@ execute "rabbitmqctl change_password chef" do
       b.start
       b.stop
       false
-    rescue Bunny::ProtocolError
+    rescue Bunny::ProtocolError, Errno::ECONNRESET
       true
     end
   end
