@@ -33,16 +33,13 @@ end
 
 package "www-servers/nginx"
 
-service "nginx" do
-  action [:enable, :start]
-  supports [:reload]
-end
-
 %w(
   /etc/nginx
   /etc/nginx/modules
   /etc/nginx/servers
   /etc/ssl/nginx
+  /var/log/nginx
+  /var/tmp/nginx
 ).each do |d|
   directory d do
     owner "root"
@@ -51,10 +48,23 @@ end
   end
 end
 
-directory "/var/cache/nginx" do
-  owner "nginx"
-  group "nginx"
-  mode "0755"
+%w(
+  /var/tmp/nginx/client
+  /var/tmp/nginx/fastcgi
+  /var/tmp/nginx/proxy
+  /var/tmp/nginx/scgi
+  /var/tmp/nginx/uwsgi
+).each do |d|
+  directory d do
+    owner "nginx"
+    group "nginx"
+    mode "0755"
+  end
+end
+
+service "nginx" do
+  action [:enable, :start]
+  supports [:reload]
 end
 
 ssl_certificate "/etc/ssl/nginx/nginx" do
