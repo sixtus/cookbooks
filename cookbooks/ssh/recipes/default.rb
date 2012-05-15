@@ -4,12 +4,12 @@ else
   package "net-misc/openssh"
 end
 
-unless solo?
+if root?
   nodes = node.run_state[:nodes].select do |n|
     n[:keys] and n[:keys][:ssh]
   end
 
-  template "/etc/ssh/ssh_known_hosts" do
+  template node[:ssh][:hostsfile] do
     source "known_hosts"
     owner "root"
     group "root"
@@ -18,7 +18,7 @@ unless solo?
   end
 end
 
-if solo?
+if solo? and not root?
   directory File.dirname(node[:ssh][:config]) do
     mode "0700"
   end

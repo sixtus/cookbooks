@@ -5,6 +5,13 @@ default[:ssh][:config] = case node[:platform]
                            "#{node[:homedir]}/.ssh/config"
                          end
 
+default[:ssh][:hostsfile] = case node[:platform]
+                            when "gentoo"
+                              root? ? "/etc/ssh/ssh_known_hosts" : "#{node[:homedir]}/.ssh/known_hosts"
+                            when "mac_os_x"
+                              "#{node[:homedir]}/.ssh/known_hosts"
+                            end
+
 default[:ssh][:additional_host_keys] = []
 
 default[:ssh][:server][:password_auth] = "no"
