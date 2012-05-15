@@ -32,6 +32,12 @@ if platform?("gentoo")
     group "root"
     mode "0644"
   end
+
+  directory "/var/log/mysql" do
+    owner "mysql"
+    group "mysql"
+    mode "0755"
+  end
 end
 
 # create initial database and users
