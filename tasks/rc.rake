@@ -14,7 +14,12 @@ namespace :rc do
   desc "Update gentoo packages"
   task :updateworld do
     rc("platform:gentoo") do |node|
-      system("ssh -t #{node.name} '/usr/bin/sudo -i /usr/local/sbin/updateworld'")
+      env = if ENV.include?('DONT_ASK')
+              "/usr/bin/env UPDATEWORLD_DONT_ASK=1"
+            else
+              ""
+            end
+      system("ssh -t #{node.name} '/usr/bin/sudo -i #{env} /usr/local/sbin/updateworld'")
     end
   end
 
