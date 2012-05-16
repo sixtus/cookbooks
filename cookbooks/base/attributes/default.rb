@@ -65,7 +65,7 @@ default[:skip][:hardware] = false
 # provide sane default values in case ohai didn't find them
 default_unless[:cpu][:total] = 1
 default_unless[:virtualization] = {}
-set[:virtualization][:guests] = %x(vserver-stat 2>/dev/null).chomp.to_i
+set[:virtualization][:guests] = %x(vserver-stat 2>/dev/null | wc -l).chomp.to_i
 
 # support non-root runs
 if root?
