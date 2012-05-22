@@ -10,6 +10,14 @@ depclean() {
 	fi
 }
 
+latest_ruby() {
+if eselect ruby list | grep -q ruby19; then
+	if ! eselect ruby show | grep -q ruby19; then
+		eselect ruby set ruby19
+	fi
+fi
+}
+
 # force unicode locale
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
@@ -21,6 +29,9 @@ git ci -m 'automatic commit before updateworld' || :
 
 # display news items and mark them as read.
 eselect news read new | grep -v '^No news is good news.' || :
+
+# switch to latest ruby first
+latest_ruby
 
 if [[ -z $UPDATEWORLD_DONT_ASK ]]; then
 	# dummy run emerge first, so global updates don't clutter the output.
@@ -90,6 +101,9 @@ lafilefixer --justfixit > /dev/null
 # finally, after all this crap, run revdep-rebuild to pick up remaining
 # packages that have broken lib dependencies.
 EMERGE_DEFAULT_OPTS="" revdep-rebuild -q -i -- --quiet-build --with-bdeps=y --binpkg-respect-use=y --usepkg=n --getbinpkg=n
+
+# switch to latest ruby before final depclean
+latest_ruby
 
 # cleanup unneeded dependencies
 depclean
