@@ -266,7 +266,7 @@ sub check_megacli {
 			%cur = ( dev => $s, state => undef, name => undef );
 			next;
 		}
-		if (my($s) = /Firmware state: (\S+)/) {
+		if (my($s) = /Firmware state: (\S+),/) {
 			$cur{state} = $s;
 			next;
 		}
