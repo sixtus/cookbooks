@@ -5,7 +5,7 @@ class Nagios::Plugin::Mysql < Nagios::Plugin
   def initialize
     super
     @config.options.on('--database=DATABASE',
-      '-dDATABASE', 'What database to use') { |@database| }
+      '-dDATABASE', 'What database to use') {|database| @database = database}
   end
 
   protected
