@@ -28,7 +28,7 @@ define :mongodb_instance, :nfiles => "1024" do
 
   # data for solr searches
   tag("mongodb")
-  node[:mongodb][:instances][params[:name]] = params
+  node[:mongodb][:instances][name] = params
 
   directory dbpath do
     owner "mongodb"
@@ -77,6 +77,14 @@ define :mongodb_instance, :nfiles => "1024" do
 
   service svcname do
     action [:enable, :start]
+  end
+
+  if tagged?("ganymed-client")
+    ganymed_collector svcname do
+      source "mongodb.rb"
+      variables :name => name,
+                :port => port
+    end
   end
 
   if tagged?("nagios-client")
