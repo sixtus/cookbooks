@@ -9,8 +9,8 @@ else
   node.run_state[:users] = search(:users)
 end
 
-# figure out if we're a nagios/munin client first, so recipes can conditionally
-# install nagios/munin plugins
+# figure out if we're a nagios/ganymed client first, so recipes can conditionally
+# install nagios/ganymed plugins
 nagios_masters = node.run_state[:nodes].select do |n|
   n[:tags].include?("nagios-master")
 end
@@ -19,12 +19,12 @@ if nagios_masters.any?
   tag("nagios-client")
 end
 
-munin_masters = node.run_state[:nodes].select do |n|
-  n[:tags].include?("munin-master")
+ganymed_processors = node.run_state[:nodes].select do |n|
+  n[:tags].include?("ganymed-processor")
 end
 
-if munin_masters.any?
-  tag("munin-node")
+if ganymed_processors.any?
+  tag("ganymed-client")
 end
 
 # create script path
@@ -94,34 +94,6 @@ end
 
 # use account cookbook in root mode
 include_recipe "account" if root?
-
-# enable munin plugins
-if tagged?("munin-node")
-  include_recipe "munin::node"
-
-  munin_plugin "cpu"
-  munin_plugin "entropy"
-  munin_plugin "forks"
-  munin_plugin "load"
-  munin_plugin "memory"
-  munin_plugin "open_files"
-  munin_plugin "open_inodes"
-  munin_plugin "processes"
-
-  munin_plugin "df" do
-    source "df"
-    config [
-      "env.warning 90",
-      "env.critical 95"
-    ]
-  end
-
-  if node[:virtualization][:role] == "host"
-    munin_plugin "iostat"
-    munin_plugin "swap"
-    munin_plugin "vmstat"
-  end
-end
 
 if tagged?("nagios-client")
   include_recipe "nagios::client"

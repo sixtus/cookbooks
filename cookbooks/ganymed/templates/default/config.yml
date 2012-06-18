@@ -1,0 +1,69 @@
+generic:
+  eventmachine:
+    threadpool_size: <%= node[:ganymed][:threadpool_size] %>
+
+<% if node[:tags].include?("ganymed-processor") %>
+  processor:
+    enabled: true
+    listen:
+      host: 0.0.0.0
+      port: 1336
+    mongodb:
+      host: localhost
+      port: 27017
+      database: ganymed
+    websocket:
+      host: 0.0.0.0
+      port: 1338
+<% else %>
+  processor:
+    enabled: false
+<% end %>
+
+<% if @processor %>
+  sampler:
+    enabled: true
+    window: 300
+    listen:
+<% if node[:tags].include?("ganymed-processor") %>
+      host: 0.0.0.0
+<% else %>
+      host: 127.0.0.1
+<% end %>
+      port: 1337
+    consolidations:
+      avg: [mean]
+
+  client:
+    processor:
+      host: <%= @processor[:primary_ipaddress] %>
+      port: 1336
+    sampler:
+      host: 127.0.0.1
+      port: 1337
+
+  collector:
+    load_paths:
+      - /usr/lib/ganymed/collectors
+
+  collectors:
+    network:
+      exclude:
+        - ^lo$
+        - ^sit
+    disk:
+      exclude:
+        - ^dev$
+        - ^dev-shm$
+        - rc-init-d$
+        - ^run$
+        - ^sys-fs-cgroup$
+        - ^var-tmp-metro
+        - ^usr-portage
+    iostat:
+      skip_numbered: true
+      exclude: []
+<% else %>
+  sampler:
+    enabled: false
+<% end %>

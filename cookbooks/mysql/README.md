@@ -6,7 +6,7 @@ development headers.
 On server nodes `recipe[mysql::server]` will install and preseed a MySQL server
 instance with a random root password and the usual `mysql_install_db` steps.
 Additionally the `mysql::server` recipe will install configuration files for
-syslog-ng, nagios and munin.
+syslog-ng and nagios.
 
 # Attributes
 
@@ -648,18 +648,3 @@ by ConSol Labs. For details see the `check_mysql_health project page
 
 **MYSQL-SLAVELAG**
   : Delay between Master and Slave
-
-
-# Munin Metrics
-
-The `mysql::server` recipe will install the following Munin plugins.
-
-## Throughput
-
-## Threads
-
-## Queries
-
-## Slow Queries
-
-## Slave Status

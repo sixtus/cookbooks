@@ -1,1 +1,0 @@
-default[:munin][:group] = "default"

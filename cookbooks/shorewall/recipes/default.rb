@@ -54,46 +54,6 @@ end.each do |n|
   end
 end
 
-# munin rules
-node.run_state[:nodes].select do |n|
-  n[:tags].include?("munin-master")
-end.each do |n|
-  if n[:primary_ipaddress]
-    shorewall_rule "munin-master@#{n[:fqdn]}" do
-      source "net:#{n[:primary_ipaddress]}"
-      destport "4949"
-    end
-  end
-
-  if n[:primary_ip6address]
-    shorewall6_rule "munin-master@#{n[:fqdn]}" do
-      source "net:<#{n[:primary_ip6address]}>"
-      destport "4949"
-    end
-  end
-end
-
-# accounting
-node[:network][:interfaces].each do |int, cfg|
-  next unless cfg[:addresses]
-  cfg[:addresses].each do |adr, net|
-    next unless net[:family] == "inet"
-    next if cfg[:flags].include?("LOOPBACK")
-
-    if net[:private]
-      shorewall_accounting "loc-#{adr}" do
-        target "loc"
-        address adr
-      end
-    else
-      shorewall_accounting "net-#{adr}" do
-        target "net"
-        address adr
-      end
-    end
-  end
-end
-
 include_recipe "shorewall::ipv4"
 
 if node[:ipv6_enabled]

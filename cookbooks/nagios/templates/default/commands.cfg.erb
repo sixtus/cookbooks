@@ -51,8 +51,3 @@ define command {
   command_name check_smtp
   command_line $USER1$/check_smtp -H $HOSTADDRESS$ -p $ARG1$ -t $ARG2$
 }
-
-define command {
-  command_name check_munin_node
-  command_line $USER1$/check_tcp -H $HOSTADDRESS$ -p 4949 -e 'munin node at $HOSTNAME$'
-}

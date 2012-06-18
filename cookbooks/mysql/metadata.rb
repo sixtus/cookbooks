@@ -7,6 +7,5 @@ license "Apache v2.0"
 supports "gentoo"
 supports "mac_os_x"
 
-depends "munin"
 depends "nagios"
 depends "syslog"

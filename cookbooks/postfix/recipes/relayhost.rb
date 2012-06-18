@@ -1,5 +1,4 @@
 include_recipe "postfix"
-include_recipe "postfix::munin"
 
 mynetworks = node.run_state[:nodes].select do |n|
   n[:primary_ipaddress]

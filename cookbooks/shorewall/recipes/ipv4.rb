@@ -49,11 +49,3 @@ directory "/var/lock/subsys"
 service "shorewall" do
   action [:enable, :start]
 end
-
-if tagged?("munin-node")
-  munin_plugin "shorewall_accounting" do
-    source "munin/shorewall_accounting"
-    config ["user root"]
-    action :delete # we only install the plugin, but not activate it
-  end
-end

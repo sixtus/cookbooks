@@ -132,11 +132,3 @@ if tagged?("nagios-client")
     check_command "check_nrpe!check_nginx"
   end
 end
-
-if tagged?("munin-node")
-  %w(memory request status).each do |p|
-    munin_plugin "nginx_#{p}" do
-      source "nginx_#{p}"
-    end
-  end
-end
