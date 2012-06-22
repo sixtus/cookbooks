@@ -12,7 +12,7 @@ if platform?("gentoo")
 end
 
 # configuration files
-if platform?("gentoo")
+if platform?("gentoo") and root?
   directory "/etc/mysql/conf.d" do
     owner "root"
     group "root"
@@ -67,7 +67,9 @@ if platform?("mac_os_x")
     service_name "homebrew.mxcl.mysql"
     action :start
   end
-else
+end
+
+if platform?("gentoo") and root?
   mysql_root_pass = get_password("mysql/root")
 
   template "/usr/sbin/mysql_pkg_config" do
