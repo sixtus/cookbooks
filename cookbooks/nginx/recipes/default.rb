@@ -132,3 +132,9 @@ if tagged?("nagios-client")
     check_command "check_nrpe!check_nginx"
   end
 end
+
+if tagged?("ganymed-client")
+  ganymed_collector "nginx" do
+    source "nginx.rb"
+  end
+end

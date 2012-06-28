@@ -1,6 +1,6 @@
 require 'mongo'
 
-collect(5) do
+collect do
   instance = "<%= @name %>"
   port = <%= @port %>
 
