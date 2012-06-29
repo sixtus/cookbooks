@@ -16,7 +16,6 @@ match_lhs=""
 
 unset safe_term match_lhs
 
-
 if ${use_color}; then
 	if type -P dircolors >/dev/null ; then
 		if [[ -f ~/.dir_colors ]] ; then
@@ -34,78 +33,18 @@ if ${use_color}; then
 	fi
 
 	alias grep="grep --color=auto"
-
-	# this is a lot uglier than the old color() function, but should be more
-	# efficient and easier to use in the prompt
-	PCOL_black='\033[00;30m'
-	PCOL_dgray='\033[01;30m'
-	PCOL_red='\033[00;31m'
-	PCOL_lred='\033[01;31m'
-	PCOL_green='\033[00;32m'
-	PCOL_lgreen='\033[01;32m'
-	PCOL_brown='\033[00;33m'
-	PCOL_yellow='\033[01;33m'
-	PCOL_blue='\033[00;34m'
-	PCOL_lblue='\033[01;34m'
-	PCOL_purple='\033[00;35m'
-	PCOL_lpurple='\033[01;35m'
-	PCOL_cyan='\033[00;36m'
-	PCOL_lcyan='\033[01;36m'
-	PCOL_lgray='\033[00;37m'
-	PCOL_white='\033[01;37m'
-	PCOL_none='\033[00m'
-
-	COL_black='\[\033[00;30m\]'
-	COL_dgray='\[\033[01;30m\]'
-	COL_red='\[\033[00;31m\]'
-	COL_lred='\[\033[01;31m\]'
-	COL_green='\[\033[00;32m\]'
-	COL_lgreen='\[\033[01;32m\]'
-	COL_brown='\[\033[00;33m\]'
-	COL_yellow='\[\033[01;33m\]'
-	COL_blue='\[\033[00;34m\]'
-	COL_lblue='\[\033[01;34m\]'
-	COL_purple='\[\033[00;35m\]'
-	COL_lpurple='\[\033[01;35m\]'
-	COL_cyan='\[\033[00;36m\]'
-	COL_lcyan='\[\033[01;36m\]'
-	COL_lgray='\[\033[00;37m\]'
-	COL_white='\[\033[01;37m\]'
-	COL_none='\[\033[00m\]'
-else
-	PCOL_black=''
-	PCOL_dgray=''
-	PCOL_red=''
-	PCOL_lred=''
-	PCOL_green=''
-	PCOL_lgreen=''
-	PCOL_brown=''
-	PCOL_yellow=''
-	PCOL_blue=''
-	PCOL_lblue=''
-	PCOL_purple=''
-	PCOL_lpurple=''
-	PCOL_cyan=''
-	PCOL_lcyan=''
-	PCOL_lgray=''
-	PCOL_white=''
-	PCOL_none=''
-
-	COL_black=''
-	COL_dgray=''
-	COL_red=''
-	COL_lred=''
-	COL_green=''
-	COL_lgreen=''
-	COL_brown=''
-	COL_yellow=''
-	COL_blue=''
-	COL_lblue=''
-	COL_purple=''
-	COL_lpurple=''
-	COL_cyan=''
-	COL_lcyan=''
-	COL_lgray=''
-	COL_white=''
-	COL_none=''
 fi
+
+# solarized color theme
+# https://github.com/necolas/dotfiles/blob/master/bash/bash_prompt
+BOLD=$(tput bold)
+RESET=$(tput sgr0)
+SOLAR_YELLOW=$(tput setaf 136)
+SOLAR_ORANGE=$(tput setaf 166)
+SOLAR_RED=$(tput setaf 124)
+SOLAR_MAGENTA=$(tput setaf 125)
+SOLAR_VIOLET=$(tput setaf 61)
+SOLAR_BLUE=$(tput setaf 33)
+SOLAR_CYAN=$(tput setaf 37)
+SOLAR_GREEN=$(tput setaf 64)
+SOLAR_WHITE=$(tput setaf 254)

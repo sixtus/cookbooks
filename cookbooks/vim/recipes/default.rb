@@ -32,29 +32,39 @@ directory node[:vim][:rcdir] do
   mode "0755"
 end
 
+directory "#{node[:vim][:rcdir]}/autoload" do
+  mode "0755"
+end
+
+cookbook_file "#{node[:vim][:rcdir]}/autoload/pathogen.vim" do
+  source "pathogen.vim"
+  mode "0644"
+end
+
+directory "#{node[:vim][:rcdir]}/bundle" do
+  mode "0755"
+end
+
+template "#{node[:vim][:rcdir]}/cleanup_bundle" do
+  source "cleanup_bundle.sh"
+  mode "0755"
+  variables :bundles => node[:vim][:plugins].keys.map(&:to_s)
+end
+
+node[:vim][:plugins].each do |name, repo|
+  next unless repo
+  git "#{node[:vim][:rcdir]}/bundle/#{name}" do
+    repository repo
+    reference "master"
+    action :sync
+  end
+end
+
+execute "vim-cleanup-bundles" do
+  command "#{node[:vim][:rcdir]}/cleanup_bundle"
+end
+
 if solo? and not root?
-  directory "#{node[:vim][:rcdir]}/autoload" do
-    mode "0755"
-  end
-
-  cookbook_file "#{node[:vim][:rcdir]}/autoload/pathogen.vim" do
-    source "pathogen.vim"
-    mode "0644"
-  end
-
-  directory "#{node[:vim][:rcdir]}/bundle" do
-    mode "0755"
-  end
-
-  node[:vim][:plugins].each do |name, repo|
-    next unless repo
-    git "#{node[:vim][:rcdir]}/bundle/#{name}" do
-      repository repo
-      reference "master"
-      action :sync
-    end
-  end
-
   overridable_template "#{node[:homedir]}/.vimrc.local" do
     source "vimrc.local"
     namespace :user

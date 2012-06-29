@@ -232,42 +232,44 @@ __ps1_git() {
 		fi
 
 		local f="$w$i$s$u"
-		echo -e " ${PCOL_red}${c}${PCOL_yellow}${b##refs/heads/}${PCOL_brown}${p:+(${p})}${PCOL_red}${f}${PCOL_green}${r}${PCOL_none}"
+		echo -e " ${SOLAR_RED}${c}${SOLAR_YELLOW}${b##refs/heads/}${SOLAR_ORANGE}${p:+(${p})}${SOLAR_RED}${f}${SOLAR_GREEN}${r}${RESET}"
 	fi
 }
 
 __ps1_rvm() {
 	if [[ -n ${rvm_path} ]]; then
-		echo -e " ${PCOL_yellow}rvm:$(rvm tools identifier)${PCOL_none}"
+		echo -e " ${SOLAR_CYAN}rvm:$(rvm tools identifier)${RESET}"
 	fi
 }
 
 __ps1_virtualenv() {
 	if [[ -n ${VIRTUAL_ENV} ]]; then
-		echo -e " ${PCOL_yellow}env:$(basename ${VIRTUAL_ENV})${PCOL_none}"
+		echo -e " ${SOLAR_YELLOW}env:$(basename ${VIRTUAL_ENV})${RESET}"
 	fi
 }
 
 __ps1_rc() {
 	if [[ ${1:-0} -eq 0 ]]; then
-		echo -en "${PCOL_lgreen}0${PCOL_none}"
+		echo -en "${SOLAR_GREEN}0${RESET}"
 	else
-		echo -en "${PCOL_red}${1}${PCOL_none}"
+		echo -en "${SOLAR_RED}${1}${RESET}"
 	fi
 }
 
 if [[ $(id -u) -eq 0 ]]; then
-	COL_user=${COL_lred}
+	USER_COLOR=${SOLAR_RED}
 else
-	COL_user=${COL_lpurple}
+	USER_COLOR=${SOLAR_ORANGE}
 fi
 
-PS1="${COL_user}\u${COL_yellow}@${COL_lgreen}${_NODENAME}${COL_lgray}.${_DOMAINNAME}${COL_none}"
-PS1="${PS1} ${COL_lgray}[${COL_none}\$(__ps1_rc \$?)${COL_lgray}]${COL_none}"
-PS1="${PS1} ${COL_lcyan}\t${COL_none}"
-PS1="${PS1} ${COL_lblue}\w${COL_none}"
-PS1="${PS1}\$(__ps1_virtualenv)\$(__ps1_rvm)\$(__ps1_git)"
-PS1="${PS1}\n${COL_user}\$ ${COL_none}"
+PS1="\[${RESET}${USER_COLOR}\]\u"
+PS1+="\[${RESET}\]@"
+PS1+="\[${RESET}${SOLAR_YELLOW}\]${_NODENAME}\[${RESET}\].${_DOMAINNAME}"
+PS1+=" \[${RESET}\][${COL_none}\$(__ps1_rc \$?)\[${RESET}]\]"
+PS1+=" \[${RESET}${SOLAR_VIOLET}\]\t"
+PS1+=" \[${RESET}${SOLAR_GREEN}\]\w"
+PS1+="\$(__ps1_virtualenv)\$(__ps1_rvm)\$(__ps1_git)"
+PS1+="\n\[${RESET}${USER_COLOR}\]\$ \[${RESET}\]"
 
 # screen/tmux title magic
 set_screen_title() {

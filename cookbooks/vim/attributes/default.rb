@@ -20,5 +20,7 @@ default[:vim][:plugins] = {
   :javascript => "https://github.com/pangloss/vim-javascript",
   :markdown => "https://github.com/tpope/vim-markdown",
   :matchit => "https://github.com/vim-scripts/matchit.zip",
+  :powerline => "https://github.com/skwp/vim-powerline",
   :ruby => "https://github.com/vim-ruby/vim-ruby",
+  :solarized => "https://github.com/hollow/vim-colors-solarized",
 }
