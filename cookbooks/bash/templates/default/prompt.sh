@@ -257,7 +257,7 @@ __ps1_rc() {
 }
 
 if [[ $(id -u) -eq 0 ]]; then
-	USER_COLOR=${SOLAR_RED}
+	USER_COLOR=${BOLD}${SOLAR_RED}
 else
 	USER_COLOR=${SOLAR_ORANGE}
 fi

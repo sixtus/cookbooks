@@ -13,7 +13,8 @@ endif
 "-----------------------------------------------------------------------
 
 " load bundles
-call pathogen#infect()
+source <%= node[:vim][:rcdir] %>/autoload/pathogen.vim
+call pathogen#infect("<%= node[:vim][:rcdir] %>/bundle")
 
 " don't be compatible with vi
 set nocompatible
