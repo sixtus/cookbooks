@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # select the correct xcode version
-sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
+sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer || exit 1
 
 # bootstrap rvm/bundler
-$(dirname $0)/bootstrap
+$(dirname $0)/bootstrap || exit 2
 source ~/.rvm/scripts/rvm && source .rvmrc
 
 # needed by ruby. does not compile with llvm-gcc
