@@ -61,6 +61,11 @@ when "mac_os_x"
   include_recipe "homebrew"
   include_recipe "iterm"
 
+  # need to upgrade this one as early as possible or dircolors will break
+  package "coreutils" do
+    action :upgrade
+  end
+
 end
 
 # install base packages
