@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: dmg
-# Attributes:: default
+# Cookbook Name:: mac_os_x
+# Provider:: plist_file
 #
 # Copyright 2011, Joshua Timberman
 #
@@ -16,5 +16,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-default[:dmg][:base_dir] = "/Applications"
-default[:dmg][:cache_dir] = Chef::Config[:file_cache_path]
+
+actions :create
+
+attribute :source, :kind_of => String, :name_attribute => true
+attribute :cookbook, :kind_of => String, :default => ""
+
+def initialize(*args)
+  super
+  @action = :create
+end

@@ -58,6 +58,8 @@ when "gentoo"
 
 when "mac_os_x"
   raise "running as root is not supported on mac os" if root?
+
+  include_recipe "mac"
   include_recipe "homebrew"
   include_recipe "iterm"
 

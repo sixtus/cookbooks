@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: dmg
-# Recipe:: default
+# Cookbook Name:: mac_os_x
+# Provider:: plist_file
 #
 # Copyright 2011, Joshua Timberman
 #
@@ -16,3 +16,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
+action :create do
+  file "#{ENV['HOME']}/Library/Preferences/#{new_resource.source}.lockfile" do
+    action :delete
+  end
+
+  cookbook_file "#{ENV['HOME']}/Library/Preferences/#{new_resource.source}" do
+    source new_resource.source
+    cookbook new_resource.cookbook unless new_resource.cookbook.empty?
+    ignore_failure true
+  end
+  new_resource.updated_by_last_action(true)
+end
