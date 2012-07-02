@@ -56,7 +56,7 @@ action :write do
       type ||= 'bool'
     when Integer
       type ||= 'int'
-    When Float
+    when Float
       type ||= 'float'
     when Hash
       type ||= 'dict'
