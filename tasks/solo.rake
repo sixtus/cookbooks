@@ -53,7 +53,8 @@ EOF
     sh("sudo rm -rf /usr/local/.git")
     sh("sudo git clone --bare https://github.com/zenops/homebrew /usr/local/.git")
     sh("sudo env GIT_DIR=/usr/local/.git GIT_WORK_TREE=/usr/local git reset --hard master")
-    sh("sudo chown #{ENV['SOLO_USER']} -R /usr/local/*")
+    sh("sudo chown #{ENV['SOLO_USER']} -R /usr/local")
+    sh("sudo chown root /usr/local")
     sh("sudo chgrp admin -R /usr/local")
     sh("sudo chmod g+rwx /usr/local")
 
