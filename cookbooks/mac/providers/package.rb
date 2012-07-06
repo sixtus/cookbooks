@@ -26,7 +26,7 @@ action :install do
     end
 
     if new_resource.zip
-      execute "unzip '#{dmg_file}' -d '#{mnt_path}'"
+      execute "unzip -q '#{dmg_file}' -d '#{mnt_path}'"
     else
       passphrase_cmd = new_resource.dmg_passphrase ? "-passphrase #{new_resource.dmg_passphrase}" : ""
       ruby_block "attach #{dmg_file}" do
