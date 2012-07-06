@@ -7,8 +7,5 @@ sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer || exit 1
 $(dirname $0)/bootstrap || exit 2
 source ~/.rvm/scripts/rvm && source .rvmrc
 
-# needed by ruby. does not compile with llvm-gcc
-export CC=/usr/bin/gcc-4.2
-
-# now do the normal bootstrap
-exec $(dirname $0)/bootstrap
+# run rake solo
+rake solo
