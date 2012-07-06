@@ -1,14 +1,19 @@
 #!/bin/bash
 
 # select the correct xcode version
+echo ">>> Setting XCode to /Applications/Xcode.app"
 sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer || exit 1
 
+# updates
+echo ">>> Installing Mac OS X software updates"
+sudo softwareupdate -ia || exit 1
+
 # bootstrap rvm/bundler
-$(dirname $0)/bootstrap || exit 2
+$(dirname $0)/bootstrap || exit 1
 source ~/.rvm/scripts/rvm && source .rvmrc
 
 # run rake solo
-rake solo
+rake solo || exit 1
 
 # open iTerm
 curl -s -L https://raw.github.com/altercation/solarized/master/iterm2-colors-solarized/Solarized%20Dark.itermcolors > '/Applications/iTerm.app/Solarized Dark.itermcolors'
