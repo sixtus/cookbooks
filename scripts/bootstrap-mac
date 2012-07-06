@@ -9,3 +9,7 @@ source ~/.rvm/scripts/rvm && source .rvmrc
 
 # run rake solo
 rake solo
+
+# open iTerm
+curl -s -L https://raw.github.com/altercation/solarized/master/iterm2-colors-solarized/Solarized%20Dark.itermcolors > '/Applications/iTerm.app/Solarized Dark.itermcolors'
+open '/Applications/iTerm.app/Solarized Dark.itermcolors'
