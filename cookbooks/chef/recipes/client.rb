@@ -39,4 +39,14 @@ unless solo?
     group "root"
     mode "0600"
   end
+
+  directory "/etc/chef/cache" do
+    action :delete
+    recursive true
+    only_if { File.directory?("/etc/chef/cache") }
+  end
+
+  link "/etc/chef/cache" do
+    to "/var/lib/chef/cache"
+  end
 end
