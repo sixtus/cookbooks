@@ -2,13 +2,13 @@ include_recipe "syslog"
 
 nginx_default_use_flags = %w(
   -nginx_modules_http_browser
-  -nginx_modules_http_empty_gif
-  -nginx_modules_http_geo
   -nginx_modules_http_memcached
   -nginx_modules_http_ssi
   -nginx_modules_http_userid
   aio
   nginx_modules_http_empty_gif
+  nginx_modules_http_geo
+  nginx_modules_http_geoip
   nginx_modules_http_gzip_static
   nginx_modules_http_realip
   nginx_modules_http_stub_status
