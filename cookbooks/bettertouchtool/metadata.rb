@@ -6,5 +6,4 @@ license "Apache v2.0"
 
 supports "mac_os_x"
 
-depends "dmg"
 depends "mac"
