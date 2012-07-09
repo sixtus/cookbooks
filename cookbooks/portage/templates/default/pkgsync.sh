@@ -24,7 +24,7 @@ rsync() {
 
 	# regenerate Packages files
 	for arch in amd64 x86; do
-		env PKGDIR=${PKGDIR}/${arch} emaint -f binhost
+		env PKGDIR=${PKGDIR}/${arch} emaint -f binhost >/dev/null
 	done
 
 ) 9>/var/lock/${PROGRAM}.lock
