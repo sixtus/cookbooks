@@ -57,6 +57,8 @@ default[:sysctl][:net][:ipv4][:tcp_max_syn_backlog] = 2048
 default[:sysctl][:net][:ipv4][:tcp_syncookies] = 1
 default[:sysctl][:net][:ipv4][:tcp_tw_recycle] = 0
 default[:sysctl][:net][:ipv4][:tcp_tw_reuse] = 0
+default[:sysctl][:net][:ipv4][:tcp_window_scaling] = 1
+default[:sysctl][:net][:ipv4][:tcp_timestamps] = 1
 default[:sysctl][:net][:netfilter][:nf_conntrack_max] = 262144
 
 # skip hardware cookbooks
