@@ -8,23 +8,28 @@ def cleanup_stale
   age = config('cleanup.age').to_i
   return unless age > 0
 
+  pattern = Regexp.new(config('cleanup.pattern'))
+  branches = %x(git branch --list).split.map(&:chomp).select do |branch|
+    branch =~ pattern
+  end
+
   now = Time.now
 
-  stale = %x(git branch --list | egrep '^\s*[0-9]').split.map(&:chomp).select do |branch|
+  stale = branches.select do |branch|
     mtime = Time.at(%x(git --no-pager show -s --format=%at #{branch}).chomp.to_i)
     now - mtime > age*24*60*60
   end
 
   if stale.any?
-    puts
-    puts "The following branches had no activity for #{age} days and have been deleted:"
-    puts
+    STDERR.puts
+    STDERR.puts "The following branches had no activity for #{age} days and have been deleted:"
+    STDERR.puts
     stale.each do |branch|
       rev = %x(git rev-parse #{branch}).chomp
-      puts " - #{branch} -> #{rev}"
+      STDERR.puts " - #{branch} -> #{rev}"
       %x(git branch -D #{branch})
     end
-    puts
+    STDERR.puts
   end
 end
 

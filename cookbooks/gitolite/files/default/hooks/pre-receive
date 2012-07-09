@@ -15,8 +15,10 @@ def check_whitespace(rev_old, rev_new, ref)
     STDERR.puts
     STDERR.puts check_result
     STDERR.puts
-    exit(1)
+    return 1
   end
+
+  return 0
 end
 
 def check_linear_history(rev_old, rev_new, ref)
@@ -33,13 +35,42 @@ def check_linear_history(rev_old, rev_new, ref)
     STDERR.puts "history by introducing the following merge commits:"
     STDERR.puts merges_introduced
     STDERR.puts
-    exit(1)
+    return 1
   end
+
+  return 0
+end
+
+def check_merged_branches(rev_old, rev_new, ref)
+  branches = config('check.merged').split(',')
+  branch = ref.sub('refs/heads/', '')
+
+  return unless branches.include?(branch)
+
+  pattern = Regexp.new(config('check.mergepattern'))
+  merged = %x(git branch --merged #{branch}).split.map(&:chomp).select do |br|
+    br =~ pattern
+  end
+
+  if merged.any?
+    STDERR.puts
+    STDERR.puts "Refusing push to #{ref}, since it contains the following merged"
+    STDERR.puts "branches which have not been deleted from the remote repository:"
+    STDERR.puts
+    STDERR.puts merged.map {|b| "  - #{b}" }.join("\n")
+    STDERR.puts
+    return 1
+  end
+
+  return 0
 end
 
 STDIN.each_line do |line|
   rev_old, rev_new, ref = line.split(" ")
 
-  check_whitespace(rev_old, rev_new, ref)
-  check_linear_history(rev_old, rev_new, ref)
+  [
+    check_whitespace(rev_old, rev_new, ref),
+    check_linear_history(rev_old, rev_new, ref),
+    check_merged_branches(rev_old, rev_new, ref),
+  ].compact.max > 0 and exit(1)
 end
