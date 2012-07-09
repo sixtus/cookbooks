@@ -146,6 +146,7 @@ end
   remerge
   update-preserved-libs
   updateworld
+  plibs
 ).each do |f|
   cookbook_file "/usr/local/sbin/#{f}" do
     source "scripts/#{f}"
