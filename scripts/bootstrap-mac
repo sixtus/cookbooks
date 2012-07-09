@@ -15,6 +15,10 @@ source ~/.rvm/scripts/rvm && source .rvmrc
 # run rake solo
 rake solo || exit 1
 
+# install iTerm colors and fonts
+curl -s -L https://gist.github.com/raw/1595572/417a3fa36e35ca91d6d23ac961071094c26e5fad/Menlo-Powerline.otf > '/Applications/iTerm.app/Menlo-Powerline.otf'
+open '/Applications/iTerm.app/Menlo-Powerline.otf'
+
 # open iTerm
 curl -s -L https://raw.github.com/altercation/solarized/master/iterm2-colors-solarized/Solarized%20Dark.itermcolors > '/Applications/iTerm.app/Solarized Dark.itermcolors'
 open '/Applications/iTerm.app/Solarized Dark.itermcolors'

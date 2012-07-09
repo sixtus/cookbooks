@@ -15,12 +15,14 @@ endif
 " load bundles
 source <%= node[:vim][:rcdir] %>/autoload/pathogen.vim
 call pathogen#infect("<%= node[:vim][:rcdir] %>/bundle")
+call pathogen#helptags()
 
 " don't be compatible with vi
 set nocompatible
 
-" fast character redrawing
+" fast redrawing
 set ttyfast
+set lazyredraw
 
 " enable a nice big viminfo file
 set viminfo='1000,f1,:1000,/1000
@@ -52,9 +54,6 @@ set laststatus=2
 
 " show full tags when doing search completion
 set showfulltag
-
-" speed up macros
-set lazyredraw
 
 " use hidden buffers
 set hidden
