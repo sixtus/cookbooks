@@ -8,6 +8,15 @@ sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer || exit 1
 echo ">>> Installing Mac OS X software updates"
 sudo softwareupdate -ia || exit 1
 
+echo ">>> Bootstrapping Homebrew"
+sudo rm -rf /usr/local/.git
+sudo git clone --bare https://github.com/zenops/homebrew /usr/local/.git
+sudo env GIT_DIR=/usr/local/.git GIT_WORK_TREE=/usr/local git reset --hard master
+sudo chown -R $(whoami) /usr/local
+sudo chown root /usr/local
+sudo chgrp -R admin /usr/local
+sudo chmod g+rwx /usr/local
+
 # bootstrap rvm/bundler
 $(dirname $0)/bootstrap || exit 1
 source ~/.rvm/scripts/rvm && source .rvmrc
