@@ -8,7 +8,7 @@ end
 mac_userdefaults "autohide dock delay" do
   domain "com.apple.dock"
   key "autohide-delay"
-  value 0.0
+  value 0
   notifies :run, "execute[kill-mac-procs]"
 end
 
