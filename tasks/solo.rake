@@ -74,3 +74,7 @@ task :solo do
   ohai.require_plugin("platform")
   Rake::Task["solo:#{ohai[:platform]}"].invoke
 end
+
+task :han do
+  puts "May the force be with you!"
+end
