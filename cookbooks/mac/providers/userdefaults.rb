@@ -7,9 +7,15 @@ def load_current_resource
   @userdefaults.key(new_resource.key)
   @userdefaults.domain(new_resource.domain)
 
+  @userdefaults.is_set(is_set)
+end
+
+def is_set
   tpcmd = "defaults read-type #{new_resource.domain} "
   tpcmd << "'#{new_resource.key}' " if new_resource.key
   v = shell_out("#{tpcmd} | awk '{print $3}'")
+
+  return false if v.stdout.empty?
 
   case v.stdout.split.first.chomp
   when 'boolean'
@@ -22,8 +28,7 @@ def load_current_resource
   drcmd << "'#{new_resource.key}' " if new_resource.key
   v = shell_out("#{drcmd} | grep -qx '#{pattern}'")
 
-  is_set = v.exitstatus == 0 ? true : false
-  @userdefaults.is_set(is_set)
+  v.exitstatus == 0
 end
 
 action :write do
