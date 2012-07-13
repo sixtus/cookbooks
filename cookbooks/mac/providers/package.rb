@@ -18,6 +18,8 @@ action :install do
                  "/Volumes/#{volumes_dir}"
                end
 
+    directory Chef::Config[:file_cache_path]
+
     remote_file "#{dmg_file} - #{@dmgpkg.name}" do
       path dmg_file
       source new_resource.source
