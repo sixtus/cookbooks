@@ -14,7 +14,7 @@ action :create do
     template_source = new_resource.source
   end
 
-  template "#{new_resource.path}" do
+  template new_resource.path do
     source template_source
     action (new_resource.only_if_missing ? :create_if_missing : :create)
     backup new_resource.backup if new_resource.backup

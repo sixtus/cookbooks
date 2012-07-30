@@ -7,7 +7,7 @@ action :create do
     Chef::Log.debug("MySQL database \"#{new_resource.name}\" exists.")
   end
   unless new_resource.owner.to_s == ""
-    mysql_user "#{new_resource.owner}" do
+    mysql_user new_resource.owner do
       host new_resource.owner_host
     end
     mysql_grant "#{new_resource.name}_#{new_resource.owner}" do

@@ -1,4 +1,6 @@
 depends "apache"
 depends "dovecot"
 depends "mysql"
+depends "php"
+depends "postfix"
 depends "pure-ftpd"
