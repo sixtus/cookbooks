@@ -1,8 +1,11 @@
 if platform?("gentoo")
-  package "dev-java/sun-jdk"
+  case node[:java][:vm]
+  when "icedtea-bin-6"
+    package "dev-java/icedtea-bin"
+  end
 
-  execute "ensure java 1.6 is the system vm" do
-    command "eselect java-vm set system sun-jdk-1.6"
-    not_if { %x(eselect --brief java-vm show system).strip == "sun-jdk-1.6" }
+  execute "ensure #{node[:java][:vm]} is the system vm" do
+    command "eselect java-vm set system #{node[:java][:vm]}"
+    not_if { %x(eselect --brief java-vm show system).strip == node[:java][:vm] }
   end
 end
