@@ -43,7 +43,7 @@ unless solo?
   directory "/etc/chef/cache" do
     action :delete
     recursive true
-    only_if { File.directory?("/etc/chef/cache") }
+    only_if { File.directory?("/etc/chef/cache") and not File.symlink?("/etc/chef/cache") }
   end
 
   link "/etc/chef/cache" do
