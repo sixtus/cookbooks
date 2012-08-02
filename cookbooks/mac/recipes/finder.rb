@@ -92,7 +92,7 @@ end
 mac_userdefaults "show all files in finder" do
   domain "com.apple.finder"
   key "AppleShowAllFiles"
-  value true
+  value false
 end
 
 mac_userdefaults "do not offer timemachine for external drives" do
