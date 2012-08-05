@@ -10,12 +10,14 @@ fi
 
 _BASHRC_DIR="${_BASHRC_DIR:-<%= node[:bash][:rcdir] %>}"
 
+<% if solo? %>
 # make sure all important paths are in PATH
 <% if node[:platform] == "mac_os_x" %>
-export PATH="~/bin:$(brew --prefix coreutils)/libexec/gnubin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:${PATH}"
+export PATH="~/bin:$(brew --prefix coreutils)/libexec/gnubin:${PATH}:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 alias find="$(brew --prefix)/bin/gfind"
 <% else %>
-export PATH="~/bin:${PATH}"
+export PATH="~/bin:${PATH}:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+<% end %>
 <% end %>
 
 source "${_BASHRC_DIR}/detect.sh"
