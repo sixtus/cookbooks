@@ -135,7 +135,6 @@ when "mac_os_x"
   node[:packages] += %w(
     ack
     atool
-    bwm-ng
     colordiff
     dos2unix
     findutils
