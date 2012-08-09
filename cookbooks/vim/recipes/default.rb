@@ -1,7 +1,7 @@
 if platform?("mac_os_x")
   package "macvim" do
     action :upgrade
-    notifies :create, "ruby_block[macvim-to-app]"
+    notifies :create, "ruby_block[macvim-to-app]", :immediately
   end
 
   package "ctags"
