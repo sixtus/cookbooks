@@ -58,3 +58,8 @@ end
 file "/etc/motd" do
   action :delete
 end
+
+# make sure /etc/mtab always points to the right info
+link "/etc/mtab" do
+  to "/proc/self/mounts"
+end
