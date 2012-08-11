@@ -121,9 +121,9 @@ end
 # roundcube
 package "dev-vcs/subversion"
 
-subversion "/srv/system/htdocs/webmail" do
-  repository "https://svn.roundcube.net/tags/roundcubemail/v0.6"
-  revision "HEAD"
+git "/srv/system/htdocs/webmail" do
+  repository "https://github.com/roundcube/roundcubemail"
+  revision "v0.7.2"
   user "nepal"
   group "nepal"
 end
