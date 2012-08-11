@@ -1,6 +1,6 @@
 #!/sbin/runscript
 
-PHPSLOT="php5.3"
+PHPSLOT="php<%= node[:php][:slot] %>"
 
 : ${PHP_FPM_CONF:="/etc/php/fpm-${PHPSLOT}/php-fpm.conf"}
 : ${PHP_FPM_PID:="/var/run/php-fpm.pid"}
