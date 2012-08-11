@@ -67,12 +67,13 @@ end
 end
 
 postconf "nepal virtual maps" do
-  set :virtual_mailbox_domains => "mysql:/etc/postfix/mysql-virtual-mailbox-domains.cf",
-      :virtual_uid_maps => "mysql:/etc/postfix/mysql-virtual-uid-maps.cf",
-      :virtual_gid_maps => "mysql:/etc/postfix/mysql-virtual-gid-maps.cf",
-      :virtual_mailbox_maps => "mysql:/etc/postfix/mysql-virtual-mailbox-maps.cf",
-      :virtual_alias_maps => "mysql:/etc/postfix/mysql-virtual-alias-maps.cf,mysql:/etc/postfix/mysql-virtual-email2email-maps.cf",
-      :virtual_transport => "lmtp:unix:private/dovecot-lmtp"
+  set :virtual_mailbox_domains => "proxy:mysql:/etc/postfix/mysql-virtual-mailbox-domains.cf",
+      :virtual_mailbox_maps => "proxy:mysql:/etc/postfix/mysql-virtual-mailbox-maps.cf",
+      :virtual_alias_maps => "proxy:mysql:/etc/postfix/mysql-virtual-alias-maps.cf,proxy:mysql:/etc/postfix/mysql-virtual-email2email-maps.cf",
+      :virtual_uid_maps => "proxy:mysql:/etc/postfix/mysql-virtual-uid-maps.cf",
+      :virtual_gid_maps => "proxy:mysql:/etc/postfix/mysql-virtual-gid-maps.cf",
+      :virtual_transport => "lmtp:unix:private/dovecot-lmtp",
+      :proxy_read_maps => "$local_recipient_maps $mydestination $virtual_alias_maps $virtual_alias_domains $virtual_mailbox_maps $virtual_mailbox_domains $virtual_uid_maps $virtual_gid_maps $relay_recipient_maps $relay_domains $canonical_maps $sender_canonical_maps $recipient_canonical_maps $relocated_maps $transport_maps $mynetworks $sender_bcc_maps $recipient_bcc_maps $smtp_generic_maps $lmtp_generic_maps"
 end
 
 portage_package_use "net-mail/dovecot|mysql" do
