@@ -29,9 +29,9 @@
 end.sort_by do |n|
   n[:hostname]
 end.each do |n|
-  n[:resolv][:aliases] ||= []
+  aliases = (n[:resolv][:aliases] || []).map { |a| " #{a}.local" }
 %>
-<%= n[:local_ipaddress] %> <%= n[:hostname] %>.local<%= n[:resolv][:aliases].map { |a| " #{a}.local" } %>
+<%= n[:local_ipaddress] %> <%= n[:hostname] %>.local<%= aliases.join(" ") %>
 <% end %>
 <% end %>
 
