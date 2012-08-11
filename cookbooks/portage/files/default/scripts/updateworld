@@ -63,16 +63,16 @@ depclean
 
 # first try to resolve preserved-libs with binpkgs. if this fails, the second
 # run will pick up remaining libs.
-emerge @preserved-rebuild
-emerge @preserved-rebuild --usepkg=n --getbinpkg=n
+emerge @preserved-rebuild --quiet
+emerge @preserved-rebuild --quiet --usepkg=n --getbinpkg=n
 
 # this fucker needs to be run after every upgrade, since noone can be sure what
 # has been broken. dude, srsly - can't we simply have PYTHON_TARGETS?
 eselect python update --python2
 
 if [[ $(ls -1d /usr/lib/python* | wc -l) != 1 ]]; then
-	python-updater -dmanual -- --usepkg --getbinpkg
-	python-updater -dmanual -- --usepkg=n --getbinpkg=n
+	python-updater -dmanual -- --quiet --usepkg --getbinpkg
+	python-updater -dmanual -- --quiet --usepkg=n --getbinpkg=n
 fi
 
 # same crap as with python ... except that perl-cleaner is even crappier
@@ -80,8 +80,8 @@ current_perl=$(ls -1d /usr/lib/perl5/5.* | sort --version-sort --reverse | head 
 old_perl_dirs=$(ls -1d /usr/lib/perl5/5.* /usr/lib/perl5/site_perl/5.* /usr/lib/perl5/vendor_perl/5.* | grep -v ${current_perl} || :)
 
 if [[ -n ${old_perl_dirs} ]]; then
-	perl-cleaner --all -- --usepkg --getbinpkg
-	perl-cleaner --all -- --usepkg=n --getbinpkg=n
+	perl-cleaner --all -- --quiet --usepkg --getbinpkg
+	perl-cleaner --all -- --quiet --usepkg=n --getbinpkg=n
 
 	# perl-cleaner doesn't remove this crap
 	for i in ${old_perl_dirs}; do
@@ -95,12 +95,12 @@ depclean
 
 # run lafilefixer to get rid of fucking annoying libtool archive dependency
 # crap. aw man. this is getting worse every day.
-emerge -n dev-util/lafilefixer
+emerge --quiet -n dev-util/lafilefixer
 lafilefixer --justfixit > /dev/null
 
 # finally, after all this crap, run revdep-rebuild to pick up remaining
 # packages that have broken lib dependencies.
-EMERGE_DEFAULT_OPTS="" revdep-rebuild -q -i -- --quiet-build --with-bdeps=y --binpkg-respect-use=y --usepkg=n --getbinpkg=n
+EMERGE_DEFAULT_OPTS="" revdep-rebuild -q -i -- --quiet --quiet-build --with-bdeps=y --binpkg-respect-use=y --usepkg=n --getbinpkg=n
 
 # switch to latest ruby before final depclean
 latest_ruby
