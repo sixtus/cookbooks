@@ -20,6 +20,7 @@ smtpd_sender_restrictions = %w(
 smtpd_recipient_restrictions = %w(
   reject_non_fqdn_recipient
   reject_unknown_recipient_domain
+  check_recipient_access\ hash:/etc/postfix/recipient
   permit_mynetworks
   permit_sasl_authenticated
   reject_unauth_destination
@@ -30,10 +31,10 @@ node[:postfix][:rbl_servers].each do |s|
   smtpd_recipient_restrictions << "reject_rbl_client #{s}"
 end
 
-smtpd_recipient_restrictions += [
-  "check_policy_service unix:private/postgrey",
-  "permit"
-]
+smtpd_recipient_restrictions += %w(
+  check_policy_service unix:private/postgrey
+  permit
+)
 
 postconf "Restrictions for public SMTP servers" do
   set :smtpd_helo_required => "yes",

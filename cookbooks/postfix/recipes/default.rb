@@ -88,6 +88,22 @@ postmaster "smtps" do
   args "-o smtpd_tls_wrappermode=yes -o smtpd_sasl_auth_enable=yes -o smtpd_client_restrictions=permit_sasl_authenticated,reject"
 end
 
+# global recipient blacklist
+blacklist = (node[:postfix][:recipient] || {}).map {|k,v| "#{k} #{v}"}.join("\n")
+
+file "/etc/postfix/recipient" do
+  content blacklist
+  owner "root"
+  group "root"
+  mode "0644"
+  notifies :run, "execute[postmap-recipient]", :immediately
+end
+
+execute "postmap-recipient" do
+  command "postmap /etc/postfix/recipient"
+  action :nothing
+end
+
 service "postfix" do
   action [:enable, :start]
 end

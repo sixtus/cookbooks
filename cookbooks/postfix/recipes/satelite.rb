@@ -3,9 +3,17 @@ unless node[:skip][:postfix_satelite]
   include_recipe "postfix::adminforward"
   include_recipe "postfix::tls"
 
+  smtpd_recipient_restrictions = %w(
+    check_recipient_access\ hash:/etc/postfix/recipient
+    permit_mynetworks
+    reject_unauth_destination
+    permit
+  )
+
   postconf "relay all mail via relayhost" do
     set :relayhost => node[:postfix][:relayhost],
-        :inet_interfaces => "loopback-only"
+        :inet_interfaces => "loopback-only",
+        :smtpd_recipient_restrictions => smtpd_recipient_restrictions.join(", ")
   end
 
   if tagged?("nagios-client")
