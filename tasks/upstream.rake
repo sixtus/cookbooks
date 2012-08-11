@@ -41,3 +41,6 @@ namespace :upstream do
   end
 
 end
+
+task :uc => 'upstream:changes'
+task :um => 'upstream:merge'
