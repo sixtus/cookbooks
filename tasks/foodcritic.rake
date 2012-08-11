@@ -1,4 +1,7 @@
-require 'foodcritic'
+begin
+  require 'foodcritic'
+rescue LoadError
+end
 
 task :lint do
   cmd_line = FoodCritic::CommandLine.new(["cookbooks", "site-cookbooks"])
