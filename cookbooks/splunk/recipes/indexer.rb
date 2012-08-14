@@ -8,7 +8,6 @@ include_recipe "splunk::default"
   indexes
   props
   transforms
-  viewstates
 ).each do |c|
   template "/opt/splunk/etc/system/local/#{c}.conf" do
     source "#{c}.conf"
@@ -19,12 +18,17 @@ include_recipe "splunk::default"
   end
 end
 
-template "/opt/splunk/etc/apps/search/default/savedsearches.conf" do
-  source "savedsearches.conf"
-  owner "root"
-  group "root"
-  mode "0644"
-  notifies :restart, "service[splunk]"
+%w(
+  savedsearches
+  viewstates
+).each do |c|
+  template "/opt/splunk/etc/apps/search/local/#{c}.conf" do
+    source "#{c}.conf"
+    owner "root"
+    group "root"
+    mode "0644"
+    notifies :restart, "service[splunk]"
+  end
 end
 
 ## syslog -> splunk
