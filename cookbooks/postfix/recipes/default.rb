@@ -96,12 +96,11 @@ file "/etc/postfix/recipient" do
   owner "root"
   group "root"
   mode "0644"
-  notifies :run, "execute[postmap-recipient]", :immediately
 end
 
 execute "postmap-recipient" do
   command "postmap /etc/postfix/recipient"
-  action :nothing
+  only_if { FileUtils.uptodate?('/etc/postfix/recipient', ['/etc/postfix/recipient.db']) }
 end
 
 service "postfix" do
