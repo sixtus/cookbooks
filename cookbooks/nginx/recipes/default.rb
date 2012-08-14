@@ -119,6 +119,10 @@ cookbook_file "/etc/logrotate.d/nginx" do
   mode "0644"
 end
 
+splunk_input "monitor:///var/log/nginx/access_log" do
+  index "access"
+end
+
 if tagged?("nagios-client")
   nrpe_command "check_nginx" do
     command "/usr/lib/nagios/plugins/check_pidfile /var/run/nginx.pid /usr/sbin/nginx"
