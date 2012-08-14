@@ -4,6 +4,14 @@ package "net-analyzer/splunk"
 
 include_recipe "splunk::default"
 
+template "/opt/splunk/etc/system/local/indexes.conf" do
+  source "indexes.conf"
+  owner "root"
+  group "root"
+  mode "0644"
+  notifies :restart, "service[splunk]"
+end
+
 remote_directory "/opt/splunk/etc/apps/syslog_priority_lookup" do
   source "apps/syslog_priority_lookup"
   files_owner "root"
