@@ -121,6 +121,10 @@ file "/var/log/apache2/error_log" do
   backup 0
 end
 
+file "/etc/syslog-ng/conf.d/90-apache.conf" do
+  action :delete
+end
+
 # nagios service checks
 if tagged?("nagios-client")
   package "dev-perl/libwww-perl"

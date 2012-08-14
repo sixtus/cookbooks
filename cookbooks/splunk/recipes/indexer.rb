@@ -18,17 +18,14 @@ include_recipe "splunk::default"
   end
 end
 
-%w(
-  savedsearches
-  viewstates
-).each do |c|
-  template "/opt/splunk/etc/apps/search/local/#{c}.conf" do
-    source "#{c}.conf"
-    owner "root"
-    group "root"
-    mode "0644"
-    notifies :restart, "service[splunk]"
-  end
+# this is in default rather than local, since splunk seems to have some
+# problems with overriding the saved searches in local files
+template "/opt/splunk/etc/apps/search/default/savedsearches.conf" do
+  source "savedsearches.conf"
+  owner "root"
+  group "root"
+  mode "0644"
+  notifies :restart, "service[splunk]"
 end
 
 ## syslog -> splunk

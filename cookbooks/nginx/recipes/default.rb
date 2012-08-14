@@ -96,6 +96,10 @@ file "/var/log/nginx/error_log" do
   action :delete
 end
 
+file "/etc/syslog-ng/conf.d/90-nginx.conf" do
+  action :delete
+end
+
 splunk_input "monitor:///var/log/nginx/access_log" do
   index "access"
 end
