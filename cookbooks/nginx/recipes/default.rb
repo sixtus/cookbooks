@@ -1,11 +1,10 @@
-include_recipe "syslog"
-
 nginx_default_use_flags = %w(
   -nginx_modules_http_browser
   -nginx_modules_http_memcached
   -nginx_modules_http_ssi
   -nginx_modules_http_userid
   aio
+  syslog
   nginx_modules_http_empty_gif
   nginx_modules_http_geo
   nginx_modules_http_geoip
@@ -92,6 +91,22 @@ nginx_module "log" do
   template "log.conf"
 end
 
+# we use syslog, no need to keep old error logs
+file "/var/log/nginx/error_log" do
+  action :delete
+end
+
+splunk_input "monitor:///var/log/nginx/access_log" do
+  index "access"
+end
+
+cookbook_file "/etc/logrotate.d/nginx" do
+  source "logrotate.conf"
+  owner "root"
+  group "root"
+  mode "0644"
+end
+
 nginx_module "fastcgi" do
   template "fastcgi.conf"
 end
@@ -106,21 +121,6 @@ end
 
 nginx_server "status" do
   template "status.conf"
-end
-
-syslog_config "90-nginx" do
-  template "syslog.conf"
-end
-
-cookbook_file "/etc/logrotate.d/nginx" do
-  source "logrotate.conf"
-  owner "root"
-  group "root"
-  mode "0644"
-end
-
-splunk_input "monitor:///var/log/nginx/access_log" do
-  index "access"
 end
 
 if tagged?("nagios-client")
