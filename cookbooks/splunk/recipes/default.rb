@@ -19,7 +19,11 @@ directory "/opt/splunk/etc/system/local" do
   mode "0755"
 end
 
-%w(inputs prefs web).each do |c|
+%w(
+  inputs
+  prefs
+  web
+).each do |c|
   template "/opt/splunk/etc/system/local/#{c}.conf" do
     source "#{c}.conf"
     owner "root"
