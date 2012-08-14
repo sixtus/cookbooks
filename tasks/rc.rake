@@ -9,6 +9,8 @@ def rc(default_query)
   end
 end
 
+
+
 namespace :rc do
 
   desc "Update gentoo packages"
@@ -33,7 +35,7 @@ namespace :rc do
   desc "Run chef-client"
   task :converge do
     rc("ipaddress:[* TO *]") do |node|
-      system("ssh -t #{node.name} '/usr/bin/sudo -i /usr/bin/chef-client'")
+      system("ssh -t #{node.name} '/usr/bin/sudo -i /usr/bin/env LANG=en_US.UTF-8 /usr/bin/chef-client'")
     end
   end
 
