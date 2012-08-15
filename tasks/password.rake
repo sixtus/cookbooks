@@ -16,5 +16,6 @@ task :password do
   raise "passwords do not match" unless p1 == p2
 
   salt = SecureRandom.hex(4)
+  STDOUT.puts p1.crypt("$1$#{salt}$")
   STDOUT.puts p1.crypt("$6$#{salt}$")
 end
