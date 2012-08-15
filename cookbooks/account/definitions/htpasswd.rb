@@ -1,4 +1,4 @@
-define :htpasswd_from_databag, :owner => "root", :group => "root", :mode => "0440" do
+define :htpasswd_from_databag, :owner => "root", :group => "root", :mode => "0440", :password_field => :password do
   if params[:query]
     query = params[:query]
   elsif params[:tags]
@@ -16,9 +16,9 @@ define :htpasswd_from_databag, :owner => "root", :group => "root", :mode => "044
   end
 
   content = node.run_state[:users].select(&query).select do |user|
-    user[:password]
+    user[params[:password_field]]
   end.map do |user|
-    "#{user[:id]}:#{user[:password]}"
+    "#{user[:id]}:#{user[params[:password_field]]}"
   end.join("\n")
 
   file params[:name] do
