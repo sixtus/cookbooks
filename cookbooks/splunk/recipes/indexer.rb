@@ -1,28 +1,28 @@
 tag("splunk-indexer")
 
+node.set[:syslog][:archivedir] = false
+
 package "net-analyzer/splunk"
 
 include_recipe "splunk::default"
 
+## users
 splunk_users = Proc.new do |u|
   (u[:tags]) and
   (u[:tags].include?("hostmaster") or u[:tags].include?("splunk")) and
   (u[:password1] and u[:password1] != '!')
 end
 
-passwd_content = node.run_state[:users].select(&splunk_users).map do |user|
-  ":#{user[:id]}:#{user[:password1]}::#{user[:comment]}:admin:#{user[:email]}:"
-end.join("\n")
-
-file "/opt/splunk/etc/passwd" do
-  content passwd_content
+template "/opt/splunk/etc/passwd" do
+  source "passwd"
   owner "root"
   group "root"
   mode "0644"
   notifies :restart, "service[splunk]"
+  variables :splunk_users => node.run_state[:users].select(&splunk_users)
 end
 
-
+## global configuration
 %w(
   alert_actions
   eventtypes
