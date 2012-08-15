@@ -24,6 +24,7 @@ end
 
 
 %w(
+  alert_actions
   eventtypes
   indexes
   props
