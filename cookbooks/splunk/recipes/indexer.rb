@@ -4,9 +4,30 @@ package "net-analyzer/splunk"
 
 include_recipe "splunk::default"
 
+splunk_users = Proc.new do |u|
+  (u[:tags]) and
+  (u[:tags].include?("hostmaster") or u[:tags].include?("splunk")) and
+  (u[:password1] and u[:password1] != '!')
+end
+
+passwd_content = node.run_state[:users].select(&splunk_users).map do |user|
+  ":#{user[:id]}:#{user[:password1]}::#{user[:comment]}:admin:#{user[:email]}:"
+end.join("\n")
+
+file "/opt/splunk/etc/passwd" do
+  content passwd_content
+  owner "root"
+  group "root"
+  mode "0644"
+  notifies :restart, "service[splunk]"
+end
+
+
 %w(
+  eventtypes
   indexes
   props
+  tags
   transforms
 ).each do |c|
   template "/opt/splunk/etc/system/local/#{c}.conf" do
@@ -49,14 +70,10 @@ end
 ## nginx ssl proxy
 include_recipe "nginx"
 
-query = Proc.new do |u|
-  u[:tags] and
-  (u[:tags].include?("hostmaster") or u[:tags].include?("splunk"))
-end
-
 htpasswd_from_databag "/etc/nginx/servers/splunk.passwd" do
-  query query
+  query splunk_users
   group "nginx"
+  password_field :password1
 end
 
 nginx_server "splunk" do
