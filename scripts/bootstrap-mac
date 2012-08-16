@@ -11,6 +11,7 @@ sudo softwareupdate -ia || exit 1
 echo ">>> Bootstrapping Homebrew"
 sudo rm -rf /usr/local/.git
 sudo git clone --bare https://github.com/zenops/homebrew /usr/local/.git
+sudo env GIT_DIR=/usr/local/.git GIT_WORK_TREE=/usr/local git config core.bare false
 sudo env GIT_DIR=/usr/local/.git GIT_WORK_TREE=/usr/local git reset --hard master
 sudo chown -R $(whoami) /usr/local
 sudo chown root /usr/local
