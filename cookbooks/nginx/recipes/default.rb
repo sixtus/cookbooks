@@ -9,6 +9,7 @@ nginx_default_use_flags = %w(
   nginx_modules_http_geo
   nginx_modules_http_geoip
   nginx_modules_http_gzip_static
+  nginx_modules_http_headers_more
   nginx_modules_http_realip
   nginx_modules_http_stub_status
 )
