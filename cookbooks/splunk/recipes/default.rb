@@ -1,7 +1,3 @@
-link "/usr/sbin/splunk" do
-  to "/opt/splunk/bin/splunk"
-end
-
 directory "/etc/ssl/splunk" do
   owner "root"
   group "root"
