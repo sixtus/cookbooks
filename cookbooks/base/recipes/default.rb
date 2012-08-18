@@ -189,7 +189,7 @@ if tagged?("nagios-client")
     end
 
     nrpe_command "check_disks" do
-      command "/usr/lib/nagios/plugins/check_disk -w 10% -c 5%"
+      command "/usr/lib/nagios/plugins/check_disk -w 10% -c 5% -A -i /var/tmp/metro"
     end
 
     nagios_service "DISKS" do
