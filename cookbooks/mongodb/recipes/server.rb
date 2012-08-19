@@ -1,4 +1,4 @@
-opts = %w(--journal --rest)
+opts = %w(--journal --rest --quiet)
 opts << "--shardsvr" if node[:mongodb][:shardsvr]
 opts << "--replSet #{node[:mongodb][:replication][:set]}" if node[:mongodb][:replication][:set]
 
