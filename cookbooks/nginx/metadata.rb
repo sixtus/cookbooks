@@ -1,2 +1,2 @@
-depends          "php"
-depends          "syslog"
+depends "php"
+depends "splunk"
