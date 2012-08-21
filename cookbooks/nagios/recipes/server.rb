@@ -10,17 +10,12 @@ portage_package_use "net-analyzer/nagios-plugins" do
   use %w(ldap mysql nagios-dns nagios-ntp nagios-ping nagios-ssh postgres)
 end
 
+package "net-analyzer/nagios"
+
+include_recipe "nagios::default"
+include_recipe "nagios::livestatus"
 include_recipe "nagios::nrpe"
 include_recipe "nagios::nsca"
-
-package "net-analyzer/nagios"
-package "net-analyzer/mk-livestatus"
-
-directory "/etc/nagios" do
-  owner "nagios"
-  group "nagios"
-  mode "0750"
-end
 
 directory "/var/nagios/rw" do
   owner "nagios"
@@ -32,12 +27,6 @@ file "/var/nagios/rw/nagios.cmd" do
   owner "nagios"
   group "apache"
   mode "0660"
-end
-
-directory "/var/run/nsca" do
-  owner "nagios"
-  group "nagios"
-  mode "0755"
 end
 
 template "/usr/lib/nagios/plugins/notify" do
@@ -269,23 +258,19 @@ template "/usr/share/nagios/htdocs/index.php" do
   mode "0644"
 end
 
-# jNag server (for mobile interface)
-cookbook_file "/usr/share/nagios/htdocs/jNag.php" do
-  source "jnag/jNag.php"
-  owner "nagios"
-  group "nagios"
-  mode "0644"
+# jNag (obsolete)
+file "/usr/share/nagios/htdocs/jNag.php" do
+  action :delete
 end
 
-remote_directory "/usr/share/nagios/htdocs/jNag/images" do
-  source "jnag/images"
-  owner "nagios"
-  group "nagios"
-  mode "0755"
+directory "/usr/share/nagios/htdocs/jNag/images" do
+  action :delete
+  recursive true
 end
 
 nagios_conf "jnag" do
   subdir false
+  action :delete
 end
 
 # nagios health check
@@ -295,4 +280,20 @@ end
 
 nagios_service "NAGIOS" do
   check_command "check_nrpe!check_nagios"
+end
+
+# splunk integration
+splunk_input "monitor:///var/nagios/nagios.log" do
+  sourcetype "nagios"
+  index "nagios"
+end
+
+splunk_input "monitor:///var/nagios/host-perfdata" do
+  sourcetype "nagioshostperf"
+  index "nagios"
+end
+
+splunk_input "monitor:///var/nagios/service-perfdata" do
+  sourcetype "nagiosserviceperf"
+  index "nagios"
 end

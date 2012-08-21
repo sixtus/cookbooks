@@ -1,13 +1,9 @@
 package "net-analyzer/nagios-nrpe"
 package "net-analyzer/nagios-check_pidfile"
 
-directory "/var/run/nrpe" do
-  owner "nagios"
-  group "nagios"
-  mode "0750"
-end
+include_recipe "nagios::default"
 
-directory "/etc/nagios" do
+directory "/var/run/nrpe" do
   owner "nagios"
   group "nagios"
   mode "0750"

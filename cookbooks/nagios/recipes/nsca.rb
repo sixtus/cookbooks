@@ -1,10 +1,6 @@
 package "net-analyzer/nagios-nsca"
 
-directory "/etc/nagios" do
-  owner "nagios"
-  group "nagios"
-  mode "0750"
-end
+include_recipe "nagios::default"
 
 master = node.run_state[:nodes].select do |n|
   n[:tags].include?("nagios-master")
