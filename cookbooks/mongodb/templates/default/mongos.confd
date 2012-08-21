@@ -10,4 +10,4 @@ MONGOS_PORT="<%= @port %>"
 MONGOS_CONFIGDB="<%= @configdb.join(',') %>"
 
 # Set extra options here, such as disabling the admin web server
-MONGOS_OPTIONS=""
+MONGOS_OPTIONS="--quiet"
