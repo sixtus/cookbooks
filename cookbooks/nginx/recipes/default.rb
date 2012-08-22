@@ -92,11 +92,6 @@ nginx_module "log" do
   template "log.conf"
 end
 
-# we use syslog, no need to keep old error logs
-file "/var/log/nginx/error_log" do
-  action :delete
-end
-
 file "/etc/syslog-ng/conf.d/90-nginx.conf" do
   action :delete
 end
