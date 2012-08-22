@@ -72,5 +72,5 @@ STDIN.each_line do |line|
     check_whitespace(rev_old, rev_new, ref),
     check_linear_history(rev_old, rev_new, ref),
     check_merged_branches(rev_old, rev_new, ref),
-  ].compact.max > 0 and exit(1)
+  ].compact.max.to_i > 0 and exit(1)
 end
