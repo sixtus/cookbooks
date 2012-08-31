@@ -61,7 +61,7 @@ class Chef
 
         def get_version_from_command(command)
           version = get_response_from_command(command).chomp
-          version.empty? ? nil : version
+          version.empty? ? nil : version.chomp(',')
         end
 
         # Nicked from lib/chef/package/provider/macports.rb and tweaked
