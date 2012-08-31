@@ -34,6 +34,8 @@
 <% if node[:git][:github][:user] %>
 [github]
 	user = <%= node[:git][:github][:user] %>
+[hub]
+	protocol = https
 <% end %>
 <% if node[:platform] == "mac_os_x" %>
 [credential]
