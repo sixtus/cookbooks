@@ -35,6 +35,7 @@ default[:mysql][:server][:replicate_do_table] = false
 default[:mysql][:server][:slave_transaction_retries] = 10
 default[:mysql][:server][:auto_increment_increment] = 1
 default[:mysql][:server][:auto_increment_offset] = 1
+default[:mysql][:server][:binlog_format] = 'statement'
 
 # General Performance Options
 default[:mysql][:server][:table_open_cache] = "1024"
