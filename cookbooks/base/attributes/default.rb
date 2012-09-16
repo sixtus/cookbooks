@@ -86,6 +86,7 @@ end
 case node[:platform]
 when "gentoo"
   node[:packages] = %w(
+    app-admin/apache-tools
     app-admin/lib_users
     app-admin/pwgen
     app-admin/pydf
