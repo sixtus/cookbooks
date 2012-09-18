@@ -34,4 +34,13 @@ if platform?("gentoo")
       check_command "check_nrpe!check_beanstalkd"
     end
   end
+
+  # ganymed
+  if tagged?('ganymed-client')
+    package 'dev-ruby/beanstalk-client'
+
+    ganymed_collector 'beanstalk' do
+      source 'beanstalk.rb'
+    end
+  end
 end
