@@ -1,6 +1,6 @@
 if platform?("gentoo")
   case node[:java][:vm]
-  when "icedtea-bin-6"
+  when /^icedtea-bin-/
     package "dev-java/icedtea-bin"
   end
 
