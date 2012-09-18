@@ -57,16 +57,6 @@ if platform?("mac_os_x")
     mode "0600"
     backup 0
   end
-
-  execute "mysql-link-plist" do
-    command "ln -nfs $(brew --prefix mysql)/homebrew.mxcl.mysql.plist #{node[:homedir]}/Library/LaunchAgents/homebrew.mxcl.mysql.plist"
-    action :nothing
-  end
-
-  service "mysql" do
-    service_name "homebrew.mxcl.mysql"
-    action :start
-  end
 end
 
 if platform?("gentoo") and root?
