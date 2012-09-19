@@ -151,6 +151,17 @@ if tagged?("nagios-client")
       servicegroups "system"
     end
 
+    nagios_plugin "check_mem"
+
+    nrpe_command "check_mem" do
+      command "/usr/lib/nagios/plugins/check_mem -C -u -w 80 -c 95"
+    end
+
+    nagios_service "MEMORY" do
+      check_command "check_nrpe!check_mem"
+      servicegroups "system"
+    end
+
     nrpe_command "check_load" do
       command "/usr/lib/nagios/plugins/check_load -w #{node[:cpu][:total]*3} -c #{node[:cpu][:total]*10}"
     end
