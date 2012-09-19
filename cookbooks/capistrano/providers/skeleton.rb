@@ -5,7 +5,7 @@ action :create do
   uid = new_resource.uid
   groups = new_resource.groups
   homedir = if new_resource.homedir == nil
-              "/var/app/#{user}"
+              node[user][:homedir] rescue "/var/app/#{user}"
             else
               new_resource.homedir
             end
@@ -78,10 +78,14 @@ EOS
   end
 
   if new_resource.rvm
-    version = new_resource.rvm
+    paths = [
+      "#{homedir}/.rvm/rubies",
+      "#{homedir}/.rvm/gems",
+      "#{homedir}/shared/bundle",
+    ]
 
-    rvm_instance user do
-      version version
+    portage_preserve_libs user do
+      paths paths
     end
   end
 
