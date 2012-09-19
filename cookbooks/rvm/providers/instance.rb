@@ -24,13 +24,13 @@ action :create do
     export HOME=#{rvm[:homedir]}
 
     tmpfile=$(mktemp)
-    curl -s https://rvm.beginrescueend.com/install/rvm -o ${tmpfile}
+    curl -s -L http://get.rvm.io -o ${tmpfile}
     chmod +x ${tmpfile}
-    ${tmpfile} #{rvm[:version]}
+    ${tmpfile} --branch #{rvm[:version]}
     rm -f ${tmpfile}
     EOS
 
-    creates "#{rvm[:path]}/src/rvm-#{rvm[:version]}"
+    not_if { ::File.read("#{rvm[:path]}/VERSION").split.first == rvm[:version] rescue false }
     user rvm[:user]
     group rvm[:group]
   end
