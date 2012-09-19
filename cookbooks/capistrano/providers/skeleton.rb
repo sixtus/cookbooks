@@ -10,9 +10,7 @@ action :create do
               new_resource.homedir
             end
 
-  akf = new_resource.authorized_keys_for
-  akf = [akf] unless akf.is_a?(Array)
-
+  akf = [new_resource.authorized_keys_for, node[user][:deployers]].flatten.uniq
   authorized_keys = authorized_keys_for(akf)
 
   group user do
