@@ -55,7 +55,7 @@ namespace "load" do
   desc "Upload all cookbooks"
   task :cookbooks => [ :pull ]
   task :cookbooks do
-    sh("knife cookbook upload -o cookbooks --all")
+    sh("knife cookbook upload --all")
   end
 
   desc "Delete and upload all cookbooks"
