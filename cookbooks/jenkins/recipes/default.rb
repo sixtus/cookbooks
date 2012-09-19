@@ -1,3 +1,5 @@
+include_recipe "java"
+
 package "dev-util/jenkins-bin"
 
 execute "jenkins-ssh-key" do
