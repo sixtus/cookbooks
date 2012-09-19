@@ -16,7 +16,7 @@ try:
             if "src_host" in r:
                 if "name" in r:
                     try:
-                        HOST = '<%= @master[:ipaddress] %>'    # The remote nagios server
+                        HOST = '<%= @master[:ipaddress] rescue nil %>'    # The remote nagios server
                         PORT = 6557              # The remote port on the nagios server
                         content = [ "GET services\nColumns: state\nFilter: host_name = ", (r["src_host"]), "\nFilter: description = ", (r["name"]), "\n" ]
                         query = "".join(content)

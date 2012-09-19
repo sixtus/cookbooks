@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "host_name,name,state,num,servicegroup"
-/usr/bin/nc <%= @master[:ipaddress] %> 6557 < nagios-servicegroupmembers |sed 's/,/\n/g'|sed 's/|/,/g'|while read line
+/usr/bin/nc <%= @master[:ipaddress] rescue nil %> 6557 < nagios-servicegroupmembers |sed 's/,/\n/g'|sed 's/|/,/g'|while read line
 do
 COUNT=`echo $line|grep -c ","`
 

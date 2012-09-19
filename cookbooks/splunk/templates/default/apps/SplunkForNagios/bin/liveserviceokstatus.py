@@ -15,7 +15,7 @@ try:
         if "_raw" in r:
             if "src_host" in r:
                 try:
-                    HOST = '<%= @master[:ipaddress] %>'    # The remote nagios server
+                    HOST = '<%= @master[:ipaddress] rescue nil %>'    # The remote nagios server
                     PORT = 6557              # The remote port on the nagios server
                     content = [ "GET services\nStats: last_hard_state = 0\n" ]
                     query = "".join(content)
