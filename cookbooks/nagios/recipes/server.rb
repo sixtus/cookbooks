@@ -154,7 +154,7 @@ end
 
 # remove sample objects
 %w(hosts localhost printer services switch windows).each do |f|
-  nagios_conf f do
+  file "/etc/nagios/objects/#{f}.cfg" do
     action :delete
   end
 end

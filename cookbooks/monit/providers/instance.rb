@@ -12,7 +12,7 @@ action :create do
     recursive true
   end
 
-  template "/etc/monitrc" do
+  file "/etc/monitrc" do
     action :delete
   end
 
