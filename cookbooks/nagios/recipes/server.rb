@@ -1,9 +1,7 @@
 tag("nagios-master")
 
-include_recipe "apache::php"
-
 portage_package_use "net-analyzer/nagios-core" do
-  use %w(apache2)
+  action :delete
 end
 
 portage_package_use "net-analyzer/nagios-plugins" do
@@ -221,30 +219,37 @@ service "nsca" do
   action [:enable, :start]
 end
 
-# apache specifics
+# Web UI
 group "nagios" do
-  members %w(apache)
+  members %w(nginx)
   append true
 end
 
 file "/etc/nagios/users" do
   content contacts.map { |c| "#{c[:id]}:#{c[:password]}" }.join("\n")
   owner "root"
-  group "apache"
+  group "nginx"
   mode "0640"
 end
 
-node[:apache][:default_redirect] = "https://#{node[:fqdn]}"
+spawn_fcgi "nagios" do
+  user "nagios"
+  group "nagios"
+  program "/usr/sbin/fcgiwrap"
+  socket({
+    :user => "nginx",
+    :group => "nginx",
+  })
+end
 
-apache_vhost "nagios" do
-  template "apache.conf"
+include_recipe "nginx::php"
+
+nginx_server "nagios" do
+  template "nginx.conf"
 end
 
 file "/var/www/localhost/htdocs/index.php" do
-  content '<?php header("Location: /nagios/"); ?>\n'
-  owner "root"
-  group "root"
-  mode "0644"
+  action :delete
 end
 
 file "/var/www/localhost/htdocs/index.html" do
