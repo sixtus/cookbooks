@@ -86,8 +86,8 @@ define :account_from_databag do
            u[:id] == params[:name]
          end.first
 
-  # "rename" params, otherwise the scope in the account
-  # block below will have empty params
+  # bind params to a local variables, otherwise the scope in the
+  # account block below will have empty params
   p = params
 
   account user[:id] do
