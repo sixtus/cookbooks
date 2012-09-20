@@ -17,13 +17,13 @@ include_recipe "nagios::nsca"
 
 directory "/var/nagios/rw" do
   owner "nagios"
-  group "apache"
+  group "nginx"
   mode "6755"
 end
 
 file "/var/nagios/rw/nagios.cmd" do
   owner "nagios"
-  group "apache"
+  group "nginx"
   mode "0660"
 end
 
