@@ -8,6 +8,7 @@
     <collection label="Performance Dashboards">
         <view name="NagiosLinuxPerformanceGraphs"/>
         <view name="NagiosNixFilesystemUsageGraphs"/>
+        <!--
         <view name="NagiosAIXPerformanceGraphs"/>
         <view name="NagiosAIXFilesystemUsageGraphs"/>
         <view name="NagiosBSDPerformanceGraphs"/>
@@ -21,6 +22,7 @@
         <view name="NagiosCiscoGatewayActivityGraphs"/>
         <view name="NagiosCiscoNetworkActivityGraphs"/>
         <view name="NagiosCiscoNetworkMultiInterfaceActivityGraphs"/>
+        -->
         <divider />
         <view name="NagiosSplunkLicenseUsageGraph"/>
     </collection>
