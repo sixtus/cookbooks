@@ -1,5 +1,7 @@
 tag("nagios-master")
 
+include_recipe "nginx::php"
+
 portage_package_use "net-analyzer/nagios-core" do
   action :delete
 end
@@ -241,8 +243,6 @@ spawn_fcgi "nagios" do
     :group => "nginx",
   })
 end
-
-include_recipe "nginx::php"
 
 nginx_server "nagios" do
   template "nginx.conf"
