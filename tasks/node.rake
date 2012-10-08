@@ -1,8 +1,18 @@
+require 'socket'
+
 namespace :node do
+
+  task :checkdns, :fqdn, :ipaddress do |t, args|
+    ip = Addrinfo.getaddrinfo(args.fqdn, nil)[0].ip_address
+    if ip != args.ipaddress
+      raise "IP #{args.ipaddress} does not match resolved address #{ip} for FQDN #{args.fqdn}"
+    end
+  end
 
   desc "Create a new node with SSL certificates and chef client key"
   task :create => [ :pull ]
   task :create, :fqdn, :ipaddress, :role do |t, args|
+    Rake::Task['node:checkdns'].invoke(args.fqdn, args.ipaddress)
     args.with_defaults(:role => "base")
 
     # create SSL cert
@@ -39,6 +49,11 @@ EOF
   task :quickstart, :fqdn, :ipaddress, :profile, :role do |t, args|
     args.with_defaults(:profile => '2tb-two-disk-md')
 
+    # sanity check
+    Rake::Task['node:checkdns'].invoke(args.fqdn, args.ipaddress)
+
+    t0 = Time.now.to_f
+
     # quick start
     tmpfile = Tempfile.new('quickstart')
     tmpfile.write <<-EOF
@@ -51,9 +66,8 @@ exec ./quickstart profiles/#{args.profile}.sh
     EOF
 
     tmpfile.rewind
-    puts tmpfile.read
 
-    sh(%{cat #{tmpfile.path} | ssh -t -l root -o "StrictHostKeyChecking no" -o "UserKnownHostsFile /dev/null" -o "GlobalKnownHostsFile /dev/null" #{args.ipaddress} "bash -x -s"})
+    sh(%{cat #{tmpfile.path} | ssh -l root -o "StrictHostKeyChecking no" -o "UserKnownHostsFile /dev/null" -o "GlobalKnownHostsFile /dev/null" #{args.ipaddress} "bash -s"})
 
     tmpfile.unlink
 
@@ -72,6 +86,8 @@ exec ./quickstart profiles/#{args.profile}.sh
 
     # run normal bootstrap
     Rake::Task['node:bootstrap'].invoke(args.fqdn, args.ipaddress, args.role)
+
+    puts "\n==> Quickstart & Bootstrap finished in #{((t0 - Time.now.to_f) / 60).round(1)} minutes\n"
   end
 
   desc "Delete the specified node, client key and SSL certificates"
