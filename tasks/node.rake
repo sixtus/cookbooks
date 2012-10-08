@@ -35,6 +35,45 @@ EOF
     sh("knife bootstrap #{args.fqdn} --distro gentoo -P tux")
   end
 
+  desc "Quickstart & Bootstrap the specified node"
+  task :quickstart, :fqdn, :ipaddress, :profile, :role do |t, args|
+    args.with_defaults(:profile => '2tb-two-disk-md')
+
+    # quick start
+    tmpfile = Tempfile.new('quickstart')
+    tmpfile.write <<-EOF
+#!/bin/bash
+cd /tmp
+wget -q -O quickstart.tar.gz https://github.com/madvertise/quickstart/tarball/master
+tar -xzf quickstart.tar.gz
+cd *-quickstart-*
+exec ./quickstart profiles/#{args.profile}.sh
+    EOF
+
+    tmpfile.rewind
+    puts tmpfile.read
+
+    sh(%{cat #{tmpfile.path} | ssh -t -l root -o "StrictHostKeyChecking no" -o "UserKnownHostsFile /dev/null" -o "GlobalKnownHostsFile /dev/null" #{args.ipaddress} "bash -x -s"})
+
+    tmpfile.unlink
+
+    # wait until machine is up again
+    print "Waiting for machine to boot "
+    booted = false
+    while !booted
+      begin
+        sh("ping -c 1 -w 5 #{args.ipaddress} &>/dev/null")
+        booted = true
+        print "\n"
+      rescue
+        print "."
+      end
+    end
+
+    # run normal bootstrap
+    Rake::Task['node:bootstrap'].invoke(args.fqdn, args.ipaddress, args.role)
+  end
+
   desc "Delete the specified node, client key and SSL certificates"
   task :delete, :fqdn do |t, args|
     fqdn = args.fqdn
