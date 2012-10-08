@@ -1,5 +1,10 @@
 include_recipe "mysql::server"
 
+# we need this in the base recipe so we can create directories for user apache
+node.default[:apache][:default_vhost] = false
+node.default[:apache][:mpm] = "prefork"
+include_recipe "apache"
+
 # system database
 mysql_password = get_password("mysql/nepal")
 
