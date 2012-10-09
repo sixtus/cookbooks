@@ -1,3 +1,4 @@
+package "net-ftp/ncftp"
 package "app-backup/duply"
 
 %w(
