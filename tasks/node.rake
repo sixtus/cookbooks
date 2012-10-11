@@ -1,5 +1,29 @@
 require 'socket'
 
+def check_ping(ipaddress)
+  reachable = nil
+
+  begin
+    sh("ping -c 1 -w 5 #{ipaddress} &>/dev/null")
+    reachable = true
+    sleep(1)
+  rescue
+    reachable = false
+  end
+
+  return reachable
+end
+
+def wait_with_ping(ipaddress, reachable)
+  print "Waiting for machine to #{reachable ? "boot" : "shutdown"} "
+
+  while check_ping(ipaddress) != reachable
+    print "."
+  end
+
+  print "\n"
+end
+
 namespace :node do
 
   task :checkdns, :fqdn, :ipaddress do |t, args|
@@ -47,12 +71,10 @@ EOF
 
   desc "Quickstart & Bootstrap the specified node"
   task :quickstart, :fqdn, :ipaddress, :profile, :role do |t, args|
-    args.with_defaults(:profile => '2tb-two-disk-md')
+    args.with_defaults(:profile => 'generic-two-disk-md')
 
     # sanity check
     Rake::Task['node:checkdns'].invoke(args.fqdn, args.ipaddress)
-
-    t0 = Time.now.to_f
 
     # quick start
     tmpfile = Tempfile.new('quickstart')
@@ -72,22 +94,11 @@ exec ./quickstart profiles/#{args.profile}.sh
     tmpfile.unlink
 
     # wait until machine is up again
-    print "Waiting for machine to boot "
-    booted = false
-    while !booted
-      begin
-        sh("ping -c 1 -w 5 #{args.ipaddress} &>/dev/null")
-        booted = true
-        print "\n"
-      rescue
-        print "."
-      end
-    end
+    wait_with_ping(args.ipaddress, false)
+    wait_with_ping(args.ipaddress, true)
 
     # run normal bootstrap
     Rake::Task['node:bootstrap'].invoke(args.fqdn, args.ipaddress, args.role)
-
-    puts "\n==> Quickstart & Bootstrap finished in #{((t0 - Time.now.to_f) / 60).round(1)} minutes\n"
   end
 
   desc "Delete the specified node, client key and SSL certificates"
