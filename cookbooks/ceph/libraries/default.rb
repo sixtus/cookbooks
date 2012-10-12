@@ -1,6 +1,6 @@
 require 'json'
 
-def get_mon_nodes(extra_search=nil)
+def get_mon_nodes
   nodes = []
 
   if node[:tags].include?('ceph-mon')
@@ -12,7 +12,7 @@ def get_mon_nodes(extra_search=nil)
       n[:ceph][:fsid] == node[:ceph][:fsid]
   end
 
-  nodes
+  nodes.uniq { |n| n[:fqdn] }
 end
 
 def get_mon_addresses()

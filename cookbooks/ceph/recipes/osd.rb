@@ -1,7 +1,9 @@
 include_recipe "ceph::default"
 include_recipe "ceph::conf"
 
-mons = get_mon_nodes("ceph_bootstrap_osd_key:*")
+mons = get_mon_nodes.select do |n|
+  n[:ceph_bootstrap_osd_key]
+end
 
 if mons.empty? then
   puts "No ceph-mon found."
