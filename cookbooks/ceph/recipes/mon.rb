@@ -3,12 +3,7 @@ tag('ceph-mon')
 include_recipe "ceph::default"
 include_recipe "ceph::conf"
 
-service "ceph" do
-  action [:enable]
-end
-
-cluster = "ceph"
-cluster_node = "#{cluster}-#{node[:hostname]}"
+cluster_node = "#{node[:ceph][:cluster]}-#{node[:hostname]}"
 keyring = "/var/lib/ceph/tmp/#{cluster_node}.mon.keyring"
 
 execute "create-ceph-keyring" do
@@ -17,7 +12,7 @@ execute "create-ceph-keyring" do
 end
 
 execute "make-ceph-mon-fs" do
-  command %{ceph-mon --mkfs -i #{node[:hostname]} --fsid #{node[:ceph][:config][:fsid]} --keyring "#{keyring}"}
+  command %{ceph-mon --cluster #{node[:ceph][:cluster]} --mkfs -i #{node[:hostname]} --fsid #{node[:ceph][:config][:fsid]} --keyring "#{keyring}"}
   creates "/var/lib/ceph/mon/#{cluster_node}/keyring"
   notifies :start, "service[ceph]", :immediately
 end
@@ -28,7 +23,7 @@ end
 
 ruby_block "tell ceph-mon about its peers" do
   block do
-    mon_addresses = get_mon_addresses()
+    mon_addresses = get_mon_addresses
     mon_addresses.each do |addr|
       system 'ceph', \
         '--admin-daemon', "/var/run/ceph/ceph-mon.#{node[:hostname]}.asok", \
@@ -37,54 +32,51 @@ ruby_block "tell ceph-mon about its peers" do
   end
 end
 
-ruby_block "create client.admin keyring" do
+ruby_block "create and save client.admin key" do
+  only_if { node['ceph_client_admin_key'].nil? }
   block do
-    if not ::File.exists?('/etc/ceph/ceph.client.admin.keyring') then
-      if not have_quorum? then
-        puts 'ceph-mon is not in quorum, skipping bootstrap-osd key generation for this run'
-      else
-        key = %x[
-          ceph \
-            --name mon. \
-            --keyring '/var/lib/ceph/mon/ceph-#{node[:hostname]}/keyring' \
-            auth get-or-create-key client.admin \
-            mon 'allow *' \
-            osd 'allow *' \
-            mds allow
-        ].chomp
-        raise 'adding or getting admin key failed' unless $?.exitstatus == 0
-
-        system 'ceph-authtool', \
-          '/etc/ceph/ceph.client.admin.keyring', \
-          '--create-keyring', \
-          '--name=client.admin', \
-          "--add-key=#{key}"
-        raise 'creating admin keyring failed' unless $?.exitstatus == 0
-      end
+    if not have_quorum? then
+      puts 'ceph-mon is not in quorum, skipping client.admin key generation for this run'
+    else
+      key = %x[
+        ceph \
+          --name mon. \
+          --keyring '/var/lib/ceph/mon/ceph-#{node[:hostname]}/keyring' \
+          auth get-or-create-key client.admin \
+          mon 'allow *' \
+          mds 'allow *' \
+          osd 'allow *'
+      ].chomp
+      raise 'adding or getting client.admin key failed' unless $?.exitstatus == 0
+      node.override['ceph_client_admin_key'] = key
+      node.save
     end
   end
 end
 
+osd_caps = [
+  'allow command osd create ...',
+  'allow command osd crush set ...',
+  'allow command auth add * osd allow\\ * mon allow\\ rwx',
+  'allow command mon getmap',
+]
+
 ruby_block "save osd bootstrap key in node attributes" do
+  only_if { node['ceph_bootstrap_osd_key'].nil? }
   block do
-    if node['ceph_bootstrap_osd_key'].nil? then
-      if not have_quorum? then
-        puts 'ceph-mon is not in quorum, skipping bootstrap-osd key generation for this run'
-      else
-        key = %x[
-          ceph \
-            --name mon. \
-            --keyring '/var/lib/ceph/mon/#{cluster}-#{node['hostname']}/keyring' \
-            auth get-or-create-key client.bootstrap-osd mon \
-            "allow command osd create ...; \
-            allow command osd crush set ...; \
-            allow command auth add * osd allow\\ * mon allow\\ rwx; \
-            allow command mon getmap"
-        ].chomp
-        raise 'adding or getting bootstrap-osd key failed' unless $?.exitstatus == 0
-        node.override['ceph_bootstrap_osd_key'] = key
-        node.save
-      end
+    if not have_quorum? then
+      puts 'ceph-mon is not in quorum, skipping bootstrap-osd key generation for this run'
+    else
+      key = %x[
+        ceph \
+          --name mon. \
+          --keyring '/var/lib/ceph/mon/#{cluster_node}/keyring' \
+          auth get-or-create-key client.bootstrap-osd mon \
+          '#{osd_caps.join('; ')}'
+      ].chomp
+      raise 'adding or getting bootstrap-osd key failed' unless $?.exitstatus == 0
+      node.override['ceph_bootstrap_osd_key'] = key
+      node.save
     end
   end
 end
