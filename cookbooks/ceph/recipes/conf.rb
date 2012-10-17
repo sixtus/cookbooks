@@ -1,6 +1,5 @@
 raise "monitor secret must be set" if node[:ceph][:monitor_secret].nil?
 raise "fsid must be set in config" if node[:ceph][:config][:fsid].nil?
-raise "mon_initial_members must be set in config" if node[:ceph][:config][:mon_initial_members].nil?
 
 mon_nodes = get_mon_nodes
 mds_nodes = get_mds_nodes
