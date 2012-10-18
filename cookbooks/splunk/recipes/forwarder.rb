@@ -1,4 +1,4 @@
-unless node.recipe?("splunk::indexer")
+unless node.recipe?("splunk::indexer") or node.role?("logger")
   tag("splunk-forwarder")
 
   package "net-analyzer/splunkforwarder"
