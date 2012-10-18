@@ -48,15 +48,29 @@ end
 template "#{node[:vim][:rcdir]}/cleanup_bundle" do
   source "cleanup_bundle.sh"
   mode "0755"
-  variables :bundles => node[:vim][:plugins].keys.map(&:to_s)
+  variables :bundles => solo? ? node[:vim][:plugins].keys.map(&:to_s) : [:solarized, :powerline]
 end
 
-node[:vim][:plugins].each do |name, repo|
-  next unless repo
-  git "#{node[:vim][:rcdir]}/bundle/#{name}" do
-    repository repo
-    reference "master"
-    action :sync
+if solo?
+  node[:vim][:plugins].each do |name, repo|
+    next unless repo
+    git "#{node[:vim][:rcdir]}/bundle/#{name}" do
+      repository repo
+      reference "master"
+      action :sync
+    end
+  end
+else
+  remote_directory "#{node[:vim][:rcdir]}/bundle/solarized" do
+    source "solarized"
+    owner "root"
+    group "root"
+  end
+
+  remote_directory "#{node[:vim][:rcdir]}/bundle/powerline" do
+    source "powerline"
+    owner "root"
+    group "root"
   end
 end
 
