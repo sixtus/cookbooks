@@ -1,4 +1,6 @@
-package "net-analyzer/ganymed"
+package "net-analyzer/ganymed" do
+  action :upgrade
+end
 
 directory "/usr/lib/ganymed" do
   owner "root"
@@ -12,16 +14,11 @@ directory "/usr/lib/ganymed/collectors" do
   mode "0755"
 end
 
-processor = node.run_state[:nodes].select do |n|
-  n[:tags].include?("ganymed-processor")
-end.first
-
 template "/etc/ganymed/config.yml" do
   source "config.yml"
   owner "root"
   group "root"
   mode "0644"
-  variables :processor => processor
   notifies :restart, "service[ganymed]"
 end
 
