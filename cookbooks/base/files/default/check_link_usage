@@ -31,7 +31,11 @@ state=$STATE_OK
 new_time=$(date +%s)
 
 while read int new_rxb _ _ _ _ _ _ _ new_txb _; do
-	if [[ $interface != "all" && $interface != $int ]]; then
+	if [[ $interface != "all" && "${interface}:" != $int ]]; then
+		continue
+	fi
+
+	if [[ $int == "lo:" ]]; then
 		continue
 	fi
 
