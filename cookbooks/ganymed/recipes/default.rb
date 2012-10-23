@@ -1,5 +1,6 @@
 package "net-analyzer/ganymed" do
   action :upgrade
+  notifies :restart, 'service[ganymed]'
 end
 
 directory "/usr/lib/ganymed" do

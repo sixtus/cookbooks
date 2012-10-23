@@ -2,11 +2,13 @@ require 'beanstalk-client'
 
 collect do
   beanstalk = Beanstalk::Pool.new(['127.0.0.1:11300'])
-  stats = beanstalk.stats_tube('default')
-  sampler.emit(:gauge, 'beanstalk.jobs.urgent', stats['current-jobs-urgent'])
-  sampler.emit(:gauge, 'beanstalk.jobs.ready', stats['current-jobs-ready'])
-  sampler.emit(:gauge, 'beanstalk.jobs.reserved', stats['current-jobs-reserved'])
-  sampler.emit(:gauge, 'beanstalk.jobs.delayed', stats['current-jobs-delayed'])
-  sampler.emit(:gauge, 'beanstalk.jobs.burried', stats['current-jobs-buried'])
-  sampler.emit(:derive, 'beanstalk.jobs', stats['total-jobs'])
+  beanstalk.list_tubes.values.flatten.uniq.each do |tube|
+    stats = beanstalk.stats_tube(tube)
+    Metriks.histogram("beanstalk.#{tube}.jobs:urgent").update(stats['current-jobs-urgent'])
+    Metriks.histogram("beanstalk.#{tube}.jobs:ready").update(stats['current-jobs-ready'])
+    Metriks.histogram("beanstalk.#{tube}.jobs:reserved").update(stats['current-jobs-reserved'])
+    Metriks.histogram("beanstalk.#{tube}.jobs:delayed").update(stats['current-jobs-delayed'])
+    Metriks.histogram("beanstalk.#{tube}.jobs:burried").update(stats['current-jobs-buried'])
+    Metriks.derive("beanstalk.#{tube}.jobs").mark(stats['total-jobs'])
+  end
 end

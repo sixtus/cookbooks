@@ -1,4 +1,6 @@
 generic:
+  interval: 300
+
   eventmachine:
     threadpool_size: <%= node[:ganymed][:threadpool_size] %>
 

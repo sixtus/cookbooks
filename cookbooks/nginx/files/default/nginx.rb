@@ -5,10 +5,11 @@ collect do
 
   active = status[0].split[2].to_i
   accepts, handled, requests = status[2].split.map(&:to_i)
-  _, reading, _, writing, _, waiting = status[3].split.map
+  _, reading, _, writing, _, waiting = status[3].split
 
-  sampler.emit(:gauge, 'nginx.connections.reading', active)
-  sampler.emit(:gauge, 'nginx.connections.writing', active)
-  sampler.emit(:gauge, 'nginx.connections.waiting', active)
-  sampler.emit(:derive, 'nginx.requests', requests)
+  Metriks.histogram('nginx.connections').update(active.to_i)
+  Metriks.histogram('nginx.connections:reading').update(reading.to_i)
+  Metriks.histogram('nginx.connections:writing').update(writing.to_i)
+  Metriks.histogram('nginx.connections:waiting').update(waiting.to_i)
+  Metriks.derive('nginx.requests').mark(requests)
 end
