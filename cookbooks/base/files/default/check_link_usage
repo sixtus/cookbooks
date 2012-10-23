@@ -39,12 +39,12 @@ while read int new_rxb _ _ _ _ _ _ _ new_txb _; do
 		continue
 	fi
 
-	if ! ethtool ${int/:} &>/dev/null; then
+	if ! sudo ethtool ${int/:} &>/dev/null; then
 		continue
 	fi
 
-	speed=$(ethtool eth0 | grep Speed: | awk '{print $2}' | sed 's/Mb\/s//')
-	duplex=$(ethtool eth0 | grep Duplex: | awk '{print $2}')
+	speed=$(sudo ethtool eth0 | grep Speed: | awk '{print $2}' | sed 's/Mb\/s//')
+	duplex=$(sudo ethtool eth0 | grep Duplex: | awk '{print $2}')
 
 	statefile="/tmp/.check_link_usage.${int}"
 

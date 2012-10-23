@@ -193,6 +193,12 @@ if tagged?("nagios-client")
       servicegroups "system"
     end
 
+    sudo_rule "nagios-ethtool" do
+      user "nagios"
+      runas "root"
+      command "NOPASSWD: /usr/sbin/ethtool"
+    end
+
     nagios_plugin "check_link_usage"
 
     nrpe_command "check_link_usage" do
