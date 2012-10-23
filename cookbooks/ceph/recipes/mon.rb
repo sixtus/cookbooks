@@ -53,30 +53,3 @@ ruby_block "create and save client.admin key" do
     end
   end
 end
-
-osd_caps = [
-  'allow command osd create ...',
-  'allow command osd crush set ...',
-  'allow command auth add * osd allow\\ * mon allow\\ rwx',
-  'allow command mon getmap',
-]
-
-ruby_block "save osd bootstrap key in node attributes" do
-  only_if { node['ceph_bootstrap_osd_key'].nil? }
-  block do
-    if not have_quorum? then
-      puts 'ceph-mon is not in quorum, skipping bootstrap-osd key generation for this run'
-    else
-      key = %x[
-        ceph \
-          --name mon. \
-          --keyring '/var/lib/ceph/mon/#{cluster_node}/keyring' \
-          auth get-or-create-key client.bootstrap-osd mon \
-          '#{osd_caps.join('; ')}'
-      ].chomp
-      raise 'adding or getting bootstrap-osd key failed' unless $?.exitstatus == 0
-      node.override['ceph_bootstrap_osd_key'] = key
-      node.save
-    end
-  end
-end

@@ -8,8 +8,12 @@ def get_ceph_nodes(type)
   end
 
   nodes += node.run_state[:nodes].select do |n|
-    n[:tags].include?("ceph-#{type}") and
-      n[:ceph][:fsid] == node[:ceph][:fsid]
+    begin
+      n[:tags].include?("ceph-#{type}") and
+      n[:ceph][:config][:fsid] == node[:ceph][:config][:fsid]
+    rescue
+      false
+    end
   end
 
   nodes.uniq { |n| n[:fqdn] }
