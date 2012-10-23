@@ -18,7 +18,6 @@ template "/opt/splunk/etc/passwd" do
   owner "root"
   group "root"
   mode "0644"
-  notifies :restart, "service[splunk]"
   variables :splunk_users => node.run_state[:users].select(&splunk_users)
 end
 

@@ -4,9 +4,7 @@ directory "/etc/ssl/splunk" do
   mode "0750"
 end
 
-ssl_ca "/etc/ssl/splunk/ca" do
-  notifies :restart, "service[splunk]"
-end
+ssl_ca "/etc/ssl/splunk/ca"
 
 ssl_certificate "/etc/ssl/splunk/server" do
   cn node[:fqdn]
