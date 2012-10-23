@@ -39,6 +39,13 @@ while read int new_rxb _ _ _ _ _ _ _ new_txb _; do
 		continue
 	fi
 
+	if ! ethtool ${int/:} &>/dev/null; then
+		continue
+	fi
+
+	speed=$(ethtool eth0 | grep Speed: | awk '{print $2}' | sed 's/Mb\/s//')
+	duplex=$(ethtool eth0 | grep Duplex: | awk '{print $2}')
+
 	statefile="/tmp/.check_link_usage.${int}"
 
 	if [[ -e $statefile ]]; then
@@ -60,12 +67,28 @@ while read int new_rxb _ _ _ _ _ _ _ new_txb _; do
 	rx_rate=$((($new_rxb - $old_rxb) / $time_diff * 8 / 1024 / 1024))
 	tx_rate=$((($new_txb - $old_txb) / $time_diff * 8 / 1024 / 1024))
 
-	echo -n "$int(rx=$rx_rate,tx=$tx_rate) "
+	echo -n "$int(rx=$rx_rate,tx=$tx_rate,speed=${speed},duplex=${duplex}) "
+
+	# interpolate to 100Mbit
+	rx_rate=$(($rx_rate * 100 / ${speed}))
+	tx_rate=$(($tx_rate * 100 / ${speed}))
 
 	if [[ $rx_rate -ge $rx_crit ]]; then
 		state=$STATE_CRITICAL
+	elif [[ $tx_rate -ge $tx_crit ]]; then
+		state=$STATE_CRITICAL
 	elif [[ $rx_rate -ge $rx_warn ]]; then
 		state=$STATE_WARNING
+	elif [[ $tx_rate -ge $tx_warn ]]; then
+		state=$STATE_WARNING
+	fi
+
+	if [[ ${speed} -lt 100 ]]; then
+		state=$STATE_CRITICAL
+	fi
+
+	if [[ ${duplex} != "Full" ]]; then
+		state=$STATE_CRITICAL
 	fi
 done < <(grep ":" /proc/net/dev)
 
