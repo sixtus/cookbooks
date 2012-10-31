@@ -1,1 +1,1 @@
-default[:ntp][:server] = "ptbtime1.ptb.de"
+default[:ntp][:server] = "pool.ntp.org"
