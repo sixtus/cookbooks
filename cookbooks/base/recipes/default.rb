@@ -19,14 +19,6 @@ if nagios_masters.any?
   tag("nagios-client")
 end
 
-ganymed_processors = node.run_state[:nodes].select do |n|
-  n[:tags].include?("ganymed-processor")
-end
-
-if ganymed_processors.any?
-  tag("ganymed-client")
-end
-
 # create script path
 directory node[:script_path] do
   owner Process.euid
@@ -213,7 +205,7 @@ if tagged?("nagios-client")
 
     execute "check_link_usage" do
       command "/usr/lib/nagios/plugins/check_link_usage"
-      creates "/tmp/.check_link_usage.lo:"
+      creates "/tmp/.check_link_usage.eth0:"
       user "nagios"
       group "nagios"
     end
