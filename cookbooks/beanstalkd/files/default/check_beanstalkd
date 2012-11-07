@@ -30,9 +30,12 @@ except:
 for server in opts.servers:
   host, port = server.split(':')
   beanstalk = beanstalkc.Connection(host=host, port=int(port))
-  stats = beanstalk.stats_tube(opts.tube)
-  jobs_ready_sum += stats['current-jobs-ready']
-  info_msg.append("%s: %d" % (server, stats['current-jobs-ready']))
+  try:
+    stats = beanstalk.stats_tube(opts.tube)
+    jobs_ready_sum += stats['current-jobs-ready']
+    info_msg.append("%s: %d" % (server, stats['current-jobs-ready']))
+  except:
+    pass
 
 info_msg = ", ".join(info_msg)
 
