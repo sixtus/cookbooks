@@ -12,6 +12,7 @@ unless node[:skip][:postfix_satelite]
 
   postconf "relay all mail via relayhost" do
     set :relayhost => node[:postfix][:relayhost],
+        :mydestination => "",
         :inet_interfaces => "loopback-only",
         :smtpd_recipient_restrictions => smtpd_recipient_restrictions.join(", ")
   end
