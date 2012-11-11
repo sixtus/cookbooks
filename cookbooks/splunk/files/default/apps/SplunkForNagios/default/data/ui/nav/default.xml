@@ -1,14 +1,14 @@
 <nav>
-    <view name="about" default='true' />
+    <!--<view name="about" default='true' />-->
     <view name="flashtimeline" />
     <view name="Nagios" />
     <view name="NagiosLivestatus" />
-    <view name="alert_formsearch" />
+    <!--<view name="alert_formsearch" />-->
     <view name="NagiosAlertsLivestatus" />
+    <!--
     <collection label="Performance Dashboards">
         <view name="NagiosLinuxPerformanceGraphs"/>
         <view name="NagiosNixFilesystemUsageGraphs"/>
-        <!--
         <view name="NagiosAIXPerformanceGraphs"/>
         <view name="NagiosAIXFilesystemUsageGraphs"/>
         <view name="NagiosBSDPerformanceGraphs"/>
@@ -22,7 +22,6 @@
         <view name="NagiosCiscoGatewayActivityGraphs"/>
         <view name="NagiosCiscoNetworkActivityGraphs"/>
         <view name="NagiosCiscoNetworkMultiInterfaceActivityGraphs"/>
-        -->
         <divider />
         <view name="NagiosSplunkLicenseUsageGraph"/>
     </collection>
@@ -33,4 +32,5 @@
         <divider />
         <saved source="unclassified" />
     </collection>
+    -->
 </nav>
