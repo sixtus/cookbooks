@@ -1,7 +1,13 @@
-package value_for_platform(
-  "gentoo" => {"default" => "net-ftp/lftp"},
-  "mac_os_x" => {"default" => "lftp"}
-)
+case node[:platform]
+when "gentoo"
+  if root?
+    package "net-ftp/lftp"
+  end
+
+when "mac_os_x"
+  package "lftp"
+
+end
 
 directory "#{node[:homedir]}/.lftp" do
   mode "0700"

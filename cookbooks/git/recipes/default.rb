@@ -1,7 +1,13 @@
-package value_for_platform(
-  "gentoo" => {"default" => "dev-vcs/git"},
-  "mac_os_x" => {"default" => "git"}
-)
+case node[:platform]
+when "gentoo"
+  if root?
+    package "dev-vcs/git"
+  end
+
+when "mac_os_x"
+  package "git"
+
+end
 
 template node[:git][:rcfile] do
   source "gitconfig"

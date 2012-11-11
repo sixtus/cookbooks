@@ -1,7 +1,12 @@
-if platform?("mac_os_x")
+case node[:platform]
+when "gentoo"
+  if root?
+    package "net-misc/openssh"
+  end
+
+when "mac_os_x"
   package "ssh-copy-id"
-else
-  package "net-misc/openssh"
+
 end
 
 if root?

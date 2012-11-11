@@ -1,7 +1,13 @@
-package value_for_platform(
-  "gentoo" => {"default" => "app-misc/tmux"},
-  "mac_os_x" => {"default" => "tmux"}
-)
+case node[:platform]
+when "gentoo"
+  if root?
+    package "app-misc/tmux"
+  end
+
+when "mac_os_x"
+  package "tmux"
+
+end
 
 template node[:tmux][:configfile] do
   source "tmux.conf"
