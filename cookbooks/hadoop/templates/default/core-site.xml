@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<!-- Put site-specific property overrides in this file. -->
+
+<configuration>
+
+  <property>
+    <name>fs.default.name</name>
+    <value>ceph://null</value>
+  </property>
+
+  <property>
+    <name>fs.ceph.monAddr</name>
+    <value><%= @ceph_mon[:primary_ipaddress] %>:6789</value>
+    <description>The location of the Ceph monitor to connect to.
+      This should be an IP address, not a domain-based web address.</description>
+  </property>
+
+  <property>
+    <name>fs.ceph.libDir</name>
+    <value>/usr/lib</value>
+    <description>The folder holding libcephfs and libhadoopceph</description>
+  </property>
+
+  <property>
+    <name>fs.ceph.commandLine</name>
+    <value> -k /opt/hadoop/conf/ceph.keyring -n client.admin --auth-supported=cephx</value>
+  </property>
+
+  <property>
+    <name>hadoop.tmp.dir</name>
+    <value>/var/tmp/hadoop/${user.name}</value>
+  </property>
+
+</configuration>

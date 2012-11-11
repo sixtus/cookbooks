@@ -1,0 +1,15 @@
+#!/sbin/runscript
+# Copyright 1999-2012 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: $
+
+name="hadoop-tasktracker"
+command="/opt/hadoop/bin/hadoop"
+command_args="--config /opt/hadoop/conf tasktracker"
+command_background="true"
+start_stop_daemon_args="--user hadoop --group hadoop"
+pidfile="/var/run/hadoop/tasktracker.pid"
+
+depend() {
+        need net
+}
