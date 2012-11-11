@@ -28,6 +28,7 @@ end
   indexes
   props
   tags
+  times
   transforms
 ).each do |c|
   template "/opt/splunk/etc/system/local/#{c}.conf" do
