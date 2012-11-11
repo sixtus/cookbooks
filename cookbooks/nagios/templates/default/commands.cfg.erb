@@ -51,24 +51,3 @@ define command {
   command_name check_smtp
   command_line $USER1$/check_smtp -H $HOSTADDRESS$ -p $ARG1$ -t $ARG2$
 }
-
-# perfdata commands
-define command {
-  command_name process-host-perfdata
-  command_line /usr/bin/printf "%b" "$TIMET$ src_host=\"$HOSTNAME$\" perfdata=\"HOSTPERFDATA\" hoststate=\"$HOSTSTATE$\" attempt=\"$HOSTATTEMPT$\" statetype=\"$HOSTSTATETYPE$\" executiontime=\"$HOSTEXECUTIONTIME$\" reason=\"$HOSTOUTPUT$\" result=\"$HOSTPERFDATA$\"\n" >> /var/nagios/host-perfdata
-}
-
-define command {
-  command_name process-service-perfdata
-  command_line    /usr/bin/printf "%b" "$TIMET$ src_host=\"$HOSTNAME$\" perfdata=\"SERVICEPERFDATA\" name=\"$SERVICEDESC$\" severity=\"$SERVICESTATE$\" attempt=\"$SERVICEATTEMPT$\" statetype=\"$SERVICESTATETYPE$\" executiontime=\"$SERVICEEXECUTIONTIME$\" latency=\"$SERVICELATENCY$\" reason=\"$SERVICEOUTPUT$\" result=\"$SERVICEPERFDATA$\"\n" >> /var/nagios/service-perfdata
-}
-
-define command {
-  command_name process-host-perfdata-file
-  command_line /bin/cat /dev/null > /var/nagios/host-perfdata
-}
-
-define command {
-  command_name process-service-perfdata-file
-  command_line /bin/cat /dev/null > /var/nagios/service-perfdata
-}

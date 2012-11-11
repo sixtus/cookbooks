@@ -785,7 +785,7 @@ enable_event_handlers=1
 # performance data.
 # Values: 1 = process performance data, 0 = do not process performance data
 
-process_performance_data=1
+process_performance_data=0
 
 
 
@@ -797,8 +797,8 @@ process_performance_data=1
 # define in your host configuration file.  Read the HTML docs for
 # more information on performance data.
 
-host_perfdata_command=process-host-perfdata
-service_perfdata_command=process-service-perfdata
+#host_perfdata_command=process-host-perfdata
+#service_perfdata_command=process-service-perfdata
 
 
 
@@ -832,8 +832,8 @@ service_perfdata_command=process-service-perfdata
 # pipe ("p") mode which avoid blocking at startup, otherwise you will
 # likely want the defult append ("a") mode.
 
-host_perfdata_file_mode=a
-service_perfdata_file_mode=a
+#host_perfdata_file_mode=a
+#service_perfdata_file_mode=a
 
 
 
@@ -843,8 +843,8 @@ service_perfdata_file_mode=a
 # below.  A value of 0 indicates the files should not be periodically
 # processed.
 
-host_perfdata_file_processing_interval=86400
-service_perfdata_file_processing_interval=86400
+#host_perfdata_file_processing_interval=86400
+#service_perfdata_file_processing_interval=86400
 
 
 
@@ -853,8 +853,8 @@ service_perfdata_file_processing_interval=86400
 # service performance data files.  The interval at which the
 # processing occurs is determined by the options above.
 
-host_perfdata_file_processing_command=process-host-perfdata-file
-service_perfdata_file_processing_command=process-service-perfdata-file
+#host_perfdata_file_processing_command=process-host-perfdata-file
+#service_perfdata_file_processing_command=process-service-perfdata-file
 
 
 
