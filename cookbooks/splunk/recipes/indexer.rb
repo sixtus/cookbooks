@@ -52,6 +52,7 @@ end
 ## splunk apps
 include_recipe "splunk::syslog"
 include_recipe "splunk::nagios"
+include_recipe "splunk::ganymed"
 
 ## nginx ssl proxy
 include_recipe "nginx"

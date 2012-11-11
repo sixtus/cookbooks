@@ -1,0 +1,161 @@
+<view template="dashboard.html" objectMode="SimpleForm">
+  <label>MongoDB</label>
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="AppBar" layoutPanel="navigationHeader"/>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">*</param>
+    <param name="clearOnJobDispatch">False</param>
+    <param name="maxSize">1</param>
+  </module>
+
+  <module name="SearchSelectLister" layoutPanel="panel_row1_col1" group="Beanstalk">
+    <param name="settingToCreate">host_setting</param>
+    <param name="search">index=metriks name=mongodb.* | stats count by host</param>
+    <param name="earliest">-15m</param>
+    <param name="searchFieldsToDisplay">
+      <list>
+        <param name="value">host</param>
+        <param name="label">host</param>
+      </list>
+    </param>
+
+    <module name="ConvertToIntention">
+      <param name="settingToConvert">host_setting</param>
+      <param name="intention">
+        <param name="name">stringreplace</param>
+        <param name="arg">
+          <param name="host">
+            <param name="value">$target$</param>
+          </param>
+        </param>
+      </param>
+
+      <module name="SearchSelectLister">
+        <param name="settingToCreate">instance_setting</param>
+        <param name="search"><![CDATA[index=metriks host=$host$ name=mongodb.* | rex field=name "mongodb\.(?<instance>[^.]+)\." | stats count by instance]]></param>
+        <param name="earliest">-15m</param>
+        <param name="applyOuterIntentionsToInternalSearch">True</param>
+        <param name="searchFieldsToDisplay">
+          <list>
+            <param name="value">instance</param>
+            <param name="label">instance</param>
+          </list>
+        </param>
+
+        <module name="ConvertToIntention">
+          <param name="settingToConvert">instance_setting</param>
+          <param name="intention">
+            <param name="name">stringreplace</param>
+            <param name="arg">
+              <param name="instance">
+                <param name="value">$target$</param>
+              </param>
+            </param>
+          </param>
+
+          <module name="TimeRangePicker">
+            <param name="searchWhenChanged">True</param>
+            <param name="selected">Last 24 hours</param>
+
+            <module name="HiddenSearch" layoutPanel="panel_row2_col1" group="Operations">
+              <param name="search"><![CDATA[index=metriks host=$host$ name=mongodb.$instance$.ops:* | eval _time=time | rex field=name "mongodb.$instance$.ops:(?<name>.*)" | timechart span=1h eval(round(avg(five_minute_rate), 0)) by name]]></param>
+              <module name="HiddenChartFormatter">
+                <param name="chart">area</param>
+                <param name="charting.seriesColors">[0x423D4F,0x4A6860,0x848F39,0xA2B73C,0xDDCB53,0xC5A32F,0x7D5836,0x963B20,0x7C2626,0x491D37,0x2F254A]</param>
+                <param name="charting.legend.masterLegend"></param>
+                <param name="chart.stackMode">stacked</param>
+                <param name="primaryAxisTitle.text">Time</param>
+                <param name="secondaryAxisTitle.text">ops/s</param>
+                <module name="JobProgressIndicator">
+                  <module name="FlashChart">
+                    <param name="width">100%</param>
+                  </module>
+                </module>
+                <module name="ViewRedirectorLink">
+                  <param name="viewTarget">flashtimeline</param>
+                </module>
+              </module>
+            </module>
+
+            <module name="HiddenSearch" layoutPanel="panel_row3_col1" group="Connections">
+              <param name="search">index=metriks host=$host$ name=mongodb.$instance$.connections | eval _time=time | timechart span=1h eval(round(avg(median), 0)) as median</param>
+              <module name="HiddenChartFormatter">
+                <param name="chart">line</param>
+                <param name="charting.seriesColors">[0x423D4F,0x4A6860,0x848F39,0xA2B73C,0xDDCB53,0xC5A32F,0x7D5836,0x963B20,0x7C2626,0x491D37,0x2F254A]</param>
+                <param name="charting.legend.masterLegend"></param>
+                <param name="primaryAxisTitle.text">Time</param>
+                <param name="secondaryAxisTitle.text">Connections</param>
+                <module name="JobProgressIndicator">
+                  <module name="FlashChart">
+                    <param name="width">100%</param>
+                  </module>
+                </module>
+                <module name="ViewRedirectorLink">
+                  <param name="viewTarget">flashtimeline</param>
+                </module>
+              </module>
+            </module>
+
+            <module name="HiddenSearch" layoutPanel="panel_row3_col2" group="Queue">
+              <param name="search"><![CDATA[index=metriks host=$host$ name=mongodb.$instance$.queue:* | eval _time=time | rex field=name "mongodb.$instance$.queue:(?<name>.*)" | timechart span=1h eval(round(avg(median), 0)) by name]]></param>
+              <module name="HiddenChartFormatter">
+                <param name="chart">line</param>
+                <param name="charting.seriesColors">[0x423D4F,0x4A6860,0x848F39,0xA2B73C,0xDDCB53,0xC5A32F,0x7D5836,0x963B20,0x7C2626,0x491D37,0x2F254A]</param>
+                <param name="charting.legend.masterLegend"></param>
+                <param name="primaryAxisTitle.text">Time</param>
+                <param name="secondaryAxisTitle.text">#</param>
+                <module name="JobProgressIndicator">
+                  <module name="FlashChart">
+                    <param name="width">100%</param>
+                  </module>
+                </module>
+                <module name="ViewRedirectorLink">
+                  <param name="viewTarget">flashtimeline</param>
+                </module>
+              </module>
+            </module>
+
+            <module name="HiddenSearch" layoutPanel="panel_row4_col1" group="BTree">
+              <param name="search"><![CDATA[index=metriks host=$host$ name=mongodb.$instance$.btree:* | eval _time=time | rex field=name "mongodb.$instance$.btree:(?<name>.*)" | timechart span=1h eval(round(avg(five_minute_rate), 0)) by name]]></param>
+              <module name="HiddenChartFormatter">
+                <param name="chart">line</param>
+                <param name="charting.seriesColors">[0x423D4F,0x4A6860,0x848F39,0xA2B73C,0xDDCB53,0xC5A32F,0x7D5836,0x963B20,0x7C2626,0x491D37,0x2F254A]</param>
+                <param name="charting.legend.masterLegend"></param>
+                <param name="primaryAxisTitle.text">Time</param>
+                <param name="secondaryAxisTitle.text">Accesses</param>
+                <module name="JobProgressIndicator">
+                  <module name="FlashChart">
+                    <param name="width">100%</param>
+                  </module>
+                </module>
+                <module name="ViewRedirectorLink">
+                  <param name="viewTarget">flashtimeline</param>
+                </module>
+              </module>
+            </module>
+
+            <module name="HiddenSearch" layoutPanel="panel_row4_col2" group="Memory Usage">
+              <param name="search"><![CDATA[index=metriks host=$host$ name=mongodb.$instance$.mem:* | eval _time=time | rex field=name "mongodb.$instance$.mem:(?<name>.*)" | timechart span=1h eval(round(avg(median)/1024, 3)) by name]]></param>
+              <module name="HiddenChartFormatter">
+                <param name="chart">line</param>
+                <param name="charting.seriesColors">[0x423D4F,0x4A6860,0x848F39,0xA2B73C,0xDDCB53,0xC5A32F,0x7D5836,0x963B20,0x7C2626,0x491D37,0x2F254A]</param>
+                <param name="charting.legend.masterLegend"></param>
+                <param name="primaryAxisTitle.text">Time</param>
+                <param name="secondaryAxisTitle.text">MB</param>
+                <module name="JobProgressIndicator">
+                  <module name="FlashChart">
+                    <param name="width">100%</param>
+                  </module>
+                </module>
+                <module name="ViewRedirectorLink">
+                  <param name="viewTarget">flashtimeline</param>
+                </module>
+              </module>
+            </module>
+
+          </module>
+        </module>
+      </module>
+    </module>
+  </module>
+</view>
