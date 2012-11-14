@@ -8,4 +8,16 @@
     <name>mapred.job.tracker</name>
     <value><%= @job_tracker[:primary_ipaddress] %>:9001</value>
   </property>
+  <property>
+    <name>mapred.tasktracker.map.tasks.maximum</name>
+    <value>8</value>
+  </property>
+  <property>
+    <name>mapred.tasktracker.reduce.tasks.maximum</name>
+    <value>8</value>
+  </property>
+  <property>
+  	<name>mapred.child.java.opts</name>
+  	<value>-Xmx1024M</value>
+  </property>
 </configuration>
