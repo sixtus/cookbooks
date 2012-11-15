@@ -7,7 +7,7 @@ export JAVA_HOME=/etc/java-config-2/current-system-vm
 # export HADOOP_CLASSPATH=
 
 # The maximum amount of heap to use, in MB. Default is 1000.
-# export HADOOP_HEAPSIZE=2000
+export HADOOP_HEAPSIZE=8192
 
 # Extra Java runtime options.  Empty by default.
 export HADOOP_OPTS=-server
