@@ -31,3 +31,9 @@ end
 service "pdns" do
   action [:enable, :start]
 end
+
+if tagged?('ganymed-client')
+  ganymed_collector 'zendns' do
+    source 'zendns.rb'
+  end
+end
