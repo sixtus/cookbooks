@@ -65,6 +65,9 @@ set sidescrolloff=5
 " wrap on these
 set whichwrap+=<,>,[,]
 
+" but by default do not wrap
+set nowrap
+
 " by default, go for an indent of 4 and do not expand tabs
 set shiftwidth=4
 set tabstop=4
