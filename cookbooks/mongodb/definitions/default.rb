@@ -80,6 +80,8 @@ define :mongodb_instance, :nfiles => "1024" do
   end
 
   if tagged?("ganymed-client")
+    package 'dev-ruby/mongo'
+
     ganymed_collector svcname do
       source "mongodb.rb"
       variables :name => name,
