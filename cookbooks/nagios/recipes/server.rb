@@ -263,21 +263,6 @@ template "/usr/share/nagios/htdocs/index.php" do
   mode "0644"
 end
 
-# jNag (obsolete)
-file "/usr/share/nagios/htdocs/jNag.php" do
-  action :delete
-end
-
-directory "/usr/share/nagios/htdocs/jNag/images" do
-  action :delete
-  recursive true
-end
-
-nagios_conf "jnag" do
-  subdir false
-  action :delete
-end
-
 # nagios health check
 nrpe_command "check_nagios" do
   command "/usr/lib/nagios/plugins/check_nagios -F /var/nagios/status.dat -C /usr/sbin/nagios -e 5"
