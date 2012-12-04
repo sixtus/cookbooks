@@ -58,7 +58,7 @@ include_recipe "splunk::metriks"
 ## nginx ssl proxy
 include_recipe "nginx"
 
-htpasswd_from_databag "/etc/nginx/servers/splunk.passwd" do
+htpasswd_from_users "/etc/nginx/servers/splunk.passwd" do
   query splunk_users
   group "nginx"
   password_field :password1
