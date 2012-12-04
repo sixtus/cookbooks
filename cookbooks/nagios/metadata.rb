@@ -1,3 +1,15 @@
+# encoding: utf-8
+
+description "Nagios Is The Industry Standard In IT Infrastructure Monitoring"
+
+maintainer "Benedikt Böhm"
+maintainer_email "bb@xnull.de"
+license "Apache v2.0"
+
+version "1.0.0"
+
+supports "gentoo"
+
 depends "beanstalkd"
 depends "nginx"
 depends "spawn-fcgi"
