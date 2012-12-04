@@ -209,34 +209,3 @@ Miscelaneous
    includes various system and  network analysis tools, shel completion,
    archiving tools etc. For a complete list see the `attributes/default.rb`
    file in the base cookbook source.
-
-
-Nagios Service Checks
-=====================
-
-The base system recipe will register the following nagios service checks
-with the chef server.
-
-PING
-----
-
-PROCS
------
-
-ZOMBIES
--------
-
-LOAD
-----
-
-DISKS
------
-
-RAID
-----
-
-SWAP
-----
-
-LINK
-----
