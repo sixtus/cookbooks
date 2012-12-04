@@ -41,3 +41,22 @@ directory "/var/lock/subsys"
 service "shorewall6" do
   action [:enable, :start]
 end
+
+if tagged?("nagios-client")
+  sudo_rule "nagios-shorewall6" do
+    user "nagios"
+    runas "root"
+    command "NOPASSWD: /sbin/shorewall6 status"
+  end
+
+  nagios_plugin "check_shorewall6"
+
+  nrpe_command "check_shorewall6" do
+    command "/usr/lib/nagios/plugins/check_shorewall6"
+  end
+
+  nagios_service "SHOREWALL6" do
+    check_command "check_nrpe!check_shorewall6"
+    servicegroups "system"
+  end
+end
