@@ -45,7 +45,7 @@ end
 
 if tagged?("nagios-client")
   nrpe_command "check_time" do
-    command "/usr/lib/nagios/plugins/check_ntp_time -H #{node[:ntp][:server]}"
+    command "/usr/lib/nagios/plugins/check_ntp_time -H #{node[:ntp][:server]} -w 5 -c 30"
   end
 
   nagios_service "TIME" do
