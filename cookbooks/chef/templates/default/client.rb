@@ -12,8 +12,6 @@ chef_server_url    "<%= node[:chef][:client][:server_url] %>"
 file_cache_path    "/var/lib/chef/cache"
 file_backup_path   "/var/lib/chef/backup"
 
-Ohai::Config[:plugin_path].unshift("/var/lib/chef/ohai")
-
 <% if node[:chef][:client][:airbrake][:key] %>
 require "airbrake_handler"
 exception_handlers << AirbrakeHandler.new(:api_key => "<%= node[:chef][:client][:airbrake][:key] %>", :notify_host => "<%= node[:chef][:client][:airbrake][:url] %>" )

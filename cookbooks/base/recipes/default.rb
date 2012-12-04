@@ -30,7 +30,6 @@ case node[:platform]
 
 when "gentoo"
   if root?
-    include_recipe "ohai"
     include_recipe "base::etcgit"
     include_recipe "base::locales"
     include_recipe "base::resolv"
