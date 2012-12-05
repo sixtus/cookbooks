@@ -10,6 +10,6 @@ version "1.0.0"
 
 supports "gentoo"
 
-depends "beanstalkd"
 depends "nginx"
+depends "splunk"
 depends "spawn-fcgi"

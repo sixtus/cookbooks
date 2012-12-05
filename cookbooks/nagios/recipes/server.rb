@@ -2,10 +2,6 @@ tag("nagios-master")
 
 include_recipe "nginx::php"
 
-portage_package_use "net-analyzer/nagios-core" do
-  action :delete
-end
-
 portage_package_use "net-analyzer/nagios-plugins" do
   use %w(ldap mysql nagios-dns nagios-ntp nagios-ping nagios-ssh postgres)
 end
@@ -34,70 +30,6 @@ template "/usr/lib/nagios/plugins/notify" do
   owner "root"
   group "nagios"
   mode "0750"
-end
-
-# nagios master/slave setup
-slave = node.run_state[:nodes].select do |n|
-  n[:tags].include?("nagios-master") and
-  n[:fqdn] != node[:fqdn]
-end
-
-if slave.length > 1
-  raise "only 1 nagios slave is supported. found: #{slave.map { |n| n[:fqdn] }.inspect}"
-else
-  slave = slave.first
-end
-
-if slave
-  include_recipe "beanstalkd"
-
-  nagios_plugin "queue_check_result"
-  nagios_plugin "process_check_results"
-
-  cookbook_file "/etc/init.d/nsca-processor" do
-    source "nsca-processor.initd"
-    owner "root"
-    group "root"
-    mode "0755"
-  end
-
-  template "/etc/conf.d/nsca-processor" do
-    source "nsca-processor.confd"
-    owner "root"
-    group "root"
-    mode "0644"
-    variables :slave => slave
-  end
-
-  service "nsca-processor" do
-    action [:enable, :start]
-  end
-
-  nrpe_command "check_beanstalkd_nsca" do
-    command "/usr/lib/nagios/plugins/check_beanstalkd -S localhost:11300 " +
-            "-w #{node[:beanstalkd][:nagios][:warning]} " +
-            "-c #{node[:beanstalkd][:nagios][:critical]} " +
-            "-t send_nsca"
-  end
-
-  nagios_service "BEANSTALKD-NSCA" do
-    check_command "check_nrpe!check_beanstalkd_nsca"
-  end
-
-  nagios_plugin "enable_master"
-  nagios_plugin "disable_master"
-
-  template "/usr/lib/nagios/plugins/check_nagios_slave" do
-    source "check_nagios_slave"
-    owner "root"
-    group "nagios"
-    mode "0750"
-    variables :slave => slave
-  end
-
-  cron "check_nagios_slave" do
-    command "/usr/bin/flock /var/lock/check_nagios_slave.lock -c /usr/lib/nagios/plugins/check_nagios_slave"
-  end
 end
 
 # retrieve data from the search index
