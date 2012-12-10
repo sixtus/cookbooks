@@ -1,0 +1,1 @@
+default[:zookeeper][:ensamble] = "default"
