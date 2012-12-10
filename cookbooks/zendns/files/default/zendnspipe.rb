@@ -2,7 +2,6 @@
 
 require 'madvertise-logging'
 $log = ImprovedLogger.new(:syslog, "zendnspipe")
-$log.level = :debug
 
 require 'mongo'
 $con = Mongo::ReplSetConnection.new(['localhost:27017'])
