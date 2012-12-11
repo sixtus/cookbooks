@@ -63,3 +63,7 @@ end.first
               :job_tracker => job_tracker
   end
 end
+
+splunk_input "monitor:///var/log/hadoop/hadoop.log" do
+  sourcetype "hadoop"
+end
