@@ -40,6 +40,16 @@ file "/var/lib/zookeeper/myid" do
   notifies :restart, "service[zookeeper]"
 end
 
+directory "/var/log/zookeeper" do
+  owner "zookeeper"
+  group "zookeeper"
+  mode "0755"
+end
+
+splunk_input "monitor:///var/log/zookeeper/zookeeper.log" do
+  sourcetype "zookeeper"
+end
+
 template "/etc/conf.d/zookeeper" do
   source "zookeeper.confd"
   owner "root"
