@@ -11,9 +11,9 @@ end.sort_by do |n|
   n[:fqdn]
 end
 
-myid = 1 + nodes.index do |n|
+myid = nodes.index do |n|
   n[:fqdn] == node[:fqdn]
-end
+end.to_i + 1
 
 template "/opt/zookeeper/conf/zoo.cfg" do
   source "zoo.cfg"
