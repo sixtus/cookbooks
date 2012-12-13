@@ -10,6 +10,7 @@ define :account,
        :home_owner => nil,
        :home_group => nil,
        :authorized_keys => [],
+       :key_source => nil,
        :action => :create do
   include_recipe "account"
 
@@ -18,6 +19,8 @@ define :account,
 
   home_owner = params[:home_owner]
   home_group = params[:home_group]
+
+  key_source = params[:key_source]
 
   group params[:gid] do
     append true
@@ -68,6 +71,22 @@ define :account,
     mode "0700"
   end
 
+  if key_source
+    cookbook_file "#{home}/.ssh/id_rsa" do
+      source key_source
+      owner home_owner
+      group home_group
+      mode "0600"
+    end
+
+    cookbook_file "#{home}/.ssh/id_rsa.pub" do
+      source "#{key_source}.pub"
+      owner home_owner
+      group home_group
+      mode "0644"
+    end
+  end
+
   # don't create an authorized keys file if authorized_keys is nil.
   # if it's empty -- i.e. [] -- then we would create an empty
   # authorized keys but with nil, the file is not created.
@@ -79,6 +98,11 @@ define :account,
       mode "0600"
     end
   end
+end
+
+define :account_keys,
+       :source => "id_rsa" do
+
 end
 
 define :account_from_databag do

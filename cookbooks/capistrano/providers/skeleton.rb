@@ -26,20 +26,7 @@ action :create do
     gid user
     groups groups
     authorized_keys authorized_keys
-  end
-
-  cookbook_file "#{homedir}/.ssh/id_rsa" do
-    source "id_rsa"
-    owner user
-    group user
-    mode "0600"
-  end
-
-  cookbook_file "#{homedir}/.ssh/id_rsa.pub" do
-    source "id_rsa.pub"
-    owner user
-    group user
-    mode "0644"
+    key_source "id_rsa"
   end
 
   %w(
