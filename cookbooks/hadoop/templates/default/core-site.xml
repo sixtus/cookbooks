@@ -1,36 +1,43 @@
 <?xml version="1.0"?>
 <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
 
-<!-- Put site-specific property overrides in this file. -->
-
 <configuration>
 
+<% if @name_node %>
   <property>
     <name>fs.default.name</name>
-    <value>ceph://null</value>
+    <value>hdfs://<%= @name_node[:primary_ipaddress] %>:9000/</value>
   </property>
-
-  <property>
-    <name>fs.ceph.monAddr</name>
-    <value><%= @ceph_mon[:primary_ipaddress] %>:6789</value>
-    <description>The location of the Ceph monitor to connect to.
-      This should be an IP address, not a domain-based web address.</description>
-  </property>
-
-  <property>
-    <name>fs.ceph.libDir</name>
-    <value>/usr/lib</value>
-    <description>The folder holding libcephfs and libhadoopceph</description>
-  </property>
-
-  <property>
-    <name>fs.ceph.commandLine</name>
-    <value> -k /opt/hadoop/conf/ceph.keyring -n client.admin --auth-supported=cephx</value>
-  </property>
+<% end %>
 
   <property>
     <name>hadoop.tmp.dir</name>
-    <value>/var/tmp/hadoop/${user.name}</value>
+    <value><%= node[:hadoop][:tmp_dir] %></value>
+  </property>
+
+  <property>
+    <name>fs.s3.awsAccessKeyId</name>
+    <value><%= node[:hadoop][:fs][:s3][:access_key] %></value>
+  </property>
+
+  <property>
+    <name>fs.s3.awsSecretAccessKey</name>
+    <value><%= node[:hadoop][:fs][:s3][:secret_key] %></value>
+  </property>
+
+  <property>
+    <name>fs.s3n.awsAccessKeyId</name>
+    <value><%= node[:hadoop][:fs][:s3][:access_key] %></value>
+  </property>
+
+  <property>
+    <name>fs.s3n.awsSecretAccessKey</name>
+    <value><%= node[:hadoop][:fs][:s3][:secret_key] %></value>
+  </property>
+
+  <property>
+    <name>fs.inmemory.size.mb</name>
+    <value><%= node[:hadoop][:fs][:inmemory] %></value>
   </property>
 
 </configuration>

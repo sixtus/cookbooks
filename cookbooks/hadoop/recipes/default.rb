@@ -1,10 +1,9 @@
-portage_package_use "sys-cluster/hadoop" do
-  use %w(ceph)
-end
+include_recipe "java"
 
 package "sys-cluster/hadoop"
 
 %w(
+  /var/lib/hadoop
   /var/log/hadoop
   /var/run/hadoop
   /var/tmp/hadoop
@@ -17,6 +16,8 @@ package "sys-cluster/hadoop"
 end
 
 %w(
+  namenode
+  datanode
   jobtracker
   tasktracker
 ).each do |svc|
@@ -28,21 +29,9 @@ end
   end
 end
 
-## ceph integration
-ceph_mon = get_mon_nodes.select do |n|
-  n[:ceph_client_admin_key]
+name_node = node.run_state[:nodes].select do |n|
+  n[:tags] && n[:tags].include?("hadoop-namenode")
 end.first
-
-execute "create-hadoop-ceph-keyring" do
-  command %{ceph-authtool /opt/hadoop/conf/ceph.keyring --create-keyring --name=client.admin --add-key="#{ceph_mon[:ceph_client_admin_key]}"}
-  creates "/opt/hadoop/conf/ceph.keyring"
-end
-
-file "/opt/hadoop/conf/ceph.keyring" do
-  owner "hadoop"
-  group "hadoop"
-  mode "0400"
-end
 
 job_tracker = node.run_state[:nodes].select do |n|
   n[:tags] && n[:tags].include?("hadoop-jobtracker")
@@ -51,6 +40,7 @@ end.first
 %w(
   core-site.xml
   hadoop-env.sh
+  hdfs-site.xml
   log4j.properties
   mapred-site.xml
 ).each do |f|
@@ -59,8 +49,8 @@ end.first
     owner "root"
     group "root"
     mode "0644"
-    variables :ceph_mon => ceph_mon,
-              :job_tracker => job_tracker
+    variables :job_tracker => job_tracker,
+              :name_node => name_node
   end
 end
 

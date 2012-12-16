@@ -3,12 +3,12 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-name="hadoop-jobtracker"
+name="hadoop-datanode"
 command="/opt/hadoop/bin/hadoop"
-command_args="--config /opt/hadoop/conf jobtracker"
+command_args="--config /opt/hadoop/conf datanode"
 command_background="true"
 start_stop_daemon_args="--user hadoop --group hadoop"
-pidfile="/var/run/hadoop/jobtracker.pid"
+pidfile="/var/run/hadoop/datanode.pid"
 
 depend() {
     need net

@@ -1,23 +1,38 @@
 <?xml version="1.0"?>
 <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
 
-<!-- Put site-specific property overrides in this file. -->
-
 <configuration>
+
+<% if @job_tracker %>
   <property>
     <name>mapred.job.tracker</name>
     <value><%= @job_tracker[:primary_ipaddress] %>:9001</value>
   </property>
+<% end %>
+
   <property>
     <name>mapred.tasktracker.map.tasks.maximum</name>
     <value>8</value>
   </property>
+
   <property>
     <name>mapred.tasktracker.reduce.tasks.maximum</name>
     <value>8</value>
   </property>
+
   <property>
-  	<name>mapred.child.java.opts</name>
-  	<value>-Xmx1024M</value>
+    <name>mapred.task.timeout</name>
+    <value>180000</value>
+  </property>
+
+  <property>
+    <name>mapred.child.java.opts</name>
+    <value>-Duser.timezone=UTC -Dfile.encoding=UTF-8 -Xmx1g</value>
+  </property>
+
+  <!-- http://stackoverflow.com/questions/2354525/what-should-be-hadoop-tmp-dir -->
+  <property>
+    <name>mapred.system.dir</name>
+    <value>/mapred/system</value>
   </property>
 </configuration>

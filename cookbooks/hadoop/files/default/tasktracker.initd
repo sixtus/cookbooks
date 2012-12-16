@@ -11,5 +11,9 @@ start_stop_daemon_args="--user hadoop --group hadoop"
 pidfile="/var/run/hadoop/tasktracker.pid"
 
 depend() {
-        need net
+    need net
+}
+
+pre_start() {
+    checkpath -d -m 0755 -o hadoop:hadoop /var/run/hadoop
 }

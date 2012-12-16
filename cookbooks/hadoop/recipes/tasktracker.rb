@@ -1,3 +1,5 @@
+tag("hadoop-tasktracker")
+
 include_recipe "hadoop::default"
 
 service "hadoop-tasktracker" do
