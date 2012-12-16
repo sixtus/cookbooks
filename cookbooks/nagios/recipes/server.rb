@@ -97,7 +97,6 @@ end
 %w(nagios nsca resource).each do |f|
   nagios_conf f do
     subdir false
-    variables :slave => slave
   end
 end
 

@@ -35,12 +35,6 @@ define command {
   command_line $USER1$/check_http -H $HOSTADDRESS$ $ARG1$
 }
 
-# event handlers
-define command {
-  command_name submit_check_result
-  command_line $USER1$/queue_check_result $HOSTNAME$ '$SERVICEDESC$' $SERVICESTATE$ '$SERVICEOUTPUT$'
-}
-
 # TODO: these should be defined in cookbooks
 define command {
   command_name check_ssh

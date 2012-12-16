@@ -866,11 +866,7 @@ process_performance_data=0
 # implementing distributed monitoring.
 # Values: 1 = obsess over services, 0 = do not obsess (default)
 
-<% if @slave %>
-obsess_over_services=1
-<% else %>
 obsess_over_services=0
-<% end %>
 
 
 
@@ -882,11 +878,7 @@ obsess_over_services=0
 # define in your host configuration file. Read the HTML docs for
 # more information on implementing distributed monitoring.
 
-<% if @slave %>
-ocsp_command=submit_check_result
-<% else %>
 #ocsp_command=somecommand
-<% end %>
 
 
 
