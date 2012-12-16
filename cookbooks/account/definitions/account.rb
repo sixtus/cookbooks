@@ -100,11 +100,6 @@ define :account,
   end
 end
 
-define :account_keys,
-       :source => "id_rsa" do
-
-end
-
 define :account_from_databag do
   user = node.run_state[:users].select do |u|
            u[:id] == params[:name]
