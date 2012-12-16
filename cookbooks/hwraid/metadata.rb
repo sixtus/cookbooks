@@ -8,4 +8,4 @@ license "Apache v2.0"
 
 version "1.0.0"
 
-depends "sudo"
+depends "sudo", "~> 1.0.0"

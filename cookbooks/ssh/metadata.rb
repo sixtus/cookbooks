@@ -12,3 +12,5 @@ supports "gentoo"
 supports "mac_os_x"
 
 depends "nagios"
+
+depends "overridable", "~> 1.0.0"

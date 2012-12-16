@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-description "This cookbook installs and configures lftp"
+description "LFTP is a file transfer program supporting a number of network protocols"
 
 maintainer "Benedikt Böhm"
 maintainer_email "bb@xnull.de"

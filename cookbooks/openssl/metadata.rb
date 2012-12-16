@@ -10,4 +10,4 @@ version "1.0.0"
 
 supports "gentoo"
 
-depends "nagios"
+depends "nagios", "~> 1.0.0"
