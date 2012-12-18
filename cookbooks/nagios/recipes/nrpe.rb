@@ -1,4 +1,7 @@
-package "net-analyzer/nagios-nrpe"
+package "net-analyzer/nrpe" do
+  action :upgrade
+end
+
 package "net-analyzer/nagios-check_pidfile"
 
 include_recipe "nagios::default"

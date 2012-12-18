@@ -1,4 +1,10 @@
-package "net-analyzer/nagios-nsca"
+portage_package_use "net-analyzer/nsca" do
+  use %w(minimal)
+end
+
+package "net-analyzer/nsca" do
+  action :upgrade
+end
 
 include_recipe "nagios::default"
 
