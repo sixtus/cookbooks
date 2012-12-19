@@ -1,7 +1,21 @@
 # init script helpers
-sva () { /etc/init.d/$1 start; }
-svo () { /etc/init.d/$1 stop; }
-svr () { /etc/init.d/$1 restart; }
+sva () {
+	for svc in "$@"; do
+		/etc/init.d/${svc} start
+	done
+}
+
+svo () {
+	for svc in "$@"; do
+		/etc/init.d/${svc} stop
+	done
+}
+
+svr () {
+	for svc in "$@"; do
+		/etc/init.d/${svc} restart
+	done
+}
 
 # portdir helpers
 eportdir() {
