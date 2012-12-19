@@ -1,9 +1,10 @@
 # paths & directories
+set[:portage][:arch] = %x(portageq envvar ARCH).chomp
 set[:portage][:make_conf] = "/etc/make.conf"
 set[:portage][:confdir] = "/etc/portage"
 set[:portage][:portdir] = "/usr/portage"
 set[:portage][:distdir] = "#{set[:portage][:portdir]}/distfiles"
-set[:portage][:pkgdir] = "#{set[:portage][:portdir]}/packages/${ARCH}"
+set[:portage][:pkgdir] = "#{set[:portage][:portdir]}/packages/#{node[:portage][:arch]}"
 
 # compiler settings
 default[:portage][:CFLAGS] = "-O2 -pipe"
@@ -28,7 +29,7 @@ if node[:platform] == "gentoo"
   set[:portage][:repo] = File.read("/usr/portage/profiles/repo_name").chomp
 
   if node[:portage][:repo] == "zentoo"
-    default[:portage][:profile] = "#{set[:portage][:portdir]}/profiles/default/linux/amd64/11.0"
+    default[:portage][:profile] = "#{set[:portage][:portdir]}/profiles/default/linux/#{node[:portage][:arch]}/11.0"
 
     default[:portage][:SYNC] = "rsync://rsync.zentoo.org/zentoo-portage"
     default[:portage][:MIRRORS] = %w(
@@ -36,7 +37,7 @@ if node[:platform] == "gentoo"
     http://ftp.spline.de/pub/gentoo
     )
   elsif node[:portage][:repo] == "gentoo"
-    default[:portage][:profile] = "#{set[:portage][:portdir]}/profiles/default/linux/amd64/10.0"
+    default[:portage][:profile] = "#{set[:portage][:portdir]}/profiles/default/linux/#{node[:portage][:arch]}/10.0"
 
     default[:portage][:SYNC] = "rsync://rsync.de.gentoo.org/gentoo-portage"
     default[:portage][:MIRRORS] = %w(
