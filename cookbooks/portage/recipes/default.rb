@@ -17,7 +17,11 @@ group "portage" do
   members %w(portage)
 end
 
-link "/etc/make.profile" do
+file "/etc/make.profile" do
+  action :delete
+end
+
+link "/etc/portage/make.profile" do
   to node[:portage][:profile]
 end
 
@@ -84,6 +88,10 @@ end
 directory "#{node[:portage][:make_conf]}.d" do
   action :delete
   recursive true
+end
+
+file "/etc/make.conf" do
+  action :delete
 end
 
 template node[:portage][:make_conf] do

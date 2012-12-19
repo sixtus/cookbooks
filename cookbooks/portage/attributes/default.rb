@@ -1,6 +1,6 @@
 # paths & directories
 set[:portage][:arch] = %x(portageq envvar ARCH).chomp
-set[:portage][:make_conf] = "/etc/make.conf"
+set[:portage][:make_conf] = "/etc/portage/make.conf"
 set[:portage][:confdir] = "/etc/portage"
 set[:portage][:portdir] = "/usr/portage"
 set[:portage][:distdir] = "#{set[:portage][:portdir]}/distfiles"
