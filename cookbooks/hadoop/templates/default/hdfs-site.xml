@@ -33,9 +33,5 @@
     <value>4096</value>
   </property>
 
-  <property>
-    <name>dfs.block.size</name>
-    <value>134217728</value>
-  </property>
 
 </configuration>
