@@ -26,7 +26,6 @@ cookbook_file "/etc/denyhosts.conf" do
   owner "root"
   group "root"
   mode "0640"
-  notifies :restart, "service[denyhosts]"
 end
 
 allowed_hosts = node.run_state[:nodes].select do |n|
@@ -51,7 +50,12 @@ file "/var/log/auth.log" do
 end
 
 service "denyhosts" do
-  action [:enable, :start]
+  action [:disable, :stop]
+end
+
+cron "denyhosts" do
+  minute "*/10"
+  command "/usr/bin/denyhosts.py -c /etc/denyhosts.conf"
 end
 
 cookbook_file "/etc/logrotate.d/denyhosts" do
