@@ -139,7 +139,7 @@ module Gentoo
 
         # We need to update the eix database if it's older than the current portage
         # tree or the eix binary.
-        cache_file = if File.exist?("/var/cache/eix/portage.eix")
+        cache_file = if File.directory?("/var/cache/eix")
                        "/var/cache/eix/portage.eix"
                      else
                        "/var/cache/eix"
