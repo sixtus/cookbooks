@@ -28,7 +28,7 @@ define :mongodb_instance, :nfiles => "1024" do
 
   # data for solr searches
   tag("mongodb")
-  node[:mongodb][:instances][name] = params
+  node.set[:mongodb][:instances][name] = params
 
   directory dbpath do
     owner "mongodb"

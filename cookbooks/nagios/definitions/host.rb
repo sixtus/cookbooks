@@ -1,7 +1,7 @@
 define :nagios_virtual_host do
   fqdn = params[:name]
 
-  node[:nagios][:services] ||= {}
+  node.set[:nagios][:services] ||= {}
   services = node[:nagios][:services].select do |service_description, params|
     params[:host_name] == fqdn
   end

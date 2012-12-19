@@ -87,7 +87,7 @@ end
 # base packages
 case node[:platform]
 when "gentoo"
-  node[:packages] = %w(
+  node.set[:packages] = %w(
     app-admin/apache-tools
     app-admin/lib_users
     app-admin/pwgen
@@ -126,16 +126,16 @@ when "gentoo"
   )
 
   if node[:virtualization][:role] == "host"
-    node[:packages] += %w(
+    node.set[:packages] += %w(
       sys-kernel/genkernel
     )
   end
 
 when "mac_os_x"
   # coreutils is missing xz dependency
-  node[:packages] = %w(xz coreutils)
+  node.set[:packages] = %w(xz coreutils)
 
-  node[:packages] += %w(
+  node.set[:packages] += %w(
     ack
     atool
     colordiff

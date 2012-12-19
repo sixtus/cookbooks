@@ -4,5 +4,5 @@ define :shorewall_accounting,
   :proto => "-",
   :port => "-" do
 
-  node[:shorewall][:accounting][params[:name]] = params
+  node.set[:shorewall][:accounting][params[:name]] = params
 end

@@ -1,18 +1,18 @@
 # reset all attributes to make sure cruft is being deleted on chef-client run
-node[:shorewall][:accounting] = {}
-node[:shorewall6][:accounting] = {}
-node[:shorewall][:hosts] = {}
-node[:shorewall6][:hosts] = {}
-node[:shorewall][:interfaces] = {}
-node[:shorewall6][:interfaces] = {}
-node[:shorewall][:policies] = {}
-node[:shorewall6][:policies] = {}
-node[:shorewall][:rules] = {}
-node[:shorewall6][:rules] = {}
-node[:shorewall][:tunnels] = {}
-node[:shorewall6][:tunnels] = {}
-node[:shorewall][:zones] = {}
-node[:shorewall6][:zones] = {}
+node.set[:shorewall][:accounting] = {}
+node.set[:shorewall6][:accounting] = {}
+node.set[:shorewall][:hosts] = {}
+node.set[:shorewall6][:hosts] = {}
+node.set[:shorewall][:interfaces] = {}
+node.set[:shorewall6][:interfaces] = {}
+node.set[:shorewall][:policies] = {}
+node.set[:shorewall6][:policies] = {}
+node.set[:shorewall][:rules] = {}
+node.set[:shorewall6][:rules] = {}
+node.set[:shorewall][:tunnels] = {}
+node.set[:shorewall6][:tunnels] = {}
+node.set[:shorewall][:zones] = {}
+node.set[:shorewall6][:zones] = {}
 
 include_recipe "shorewall::rules"
 
