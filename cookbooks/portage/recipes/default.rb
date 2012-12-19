@@ -1,3 +1,7 @@
+package "sys-apps/portage" do
+  action :upgrade
+end
+
 group "portage" do
   gid 250
   append true
