@@ -2,7 +2,7 @@
 # HOST.CFG - OBJECTS FOR HOST <%= @host[:fqdn] %>
 ###############################################################################
 
-<% @host[:nagios][:contact_groups] ||= node[:nagios][:host][:contact_groups] %>
+<% @host.set[:nagios][:contact_groups] ||= node[:nagios][:host][:contact_groups] %>
 
 define host {
   use generic-host
@@ -15,7 +15,7 @@ define host {
 }
 
 <%
-@host[:nagios][:services] ||= {}
+@host.set[:nagios][:services] ||= {}
 @host[:nagios][:services].sort.each do |service_description, params|
   params[:enabled] = true if params[:enabled] == nil
 

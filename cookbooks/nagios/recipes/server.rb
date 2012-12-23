@@ -23,6 +23,8 @@ file "/var/nagios/rw/nagios.cmd" do
   owner "nagios"
   group "nginx"
   mode "0660"
+  action :create_if_missing # prevent chef from building a checksum on a FIFO
+  only_if { File.exist?("/var/nagios/rw/nagios.cmd") } # do not create the FIFO ourselves
 end
 
 template "/usr/lib/nagios/plugins/notify" do
