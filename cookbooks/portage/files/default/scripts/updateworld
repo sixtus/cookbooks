@@ -33,11 +33,6 @@ eselect news read new | grep -v '^No news is good news.' || :
 # switch to latest ruby first
 latest_ruby
 
-# check for openrc migration
-if qlist -eICv openrc | fgrep -qv openrc-0.10.; then
-	MIGRATE_OPENRC=1
-fi
-
 if [[ -z $UPDATEWORLD_DONT_ASK ]]; then
 	# dummy run emerge first, so global updates don't clutter the output.
 	emerge --info &>/dev/null
@@ -112,11 +107,6 @@ latest_ruby
 
 # cleanup unneeded dependencies
 depclean
-
-# migrate to openrc-0.10.4
-if [[ $MIGRATE_OPENRC -eq 1 ]]; then
-	rsync -av /lib/rc/init.d/ /run/openrc
-fi
 
 # update config files and run chef-client/chef-solo
 if [[ -e /etc/chef/client.pem ]]; then
