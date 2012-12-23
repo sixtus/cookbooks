@@ -1,3 +1,7 @@
+portage_package_use "sys-apps/openrc" do
+  use %w(newnet)
+end
+
 package "sys-apps/openrc"
 
 template "/etc/rc.conf" do
