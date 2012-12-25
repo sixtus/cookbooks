@@ -1,5 +1,7 @@
+is_master = tagged?("nagios-master")
+
 portage_package_use "net-analyzer/nsca" do
-  use %w(minimal)
+  use %w(minimal) unless is_master
 end
 
 package "net-analyzer/nsca" do
