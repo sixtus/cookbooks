@@ -28,7 +28,7 @@ default[:portage][:LINGUAS] = %w(en)
 if node[:platform] == "gentoo"
   set[:portage][:repo] = File.read("/usr/portage/profiles/repo_name").chomp
 
-  if node[:portage][:repo] == "zentoo"
+  if node[:portage][:repo] =~ /^zentoo/
     default[:portage][:profile] = "#{set[:portage][:portdir]}/profiles/default/linux/#{node[:portage][:arch]}/11.0"
 
     default[:portage][:SYNC] = "rsync://rsync.zentoo.org/zentoo-portage"
