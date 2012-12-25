@@ -15,6 +15,7 @@ class Nagios::Plugin::Mysql < Nagios::Plugin
 
     [].tap do |ret|
       ::Mysql.init.tap do |dbh|
+        dbh.options(::Mysql::READ_DEFAULT_FILE, "/var/nagios/home/.my.cnf")
         dbh.options(::Mysql::READ_DEFAULT_GROUP, "client")
         dbh.connect
         dbh.select_db(@database)
