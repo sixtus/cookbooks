@@ -1,6 +1,6 @@
 if platform?("gentoo")
   case node[:java][:vm]
-  when /^icedtea-bin-/
+  when /^icedtea-/
     portage_package_use "x11-libs/cairo" do
       use %w(X)
     end
@@ -9,7 +9,7 @@ if platform?("gentoo")
       use %w(X)
     end
 
-    package "dev-java/icedtea-bin" do
+    package "dev-java/icedtea" do
       action :upgrade
     end
   else
@@ -19,5 +19,9 @@ if platform?("gentoo")
   execute "ensure #{node[:java][:vm]} is the system vm" do
     command "eselect java-vm set system #{node[:java][:vm]}"
     not_if { %x(eselect --brief java-vm show system).strip == node[:java][:vm] }
+  end
+
+  package "dev-java/icedtea-bin" do
+    action :remove
   end
 end

@@ -1,1 +1,1 @@
-default[:java][:vm] = "icedtea-bin-7"
+default[:java][:vm] = "icedtea-7"
