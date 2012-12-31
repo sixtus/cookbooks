@@ -6,7 +6,7 @@ pidfile=<%= @pidfile %>
 command=/usr/bin/monit
 command_args="-p ${pidfile}"
 
-user=<%= @user[:name] %>
+command_user=<%= @user[:name] %>
 
 depend() {
 	use net
