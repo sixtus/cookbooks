@@ -34,14 +34,21 @@ default[:php][:upload][:tmp_dir] = "#{node[:php][:tmp_dir]}/uploads"
 default[:php][:fpm][:conf] = nil
 default[:php][:fpm][:pools][:default] = {}
 
-# get current php slot
+# slot support on gentoo
 if node[:platform] == "gentoo"
-  default[:php][:slot] = %x(eix --pure-packages --format '<bestversion:NAMEASLOT>' -e dev-lang/php|cut -d: -f2).chomp
+  default[:php][:slot] = "5.3"
+  default[:php][:install_path] = "/usr/lib/php#{node[:php][:slot]}"
+  default[:php][:php_config] = "#{node[:php][:install_path]}/bin/php-config"
 end
 
 # infer extension dir
-default[:php][:extension_dir] = if File.exist?("/usr/bin/php-config")
-                                  %x(/usr/bin/php-config --extension-dir).chomp
-                                else
-                                  "/does/not/exist"
-                                end
+default[:php][:extension_dir] = %x(#{node[:php][:php_config]} --extension-dir).chomp rescue "/does/not/exist"
+
+# xcache
+default[:php][:xcache][:admin_enable_auth] = "Off"
+default[:php][:xcache][:admin_pass] = ""
+default[:php][:xcache][:cacher] = "On"
+default[:php][:xcache][:count] = "2"
+default[:php][:xcache][:size] = "64M"
+default[:php][:xcache][:var_count] = node[:php][:xcache][:count]
+default[:php][:xcache][:var_size] = "64M"

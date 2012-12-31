@@ -5,7 +5,13 @@ portage_package_use "dev-lang/php" do
   use node[:php][:default_use_flags] + node[:php][:use_flags] + node[:php][:sapi]
 end
 
-package "dev-lang/php"
+portage_package_use "dev-php/xcache" do
+  use ["php_targets_php#{node[:php][:slot].sub(/\./, '-')}"]
+end
+
+# we pull dev-lang/php implicitly via xcache so that we can guarantee the
+# correct slot with the above package.use resource
+package "dev-php/xcache"
 
 execute "eselect php set cli php#{node[:php][:slot]}" do
   user "root"
@@ -35,7 +41,7 @@ template "/etc/php/cli-php#{node[:php][:slot]}/php.ini" do
   mode "0644"
 end
 
-include_recipe "php::xcache"
+php_extension "xcache"
 
 %w(
   /var/log/php-error.log
