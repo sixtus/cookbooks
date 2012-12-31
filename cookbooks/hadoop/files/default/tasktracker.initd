@@ -4,16 +4,21 @@
 # $Header: $
 
 name="hadoop-tasktracker"
-command="/opt/hadoop/bin/hadoop"
-command_args="--config /opt/hadoop/conf tasktracker"
-command_background="true"
-start_stop_daemon_args="--user hadoop --group hadoop"
+
 pidfile="/var/run/hadoop/tasktracker.pid"
 
+command="/opt/hadoop/bin/hadoop"
+command_args="--config /opt/hadoop/conf tasktracker"
+
+command_background="true"
+
+command_user="hadoop"
+command_group="hadoop"
+
 depend() {
-    need net
+	need net
 }
 
 pre_start() {
-    checkpath -d -m 0755 -o hadoop:hadoop /var/run/hadoop
+	checkpath -d -m 0755 -o hadoop:hadoop /var/run/hadoop
 }
