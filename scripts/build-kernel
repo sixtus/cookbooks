@@ -1,6 +1,11 @@
 #!/bin/bash
 
-KV="3.5.1-zentoo"
+KV="3.7.1-zentoo"
+
+if [[ ! -d /usr/src/linux-${KV} ]]; then
+	echo "!!! kernel version ${KV} does not exist ..."
+	exit 1
+fi
 
 pushd /usr/src
 
@@ -24,7 +29,7 @@ pushd linux
 
 make mrproper
 
-wget -q -O .config "https://raw.github.com/zentoo/quickstart/master/profiles/3.5.1-zentoo-generic.kconfig"
+wget -q -O .config "https://raw.github.com/zentoo/quickstart/master/profiles/3.7.1-zentoo-generic.kconfig"
 
 genkernel --oldconfig \
 	--install \
