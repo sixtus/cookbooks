@@ -81,6 +81,10 @@ if root? and not solo? and node[:os] == "linux" and node[:virtualization][:role]
   include_recipe "ntp"
   include_recipe "shorewall"
   include_recipe "smart"
+
+  cron_daily "xfs_fsr" do
+    command "/usr/sbin/xfs_fsr -t 600"
+  end
 end
 
 # use account cookbook in root mode
