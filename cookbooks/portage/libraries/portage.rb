@@ -23,7 +23,11 @@ module Gentoo
       # =net-analyzer/netdiscover => chef-net-analyzer-netdiscover
       def package_conf_file(conf_type, name)
         conf_dir = "/etc/portage/package.#{conf_type}"
-        raise Chef::Exceptions::Package, "#{conf_type} should be a directory." unless ::File.directory?(conf_dir)
+
+        unless ::File.directory?(conf_dir)
+          ::FileUtils.rm_rf(conf_dir)
+          ::FileUtils.mkdir_p(conf_dir)
+        end
 
         package_atom = name.strip.split(/\s+/).first
         package_file = package_atom.gsub(/[\/\.|]/, "-").gsub(/[^a-z0-9_\-]/i, "")
