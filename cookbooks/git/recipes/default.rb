@@ -1,11 +1,11 @@
 case node[:platform]
 when "gentoo"
-  if root?
-    package "dev-vcs/git"
-  end
+  package "dev-vcs/git"
+  package "dev-vcs/git-extras"
 
 when "mac_os_x"
   package "git"
+  package "git-extras"
 
 end
 
