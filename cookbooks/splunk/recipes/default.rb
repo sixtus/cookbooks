@@ -39,15 +39,11 @@ end
   end
 end
 
-execute "stop-splunk" do
-  command "/opt/splunk/bin/splunk stop"
-  action :nothing
-end
-
-execute "start-splunk-first-time" do
-  command "/opt/splunk/bin/splunk start --accept-license"
-  creates "/opt/splunk/etc/auth/splunk.secret"
-  notifies :run, "execute[stop-splunk]", :immediately
+cookbook_file "/etc/init.d/splunk" do
+  source "splunk.initd"
+  owner "root"
+  group "root"
+  mode "0755"
 end
 
 service "splunk" do
