@@ -54,6 +54,15 @@ end.first
   end
 end
 
+node[:hadoop][:tmp_dir].each do |dir|
+  directory dir do
+    owner "hadoop"
+    group "hadoop"
+    mode "0777"
+    recursive true
+  end
+end
+
 splunk_input "monitor:///var/log/hadoop/hadoop.log" do
   sourcetype "hadoop"
 end

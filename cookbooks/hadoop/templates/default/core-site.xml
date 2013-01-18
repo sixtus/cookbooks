@@ -12,7 +12,7 @@
 
   <property>
     <name>hadoop.tmp.dir</name>
-    <value><%= node[:hadoop][:tmp_dir] %></value>
+    <value><%= node[:hadoop][:tmp_dir].first %>/${user.name}</value>
   </property>
 
   <property>

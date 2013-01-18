@@ -1,4 +1,4 @@
-default[:hadoop][:tmp_dir] = "/var/tmp/hadoop/${user.name}"
+default[:hadoop][:tmp_dir] = [ "/var/tmp/hadoop" ]
 
 default[:hadoop][:fs][:inmemory] = "200"
 

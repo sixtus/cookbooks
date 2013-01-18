@@ -35,4 +35,10 @@
     <name>mapred.system.dir</name>
     <value>/mapred/system</value>
   </property>
+
+  <property>
+    <name>mapred.local.dir</name>
+    <value><%= node[:hadoop][:tmp_dir].map { |dir| "#{dir}/${user.name}/mapred/local" }.join(',') %></value>
+  </property>
+
 </configuration>
