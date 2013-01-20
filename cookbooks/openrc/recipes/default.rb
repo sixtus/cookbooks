@@ -2,7 +2,13 @@ portage_package_use "sys-apps/openrc" do
   use %w(newnet)
 end
 
-package "sys-apps/openrc"
+package "sys-fs/udev-init-scripts" do
+  action :upgrade
+end
+
+package "sys-apps/openrc" do
+  action :upgrade
+end
 
 template "/etc/rc.conf" do
   source "rc.conf"
