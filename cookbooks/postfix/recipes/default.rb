@@ -46,6 +46,12 @@ user "mail" do
   shell "/sbin/nologin"
 end
 
+directory "/var/spool/mail" do
+  owner "root"
+  group "mail"
+  mode "03775"
+end
+
 directory "/etc/mail" do
   owner "root"
   group "root"
