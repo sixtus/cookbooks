@@ -17,8 +17,8 @@ exec 2> >(logger -i -p "${LOG_FACILITY}.error" -t "${PROGRAM}")
       rsync -avz /var/lib/mysql/mysql-bin.* \
         <%= node[:mysql][:backup][:stream][:host] %>:<%= node[:mysql][:backup][:stream][:dir] %>/$(hostname -f)/
     <% else %>
-      lftp -c "open backup; mkdir $(hostname -f)"
-      lftp -c "open backup; mkdir $(hostname -f)/mysql"
+      lftp -c "open backup; mkdir $(hostname -f)" &>/dev/null
+      lftp -c "open backup; mkdir $(hostname -f)/mysql" &>/dev/null
       lftp -c "open backup; mput -c -O $(hostname -f)/mysql /var/lib/mysql/mysql-bin.*"
     <% end %>
   fi
