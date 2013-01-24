@@ -121,7 +121,7 @@ def process_axfr(qname)
 end
 
 def process(query)
-  $log.info("processing query=#{query.inspect}")
+  $log.debug("processing query=#{query.inspect}")
   qformat, qname, qclass, qtype, domain_id, remote_ip, _ = query.split(/\t/)
 
   if not %w(Q AXFR).include?(qformat)
