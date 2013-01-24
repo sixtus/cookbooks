@@ -6,6 +6,7 @@
 
 # Defaults specification
 Defaults env_keep="EDITOR"
+Defaults:nagios !syslog
 
 # Runas alias specification
 
