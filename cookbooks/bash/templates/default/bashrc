@@ -172,6 +172,11 @@ serve() {
 	python -m SimpleHTTPServer ${1:-8080}
 }
 
+<% if solo? and not root? %>
+# unset RUBYOPT here for rvm compat
+unset RUBYOPT
+<% end %>
+
 # load local bashrc if it exists
 if [[ -e ${HOME}/.bashrc.local ]]; then
 	source ${HOME}/.bashrc.local
