@@ -19,6 +19,6 @@ depend() {
 	need net
 }
 
-pre_start() {
+start_pre() {
 	checkpath -d -m 0755 -o hadoop:hadoop /var/run/hadoop
 }
