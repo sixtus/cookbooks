@@ -1,5 +1,9 @@
 include_recipe "xvfb"
 
+portage_package_use "dev-lang/python" do
+  use %w(sqlite)
+end
+
 portage_package_use "dev-libs/libxml2" do
   use %w(python)
 end
