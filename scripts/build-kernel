@@ -46,7 +46,7 @@ else
 
 	# build initramfs
 	emerge -n sys-kernel/dracut || exit 1
-	dracut --xz /boot/initramfs-${KV}.img || exit 1
+	dracut /boot/initramfs-${KV}.img || exit 1
 fi
 
 # use UUID for rootfs in fstab
