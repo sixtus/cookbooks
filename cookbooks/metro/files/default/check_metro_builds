@@ -1,0 +1,22 @@
+#!/bin/bash
+
+source /usr/lib/nagios/plugins/utils.sh
+
+LAST_BUILD=$(date --date="last saturday" +%Y%m%d)
+BROKEN_BUILDS=()
+
+for i in $(find $1 -maxdepth 1 -type l); do
+        build=$(dirname $(readlink $i))
+
+        if [[ $build != $LAST_BUILD ]]; then
+            BROKEN_BUILDS=("${BROKEN_BUILDS[@]}" $(basename $i))
+        fi
+done
+
+if [[ ${#BROKEN_BUILDS[@]} -gt 0 ]]; then
+        echo "failed builds: ${BROKEN_BUILDS[@]}"
+        exit $STATE_WARNING
+fi
+
+echo "no broken builds"
+exit $STATE_OK

@@ -1,3 +1,4 @@
 default[:metro][:repository] = "https://github.com/zentoo/metro"
-default[:metro][:build] = "zentoo"
-default[:metro][:path][:mirror] = "/var/cache/metro/#{node[:metro][:build]}"
+default[:metro][:path][:mirror] = "/var/cache/metro"
+default[:metro][:builds] = ["zentoo"]
+default[:metro][:archs] = ["amd64"]
