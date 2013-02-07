@@ -6,6 +6,14 @@ default[:classification] = :normal
 default[:primary_ipaddress] = node[:ipaddress]
 default[:primary_ip6address] = nil
 
+# ec2 support
+if node[:ec2] and node[:ec2][:local_ipv4]
+  default[:bind_ipaddress] = node[:ec2][:local_ipv4]
+else
+  default[:bind_ipaddress] = node[:primary_ipaddress]
+end
+
+
 # cluster support
 default[:cluster][:name] = "default"
 default[:local_ipaddress] = nil
