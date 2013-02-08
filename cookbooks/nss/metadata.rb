@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-description "Configure the Name Service Switch (NSS)"
+description "Name Service Switch (NSS)"
 
 maintainer "Benedikt Böhm"
 maintainer_email "bb@xnull.de"

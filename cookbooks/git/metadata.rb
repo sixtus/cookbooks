@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-description "This cookbook installs and configures git"
+description "Git - the distributed version control system"
 
 maintainer "Benedikt Böhm"
 maintainer_email "bb@xnull.de"

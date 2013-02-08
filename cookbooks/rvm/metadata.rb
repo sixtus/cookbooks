@@ -1,9 +1,11 @@
-description "This cookbook installs the Ruby Version Manager for user accounts"
+# encoding: utf-8
+
+description "The Ruby Version Manager"
 
 maintainer "Benedikt Böhm"
 maintainer_email "bb@xnull.de"
 license "Apache v2.0"
 
+supports "gentoo"
+
 depends "account"
-depends "core_ext"
-depends "portage"

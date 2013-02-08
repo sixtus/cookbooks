@@ -1,4 +1,6 @@
-description "Metro is a set of shell and python scripts to build install media for Gentoo Linux based systems"
+# encoding: utf-8
+
+description "Metro - a build tool for Gentoo based system"
 
 maintainer "Benedikt Böhm"
 maintainer_email "bb@xnull.de"

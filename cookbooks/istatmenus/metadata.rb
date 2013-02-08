@@ -1,4 +1,6 @@
-description "Install iStats Menu"
+# encoding: utf-8
+
+description "iStats Menu"
 
 maintainer "Mike Szörnyi"
 maintainer_email "mike.szoernyi@gmail.com"

@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-description "Install syslog-ng in client or server mode"
+description "syslog-ng client and server"
 
 maintainer "Benedikt Böhm"
 maintainer_email "bb@xnull.de"

@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-description "Install bash and bashrc"
+description "bash - the Bourne-again shell"
 
 maintainer "Benedikt Böhm"
 maintainer_email "bb@xnull.de"

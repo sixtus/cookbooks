@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-description "Install and configure sudo"
+description "sudo"
 
 maintainer "Benedikt Böhm"
 maintainer_email "bb@xnull.de"

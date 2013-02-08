@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-description "This cookbook installs and configures OpenRC"
+description "OpenRC init system"
 
 maintainer "Benedikt Böhm"
 maintainer_email "bb@xnull.de"

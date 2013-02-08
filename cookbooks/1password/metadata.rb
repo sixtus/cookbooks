@@ -1,4 +1,4 @@
-description "Install 1Password"
+description "1Password"
 
 maintainer "Mike Szörnyi"
 maintainer_email "mike.szoernyi@gmail.com"

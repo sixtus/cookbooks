@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 description "Better Touch Tool"
 
 maintainer "Mike Szörnyi"

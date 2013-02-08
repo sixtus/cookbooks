@@ -1,4 +1,4 @@
-description "Install Adium"
+description "Adium"
 
 maintainer "Benedikt Böhm"
 maintainer_email "bb@xnull.de"

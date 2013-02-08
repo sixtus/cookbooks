@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-description "Install and configure OpenSSH client and server"
+description "OpenSSH client and server"
 
 maintainer "Benedikt Böhm"
 maintainer_email "bb@xnull.de"
@@ -12,5 +12,4 @@ supports "gentoo"
 supports "mac_os_x"
 
 depends "nagios"
-
-depends "overridable", "~> 1.0.0"
+depends "overridable"

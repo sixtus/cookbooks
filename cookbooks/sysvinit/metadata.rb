@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-description "This cookbook installs and configures System V init"
+description "System V init"
 
 maintainer "Benedikt Böhm"
 maintainer_email "bb@xnull.de"

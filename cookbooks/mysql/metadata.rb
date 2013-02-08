@@ -1,4 +1,6 @@
-description "This cookbook installs and configures the MySQL database system"
+# encoding: utf-8
+
+description "The MySQL database server"
 
 maintainer "Benedikt Böhm"
 maintainer_email "bb@xnull.de"

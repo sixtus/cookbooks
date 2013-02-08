@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-description "This cookbook installs and configures openssl"
+description "OpenSSL"
 
 maintainer "Benedikt Böhm"
 maintainer_email "bb@xnull.de"
@@ -10,4 +10,4 @@ version "1.0.0"
 
 supports "gentoo"
 
-depends "nagios", "~> 1.0.0"
+depends "nagios"

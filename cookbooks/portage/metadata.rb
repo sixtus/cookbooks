@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-description "This cookbook installs and configures portage"
+description "portage - the Gentoo package manager"
 
 maintainer "Benedikt Böhm"
 maintainer_email "bb@xnull.de"

@@ -11,4 +11,4 @@ version "1.0.0"
 supports "gentoo"
 supports "mac_os_x"
 
-depends "overridable", "~> 1.0.0"
+depends "overridable"

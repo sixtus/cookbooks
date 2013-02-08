@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-description "Create, manage and monitor Linux MD devices"
+description "Linux Software RAID utilities"
 
 maintainer "Benedikt Böhm"
 maintainer_email "bb@xnull.de"

@@ -1,4 +1,6 @@
-description "This cookbook installs and configures the Splunk Search Engine"
+# encoding: utf-8
+
+description "The Splunk Search Engine"
 
 maintainer "Benedikt Böhm"
 maintainer_email "bb@xnull.de"

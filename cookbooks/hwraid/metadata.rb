@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-description "Install Hardware RAID utilities"
+description "Hardware RAID utilities"
 
 maintainer "Benedikt Böhm"
 maintainer_email "bb@xnull.de"

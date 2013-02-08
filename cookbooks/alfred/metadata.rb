@@ -1,4 +1,4 @@
-description "Install Alfred"
+description "Alfred"
 
 maintainer "Mike Szörnyi"
 maintainer_email "mike.szoernyi@gmail.com"

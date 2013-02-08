@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-description "Install and configure the basic filesystem layout"
+description "Basic filesystem layout"
 
 maintainer "Benedikt Böhm"
 maintainer_email "bb@xnull.de"
