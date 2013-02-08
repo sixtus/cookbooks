@@ -11,6 +11,11 @@
 <% end %>
 
   <property>
+    <name>mapred.task.timeout</name>
+    <value>1800000</value>
+  </property>
+
+  <property>
     <name>mapred.tasktracker.map.tasks.maximum</name>
     <value>8</value>
   </property>
