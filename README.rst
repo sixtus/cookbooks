@@ -11,8 +11,7 @@ The repository uses RVM and Bundler to manage ruby and dependencies required by
 Chef. To start your own copy of this repository clone the repository first and
 bootstrap your local rvm environment::
 
-  git clone https://github.com/zenops/cookbooks chef
-  cd chef
+  git clone https://github.com/zenops/cookbooks chef && cd chef
   ./scripts/bootstrap
 
 Repository Layout

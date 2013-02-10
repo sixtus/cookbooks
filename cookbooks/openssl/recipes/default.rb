@@ -25,9 +25,7 @@ when "gentoo"
       result = false
 
       Find.find('/etc/ssl/certs') do |path|
-        if File.symlink?(path) and not File.exist?(path)
-          result = true
-        end
+        result = true if File.symlink?(path) and not File.exist?(path)
       end
 
       result

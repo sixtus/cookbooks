@@ -20,9 +20,7 @@ end.each do |u|
     append true
   end
 
-  u[:chroot] = true if u[:chroot].nil?
-
-  if u[:chroot]
+  if u[:chroot] or u[:chroot].nil?
     ssh_chroot_sftp u[:id] do
       directory "/backup"
     end
