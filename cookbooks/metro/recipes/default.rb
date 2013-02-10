@@ -95,7 +95,11 @@ end
 end
 
 # setup weekly build
-builds = node[:metro][:builds].zip(node[:metro][:archs]).map { |b, a| "#{b}:#{a}" }.join(" ")
+builds = node[:metro][:builds].map do |build|
+  node[:metro][:archs].map do |arch|
+    "#{build}:#{arch}"
+  end
+end.flatten.join(' ')
 
 cron_weekly "metro" do
   command "exec /usr/local/metro/scripts/ezbuild.sh #{builds}"
