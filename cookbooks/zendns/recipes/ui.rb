@@ -11,7 +11,7 @@ nginx_unicorn "zendns" do
   port node[:zendns][:port]
 end
 
-if node[:chef_environment] == "production"
+if node.chef_environment == "production"
   ssl_certificate "/etc/ssl/nginx/zendns" do
     cn node[:zendns][:ssl][:cn]
   end

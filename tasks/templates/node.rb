@@ -1,3 +1,5 @@
+chef_environment "production"
+
 set[:primary_ipaddress] = "<%= args.ipaddress %>"
 
 run_list(%w(

@@ -100,12 +100,11 @@ namespace :load do
     rescue
       n = Chef::Node.new
       n.name(fqdn)
-      n.chef_environment = 'production'
     end
 
     n.from_file(File.join(NODES_DIR, "#{fqdn}.rb"))
 
-    printf "  + %-20.20s [%s]\n", n[:fqdn], n[:chef_environment]
+    printf "  + %-20.20s [%s]\n", n[:fqdn], n.chef_environment
     n.save
   end
 
