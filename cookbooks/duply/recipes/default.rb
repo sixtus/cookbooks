@@ -13,7 +13,6 @@ package "app-backup/duply"
   end
 end
 
-# nagios checks
 if tagged?("nagios-client")
   nagios_plugin "check_duplybackup"
 end
@@ -49,6 +48,8 @@ node[:backup][:configs].each do |name, params|
   cron_weekly "duply-purge-#{name}" do
     command "/usr/bin/duply #{name} purge-full --force &> /dev/null"
   end
+
+  splunk_input "monitor:///var/log/duply/#{name}/*.log"
 
   if tagged?("nagios-client")
     nrpe_command "check_duplybackup_#{name}" do
