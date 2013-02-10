@@ -51,6 +51,8 @@ action :create do
     end
   end
 
+  splunk_input "monitor://#{homedir}/shared/log/*.log"
+
   file "/etc/logrotate.d/capistrano-#{user}" do
     content <<-EOS
 #{homedir}/shared/log/*.log {
