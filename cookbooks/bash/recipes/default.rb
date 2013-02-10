@@ -1,10 +1,11 @@
-package value_for_platform(
-  "gentoo" => {"default" => "app-shells/bash"},
-  "mac_os_x" => {"default" => "bash"}
-)
+case node[:platform]
+when "gentoo"
+  package "app-shells/bash"
 
-if platform?("mac_os_x")
+when "mac_os_x"
+  package "bash"
   package "bash-completion"
+
 end
 
 directory node[:bash][:rcdir] do

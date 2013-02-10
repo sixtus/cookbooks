@@ -1,9 +1,7 @@
-package value_for_platform({
-  "gentoo" => {"default" => "app-misc/beanstalkd"},
-  "mac_os_x" => {"default" => "beanstalk"},
-})
+case node[:platform]
+when "gentoo"
+  package "app-misc/beanstalkd"
 
-if platform?("gentoo")
   template "/etc/conf.d/beanstalkd" do
     source "beanstalkd.confd.erb"
     owner "root"
@@ -16,31 +14,39 @@ if platform?("gentoo")
     action [:enable, :start]
   end
 
-  # nagios
-  if tagged?("nagios-client")
-    package "dev-python/beanstalkc"
+when "mac_os_x"
+  package "beanstalk"
 
-    nagios_plugin "check_beanstalkd"
-
-    nrpe_command "check_beanstalkd" do
-      command "/usr/lib/nagios/plugins/check_beanstalkd -S localhost:11300 " +
-              "-w #{node[:beanstalkd][:nagios][:warning]} " +
-              "-c #{node[:beanstalkd][:nagios][:critical]} " +
-              "-W #{node[:beanstalkd][:nagios][:growth_warning]} " +
-              "-C #{node[:beanstalkd][:nagios][:growth_critical]}"
-    end
-
-    nagios_service "BEANSTALKD" do
-      check_command "check_nrpe!check_beanstalkd"
-    end
+  service "mxcl.beanstalk" do
+    action [:start]
   end
 
-  # ganymed
-  if tagged?('ganymed-client')
-    package 'dev-ruby/beanstalk-client'
+end
 
-    ganymed_collector 'beanstalk' do
-      source 'beanstalk.rb'
-    end
+# nagios
+if tagged?("nagios-client")
+  package "dev-python/beanstalkc"
+
+  nagios_plugin "check_beanstalkd"
+
+  nrpe_command "check_beanstalkd" do
+    command "/usr/lib/nagios/plugins/check_beanstalkd -S localhost:11300 " +
+            "-w #{node[:beanstalkd][:nagios][:warning]} " +
+            "-c #{node[:beanstalkd][:nagios][:critical]} " +
+            "-W #{node[:beanstalkd][:nagios][:growth_warning]} " +
+            "-C #{node[:beanstalkd][:nagios][:growth_critical]}"
+  end
+
+  nagios_service "BEANSTALKD" do
+    check_command "check_nrpe!check_beanstalkd"
+  end
+end
+
+# ganymed
+if tagged?('ganymed-client')
+  package 'dev-ruby/beanstalk-client'
+
+  ganymed_collector 'beanstalk' do
+    source 'beanstalk.rb'
   end
 end

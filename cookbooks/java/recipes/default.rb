@@ -1,4 +1,5 @@
-if platform?("gentoo")
+case node[:platform]
+when "gentoo"
   case node[:java][:vm]
   when /^icedtea-/
     portage_package_use "x11-libs/cairo" do

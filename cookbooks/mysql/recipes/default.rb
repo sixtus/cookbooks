@@ -1,7 +1,10 @@
-if platform?("mac_os_x")
+case node[:platform]
+when "gentoo"
+  package "dev-db/mysql"
+
+when "mac_os_x"
   package "mysql" do
     action :upgrade
   end
-else
-  package "dev-db/mysql"
+
 end

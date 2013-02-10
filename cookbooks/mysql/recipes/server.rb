@@ -2,46 +2,99 @@ tag("mysql-server")
 
 include_recipe "mysql::default"
 
-if platform?("gentoo")
+case node[:platform]
+when "gentoo"
   package "dev-db/innotop"
   package "dev-db/maatkit"
   package "dev-db/mysqltuner"
   package "dev-db/mytop"
   package "dev-db/xtrabackup-bin"
   package "dev-ruby/mysql-ruby"
-end
 
-# configuration files
-if platform?("gentoo") and root?
-  directory "/etc/mysql/conf.d" do
-    owner "root"
-    group "root"
-    mode "0755"
+  # configuration files
+  if root?
+    directory "/etc/mysql/conf.d" do
+      owner "root"
+      group "root"
+      mode "0755"
+    end
+
+    template "/etc/mysql/my.cnf" do
+      source "my.cnf"
+      owner "root"
+      group "root"
+      mode "0644"
+    end
+
+    template "/etc/conf.d/mysql" do
+      source "mysql.confd"
+      owner "root"
+      group "root"
+      mode "0644"
+    end
+
+    directory "/var/log/mysql" do
+      owner "mysql"
+      group "mysql"
+      mode "0755"
+    end
+
+    mysql_root_pass = get_password("mysql/root")
+
+    template "/usr/sbin/mysql_pkg_config" do
+      source "mysql_pkg_config"
+      owner "root"
+      group "root"
+      mode "0755"
+      not_if { File.directory?("/var/lib/mysql/mysql") }
+      backup 0
+      variables(:root_pass => mysql_root_pass)
+    end
+
+    execute "mysql_pkg_config" do
+      creates "/var/lib/mysql/mysql"
+    end
+
+    file "/usr/sbin/mysql_pkg_config" do
+      action :delete
+      backup 0
+    end
+
+    file "/root/.my.cnf" do
+      content "[client]\nuser = root\npass = #{mysql_root_pass}\n"
+      owner "root"
+      group "root"
+      mode "0600"
+      backup 0
+    end
+
+    # syslog and logrotate configuration
+    syslog_config "90-mysql" do
+      template "syslog.conf"
+    end
+
+    template "/etc/logrotate.d/mysql" do
+      source "logrotate.conf"
+      owner "root"
+      group "root"
+      mode "0644"
+    end
+
+    %w(mysql.err mysql.log mysqld.err slow-queries.log).each do |l|
+      file "/var/log/mysql/#{l}" do
+        owner "mysql"
+        group "wheel"
+        mode "0640"
+      end
+    end
+
+    # init script
+    service "mysql" do
+      action [:enable, :start]
+    end
   end
 
-  template "/etc/mysql/my.cnf" do
-    source "my.cnf"
-    owner "root"
-    group "root"
-    mode "0644"
-  end
-
-  template "/etc/conf.d/mysql" do
-    source "mysql.confd"
-    owner "root"
-    group "root"
-    mode "0644"
-  end
-
-  directory "/var/log/mysql" do
-    owner "mysql"
-    group "mysql"
-    mode "0755"
-  end
-end
-
-# create initial database and users
-if platform?("mac_os_x")
+when "mac_os_x"
   template "/usr/local/etc/my.cnf" do
     source "my.cnf"
     mode "0644"
@@ -57,62 +110,7 @@ if platform?("mac_os_x")
     mode "0600"
     backup 0
   end
-end
 
-if platform?("gentoo") and root?
-  mysql_root_pass = get_password("mysql/root")
-
-  template "/usr/sbin/mysql_pkg_config" do
-    source "mysql_pkg_config"
-    owner "root"
-    group "root"
-    mode "0755"
-    not_if { File.directory?("/var/lib/mysql/mysql") }
-    backup 0
-    variables(:root_pass => mysql_root_pass)
-  end
-
-  execute "mysql_pkg_config" do
-    creates "/var/lib/mysql/mysql"
-  end
-
-  file "/usr/sbin/mysql_pkg_config" do
-    action :delete
-    backup 0
-  end
-
-  file "/root/.my.cnf" do
-    content "[client]\nuser = root\npass = #{mysql_root_pass}\n"
-    owner "root"
-    group "root"
-    mode "0600"
-    backup 0
-  end
-
-  # syslog and logrotate configuration
-  syslog_config "90-mysql" do
-    template "syslog.conf"
-  end
-
-  template "/etc/logrotate.d/mysql" do
-    source "logrotate.conf"
-    owner "root"
-    group "root"
-    mode "0644"
-  end
-
-  %w(mysql.err mysql.log mysqld.err slow-queries.log).each do |l|
-    file "/var/log/mysql/#{l}" do
-      owner "mysql"
-      group "wheel"
-      mode "0640"
-    end
-  end
-
-  # init script
-  service "mysql" do
-    action [:enable, :start]
-  end
 end
 
 # nagios service checks

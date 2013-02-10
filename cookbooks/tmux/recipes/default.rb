@@ -1,8 +1,6 @@
 case node[:platform]
 when "gentoo"
-  if root?
-    package "app-misc/tmux"
-  end
+  package "app-misc/tmux"
 
 when "mac_os_x"
   package "tmux"

@@ -1,13 +1,11 @@
 case node[:platform]
 when "gentoo"
-  if root?
-    portage_package_use "app-editors/vim" do
-      use %w(python ruby)
-    end
-
-    package "app-editors/vim"
-    package "dev-util/ctags"
+  portage_package_use "app-editors/vim" do
+    use %w(python ruby)
   end
+
+  package "app-editors/vim"
+  package "dev-util/ctags"
 
 when "mac_os_x"
   package "macvim" do

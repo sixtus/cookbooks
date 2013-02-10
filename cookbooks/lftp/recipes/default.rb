@@ -1,8 +1,6 @@
 case node[:platform]
 when "gentoo"
-  if root?
-    package "net-ftp/lftp"
-  end
+  package "net-ftp/lftp"
 
 when "mac_os_x"
   package "lftp"

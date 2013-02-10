@@ -1,8 +1,6 @@
 case node[:platform]
 when "gentoo"
-  if root?
-    package "net-misc/openssh"
-  end
+  package "net-misc/openssh"
 
 when "mac_os_x"
   package "ssh-copy-id"

@@ -1,4 +1,5 @@
-if platform?("gentoo")
+case node[:platform]
+when "gentoo"
   package "dev-libs/openssl"
   package "app-misc/ca-certificates"
 
@@ -32,8 +33,8 @@ if platform?("gentoo")
       result
     end
   end
+end
 
-  if tagged?("nagios-client")
-    nagios_plugin "check_ssl_server"
-  end
+if tagged?("nagios-client")
+  nagios_plugin "check_ssl_server"
 end
