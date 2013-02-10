@@ -16,8 +16,8 @@ namespace :upstream do
     sh("git config push.default tracking")
   end
 
-  task :pull => [ :require_clean_working_tree ]
   task :pull do
+    require_clean_working_tree
     sh("git fetch upstream")
     sh("git branch -f upstream upstream/master")
   end

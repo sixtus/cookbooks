@@ -51,39 +51,14 @@ namespace :ssl do
 
     unless File.exist?(File.join(SSL_CERT_DIR, "#{keyfile}.key"))
       puts("** Creating SSL Certificate Request for #{cn}")
+
+      b = binding()
+      erb = Erubis::Eruby.new(File.read(File.join(TEMPLATES_DIR, 'openssl.cnf')))
+
       tf = Tempfile.new("#{keyfile}.ssl-conf")
-      ssl_config = <<EOH
-[ req ]
-distinguished_name = req_distinguished_name
-
-[ req_distinguished_name ]
-countryName                     = Country Name (2 letter code)
-countryName_default             = #{SSL_COUNTRY_NAME}
-countryName_min                 = 2
-countryName_max                 = 2
-
-stateOrProvinceName             = State or Province Name (full name)
-stateOrProvinceName_default     = #{SSL_STATE_NAME}
-
-localityName                    = Locality Name (eg, city)
-localityName_default            = #{SSL_LOCALITY_NAME}
-
-0.organizationName              = Organization Name (eg, company)
-0.organizationName_default      = #{COMPANY_NAME}
-
-organizationalUnitName          = Organizational Unit Name (eg, section)
-organizationalUnitName_default  = #{SSL_ORGANIZATIONAL_UNIT_NAME}
-
-commonName                      = Common Name (eg, YOUR name)
-commonName_max                  = 64
-commonName_default              = #{cn}
-
-emailAddress                    = Email Address
-emailAddress_max                = 64
-emailAddress_default            = #{SSL_EMAIL_ADDRESS}
-EOH
-      tf.puts(ssl_config)
+      tf.puts(erb.result(b))
       tf.close
+
       if ENV['BATCH'] == "1"
         sh("openssl req -new -batch -nodes -config '#{tf.path}' -keyout #{SSL_CERT_DIR}/#{keyfile}.key -out #{SSL_CERT_DIR}/#{keyfile}.csr -newkey rsa:2048")
       else
@@ -108,7 +83,6 @@ EOH
     Rake::Task["ssl:do_cert"].execute(args)
   end
 
-  desc "Create missing SSL certificates"
   task :create_missing_certs do
     old_batch = ENV['BATCH']
     ENV['BATCH'] = "1"

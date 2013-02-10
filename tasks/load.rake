@@ -2,75 +2,82 @@ require 'chef/node'
 require 'chef/data_bag'
 require 'chef/data_bag_item'
 
-# monkeypatch data_bag_item for better DSL
-class Chef::DataBagItem
-  def method_missing(sym, *args, &block)
-    self.raw_data.store(sym, *args, &block)
-  end
-end
-
-task :require_clean_working_tree do
-  sh("git update-index -q --ignore-submodules --refresh")
-  err = false
-
-  sh("git diff-files --quiet --ignore-submodules --") do |ok, res|
-    unless ok
-      err = true
-      puts("\n** working tree contains unstaged changes:")
-      sh("git diff-files --name-status -r --ignore-submodules -- >&2")
-    end
-  end
-
-  sh("git diff-index --cached --quiet HEAD --ignore-submodules --") do |ok, res|
-    unless ok
-      err = true
-      puts("\n** index contains uncommited changes:")
-      sh("git diff-index --cached --name-status -r --ignore-submodules HEAD -- >&2")
-      puts("")
-    end
-  end
-
-  err and fail "Working tree is dirty (stash or commit changes)"
-end
-
 desc "Pull changes from the remote repository"
 task :pull do
   unless ENV.include?('BOOTSTRAP')
-    sh("git checkout master")
-    sh("git pull")
+    sh("git checkout -q master")
+    sh("git pull -q")
   end
 end
 
-namespace "load" do
+namespace :load do
 
   desc "Upload all entities"
-  task :all => [ :cookbooks, :nodes, :roles, :databags ]
-
-  desc "Upload a single cookbook"
-  task :cookbook => [ :pull ]
-  task :cookbook, :name do |t, args|
-    sh("knife cookbook upload -o cookbooks #{args.name}")
-  end
+  task :all => [ :cookbooks, :nodes, :roles, :environments, :databags ]
 
   desc "Upload all cookbooks"
-  task :cookbooks => [ :pull ]
+  task :cookbooks => [ :pull, 'generate:metadata' ]
   task :cookbooks do
-    sh("knife cookbook upload --all")
-  end
+    puts ">>> Uploading cookbooks"
+    cookbook_metadata.each do |cookbook, metadata|
+      platforms = metadata[:platforms].keys - CHEF_SOLO_PLATFORMS
+      version = metadata[:version]
 
-  desc "Delete and upload all cookbooks"
-  task :cookbooks_clear => [ :pull ]
-  task :cookbooks_clear do
-    rest = Chef::REST.new(Chef::Config[:chef_server_url])
-    rest.get_rest('cookbooks').each do |name, cb|
-      puts("Deleting cookbook #{name} ...")
-      cb['versions'].each do |vcb|
-        puts("  v#{vcb['version']}")
-        rest.delete_rest("cookbooks/#{name}/#{vcb['version']}")
+      if platforms.empty?
+        printf "  - %-20.20s [%s] (it only supports chef-solo platforms)\n", cookbook, version
+        next
       end
+
+      if version == "0.0.0"
+        printf "  + %-20.20s [%s]\n", cookbook, version
+        knife :cookbook_upload, [cookbook]
+        next
+      end
+
+      stdout, _, status = knife_capture :cookbook_show, [cookbook, version, '-F', 'json']
+
+      # version does not exist
+      if status != 0
+        printf "  + %-20.20s [%s]\n", cookbook, version
+        knife :cookbook_upload, [cookbook, '--freeze']
+        next
+      end
+
+      cookbook = parse_json(stdout)
+
+      # new version
+      if version != cookbook[:version]
+        printf "  + %-20.20s [%s]\n", cookbook, version
+        knife :cookbook_upload, [cookbook, '--freeze']
+        next
+      end
+
+      # check for missing version bumps
+      files = %w(
+        recipes
+        definitions
+        libraries
+        attributes
+        files
+        templates
+        resources
+        providers
+        root_files
+      ).map do |type|
+        cookbook[type.to_sym].map(&:with_indifferent_access)
+      end.flatten
+
+      files.each do |file|
+        path = File.join(metadata[:path], file[:path])
+        checksum = Digest::MD5.hexdigest(File.read(path))
+
+        if checksum != file[:checksum]
+          raise "missing version bump for changes in #{path}"
+        end
+      end
+
+      printf "  - %-20.20s [%s] (it has already been frozen)\n", cookbook[:cookbook_name], version
     end
-    sh("rm -rf #{Chef::Config[:cache_options][:path]}")
-    Rake::Task['load:cookbooks'].invoke
   end
 
   desc "Upload a single node definition"
@@ -78,22 +85,25 @@ namespace "load" do
   task :node, :fqdn do |t, args|
     fqdn = args.fqdn
 
-    puts("Updating node #{fqdn}")
-
     begin
       n = Chef::Node.load(fqdn)
     rescue
       n = Chef::Node.new
       n.name(fqdn)
+      n.chef_environment = 'production'
     end
 
     n.from_file(File.join(NODES_DIR, "#{fqdn}.rb"))
+
+    printf "  + %-20.20s [%s]\n", n[:fqdn], n[:chef_environment]
     n.save
   end
 
   desc "Upload all node definitions"
   task :nodes => [ :pull ]
   task :nodes do
+    puts ">>> Uploading nodes"
+
     nodes = Dir[ File.join(NODES_DIR, '*.rb') ].map do |f|
       File.basename(f, '.rb')
     end.sort!
@@ -109,17 +119,19 @@ namespace "load" do
   task :role, :name do |t, args|
     name = args.name
 
-    puts("Updating role #{name} ...")
-
     r = Chef::Role.new
     r.name(name)
     r.from_file(File.join(ROLES_DIR, "#{name}.rb"))
+
+    printf "  + %-20s\n", r.name
     r.save
   end
 
   desc "Upload all role definitions"
   task :roles => [ :pull ]
   task :roles do
+    puts ">>> Uploading roles"
+
     roles = Dir[ File.join(ROLES_DIR, '*.rb') ].map do |f|
       File.basename(f, '.rb')
     end.sort!
@@ -130,12 +142,40 @@ namespace "load" do
     end
   end
 
+  desc "Upload a single environment definition"
+  task :environment => [ :pull ]
+  task :environment, :name do |t, args|
+    name = args.name
+
+    e = Chef::Environment.new
+    e.name(name)
+    e.from_file(File.join(ENVIRONMENTS_DIR, "#{name}.rb"))
+
+    printf "  + %-20s\n", e.name
+    e.save
+  end
+
+  desc "Upload all environment definitions"
+  task :environments => [ :pull ]
+  task :environments do
+    puts ">>> Uploading environments"
+
+    environments = Dir[ File.join(ENVIRONMENTS_DIR, '*.rb') ].map do |f|
+      File.basename(f, '.rb')
+    end.sort!
+
+    environments.each do |environment|
+      args = Rake::TaskArguments.new([:name], [environment])
+      Rake::Task['load:environment'].execute(args)
+    end
+  end
+
   desc "Upload a single databag"
   task :databag => [ :pull ]
   task :databag, :name do |t, args|
     name = args.name
 
-    puts("Uploading data bag #{name} ...")
+    puts ">>> Uploading data bag #{name}"
 
     begin
       b = Chef::DataBag.load(name)
@@ -151,7 +191,7 @@ namespace "load" do
     end.sort!
 
     items.each do |item|
-      puts("  > #{item}")
+      puts("  + #{item}")
 
       i = Chef::DataBagItem.new
       i.data_bag(name)

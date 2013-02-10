@@ -39,7 +39,9 @@ BAGS_DIR = File.expand_path(File.join(TOPDIR, "databags"))
 COOKBOOKS_DIR = File.expand_path(File.join(TOPDIR, "cookbooks"))
 NODES_DIR = File.expand_path(File.join(TOPDIR, "nodes"))
 ROLES_DIR = File.expand_path(File.join(TOPDIR, "roles"))
+ENVIRONMENTS_DIR = File.expand_path(File.join(TOPDIR, "environments"))
 SITE_COOKBOOKS_DIR = File.expand_path(File.join(TOPDIR, "site-cookbooks"))
+TEMPLATES_DIR = File.expand_path(File.join(TOPDIR, "tasks", "templates"))
 
 # documentation directories
 DOC_DIR = File.expand_path(File.join(TOPDIR, "documentation"))
@@ -52,3 +54,8 @@ SSL_CERT_DIR = File.expand_path(File.join(TOPDIR, "cookbooks/openssl/files/defau
 
 # OpenSSL config file
 SSL_CONFIG_FILE = File.expand_path(File.join(TOPDIR, "config", "openssl.cnf"))
+
+# chef-solo only platforms
+CHEF_SOLO_PLATFORMS = %w(
+  mac_os_x
+)

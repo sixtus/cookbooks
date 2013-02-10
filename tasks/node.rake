@@ -1,29 +1,5 @@
 require 'socket'
 
-def check_ping(ipaddress)
-  reachable = nil
-
-  begin
-    sh("ping -c 1 -w 5 #{ipaddress} &>/dev/null")
-    reachable = true
-    sleep(1)
-  rescue
-    reachable = false
-  end
-
-  return reachable
-end
-
-def wait_with_ping(ipaddress, reachable)
-  print "Waiting for machine to #{reachable ? "boot" : "shutdown"} "
-
-  while check_ping(ipaddress) != reachable
-    print "."
-  end
-
-  print "\n"
-end
-
 namespace :node do
 
   task :checkdns, :fqdn, :ipaddress do |t, args|
@@ -44,18 +20,15 @@ namespace :node do
     Rake::Task['ssl:do_cert'].invoke(args.fqdn)
     Rake::Task['load:cookbook'].invoke('openssl')
 
+    b = binding()
+    erb = Erubis::Eruby.new(File.read(File.join(TEMPLATES_DIR, 'node.rb')))
+
     # create new node
     nf = File.join(TOPDIR, "nodes", "#{args.fqdn}.rb")
 
     unless File.exists?(nf)
-      File.open(nf, "w") do |fd|
-        fd.puts <<EOF
-set[:primary_ipaddress] = "#{args.ipaddress}"
-
-run_list(%w(
-  role[#{args.role}]
-))
-EOF
+      File.open(nf, "w") do |f|
+        f.puts(erb.result(b))
       end
     end
 
@@ -66,7 +39,7 @@ EOF
   desc "Bootstrap the specified node"
   task :bootstrap, :fqdn, :ipaddress, :role do |t, args|
     Rake::Task['node:create'].invoke(args.fqdn, args.ipaddress, args.role)
-    sh("knife bootstrap #{args.fqdn} --distro gentoo -P tux")
+    knife :bootstrap, [args.fqdn, "--distro", "gentoo", "-P", "tux"]
   end
 
   desc "Quickstart & Bootstrap the specified node"
@@ -77,16 +50,11 @@ EOF
     Rake::Task['node:checkdns'].invoke(args.fqdn, args.ipaddress)
 
     # quick start
-    tmpfile = Tempfile.new('quickstart')
-    tmpfile.write <<-EOF
-#!/bin/bash
-cd /tmp
-wget -q -O quickstart.tar.gz https://github.com/zentoo/quickstart/tarball/master
-tar -xzf quickstart.tar.gz
-cd *-quickstart-*
-exec ./quickstart profiles/#{args.profile}.sh
-    EOF
+    b = binding()
+    erb = Erubis::Eruby.new(File.read(File.join(TEMPLATES_DIR, 'quickstart.sh')))
 
+    tmpfile = Tempfile.new('quickstart')
+    tmpfile.write(erb.result(b))
     tmpfile.rewind
 
     sh(%{cat #{tmpfile.path} | ssh -l root -o "StrictHostKeyChecking no" -o "UserKnownHostsFile /dev/null" -o "GlobalKnownHostsFile /dev/null" #{args.ipaddress} "bash -s"})
@@ -123,8 +91,8 @@ exec ./quickstart profiles/#{args.profile}.sh
       # do nothing
     end
 
-    sh("knife node delete -y #{fqdn}")
-    sh("knife client delete -y #{fqdn}")
+    knife :node_delete, [fqdn, '-y']
+    knife :client_delete, [fqdn, '-y']
   end
 
 end

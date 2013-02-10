@@ -11,12 +11,20 @@ task :password do
     q.validate = /^#{p1}$/
   end
 
-  STDOUT.puts
+  puts
 
   raise "passwords do not match" unless p1 == p2
 
+  if p1.length == 0
+    p1 = %x(pwgen -s 10 1).chomp
+    puts "You did not enter a password, generating one for you:"
+    puts
+    puts "    #{p1}"
+    puts
+  end
+
   salt = SecureRandom.hex(8)
-  STDOUT.puts p1.crypt("$1$#{salt}$")
+  printf "password1 '%s'\n", p1.crypt("$1$#{salt}$")
   salt = SecureRandom.hex(4)
-  STDOUT.puts p1.crypt("$6$#{salt}$")
+  printf "password '%s'\n", p1.crypt("$6$#{salt}$")
 end

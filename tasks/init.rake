@@ -5,17 +5,17 @@ desc "Initialize the Chef repository"
 task :init do
   # collect data
   node_name = ask('Your chef server API username: ') do |q|
-    q.default = %x(whoami).chomp
+    q.default = Chef::Config[:node_name] || %x(whoami).chomp
     q.validate = /^\w+$/
   end
 
   chef_server_url = ask('Hostname of your chef server: ') do |q|
-    q.default = %x(hostname -f).chomp
+    q.default = URI.parse(Chef::Config[:chef_server_url]).host
     q.validate = /^[\w.]+$/
   end
 
   b = binding()
-  erb = Erubis::Eruby.new(File.read(KNIFE_CONFIG_FILE + ".erb"))
+  erb = Erubis::Eruby.new(File.read(File.join(TEMPLATES_DIR, 'knife.rb')))
 
   File.open(KNIFE_CONFIG_FILE, "w") do |f|
     f.puts(erb.result(b))

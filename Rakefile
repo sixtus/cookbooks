@@ -1,6 +1,4 @@
-#
-# Rakefile for Chef Server Repository
-#
+# encoding: utf-8
 
 require 'rubygems'
 
@@ -16,6 +14,11 @@ if Process.euid > 0
 end
 
 require 'chef'
+require 'knife/dsl'
+
+require 'benchmark'
+require 'json'
+require 'active_support/core_ext/hash/indifferent_access'
 
 # load constants from rake config file.
 require File.expand_path('../config/rake', __FILE__)
@@ -27,6 +30,12 @@ rescue
   # do nothing
 end
 
+# support files
+Dir[ File.join(File.dirname(__FILE__), 'tasks', 'support', '*.rb') ].sort.each do |f|
+  require f
+end
+
+# tasks
 Dir[ File.join(File.dirname(__FILE__), 'tasks', '*.rake') ].sort.each do |f|
   load f
 end

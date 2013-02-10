@@ -25,28 +25,15 @@ namespace :solo do
       email = ask('Your email address: ')
       github_user = ask('Your github username: ')
 
+      b = binding()
+      erb = Erubis::Eruby.new(File.read(File.join(TEMPLATES_DIR, 'solo.json')))
+
       File.open(ENV['SOLO_CONFIG'], "w") do |f|
-        f.write <<EOF
-{
-  "current_name": "#{name}",
-  "current_email": "#{email}",
-
-  "git": {
-    "github": {
-      "user": "#{github_user}"
-    }
-  },
-
-  "run_list": [
-    "recipe[base]"
-  ]
-}
-EOF
+        f.puts(erb.result(b))
       end
     end
   end
 
-  desc "Bootstrap local Mac OS X node with chef-solo"
   task :mac_os_x => :create_solo_config do
     raise "running as root is not supported on mac os" if ENV['SOLO_USER'] == "root"
 
@@ -60,7 +47,6 @@ EOF
     end
   end
 
-  desc "Bootstrap local Gentoo node with chef-solo"
   task :gentoo => :create_solo_config do
     run_solo
   end
