@@ -19,7 +19,7 @@ SSL_ORGANIZATIONAL_UNIT_NAME = "Operations"
 SSL_EMAIL_ADDRESS = "hostmaster@example.com"
 
 # The upstream branch to track
-UPSTREAM_BRANCH="master"
+UPSTREAM_BRANCH="next"
 
 # make rake more silent
 RakeFileUtils.verbose_flag = false
