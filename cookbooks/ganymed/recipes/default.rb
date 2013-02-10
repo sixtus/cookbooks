@@ -28,3 +28,13 @@ end
 service "ganymed" do
   action [:enable, :start]
 end
+
+if tagged?("nagios-client")
+  nrpe_command "check_ganymed" do
+    command "/usr/lib/nagios/plugins/check_pidfile /var/run/ganymed.pid ganymed"
+  end
+
+  nagios_service "GANYMED" do
+    check_command "check_nrpe!check_ganymed"
+  end
+end
