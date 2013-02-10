@@ -1,4 +1,7 @@
-package "app-admin/chef"
+package "app-admin/chef" do
+  action :upgrade
+  notifies :restart, "service[chef-client]"
+end
 
 if node[:chef][:client][:airbrake][:key]
   package "dev-ruby/airbrake_handler"
@@ -24,8 +27,10 @@ unless solo?
   end
 
   service "chef-client" do
-    action [:disable, :stop]
+    action [:enable, :start]
   end
+
+  splunk_input "monitor:///var/log/chef/*.log"
 
   cookbook_file "/etc/logrotate.d/chef" do
     source "chef.logrotate"
@@ -48,5 +53,16 @@ unless solo?
 
   link "/etc/chef/cache" do
     to "/var/lib/chef/cache"
+  end
+end
+
+if tagged?("nagios-client")
+  nrpe_command "check_chef_client" do
+    command "/usr/lib/nagios/plugins/check_pidfile /var/run/chef/client.pid"
+  end
+
+  nagios_service "CHEF-CLIENT" do
+    check_command "check_nrpe!check_chef_client"
+    servicegroups "chef"
   end
 end
