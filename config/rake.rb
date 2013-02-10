@@ -21,6 +21,17 @@ SSL_EMAIL_ADDRESS = "hostmaster@example.com"
 # The upstream branch to track
 UPSTREAM_BRANCH="next"
 
+# cookbooks that should always be uploaded
+FORCED_COOKBOOKS = %w(
+  openssl
+  shorewall
+)
+
+# chef-solo only platforms
+CHEF_SOLO_PLATFORMS = %w(
+  mac_os_x
+)
+
 # make rake more silent
 RakeFileUtils.verbose_flag = false
 Chef::Log.level = :error
@@ -57,8 +68,3 @@ SSL_CERT_DIR = File.expand_path(File.join(TOPDIR, "cookbooks/openssl/files/defau
 
 # OpenSSL config file
 SSL_CONFIG_FILE = File.expand_path(File.join(TOPDIR, "config", "openssl.cnf"))
-
-# chef-solo only platforms
-CHEF_SOLO_PLATFORMS = %w(
-  mac_os_x
-)

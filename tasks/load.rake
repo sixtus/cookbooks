@@ -43,12 +43,19 @@ namespace :load do
         next
       end
 
-      cookbook = parse_json(stdout)
+      cb = parse_json(stdout)
 
-      # new version
-      if version != cookbook[:version]
+      # new version or not yet frozen
+      if version != cb[:version] or not cb[:frozen?]
         printf "  + %-20.20s [%s]\n", cookbook, version
         knife :cookbook_upload, [cookbook, '--freeze']
+        next
+      end
+
+      # forced cookbooks
+      if FORCED_COOKBOOKS.include?(cookbook)
+        printf "  + %-20.20s [%s] (forced)\n", cookbook, version
+        knife :cookbook_upload, [cookbook, '--force', '--freeze']
         next
       end
 
@@ -64,10 +71,13 @@ namespace :load do
         providers
         root_files
       ).map do |type|
-        cookbook[type.to_sym].map(&:with_indifferent_access)
+        cb[type.to_sym].map(&:with_indifferent_access)
       end.flatten
 
       files.each do |file|
+        # ignore overridable user templates
+        next if file[:path] =~ %r{^templates/default/user-}
+
         path = File.join(metadata[:path], file[:path])
         checksum = Digest::MD5.hexdigest(File.read(path))
 
@@ -76,7 +86,7 @@ namespace :load do
         end
       end
 
-      printf "  - %-20.20s [%s] (it has already been frozen)\n", cookbook[:cookbook_name], version
+      printf "  - %-20.20s [%s] (it has already been frozen)\n", cookbook, version
     end
   end
 
