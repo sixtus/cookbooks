@@ -10,6 +10,14 @@ when "gentoo"
       use %w(X)
     end
 
+    portage_package_use "app-text/ghostscript-gpl" do
+      use %w(cups)
+    end
+
+    portage_package_use "dev-java/icedtea" do
+      use %w(javascript -webstart)
+    end
+
     package "dev-java/icedtea" do
       action :upgrade
     end
