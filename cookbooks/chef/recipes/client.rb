@@ -1,7 +1,4 @@
-package "app-admin/chef" do
-  action :upgrade
-  notifies :restart, "service[chef-client]"
-end
+package "app-admin/chef"
 
 if node[:chef][:client][:airbrake][:key]
   package "dev-ruby/airbrake_handler"
