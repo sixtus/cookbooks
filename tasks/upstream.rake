@@ -12,15 +12,14 @@ namespace :upstream do
     # add public cookbooks as upstream branch
     sh("git remote rm upstream || :")
     sh("git remote add -f upstream https://github.com/zenops/cookbooks.git")
-    sh("git branch -D upstream || :")
-    sh("git branch -t upstream upstream/#{UPSTREAM_BRANCH}")
+    sh("git branch -t -f upstream upstream/#{UPSTREAM_BRANCH}")
     sh("git config push.default tracking")
   end
 
   task :pull do
     require_clean_working_tree
     sh("git fetch upstream")
-    sh("git branch -f upstream upstream/master")
+    sh("git branch -t -f upstream upstream/#{UPSTREAM_BRANCH}")
   end
 
   desc "Show changes to upstream"
