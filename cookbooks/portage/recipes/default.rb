@@ -2,6 +2,10 @@ package "sys-apps/portage" do
   action :upgrade
 end
 
+%w(eix elogv gentoolkit portage-utils).each do |pkg|
+  package "app-portage/#{pkg}"
+end
+
 group "portage" do
   gid 250
   append true
@@ -21,6 +25,17 @@ group "portage" do
   members %w(portage)
 end
 
+directory "/var/cache/portage" do
+  owner "root"
+  group "root"
+  mode "0755"
+end
+
+directory node[:portage][:distdir] do
+  owner "root"
+  group "portage"
+end
+
 file "/etc/make.profile" do
   action :delete
 end
@@ -29,17 +44,19 @@ link "/etc/portage/make.profile" do
   to node[:portage][:profile]
 end
 
-directory "/usr/portage/.git" do
-  action :delete
-  recursive true
-  only_if { FileTest.writable?("/usr/portage/.git") }
-end
-
 include_recipe "portage::layman"
 
-directory node[:portage][:distdir] do
+file "/etc/make.conf" do
+  action :delete
+end
+
+template node[:portage][:make_conf] do
   owner "root"
-  group "portage"
+  group "root"
+  mode "0644"
+  source "make.conf"
+  cookbook "portage"
+  backup 0
 end
 
 directory node[:portage][:confdir] do
@@ -83,34 +100,30 @@ cookbook_file "#{node[:portage][:confdir]}/bashrc" do
   mode "0644"
 end
 
-directory "/var/cache/portage" do
-  owner "root"
-  group "root"
-  mode "0755"
-end
-
-directory "#{node[:portage][:make_conf]}.d" do
-  action :delete
-  recursive true
-end
-
-file "/etc/make.conf" do
-  action :delete
-end
-
-template node[:portage][:make_conf] do
-  owner "root"
-  group "root"
+cookbook_file "/etc/logrotate.d/portage" do
+  source "portage.logrotate"
   mode "0644"
-  source "make.conf"
-  cookbook "portage"
   backup 0
 end
 
-package "sys-apps/portage"
+cookbook_file "/etc/logrotate.d/elog-save-summary" do
+  source "elog-save-summary.logrotate"
+  mode "0644"
+  backup 0
+end
 
-%w(eix elogv gentoolkit portage-utils).each do |pkg|
-  package "app-portage/#{pkg}"
+cookbook_file "/etc/dispatch-conf.conf" do
+  source "dispatch-conf.conf"
+  mode "0644"
+  backup 0
+end
+
+cron_weekly "eclean-distfiles" do
+  command "exec /usr/bin/eclean -d -n -q distfiles"
+end
+
+cron_weekly "eclean-packages" do
+  command "exec /usr/bin/eclean -d -n -q packages"
 end
 
 execute "eix-update" do
@@ -134,24 +147,6 @@ ruby_block "update-packages-cache" do
   end
 end
 
-cookbook_file "/etc/logrotate.d/portage" do
-  source "portage.logrotate"
-  mode "0644"
-  backup 0
-end
-
-cookbook_file "/etc/logrotate.d/elog-save-summary" do
-  source "elog-save-summary.logrotate"
-  mode "0644"
-  backup 0
-end
-
-cookbook_file "/etc/dispatch-conf.conf" do
-  source "dispatch-conf.conf"
-  mode "0644"
-  backup 0
-end
-
 %w(
   cruft
   fake-preserved-libs
@@ -165,15 +160,6 @@ end
     owner "root"
     group "root"
     mode "0755"
-  end
-end
-
-%w(
-  fake-world
-  fake-vardb
-).each do |f|
-  file "/usr/local/sbin/#{f}" do
-    action :delete
   end
 end
 
