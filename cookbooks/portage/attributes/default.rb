@@ -37,7 +37,7 @@ if node[:platform] == "gentoo"
     http://ftp.spline.de/pub/gentoo
     )
   elsif node[:portage][:repo] == "gentoo"
-    default[:portage][:profile] = "#{set[:portage][:portdir]}/profiles/default/linux/#{node[:portage][:arch]}/10.0"
+    default[:portage][:profile] = "#{set[:portage][:portdir]}/profiles/default/linux/#{node[:portage][:arch]}/13.0"
 
     default[:portage][:SYNC] = "rsync://rsync.de.gentoo.org/gentoo-portage"
     default[:portage][:MIRRORS] = %w(
