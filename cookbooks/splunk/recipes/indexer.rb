@@ -54,6 +54,7 @@ end
 include_recipe "splunk::syslog"
 include_recipe "splunk::nagios"
 include_recipe "splunk::metriks"
+include_recipe "splunk::hadoop"
 
 ## nginx ssl proxy
 include_recipe "nginx"
