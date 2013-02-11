@@ -22,7 +22,7 @@
 
   <property>
     <name>mapred.tasktracker.reduce.tasks.maximum</name>
-    <value>8</value>
+    <value>4</value>
   </property>
 
   <property>
@@ -32,7 +32,7 @@
 
   <property>
     <name>mapred.child.java.opts</name>
-    <value>-Duser.timezone=UTC -Dfile.encoding=UTF-8 -Xmx1g</value>
+    <value>-Duser.timezone=UTC -Dfile.encoding=UTF-8 -Xmx16g -Djava.io.tmpdir=<%= File.join(node[:hadoop][:tmp_dir].last, 'java') %></value>
   </property>
 
   <!-- http://stackoverflow.com/questions/2354525/what-should-be-hadoop-tmp-dir -->

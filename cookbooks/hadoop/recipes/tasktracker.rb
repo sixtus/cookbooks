@@ -2,6 +2,13 @@ tag("hadoop-tasktracker")
 
 include_recipe "hadoop::default"
 
+# java tmp dir for map/reduce
+directory File.join(node[:hadoop][:tmp_dir].last, 'java') do
+  owner "hadoop"
+  group "hadoop"
+  mode "0777"
+end
+
 service "hadoop-tasktracker" do
   action [:enable, :start]
 end
