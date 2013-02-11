@@ -1,0 +1,20 @@
+.HadoopOpsSimpleTRPContainer {
+    padding: 20px 0 0 20px;
+    width: 420px;
+}
+.HadoopOpsSimpleTRPContainer input {
+    background-color: #FFFFFF;
+    border-color: none;
+    border-radius: 5px;
+    border-width: 0;
+    color: #CCCCCC;
+    font-size: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    width: 100px;
+}
+.HadoopOpsSimpleTRPContainer input.selected {
+    background-color: #CCCCCC;
+    color: #FFFFFF;
+}
+

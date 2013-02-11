@@ -1,0 +1,162 @@
+<%page expression_filter="h"/>
+<%inherit file="//layout/base.html" />
+<%namespace name="lib" file="//lib.html" import="*"/>
+<%!
+    import logging
+    from sets import Set
+    import splunk.appserver.mrsparkle.lib.startup as startup
+
+    logger = logging.getLogger('splunk.module.setup')
+
+    def parse_dynamic(tokenized_string, removeKey=True):
+        try:
+            # if already a list, we don't need to do any string parsing
+            if isinstance(tokenized_string, list):
+                seq = tokenized_string
+            else:
+                if removeKey:
+                    seq = [token.split('=')[1] for token in tokenized_string.split(' OR ')]
+                else:
+                    seq = tokenized_string.split(' OR ')
+            # convert to set to deduplicate
+            set = Set(seq)
+            # convert back to list to sort
+            tokenList = list(set)
+            tokenList.sort()
+        except IndexError, ex:
+            tokenList = []
+
+        return tokenList
+
+%>
+<%def name="js()">
+    <%  
+    coreJsFiles = startup.generateJSManifest()
+    %>
+
+    ## start: core js
+    <%lib:script_tags files="${coreJsFiles}" />
+
+    ## buffered inline js
+    <%lib:get_script_blocks />
+</%def>
+
+<%def name="js_initialization()">
+    <%lib:script_tags files="${['/static/js/init.js']}" />
+</%def>
+
+<%def name="custom_css()">
+    <%lib:stylesheet_tags files="${['/static/app/%s/setup.css' % app,
+				'/static/app/%s/help_tooltip.css' % app ]}" />
+    <%lib:script_tags files="${['/static/app/%s/setup.js' % app,
+                                '/static/app/%s/help_tooltip.js' % app ]}" />
+</%def>
+
+<%def name="gen_form(method='POST', action=None)">
+    <form method="${method}" action="${action if action else ''}">
+</%def>
+
+<%def name="gen_hadooplogs(name, form_content, dynamic=False, preview=False, addNew=True)">
+
+    % if form_content.errors:
+        <p class="errorText">${form_content.errors[0]}</p>
+    % endif 
+<%
+    if form_content.definition:
+        sourcetypes = form_content.definition
+        try:
+            tokenList = parse_dynamic(sourcetypes, removeKey=False)
+        except:
+            tokenList = []
+    else:
+        tokenList = []
+    tokenLen = len(tokenList)
+%> 
+    <dl>
+      <dd>
+    % for st in tokenList:
+        <div class="dynamic-input">
+          <input class="dynamic-text" type="text" name="macro.${name}.definition" value="${st}">
+        % if tokenLen > 1:
+          <span class="remove-text">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        % else:
+          <span class="remove-text singleRow">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        % endif
+        </div>
+    % endfor
+        <div class="belowInput">
+        % if preview:
+          <a class="preview"><span>Preview</span></a>
+        % endif
+        % if addNew:
+          <a class="add-text"><span>&nbsp;Add New</span></a>
+        % endif
+        </div>
+      </dd>
+    </dl> 
+</%def>
+
+<div id="setup">
+  ${gen_form(method="POST", action=make_url(['custom', app , 'hadoopopssetup', app, 'save']))}
+  <div class="splHadoopButtons topButtons">
+    <input class="splButton-primary" type="submit" value="Save"></input>
+  </div>
+  <h1>Setup</h1>
+  <div class="splHadoopOpsConfSpacer"></div>
+  ${csrf_hidden_input()}
+  <div class="splHadoopOpsConfSpacer"></div>
+  <h3 id="tip_hadoop_conf" class="help" >Configuration Data</h3>
+  <div class="splHadoopOpsConfItem">
+    <div class="searchBox ${'formError' if name and name in ['hadoop_conf'] else ''}">
+      ${gen_hadooplogs('hadoop_conf', form_content.get('hadoop_conf'), dynamic=True, preview=True)}
+    </div>
+  </div>
+  <div class="splHadoopOpsConfSpacer"></div>
+  <h3 id="tip_hadoop_daemon_logs" class="help">Daemon Data</h3>
+  <div class="splHadoopOpsConfItem">
+    <div class="searchBox ${'formError' if name and name in ['hadoop_daemon_logs'] else ''}">
+      ${gen_hadooplogs('hadoop_daemon_logs', form_content.get('hadoop_daemon_logs'), dynamic=True, preview=True)}
+    </div>
+  </div>
+  <div class="splHadoopOpsConfSpacer"></div>
+ <h3 id="tip_hadoop_jobtracker_logs" class="help" >Jobtracker Data </h3>
+  <div class="splHadoopOpsConfItem">
+    <div class="searchBox ${'formError' if name and name in ['hadoop_jobtracker_logs'] else ''}">
+      ${gen_hadooplogs('hadoop_jobtracker_logs', form_content.get('hadoop_jobtracker_logs'), dynamic=True, preview=True)}
+    </div>
+  </div>
+  <div class="splHadoopOpsConfSpacer"></div>
+  <h3 id="tip_hadoop_tasktracker_logs" class="help">Tasktracker Data </h3>
+  <div class="splHadoopOpsConfItem">
+    <div class="searchBox ${'formError' if name and name in ['hadoop_tasktracker_logs'] else ''}">
+      ${gen_hadooplogs('hadoop_tasktracker_logs', form_content.get('hadoop_tasktracker_logs'), dynamic=True, preview=True)}
+    </div>
+  </div>
+  <div class="splHadoopOpsConfSpacer"></div>
+  <h3 id="tip_hadoop_metrics" class="help">Metrics Data </h3>
+  <div class="splHadoopOpsConfItem">
+    <div class="searchBox ${'formError' if name and name in ['hadoop_metrics'] else ''}">
+      ${gen_hadooplogs('hadoop_metrics', form_content.get('hadoop_metrics'), dynamic=True, preview=True)}
+    </div>
+  </div>
+  <div class="splHadoopOpsConfSpacer"></div>
+  <h3 id="tip_hadoop_os" class="help">OS Data </h3>
+  <div class="splHadoopOpsConfItem">
+    <div class="searchBox ${'formError' if name and name in ['hadoop_os'] else ''}">
+      ${gen_hadooplogs('hadoop_os', form_content.get('hadoop_os'), dynamic=True, preview=True)}
+    </div>
+  </div>
+  <!--
+  <div class="splHadoopOpsConfSpacer"></div>
+  <h3 id="tip_hadoop_topology_script" class="help">Cluster Topology Script </h3>
+  <div class="splHadoopOpsConfItem">
+    <div class="searchBox ${'formError' if name and name in ['hadoop_topology_script'] else ''}">
+      ${gen_hadooplogs('hadoop_topology_script', form_content.get('hadoop_topology_script'), dynamic=False, preview=False, addNew=False)}
+    </div>
+  </div>
+  -->
+  <div class="splHadoopButtons lastSave">
+    <input class="splButton-primary" type="submit" value="Save"></input>
+  </div>
+  </form>
+</div>

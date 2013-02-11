@@ -1,0 +1,328 @@
+<%page args="module"/>
+<%namespace name="lib" file="//lib.html" import="*"/>
+
+<%!
+import logging
+from splunk.appserver.mrsparkle.lib import times
+logger = logging.getLogger('splunk.appserver')
+%>
+
+<%
+
+"""
+the normal time range picker generates a JSON literal of all of the time 
+ranges that have been specified in times.conf. This custom time range
+picker also loads the specified times from the module's configuration
+in the view and treats those as authoritative.  However, we still need
+to load the times.conf ranges in order to grab stored configurations so
+that module confs can specify (for example) last_7d and we can load the 
+appropriate values from times.conf.
+"""
+
+def getModuleTimeRanges(timeRanges):
+    """ 
+    given a dictionary of the time ranges from times.conf
+    return a list of dictionary objects to be loaded
+    """
+
+    # list of valid keys for a time range
+    keyList = ['earliest_time', 'is_sub_menu', 'label', 
+               'latest_time', 'order', 'sub_menu'] 
+
+    # get a dictionary of time ranges
+    keyedRanges = _keyedRanges(timeRanges)
+
+    # list of newTimeRanges derived from the view conf
+    newTimeRanges = []
+
+    # the range map derived from the view conf
+    rangeMap = module['params'].get('rangeMap')
+
+    if not rangeMap:
+        return timeRanges 
+    
+    for key in rangeMap.keys():
+        # iterate through the provided range map items
+
+        range = rangeMap[key]
+       
+        # attempt to load the key name from times.conf 
+        tempRange = keyedRanges.get(key)
+
+        if not range and not tempRange:
+            # if range is a None type and the key name does not 
+            # exist in times.conf, we log a warning and skip it
+
+            logger.warn("unable to load specified stanza %s from times.conf" % key)
+            next
+
+        if isinstance(range, dict):
+            # if there are keys, keep going
+
+            if not tempRange:
+                tempRange = {}
+
+            for k in range.keys():
+                if k in keyList: 
+                    tempRange[k] = range[k]
+
+        # append the final range definition to the list that will be returned
+        newTimeRanges.append(tempRange)
+
+    return keySort(newTimeRanges, 'order') 
+
+def keySort(timeRanges, key):
+    """ 
+    numeric sort the provided list of time range dictionaries based on key 
+    """
+    sortedRanges = []
+
+    for t in timeRanges:
+        if len(sortedRanges) < 1:
+            sortedRanges.append(t)
+        else:
+            i = 0
+            for s in sortedRanges:
+                try:
+                    if int(t[key]) <= int(s[key]):
+                        sortedRanges.insert(i,t)
+                        break
+                    i = i + 1
+                except:
+                    # the given value was not an integer
+                    sortedRanges.append(t)
+                    break
+            else:
+                sortedRanges.append(t)
+
+    return sortedRanges
+
+def _keyedRanges(timeRanges):
+    """ create a dictionary of ranges from times.conf """ 
+    keyed = {}
+    for range in timeRanges:
+        keyed[range['key']] = range
+    return keyed
+
+timeRanges = getModuleTimeRanges(times.getTimeRanges(namespace=APP['id']))
+menuItems = []
+
+'''
+  Although times.conf has a submenu hierarchy, the values come out as a flat 
+  list. The hierarchy is then built here.
+
+  In that list among the regular top-level items, there will be 
+  a) stubs for the submenus themselves, within the regular items, 
+    marked with is_sub_menu = True and label=foo.
+  b) the children of those submenus , 
+    marked with sub_menu = foo.
+  We will not append those children into the main menuItems array, but rather 
+  keep them in a dict by sub_menu name.
+  Then in a second pass we will attach the children appropriately.
+'''
+subMenuContents = {}
+    
+        
+for t in timeRanges:
+        
+    if 'is_sub_menu' in t: 
+        item = {
+            "is_sub_menu" : True,
+            "label" : _(t['label']),
+            "rawLabel" : t['label'],
+            "order": t['order']
+        }
+        menuItems.append(item)
+        continue
+
+    item = {
+        "label" : _(t['label']),
+        "rawLabel": t['label'],
+        "attrs" : {},
+        "style": "timeRangePreset",
+        "order": t['order']
+    }
+
+    
+    # if defined, add in earliest/latest identifiers
+    # the resurrection logic depends on the absence/presence of start and end keys
+    # TODO: convert start/end to earliest/latest
+    for k in ('earliest_time', 'latest_time'):
+        if t[k]:
+            item['attrs'][k] = t[k]
+
+    subMenuName = t.get('sub_menu', False)
+    if (subMenuName) :
+        #subMenuName = _(subMenuName)
+        if (subMenuName not in subMenuContents) : 
+            subMenuContents[subMenuName] = []
+        subMenuContents[subMenuName].append(item)
+    else :
+        menuItems.append(item)
+    
+'''
+    Now we go through and attach the children for each of the sub_menus, 
+    which we've been keeping off to the side in the subMenuContents dict until now.
+'''
+for i in range(len(menuItems)):
+    if "is_sub_menu" in menuItems[i]:
+        subMenuLabel = menuItems[i]["rawLabel"]
+        # If this isnt true it'll have been caught by the runtime check in times.py
+        # we check here only to prevent the exception. 
+        if subMenuLabel in subMenuContents:
+            menuItems[i]["items"] = subMenuContents[subMenuLabel]
+
+        # This was just a marker for us to do this rearranging.  
+        # Now that we are done we delete the marker.
+        del menuItems[i]["is_sub_menu"]
+        
+
+jsonOutput = jsonify(menuItems)
+
+%>
+
+<%page args="module"/>
+
+<%namespace name="lib" file="//lib.html" import="*"/>
+
+<%call expr="lib.add_script_block()">
+    Splunk.Module.loadParams.${module['id']}.timeRangeJson = ${jsonOutput};
+</%call>
+
+% if 'label' in module:
+    <label class="timeRangePickerLabel">${_(module.get('label', ' '))|h}</label>
+% endif
+
+
+<div class="timeRangeActivatorWrapper splBorder splBorder-nsew splBackground-primary">
+    <span class="splIcon splIcon-triangle-4-s"></span>
+    <span class="timeRangeActivator"></span>
+</div>
+
+<div class="trpCustomDateTime popupContainer">
+    <div class="splHeader splHeader-popup"><a href="javascript:void(0)" class="splIcon splIcon-close"></a><h2>${_('Custom Time Range')}</h2></div>
+    <div class="popupContent">
+        <h4>${_('Range Type')}</h4>
+        <div class="rangeType">
+            <input type="radio" name="rangeTypeRadio" checked="checked" value="dateRangeMode" class="radio dateRangeRadio" id="firstCustomRadio" /><label for="firstCustomRadio">${_('Date')}</label>
+            <input type="radio" name="rangeTypeRadio" value="relativeMode" class="radio relativeRadio" id="secondCustomRadio" /><label for="secondCustomRadio">${_('Relative')}</label>
+            <input type="radio" name="rangeTypeRadio" value="realtimeMode" class="radio realtimeRadio" id="fourthCustomRadio" /><label for="fourthCustomRadio">${_('Real-time')}</label>
+            <input type="radio" name="rangeTypeRadio" value="advancedMode" class="radio advancedRadio" id="thirdCustomRadio" /><label for="thirdCustomRadio">${_('Advanced search language')}</label>
+        </div>
+        <div class="dateRangeMode dateTimePanel visibleDateTimePanel">
+            <div class="datepickerErrMsg"></div>
+            <div class="earliestTimeContainer">
+                <h4>${_('Earliest time')}</h4>
+                <div class="specificOptionWrapper">
+                    <input type="radio" class="radio earliestSpecificDateRadio" checked="checked" id="earliestSpecificDateRadio" name="earliestDateOption" /><label for="earliestSpecificDateRadio">${_('Specific Date')}</label>
+                    <input type="radio" class="radio earliestDateRadio" id="earliestDateRadio" name="earliestDateOption" /><label for="earliestDateRadio">${_('Earliest Date')}</label>
+                </div>
+                <div class="earliestDateTime">
+                    <input type="text" class="earliestDate customDate" />
+                    <div class="earliestTime">
+                    </div>
+                </div>
+            </div>
+            <div class="latestTimeContainer">
+                <h4>${_('Latest time')}</h4>
+                <div class="specificOptionWrapper">
+                    <input type="radio" class="radio latestSpecificDateRadio" checked="checked" id="latestSpecificDateRadio" name="latestDateOption" /><label for="latestSpecificDateRadio">${_('Specific Date')}</label>
+                    <input type="radio" class="radio nowDateRadio" id="nowDateRadio" name="latestDateOption" /><label for="nowDateRadio">${_('Now')}</label>
+                </div>
+                <div class="latestDateTime">
+                    <input type="text" class="latestDate customDate" />
+                    <div class="latestTime">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="relativeMode dateTimePanel">
+            <label>${_('Earliest time')}</label>
+            <div class="relativeOptions customTimeOptions">
+                
+                <input type="text" class="relativeValue" value="1" /> 
+                <select class="relativeUnit">
+                    <option value="s">${_('Second(s) ago')}</option>
+                    <option value="m">${_('Minute(s) ago')}</option>
+                    <option value="h">${_('Hour(s) ago')}</option>
+                    <option value="d">${_('Day(s) ago')}</option>
+                    <option value="w">${_('Week(s) ago')}</option>
+                    <option value="mon">${_('Month(s) ago')}</option>
+                </select>
+                <label>${_('Snap to')}</label>
+                <select class="relativeSnap">
+                    <option value="s">${_('Second')}</option>
+                    <option value="m">${_('Minute')}</option>
+                    <option value="h">${_('Hour')}</option>
+                    <option value="d">${_('Day')}</option>
+                    <option value="w">${_('Week')}</option>
+                    <option value="mon">${_('Month')}</option>
+                    <option value="none">${_('None')}</option>
+                </select>
+                
+            </div>
+            <div class="relativeEffectives">
+                <div class="searchLangEquivalentWrapper">
+                    <h5>${_('Search language equivalent')}</h5>
+                    <div class="searchLangEquivalent outputString">
+                    </div>
+                </div>
+                <div class="effectiveRangeWrapper">
+                    <h5>${_('Effective range')}</h5>
+                    <div class="effectiveRange outputString">
+                    </div>
+                </div>                
+            </div>
+        </div>
+        <div class="realtimeMode dateTimePanel">
+            <label>${_('Time window')}</label>
+            <div class="realtimeOptions customTimeOptions">
+                <input type="text" class="rollingWindowSize" value="1" />
+                <select class="rollingWindowUnit">
+                    <option value="s">${_('Second(s)')}</option>
+                    <option value="m">${_('Minute(s)')}</option>
+                    <option value="h">${_('Hour(s)')}</option>
+                </select>
+            </div>
+            <div class="realtimeEffectives">
+                <div class="searchLangEquivalentWrapper">
+                    <h5>${_('Search language equivalent')}</h5>
+                    <div class="searchLangEquivalent outputString">a
+                    </div>
+                </div>
+            </div>
+        </div>    
+        <div class="advancedMode dateTimePanel">
+            <div class="advancedStartContainer">
+                <label>
+                    ${_('Earliest')}
+                    <input type="text" class="advancedStart" />
+                </label>
+                <div>
+                    <h5>${_('Effective Earliest')}</h5>
+                    <div class="advancedEffectiveStart outputString">&nbsp;</div>
+                </div>
+            </div>
+            <div class="advancedEndContainer">
+                <label>
+                    ${_('Latest')}
+                    <input type="text" class="advancedEnd" />
+                </label>
+                <div>
+                    <h5>${_('Effective Latest')}</h5>
+                    <div class="advancedEffectiveEnd outputString" >&nbsp;</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="popupFooter">
+        <button class="splButton-secondary trpCancel">
+            <span>${_('Cancel')}</span>
+        </button>
+        <button class="splButton-primary trpApply">
+            <span>${_('Apply')}</span>
+        </button>
+        
+    </div>
+</div>
+

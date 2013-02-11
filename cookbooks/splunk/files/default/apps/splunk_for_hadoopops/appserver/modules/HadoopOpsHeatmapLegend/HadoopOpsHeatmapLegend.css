@@ -1,0 +1,19 @@
+.HadoopOpsHeatmapLegend {
+    float: right; 
+    height: 48px;
+    padding-top: 0;
+    width: 200px;
+}
+.LegendContainer {
+    float: right;
+    display: none;
+}
+.LegendContainer h2 {
+    margin: 0;
+}
+.LegendContainer svg {
+    float: left;
+}
+.LegendContainer svg rect, .LegendContainer svg text {
+    cursor: default;
+}

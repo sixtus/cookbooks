@@ -1,0 +1,101 @@
+.HadoopOpsServiceMonitoring {
+    height: 270px;
+    position: relative;
+}
+.HadoopOpsServiceMonitoringControls {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+.HadoopOpsServiceMonitoringControls input {
+    cursor: pointer;
+    background-color: #CCCCCC;
+    border-radius: 5px 5px 5px 5px;
+    border-width: 0;
+    color: #FFFFFA;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 5px;
+    text-transform: uppercase;
+    width: auto;  
+}
+.HadoopOpsServiceMonitoringResults .simpleResultsTableWrapper {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0 10px;
+}
+.HadoopOpsServiceMonitoringResults .greyRow {
+    background-color: #f8f8f8;
+}
+.HadoopOpsServiceMonitoringResults table.simpleResultsTable tbody tr:first-child {
+    display: none;
+}
+.HadoopOpsServiceMonitoringResults table.simpleResultsTable span.sortLabel {
+    border-right: none;
+    font-size: 11px;
+    color:#cccccc;
+}
+.HadoopOpsServiceMonitoringResults table.simpleResultsTable span.nodeDown {
+    color: #FF0000;
+    font-weight: bold;
+}
+.HadoopOpsServiceMonitoringResults table.simpleResultsTable tr,
+.HadoopOpsServiceMonitoringResults table.simpleResultsTable th {
+    font-size: 11px;
+    font-weight: bold;
+    padding: 10px 10px 10px 0;
+    cursor: pointer;
+   
+}
+.HadoopOpsServiceMonitoringResults table.simpleResultsTable td {
+    border-radius: 1px 1px 1px 1px;
+    border-top: 1px solid #CCCCCC;
+    font-size: 14px;
+    font-weight: normal;
+} 
+.HadoopOpsServiceMonitoringResults table.simpleResultsTable tr:last-child td {
+    border-top: none;
+    border-bottom: 1px solid #CCCCCC;
+}
+.HadoopOpsServiceMonitoringResults table.simpleResultsTable {
+    height: 90%;
+    padding-top: 0px;
+    width: 100%;
+}
+.HadoopOpsServiceMonitoringResults table.simpleResultsTable td[field="instance"] {
+    font-weight: bold;
+}
+.HadoopOpsServiceMonitoringResults table.simpleResultsTable td[field="health"] {
+    border-right: none;
+    width: 65px;
+    text-align: center;
+}
+
+.HadoopOpsServiceMonitoringFTRPopup {
+    display: none;
+    width: 380px;
+    padding: 30px;
+    z-index: 5;
+}
+.HadoopOpsServiceMonitoringFTRPopup h2 {
+    border-bottom: 1px solid #3F3F3F;
+    color: #3F3F3F;
+    font-size: 24px;
+    font-weight: 200;
+    margin-bottom: 35px;
+    font-family:"Helvetica nenu", Helvetica, Arial, sans-serif;
+    margin-top: 15px;
+    padding-bottom: 20px;
+    text-align: center;
+}
+.HadoopOpsServiceMonitoringFTRPopup p {
+    font-family:"Helvetica nenu", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+}
+.HadoopOpsServiceMonitoringFTRPopup .ButtonRow {
+    margin-top: 50px;
+    padding-bottom: 15px;
+}
+.HadoopOpsServiceMonitoringFTRPopup a.splButton-primary {
+    float: right;
+}

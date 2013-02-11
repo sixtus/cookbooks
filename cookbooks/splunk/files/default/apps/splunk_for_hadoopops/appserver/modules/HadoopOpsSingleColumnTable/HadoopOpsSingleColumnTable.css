@@ -1,0 +1,28 @@
+.message {
+    font-size: 12px;
+    font-weight: lighter;
+}
+.splHadoopOpsSingleColumnTable {
+    border-spacing: 10px;
+    float: left;
+    margin-top: 6px;
+    table-layout: fixed;
+    width: 100%; 
+}
+.splHadoopOpsSingleColumnTable tbody tr td {
+    font-size: 12px;
+}
+.splHadoopOpsSingleColumnTable tbody tr td:first-child { 
+    font-weight: bold;
+}
+.splHadoopOpsSingleColumnTable tbody tr td:last-child { 
+    text-align: center;
+}
+.HadoopOpsSingleColumnTableInner {
+    border-bottom: 1px solid #CCCCCC;
+    border-top: 1px solid #CCCCCC;
+    border-radius: 1px;
+    height: auto;
+    margin-left: 1%;
+    width: auto;
+}

@@ -1,0 +1,173 @@
+<view autoCancelInterval="90" isVisible="true" onunloadCancelJobs="true" template="splunk_for_hadoopops:/templates/layout/job_history.html">
+  <label>Job History</label>
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="HadoopOpsAppBar" layoutPanel="navigationHeader"/>
+
+  <module name="HiddenSearch" autoRun="True" layoutPanel="FilterRow">
+    <param name="search">`job_history_multiselect($job_name$, $job_id$, $user_name$, $job_status$)`</param>
+    <module name="HadoopOpsCustomTimeRangePicker">
+      <param name="useCustom">False</param>
+      <param name="rangeMap">
+        <param name="15m">
+          <param name="label">Last 15 Minutes</param>
+          <param name="earliest_time">-15m</param>
+          <param name="latest_time">now</param>
+          <param name="order">100</param>
+        </param>
+        <param name="1h">
+          <param name="label">Last Hour</param>
+          <param name="earliest_time">-1h</param>
+          <param name="latest_time">now</param>
+          <param name="order">110</param>
+        </param>
+        <param name="4h">
+          <param name="label">Last 4 Hours</param>
+          <param name="earliest_time">-4h</param>
+          <param name="latest_time">now</param>
+          <param name="order">120</param>
+        </param>
+        <param name="24h">
+          <param name="label">Last Day</param>
+          <param name="earliest_time">-1d</param>
+          <param name="latest_time">now</param>
+          <param name="order">130</param>
+        </param>
+        <param name="7d">
+          <param name="label">Last Week</param>
+          <param name="earliest_time">-7d</param>
+          <param name="latest_time">now</param>
+          <param name="order">140</param>
+        </param>
+        <param name="1mon">
+          <param name="label">Last Month</param>
+          <param name="earliest_time">-1mon</param>
+          <param name="latest_time">now</param>
+          <param name="order">150</param>
+        </param>
+        <param name="all">
+          <param name="label">All Time</param>
+          <param name="earliest_time">0</param>
+          <param name="latest_time">now</param>
+          <param name="order">160</param>
+        </param>
+      </param>
+      <param name="searchWhenChanged">True</param>
+      <param name="selected">Last Month</param>
+	  <module name="HadoopOpsMultiSelect">
+		<param name="apply_from_context">True</param>
+		<param name="fill_on_empty">False</param>
+		<param name="label">Job Name: </param>
+		<param name="multi">true</param>
+		<param name="outer_width">145</param>
+		<param name="field">job_name</param>
+		<module name="HadoopOpsMultiSelect">
+		  <param name="apply_from_context">True</param>
+		  <param name="fill_on_empty">False</param>
+		  <param name="label">Job ID: </param>
+		  <param name="multi">true</param>
+		  <param name="outer_width">145</param>
+		  <param name="field">job_id</param>
+		  <module name="HadoopOpsMultiSelect">
+			<param name="apply_from_context">True</param>
+			<param name="fill_on_empty">False</param>
+			<param name="label">Job Status: </param>
+			<param name="multi">true</param>
+			<param name="outer_width">155</param>
+			<param name="field">job_status</param>
+			<module name="HadoopOpsMultiSelect">
+			  <param name="apply_from_context">True</param>
+			  <param name="fill_on_empty">False</param>
+			  <param name="label">User Name: </param>
+			  <param name="multi">true</param>
+			  <param name="outer_width">150</param>
+			  <param name="field">user_name</param>
+			  <module name="HadoopOpsTokenReplacer">
+				<module name="HadoopOpsContextPopulator">
+    				<module name="HadoopOpsSubmitButton">
+    				  <param name="allowSoftSubmit">True</param>
+    				  <param name="updatePermalink">True</param>
+    				  <param name="visible">False</param>
+    				  <module name="HadoopOpsMultiSelectInfo" layoutPanel="PaginatorRow"/>
+    				  <module name="Count" layoutPanel="PaginatorRow">
+    					<param name="options">
+    					  <list>
+    						<param name="text">10</param>
+    						<param name="value">10</param>
+    					  </list>
+    					  <list>
+    						<param name="text">20</param>
+    						<param name="value">20</param>
+    						<param name="selected">True</param>
+    					  </list>
+    					  <list>
+    						<param name="text">50</param>
+    						<param name="value">50</param>
+    					  </list>
+    					</param>
+    					<module name="Paginator">
+    					  <param name="entityName">results</param>
+    					  <module name="SimpleResultsTable" layoutPanel="TableRow">
+    						<param name="displayRowNumbers">off</param>
+    						<module name="HiddenSearch">
+    						  <param name="search">`hadoop_job_history` $job_id$ $earliest$ $latest$ | kv hadoop_total_counter_internal | table *</param>
+    						  <module name="HadoopOpsTokenReplacer" layoutPanel="DrilldownRow">
+    							<module name="HiddenSearch" layoutPanel="DrilldownPanelLeft">
+    							  <param name="search">`hadoop_job_history` $job_id$ $earliest$ $latest$ JOBID COUNTERS | kv hadoop_total_counters hadoop_total_counter_internal | fillnull HDFS_BYTES_READ HDFS_BYTES_WRITTEN value=0 | stats first(eval(round(CPU_MILLISECONDS/1000,2))) as cpu_seconds first(eval(round(HDFS_BYTES_READ/1024, 2))) as hdfs_kb_read first(eval(round(HDFS_BYTES_WRITTEN/1024,2))) as hdfs_kb_written first(eval(round(PHYSICAL_MEMORY_BYTES/1024/1024,2))) as mem_snapshot_mb first(eval(round(COMMITTED_HEAP_BYTES/1024/1024,2))) as committed_heap_mb</param>
+    							  <module name="HadoopOpsTokenReplacer">
+    								<module name="HadoopOpsSingleColumnTable">
+    								</module>
+    							  </module>
+    							</module>
+    							<module name="GenericHeader" layoutPanel="DrilldownPanelCenter">
+    							  <param name="label">Maps</param>
+    							  <module name="HiddenSearch">
+    								<param name="search">`hadoop_job_history` $job_id$ $earliest$ $latest$ JOBID COUNTERS | kv hadoop_map_counters hadoop_map_counter_internal | fillnull HDFS_BYTES_READ HDFS_BYTES_WRITTEN value=0 | stats first(eval(round(CPU_MILLISECONDS/1000,2))) as cpu_seconds first(eval(round(HDFS_BYTES_READ/1024, 2))) as hdfs_kb_read first(eval(round(HDFS_BYTES_WRITTEN/1024,2))) as hdfs_kb_written first(eval(round(PHYSICAL_MEMORY_BYTES/1024/1024,2))) as mem_snapshot_mb first(eval(round(COMMITTED_HEAP_BYTES/1024/1024,2))) as committed_heap_mb</param>
+    								<module name="HadoopOpsTokenReplacer">
+    								  <module name="HadoopOpsSingleColumnTable">
+    								  </module>
+    								</module>
+    							  </module>
+    							  <module name="GenericHeader">
+    								<param name="label">Reduces</param>
+    								<module name="HiddenSearch">
+    								  <param name="search">`hadoop_job_history` $job_id$ $earliest$ $latest$ JOBID COUNTERS | kv hadoop_reduce_counters hadoop_reduce_counter_internal | fillnull HDFS_BYTES_READ HDFS_BYTES_WRITTEN value=0 | stats first(eval(round(CPU_MILLISECONDS/1000,2))) as cpu_seconds first(eval(round(HDFS_BYTES_READ/1024, 2))) as hdfs_kb_read first(eval(round(HDFS_BYTES_WRITTEN/1024,2))) as hdfs_kb_written first(eval(round(PHYSICAL_MEMORY_BYTES/1024/1024,2))) as mem_snapshot_mb first(eval(round(COMMITTED_HEAP_BYTES/1024/1024,2))) as committed_heap_mb</param>
+    								  <module name="HadoopOpsTokenReplacer">
+    									<module name="HadoopOpsSingleColumnTable">
+    									</module>
+    								  </module>
+    								</module>
+    							  </module>
+    							</module>
+    							<module name="HiddenSearch" layoutPanel="DrilldownPanelRight">
+    							  <param name="search">`hadoop_job_eventtype_summary($job_id$)` | replace hadoop_* with * in et | timechart useother=f usenull=f span=1m sum(count) as count by et | rename et as event</param>
+    								<module name="HadoopOpsTokenReplacer">
+    								<module name="HiddenChartFormatter">
+    								  <param name="chart">line</param>
+    								  <param name="legend.placement">bottom</param>
+    								  <param name="secondaryAxis.scale">log</param>
+    								  <param name="charting.primaryAxisTitle.text"> </param>
+                                      <param name="chart.nullValueMode">zero</param>
+    								  <param name="charting.backgroundColor">rgba(255, 255, 255, 0.1)</param>
+    								  <module name="JSChart">
+    									<param name="enableResize">False</param>
+    									<param name="height">320px</param>
+    								  </module>
+    								</module>
+    							  </module>
+    							</module>
+    						  </module>
+    						</module>
+    					  </module>
+    					</module>
+    				  </module>
+    				</module>
+    			  </module>
+    			</module>
+    		  </module>
+    		</module>
+    	  </module>
+    	</module>
+     </module>
+  </module>
+
+</view>

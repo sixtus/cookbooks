@@ -1,0 +1,33 @@
+table.splHadoopOpsNewsFeedTable {
+    float: left;
+    margin-top: 20px;
+    margin-left: 20px;
+    table-layout: auto;
+    width: 97%;
+}
+table.splHadoopOpsNewsFeedTable thead td {
+    font-size: 16px;
+    font-weight: lighter;
+}
+table.splHadoopOpsNewsFeedTable tbody tr {
+    background-color: #FFFFFF;
+}
+table.splHadoopOpsNewsFeedTable tbody td.critical {
+    color: #FF0000; 
+}
+table.splHadoopOpsNewsFeedTable tbody td.high {
+    color: #66CBFF;
+}
+table.splHadoopOpsNewsFeedTable tbody tr.even {
+    background-color: #EEE9E9;
+}
+table.splHadoopOpsNewsFeedTable tbody tr td {
+    font-size: 18px;
+}
+.HadoopOpsNewsFeedInner .message {
+    font-size: 18px;
+    font-weight: lighter;
+    margin-top: 75px;
+    text-align: center;
+}
+

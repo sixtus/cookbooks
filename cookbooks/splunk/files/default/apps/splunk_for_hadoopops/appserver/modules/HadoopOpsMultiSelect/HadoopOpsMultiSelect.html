@@ -1,0 +1,9 @@
+<%page args="module" expression_filter="h" />
+<%namespace name="lib" file="//lib.html" import="*"/>
+<%
+width = module.get('outer_width')
+%>
+<div style="width: ${'auto' if not width or width.lower().startswith('auto') else width + 'px'};" class="MultiSelectContainer">
+  <select name="${module.get('field')}" class="multiselect_module" style="display: none; width: ${'auto' if not width or width.lower().startswith('auto') else width + 'px'};" id="${module.get('id')}_multiselect" ${'multiple="multiple"' if module.get('multi').lower().startswith('true') else ''}>
+  </select>
+</div>

@@ -1,0 +1,26 @@
+.HadoopOpsButtonSearch {
+    float: right;
+    margin-top: 40px;
+    margin-right: 20px;
+}
+.HadoopOpsButtonSearch label span {
+   font-weight: bold;
+}
+button.runSearch {
+    background-color: #CCCCCC;
+    border-radius: 5px 5px 5px 5px;
+    border-width: 0;
+    color: #FFFFFA;
+    display: none;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 5px;
+    text-transform: uppercase;
+    width: auto;  
+}
+label {
+    margin-right: 10px; 
+    padding-top: 5px;
+    font-color: #FAFAFA;
+    font-size: 8px;
+}

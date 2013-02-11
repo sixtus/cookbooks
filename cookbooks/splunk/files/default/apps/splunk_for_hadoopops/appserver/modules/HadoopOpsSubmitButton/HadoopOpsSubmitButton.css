@@ -1,0 +1,9 @@
+.HadoopOpsSubmitButton .splButton-primary,
+.HadoopOpsSubmitButton .splButton-secondary {
+    margin-left:0px;
+}
+input.searchButton,
+input.searchButton:focus, 
+input.searchButton:active { 
+   outline: none; 
+}

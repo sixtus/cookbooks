@@ -1,0 +1,316 @@
+<view autoCancelInterval="90" isVisible="true" onunloadCancelJobs="true" template="dashboard.html">
+  <label>Home</label>
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="HadoopOpsAppBar" layoutPanel="navigationHeader"/>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">*</param>
+    <param name="clearOnJobDispatch">False</param>
+    <param name="maxSize">1</param>
+  </module>
+  <module name="HadoopOpsFTR" layoutPanel="viewHeader">
+    <param name="configLink">/app/splunk_for_hadoopops/setup</param>
+  </module>
+  <module name="HiddenSearch" layoutPanel="panel_row1_col1" autoRun="true" group="Components">
+    <param name="search">`hadoop_health_headlines`</param>
+    <param name="earliest">-2m</param>
+    <param name="latest"></param>
+    <module name="HadoopOpsServiceMonitoring"> 
+      <param name="displayRowNumbers">false</param>
+      <module name="HiddenSearch">
+        <param name="search">`hadoop_nodes_status`</param>
+        <module name="HadoopOpsDrillDowner">
+          <param name="view_target">nodes</param>
+        </module>
+      </module>
+    </module>
+  </module>
+  <module name="HiddenSearch" layoutPanel="panel_row1_col2_grp1" autoRun="true" group="Utilization">
+    <param name="search">`hadoop_avg_load_by_host`</param>
+    <param name="earliest">rt-5m</param>
+    <param name="latest">rt</param>
+    <module name="HiddenPostProcess">
+      <param name="search">`__hadoop_postproc_calc_highLoad` | gauge tot_avg_load high_load_perc </param>
+      <module name="HiddenChartFormatter">
+        <param name="charting.primaryAxisTitle.text">Load Avg</param>
+        <param name="charting.chart.style">shiny</param>
+        <param name="charting.chart">noelGauge</param>
+        <param name="charting.gaugeColors">[0x79c442, 0xffd800,0xff8a00,0xd93705]</param>
+        <param name="charting.chart.rangeValues">[0,.5,.9,1]</param>
+        <module name="JSChart">
+          <param name="enableResize">false</param>
+          <module name="HiddenSearch">
+            <param name="earliest">-1d</param>
+            <param name="latest">now</param>
+            <param name="search">`hadoop_load_avg_by_host`</param>
+            <module name="HiddenChartFormatter">
+              <param name="charting.drilldown.chart">line</param>
+              <param name="charting.drilldown.title">Load Average By Host</param>
+              <module name="HadoopOpsDrillDowner">
+                <param name="view_target">hadoopops_flashtimeline</param>
+                <param name="drill_to_chart">true</param>
+              </module>
+            </module>
+          </module>
+        </module>
+      </module>
+    </module>
+    <module name="HiddenPostProcess">
+      <param name="search">`__hadoop_postproc_highLoad_count` | rangemap field=count low=0-0 severe=1-10000 default=low</param>
+      <module name="SingleValue">
+        <param name="beforeLabel">Nodes over .9:&lt;br&gt;</param>
+      </module> 
+    </module>
+  </module>
+  <module name="HiddenSearch" layoutPanel="panel_row1_col2_grp2" autoRun="true">
+    <param name="search">`hadoop_avg_memUsedPct_by_host`</param>
+    <param name="earliest">rt-5m</param>
+    <param name="latest">rt</param>
+    <module name="HiddenPostProcess">
+      <param name="search"> `__hadoop_postproc_tot_avg_memUsedPct` | gauge tot_avg_memUsedPct</param>
+      <module name="HiddenChartFormatter">
+        <param name="charting.primaryAxisTitle.text">Used Mem</param>
+        <param name="charting.chart.style">shiny</param>
+        <param name="charting.chart">noelGauge</param>
+        <param name="charting.gaugeColors">[0x79c442, 0xffd800,0xff8a00,0xd93705]</param>
+        <param name="charting.chart.rangeValues">[0,50,65,89,100]</param>
+        <param name="charting.chart.usePercentageRange">true</param>
+        <param name="charting.chart.usePercentageValue">true</param>
+        <module name="JSChart">
+          <param name="enableResize">false</param>
+          <module name="HiddenSearch">
+            <param name="earliest">-1d</param>
+            <param name="latest">now</param>
+            <param name="search">`hadoop_avg_memUsed_by_host_timechart`</param>
+            <module name="HiddenChartFormatter">
+              <param name="charting.drilldown.chart">line</param>
+              <param name="charting.drilldown.title">Average Memory Used</param>
+              <module name="HadoopOpsDrillDowner">
+                <param name="view_target">hadoopops_flashtimeline</param>
+                <param name="drill_to_chart">true</param>
+              </module>
+            </module>
+          </module>
+        </module>
+      </module>
+    </module>
+    <module name="HiddenPostProcess">
+      <param name="search">`__hadoop_postproc_highMem_count` | rangemap field=count low=0-0 severe=1-10000 default=low</param>
+      <module name="SingleValue">
+        <param name="beforeLabel">Nodes over 90%:&lt;br&gt;</param>
+      </module> 
+    </module>
+  </module>
+  <module name="HiddenSearch" layoutPanel="panel_row1_col2_grp3" autoRun="true">
+    <param name="search">`hadoop_avg_spaceUsedPct_by_namenode`</param> 
+    <param name="earliest">rt-5m</param>
+    <param name="latest">rt</param>
+    <module name="HiddenPostProcess">
+      <param name="search">`__hadoop_postproc_tot_avg_spaceUsedPct`</param>
+      <module name="HiddenChartFormatter">
+        <param name="charting.primaryAxisTitle.text">HDFS Used</param>
+        <param name="charting.chart.style">shiny</param>
+        <param name="charting.chart">noelGauge</param>
+        <param name="charting.gaugeColors">[0x79c442, 0xffd800,0xff8a00,0xd93705]</param>
+        <param name="charting.chart.rangeValues">[0,50,65,89,100]</param>
+        <param name="charting.chart.usePercentageRange">true</param>
+        <param name="charting.chart.usePercentageValue">true</param>
+        <module name="JSChart">
+          <param name="enableResize">false</param>
+          <module name="HiddenSearch">
+            <param name="earliest">-7d</param>
+            <param name="latest">now</param>
+            <param name="search">`hadoop_hdfs_remaining_timechart`</param>
+            <module name="HiddenChartFormatter">
+              <param name="charting.drilldown.chart">line</param>
+              <param name="charting.drilldown.title">HDFS Usage vs. Total</param>
+              <module name="HadoopOpsDrillDowner">
+                <param name="view_target">hadoopops_flashtimeline</param>
+                <param name="drill_to_chart">true</param>
+              </module>
+            </module>
+          </module>
+        </module>
+      </module>
+    </module>
+    <module name="HiddenPostProcess">
+      <param name="search">`__hadoop_postproc_hdfs_capacity`</param>
+      <module name="SingleValue">
+        <param name="beforeLabel">HDFS Capacity:&lt;br&gt;</param>
+      </module>
+    </module>
+  </module>
+  <module name="HiddenSearch" layoutPanel="panel_row1_col2_grp4" autoRun="true">
+    <param name="search">`hadoop_slots_used`</param>
+    <param name="earliest">rt-5m</param>
+    <param name="latest">rt</param>
+    <module name="HiddenPostProcess">
+      <param name="search">`__hadoop_postproc_slots_used`</param>
+      <module name="HiddenChartFormatter">
+        <param name="charting.primaryAxisTitle.text">Slots Used</param>
+        <param name="charting.chart.style">shiny</param>
+        <param name="charting.chart">noelGauge</param>
+        <param name="charting.gaugeColors">[0x79c442,0xffd800,0xff8a00,0xd93705]</param>
+        <param name="charting.chart.rangeValues">[0,50,75,90,100]</param>
+        <param name="charting.chart.usePercentageRange">true</param>
+        <param name="charting.chart.usePercentageValue">true</param>
+        <module name="JSChart">
+          <param name="enableResize">false</param>
+          <module name="HiddenSearch">
+            <param name="earliest">-7d</param>
+            <param name="latest">now</param>
+            <param name="search">`hadoop_avg_slots_used_by_host`</param>
+            <module name="HiddenChartFormatter">
+              <param name="charting.drilldown.chart">line</param>
+              <param name="charting.drilldown.title">Average Slots Used</param>
+              <module name="HadoopOpsDrillDowner">
+                <param name="view_target">hadoopops_flashtimeline</param>
+                <param name="drill_to_chart">true</param>
+              </module>
+            </module>
+          </module>
+        </module>
+      </module>
+    </module>
+    <module name="HiddenPostProcess">
+      <param name="search">`__hadoop_postproc_slots_capacity`</param>
+      <module name="SingleValue">
+        <param name="beforeLabel">Slot Capacity:&lt;br&gt;</param>
+      </module> 
+    </module>
+  </module>
+  <module name="HadoopOpsSimpleTRP" layoutPanel="panel_row2_col1" group="Headlines">
+    <param name="rangeMap">
+      <param name="Last 15 Minutes">
+        <param name="range">-15m</param>
+        <param name="order">1</param>
+      </param>
+      <param name="Last Hour">
+        <param name="range">-1h</param>
+        <param name="order">2</param>
+      </param>
+      <param name="Last 24 Hours">
+        <param name="range">-24h</param>
+        <param name="order">3</param>
+        <param name="selected">true</param>
+      </param>
+    </param>
+    <module name="HiddenSearch" autoRun="True">
+      <param name="search">`noop`</param>
+      <module name="HadoopOpsHeadlines">
+      </module>
+    </module>
+  </module>
+  <module name="HadoopOpsSimpleTRP" layoutPanel="panel_row2_col2" group="Activities">
+    <param name="rangeMap">
+      <param name="Running">
+        <param name="range">rt</param>
+        <param name="order">1</param>
+      </param>
+      <param name="Last Hour">
+        <param name="range">-60m</param>
+        <param name="order">2</param>
+      </param>
+      <param name="Last 24 Hours">
+        <param name="range">-24h</param>
+        <param name="order">3</param>
+      </param>
+      <param name="Last 7 days">
+        <param name="range">-7d</param>
+        <param name="order">4</param>
+        <param name="selected">true</param>
+      </param>
+    </param>
+    <module name="HadoopOpsHiddenSearchSwapper" autoRun="true">
+      <param name="rangeMap">
+        <param name="rt">
+          <param name="search">`hadoop_metrics_running_jobs_duration`</param>
+        </param>
+        <param name="59m">
+          <param name="search">`hadoop_job_summary_table`</param>
+        </param>
+        <param name="24h">
+          <param name="search">`hadoop_job_summary_table`</param>
+        </param>
+        <param name="7d">
+          <param name="search">`hadoop_job_summary_table`</param>
+        </param>
+        <param name="default">
+          <param name="search">index=hadoop* | stats count by host </param>
+        </param>
+      </param>
+      <module name="HadoopOpsSingleRowTable">
+        <param name="label">Jobs</param>
+        <param name="bgcolor">#F8F8F8</param>
+        <param name="drilldown_key">job_status</param>
+        <param name="drilldown_map">pending=*,running=*,complete=SUCCESS,total=*, > 0 minutes=*,> 1 hour=*,> 5 hours=*,> 24 hours=*</param>
+        <param name="drilldown_val">header</param>
+        <param name="drilldown_transform">all_upper</param>
+        <module name="HadoopOpsDrillDowner">
+          <param name="view_target">job_history</param>
+        </module>
+      </module>
+    </module>
+    <module name="HadoopOpsHiddenSearchSwapper" autoRun="true">
+      <param name="rangeMap">
+        <param name="rt">
+          <param name="search">`hadoop_metrics_mapred_utilization`</param>
+        </param>
+        <param name="59m">
+          <param name="search">`hadoop_task_summary_table`</param>
+        </param>
+        <param name="24h">
+          <param name="search">`hadoop_task_summary_table`</param>
+        </param>
+        <param name="7d">
+          <param name="search">`hadoop_task_summary_table`</param>
+        </param>
+        <param name="default">
+          <param name="search">index=hadoop* | stats count by host </param>
+        </param>
+      </param>
+      <module name="HadoopOpsSingleRowTable">
+        <param name="label">Tasks</param>
+        <param name="notop">true</param>
+        <param name="bgcolor">#FFFFFF</param>
+        <param name="drilldown_key">job_status</param>
+        <param name="drilldown_map">attempts=*,succeeded=SUCCESS,complete=SUCCESS,Attempts/Task=*,Maps (Waiting)=*,Reduces (Waiting)=*,total=*</param>
+        <param name="drilldown_val">header</param>
+        <param name="drilldown_transform">all_upper</param>
+        <module name="HadoopOpsDrillDowner">
+          <param name="view_target">job_history</param>
+        </module>
+      </module>
+    </module>
+    <module name="HadoopOpsHiddenSearchSwapper" autoRun="true">
+      <param name="rangeMap">
+        <param name="rt">
+          <param name="search">index=__NOOP__</param>
+        </param>
+        <param name="59m">
+          <param name="search">`hadoop_mr_summary_table`</param>
+        </param>
+        <param name="24h">
+          <param name="search">`hadoop_mr_summary_table`</param>
+        </param>
+        <param name="7d">
+          <param name="search">`hadoop_mr_summary_table`</param>
+        </param>
+        <param name="default">
+          <param name="search">index=hadoop* | stats count by host </param>
+        </param>
+      </param>
+      <module name="HadoopOpsSingleRowTable">
+        <param name="label">M/R</param>
+        <param name="notop">true</param>
+        <param name="islast">true</param>
+        <param name="bgcolor">#F8F8F8</param>
+        <param name="drilldown_map">Map Tasks=*,Reduce Tasks=*</param>
+        <param name="drilldown_val">header</param>
+        <param name="drilldown_transform">all_upper</param>
+        <module name="HadoopOpsDrillDowner">
+          <param name="view_target">job_history</param>
+        </module>
+      </module>
+    </module>
+  </module>
+</view>

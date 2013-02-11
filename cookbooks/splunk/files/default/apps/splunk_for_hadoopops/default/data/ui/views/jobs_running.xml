@@ -1,0 +1,84 @@
+<view refresh="60" autoCancelInterval="90" isVisible="true" onunloadCancelJobs="true" template="splunk_for_hadoopops:/templates/layout/jobs_running.html">
+  <label>Activities</label>
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="HadoopOpsAppBar" layoutPanel="navigationHeader"/>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">*</param>
+    <param name="clearOnJobDispatch">False</param>
+    <param name="maxSize">1</param>
+  </module>
+
+  <module name="HiddenSearch" autoRun="True" layoutPanel="FilterRow">
+    <param name="search">`jobs_running_multiselect($job_id$, $user_name$)`</param>
+    <param name="earliest">-1d</param>
+          <module name="HadoopOpsMultiSelect">
+            <param name="apply_from_context">True</param>
+            <param name="fill_on_empty">False</param>
+            <param name="label">Job ID: </param>
+            <param name="multi">true</param>
+            <param name="outer_width">145</param>
+            <param name="field">job_id</param>
+            <module name="HadoopOpsMultiSelect">
+              <param name="apply_from_context">True</param>
+              <param name="fill_on_empty">False</param>
+              <param name="label">User Name: </param>
+              <param name="multi">true</param>
+              <param name="outer_width">150</param>
+              <param name="field">user_name</param>
+              <module name="HadoopOpsTokenReplacer">
+                <module name="HadoopOpsContextPopulator">
+                <module name="HadoopOpsSubmitButton">
+                  <param name="allowSoftSubmit">True</param>
+                  <param name="updatePermalink">True</param>
+                  <param name="visible">False</param>
+                  <module name="HadoopOpsMultiSelectInfo" layoutPanel="PaginatorRow"/>
+                  <module name="Count" layoutPanel="PaginatorRow">
+                    <param name="options">
+                      <list>
+                        <param name="text">10</param>
+                        <param name="value">10</param>
+                      </list>
+                      <list>
+                        <param name="text">20</param>
+                        <param name="value">20</param>
+                        <param name="selected">True</param>
+                      </list>
+                      <list>
+                        <param name="text">50</param>
+                        <param name="value">50</param>
+                      </list>
+                    </param>
+                    <module name="Paginator">
+                      <param name="entityName">results</param>
+                      <module name="SimpleResultsTable" layoutPanel="TableRow">
+                        <param name="displayRowNumbers">off</param>
+                          <module name="HadoopOpsTokenReplacer" layoutPanel="DrilldownRow">
+                            <module name="HiddenSearch" layoutPanel="DrilldownPanelLeft">
+                              <param name="search">`hadoop_jobtracker_logs` $job_id$ [ search `hadoop_jobtracker_logs` $job_id$ | tail 1 | stats first(_time) as earliest | eval earliest=earliest - 60] [ search `hadoop_jobtracker_logs` $job_id$ | head 1 | stats first(_time) as latest | eval latest=latest + 60] | replace hadoop_* with * in eventtype | timechart limit=20 useother=f usenull=f span=1m count by eventtype</param>
+                              <module name="HadoopOpsTokenReplacer">
+                                <module name="HiddenChartFormatter">
+                                  <param name="chart">line</param>
+                                  <param name="legend.placement">bottom</param>
+                                  <param name="secondaryAxis.scale">log</param>
+                                  <param name="charting.primaryAxisTitle.text"> </param>
+                                  <param name="charting.backgroundColor">rgba(255, 255, 255, 0.1)</param>
+                                  <module name="JSChart">
+                                    <param name="enableResize">False</param>
+                                    <param name="height">320px</param>
+                                    <param name="width">640px</param>
+                                  </module>
+                                </module>
+                              </module>
+                            </module>
+                          </module>
+                      </module>
+                    </module>
+                  </module>
+                </module>
+              </module>
+          </module>
+        </module>
+      </module>
+  </module>
+
+</view>

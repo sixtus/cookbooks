@@ -1,0 +1,368 @@
+<view template="splunk_for_hadoopops:/templates/layout/nodes.html">
+<label>Nodes</label>
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="HadoopOpsAppBar" layoutPanel="navigationHeader"/>
+  <module name="StaticContentSample" layoutPanel="NodeStatusHDFS">
+    <param name="text">HDFS</param>
+    <module name="HiddenSearch" autoRun="True">
+      <param name="search">`hadoop_nodes_hdfs_used_and_total_stats`</param>
+      <param name="earliest">-15m</param>
+      <module name="HadoopOpsSingleColumnTable"/>
+    </module>
+    <module name="HiddenSearch" autoRun="True">
+      <param name="search">`hadoop_datanodes_up_down_count`</param>
+      <param name="earliest">-5m</param>
+      <module name="HadoopOpsSingleColumnTable"/>
+    </module>
+  </module>
+  <module name="StaticContentSample" layoutPanel="NodeStatusMapReduce">
+    <param name="text">MapReduce</param>
+    <module name="HiddenSearch" autoRun="True">
+      <param name="search">`hadoop_tasktrackers_up_down_count`</param>
+      <param name="earliest">-15m</param>
+      <module name="HadoopOpsSingleColumnTable"/>
+    </module>
+    <module name="HiddenSearch" autoRun="True">
+      <param name="search">`hadoop_jobs_running_waiting_count`</param>
+      <param name="earliest">-24h</param>
+      <module name="HadoopOpsSingleColumnTable"/>
+    </module>
+  </module>
+  <module name="StaticContentSample" layoutPanel="NodeControl">
+    <param name="text">Heat Map</param>
+  </module>
+  <module name="HiddenSearch" layoutPanel="NodeMain" autoRun="True">
+    <param name="search">`hadoop_nodes_status`</param>
+    <param name="earliest">-5m</param>
+    <module name="HadoopOpsMetricsSelect" layoutPanel="NodeControl">
+      <param name="outer_width">150</param>
+      <param name="options">
+        <list>
+        <param name="none">
+        </param>
+        </list>
+        <list>
+        <param name="CPU">
+          <param name="search">`hadoop_heatmap_cpu`</param>
+          <param name="rangemap">
+            <list>
+              <param name="low">0</param>
+              <param name="high">25</param>
+              <param name="node_fill">#ecf3fa</param>
+              <param name="text_fill">#111111</param>
+              <param name="text_offset">8</param>
+            </list>
+            <list>
+              <param name="low">26</param>
+              <param name="high">50</param>
+              <param name="node_fill">#c6e0ee</param>
+              <param name="text_fill">#111111</param>
+              <param name="text_offset">7</param>
+            </list>
+            <list>
+              <param name="low">51</param>
+              <param name="high">75</param>
+              <param name="node_fill">#6696c4</param>
+              <param name="text_fill">#FFFFFF</param>
+              <param name="text_offset">6</param>
+            </list>
+            <list>
+              <param name="low">76</param>
+              <param name="high">100</param>
+              <param name="node_fill">#1463ab</param>
+              <param name="text_fill">#FFFFFF</param>
+              <param name="text_offset">3</param>
+            </list>
+          </param>
+        </param>
+        </list>
+        <list>
+        <param name="Memory">
+          <param name="search">`hadoop_heatmap_mem`</param>
+          <param name="rangemap">
+            <list>
+              <param name="low">0</param>
+              <param name="high">25</param>
+              <param name="node_fill">#ecf3fa</param>
+              <param name="text_fill">#111111</param>
+              <param name="text_offset">8</param>
+            </list>
+            <list>
+              <param name="low">26</param>
+              <param name="high">50</param>
+              <param name="node_fill">#c6e0ee</param>
+              <param name="text_fill">#111111</param>
+              <param name="text_offset">7</param>
+            </list>
+            <list>
+              <param name="low">51</param>
+              <param name="high">75</param>
+              <param name="node_fill">#6696c4</param>
+              <param name="text_fill">#FFFFFF</param>
+              <param name="text_offset">6</param>
+            </list>
+            <list>
+              <param name="low">76</param>
+              <param name="high">100</param>
+              <param name="node_fill">#1463ab</param>
+              <param name="text_fill">#FFFFFF</param>
+              <param name="text_offset">3</param>
+            </list>
+          </param>
+        </param>
+        </list>
+        <list>
+        <param name="I/O">
+          <param name="search">`hadoop_heatmap_io`</param>
+          <param name="rangemap">
+            <list>
+              <param name="low">0</param>
+              <param name="high">10</param>
+              <param name="node_fill">#ecf3fa</param>
+              <param name="text_fill">#111111</param>
+              <param name="text_offset">9</param>
+            </list>
+            <list>
+              <param name="low">11</param>
+              <param name="high">100</param>
+              <param name="node_fill">#c6e0ee</param>
+              <param name="text_fill">#111111</param>
+              <param name="text_offset">3</param>
+            </list>
+            <list>
+              <param name="low">101</param>
+              <param name="high">500</param>
+              <param name="node_fill">#6696c4</param>
+              <param name="text_fill">#FFFFFF</param>
+              <param name="text_offset">0</param>
+            </list>
+            <list>
+              <param name="low">501</param>
+              <param name="node_fill">#1463ab</param>
+              <param name="text_fill">#FFFFFF</param>
+              <param name="text_offset">8</param>
+            </list>
+          </param>
+        </param>
+        </list>
+        <list>
+        <param name="Disk">
+          <param name="search">`hadoop_heatmap_disk`</param>
+          <param name="rangemap">
+            <list>
+              <param name="low">0</param>
+              <param name="high">25</param>
+              <param name="node_fill">#ecf3fa</param>
+              <param name="text_fill">#111111</param>
+              <param name="text_offset">8</param>
+            </list>
+            <list>
+              <param name="low">26</param>
+              <param name="high">50</param>
+              <param name="node_fill">#c6e0ee</param>
+              <param name="text_fill">#111111</param>
+              <param name="text_offset">7</param>
+            </list>
+            <list>
+              <param name="low">51</param>
+              <param name="high">75</param>
+              <param name="node_fill">#6696c4</param>
+              <param name="text_fill">#FFFFFF</param>
+              <param name="text_offset">6</param>
+            </list>
+            <list>
+              <param name="low">76</param>
+              <param name="high">100</param>
+              <param name="node_fill">#1463ab</param>
+              <param name="text_fill">#FFFFFF</param>
+              <param name="text_offset">3</param>
+            </list>
+          </param>
+        </param>
+        </list>
+      </param>
+      <module name="HadoopOpsTokenReplacer">
+        <module name="HadoopOpsSubmitButton">
+          <param name="updatePermalink">True</param>
+          <param name="allowSoftSubmit">True</param>
+          <param name="visible">False</param>
+          <module name="HadoopOpsNodesSizeSelector" layoutPanel="NodeControl">
+            <module name="HadoopOpsNodes" layoutPanel="NodeMain">
+              <param name="radius_factor">15</param>
+              <module name="StaticContentSample" layoutPanel="NodeDetail">
+                <param name="text">Click a node for details</param>
+                <module name="HiddenSearch">
+                  <param name="search">| `hadoop_get_rack_from_host($host$)`</param>
+                  <param name="earliest">-1m</param>
+                  <module name="HadoopOpsTokenReplacer">
+                    <module name="HadoopOpsDynamicContentSample">
+                      <param name="text">Quick Status</param>
+                      <module name="SimpleResultsTable">
+                        <param name="displayRowNumbers">False</param>
+                      </module>
+                    </module>
+                  </module>
+                </module>
+                <!-- skip status for nodes that do not have any valid services running -->
+                <module name="HiddenSearch"> 
+                  <param name="search">`hadoop_health_by_host($host$)` | rename service_type as name | fields name status</param>
+                  <param name="earliest">-1h</param>
+                  <module name="HadoopOpsTokenReplacer">
+                    <module name="ConditionalSwitcher">
+                      <param name="mode">independent</param>
+                      <param name="condition"> job.getResultCount() &gt;  0 </param>
+                      <module name="HadoopOpsTokenReplacer">
+                        <module name="SimpleResultsTable">
+                          <param name="displayRowNumbers">False</param>
+                        </module>
+                      </module>
+                      <module name="NullModule">
+                      </module>
+                    </module>
+                  </module>
+                </module>
+                <module name="HiddenSearch">
+                  <param name="search">`hadoop_cpu_cores($host$)`</param>
+                  <param name="earliest">-4h</param>
+                  <module name="HadoopOpsDynamicContentSample">
+                    <param name="text">System Information</param>
+                    <module name="HadoopOpsTokenReplacer">
+                      <module name="SimpleResultsTable">
+                        <param name="displayRowNumbers">False</param>
+                      </module>
+                    </module>
+                  </module>
+                </module>
+                <module name="HiddenSearch">
+                  <param name="search">`hadoop_mem_mb($host$)`</param>
+                  <param name="earliest">-4h</param>
+                  <module name="HadoopOpsTokenReplacer">
+                    <module name="SimpleResultsTable">
+                      <param name="displayRowNumbers">False</param>
+                    </module>
+                  </module>
+                </module>
+                <module name="HiddenSearch">
+                  <param name="search">`hadoop_disk_gb($host$)`</param>
+                  <param name="earliest">-4h</param>
+                  <module name="HadoopOpsTokenReplacer">
+                    <module name="SimpleResultsTable">
+                      <param name="displayRowNumbers">False</param>
+                    </module>
+                  </module>
+                </module>
+                <module name="HiddenSearch">
+                  <param name="search">`hadoop_cpu_sparkline_1h($host$)`</param>
+                  <param name="earliest">-1h</param>
+                  <module name="HadoopOpsDynamicContentSample">
+                    <param name="text">Resources Used</param>
+                    <module name="HadoopOpsTokenReplacer">
+                      <module name="SimpleResultsTable">
+                        <param name="displayRowNumbers">False</param>
+                      </module>
+                    </module>
+                  </module>
+                </module>
+                <module name="HiddenSearch">
+                  <param name="search">`hadoop_mem_sparkline_1h($host$)`</param>
+                  <param name="earliest">-1h</param>
+                  <module name="HadoopOpsTokenReplacer">
+                    <module name="SimpleResultsTable">
+                      <param name="displayRowNumbers">False</param>
+                    </module>
+                  </module>
+                </module>
+                <module name="HiddenSearch">
+                  <param name="search">`hadoop_disk_sparkline_1h($host$)`</param>
+                  <param name="earliest">-5h</param>
+                  <module name="HadoopOpsTokenReplacer">
+                    <module name="SimpleResultsTable">
+                      <param name="displayRowNumbers">False</param>
+                    </module>
+                  </module>
+                </module>
+                <!-- map reduce statistics -->
+                <module name="HiddenSearch"> 
+                  <param name="search">| `hadoop_node_details_mapred($host$)`</param>
+                  <param name="earliest">-1m</param>
+                  <module name="HadoopOpsTokenReplacer">
+                    <module name="ConditionalSwitcher">
+                      <param name="mode">independent</param>
+                      <param name="condition"> job.getResultCount() &gt;  0 </param>
+                      <module name="NullModule">
+                        <module name="HiddenSearch">
+                          <param name="search">`hadoop_slot_capacity_sparkline_1h($host$)`</param>
+                          <param name="earliest">-1h</param>
+                          <module name="HadoopOpsDynamicContentSample">
+                            <param name="text">MapReduce</param>
+                            <module name="HadoopOpsTokenReplacer">
+                              <module name="SimpleResultsTable">
+                                <param name="displayRowNumbers">False</param>
+                              </module>
+                            </module>
+                          </module>
+                        </module>
+                        <module name="HiddenSearch">
+                          <param name="search">`hadoop_slot_occupied_sparkline_1h($host$)`</param>
+                          <param name="earliest">-1h</param>
+                          <module name="HadoopOpsTokenReplacer">
+                            <module name="SimpleResultsTable">
+                              <param name="displayRowNumbers">False</param>
+                            </module>
+                          </module>
+                        </module>
+                      </module>
+                      <!-- ConditionalSwitcher needs two children -->
+                      <module name="NullModule">
+                      </module>
+                    </module>
+                  </module>
+                </module> 
+                <!-- end MapReduce statistics -->
+                <!-- HDFS statistics -->
+                <module name="HiddenSearch" autoRun="true">
+                  <param name="search">| `hadoop_node_details_hdfs($host$)`</param>
+                  <param name="earliest">-1m</param>
+                  <module name="HadoopOpsTokenReplacer">
+                    <module name="ConditionalSwitcher" autoRun="true">
+                      <param name="mode">independent</param>
+                      <param name="condition"> job.getResultCount() &gt;  0 </param>
+                      <module name="NullModule">
+                        <module name="HiddenSearch">
+                          <param name="search">`hadoop_total_blocks($host$)`</param>
+                          <param name="earliest">-1h</param>
+                          <module name="HadoopOpsDynamicContentSample">
+                            <param name="text">HDFS</param>
+                            <module name="HadoopOpsTokenReplacer">
+                              <module name="SimpleResultsTable">
+                                <param name="displayRowNumbers">False</param>
+                              </module>
+                            </module>
+                          </module>
+                        </module>
+                        <module name="HiddenSearch">
+                          <param name="search">`hadoop_blocks_verified($host$)`</param>
+                          <param name="earliest">-4h</param>
+                          <module name="HadoopOpsTokenReplacer">
+                            <module name="SimpleResultsTable">
+                              <param name="displayRowNumbers">False</param>
+                            </module>
+                          </module>
+                        </module>
+                      </module>
+                      <!-- ConditionalSwitcher needs two children -->
+                      <module name="NullModule">
+                      </module>
+                    </module>
+                  </module>
+                </module> 
+                <!-- end HDFS statistics -->
+              </module>
+            </module>
+          </module>
+          <module name="HadoopOpsHeatmapLegend" layoutPanel="NodeControl"/>
+        </module>
+      </module>
+    </module>
+  </module>
+</view>

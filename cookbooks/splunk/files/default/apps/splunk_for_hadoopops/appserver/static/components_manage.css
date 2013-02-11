@@ -1,0 +1,145 @@
+.ManageComponentsContainer {
+    position: relative;
+    height: 500px;
+    padding: 20px;
+    overflow: auto;
+    width: 760px;
+}
+.ManageComponentsContainer h2, .SuccessMessage h2 {
+    font-family: "Helvetica nenu",Helvetica,Arial,sans-serif;
+    font-size: 24px;
+    font-weight: 200;
+	padding-left: 15px;
+}
+.ManageComponentsContainer hr, .SuccessMessage hr {
+    margin-bottom: 15px;
+    margin-top: 35px;
+    margin-right: 0;
+    margin-left: 16px;
+    color: #dddddd;
+    background-color: #dddddd;
+    height:1px;
+    border-width:0;
+    width: 96%;
+}
+.ManageComponentsButtons {
+    width: 96%;
+    margin-left: 2%;
+}
+.ManageComponentsButtons a{
+    width: 60px;
+}
+.ManageComponentsButtons a.saveAll {
+    float: right;
+}
+.ManageComponentsContainer .loading {
+    display: none;
+}
+.ManageComponentsContainer .loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    filter:alpha(opacity=50);
+    -moz-opacity:0.5;
+    -khtml-opacity: 0.5;
+    opacity: 0.5;
+    z-index: 10000;
+}
+.ManageComponentsContainer .loading-message{
+    position: absolute;
+    background-color: white;
+    font-family: "Helvetica nenu",Helvetica,Arial,sans-serif;
+    font-size: 16px;
+    width: 300px;
+    height: 40px;
+    bottom: 27px;
+    left: 50%;
+    margin-left: -180px;
+}
+.ManageComponentsContainer .loading-message p{
+    margin: 0 0 5px 0;
+}
+.ManageComponentsContainer .loading-message img{
+    display: block;
+    margin: 0 auto;
+}
+.ManageComponentsButtons 
+.statusMessage {
+    font-family: "Helvetica nenu",Helvetica,Arial,sans-serif;
+    font-size: 16px;
+    text-align: center;
+    width: 100%;
+}
+.errorText {
+    background: #fae7e7 url(images/icon_error.png) 10px 10px no-repeat;
+    height: 25px;
+    margin-left: 2%;
+    padding: 10px 10px 10px 44px;
+    width: 85%;
+}
+.SuccessMessage {
+    height: 500px;
+    width: 760px;
+    padding: 10px;
+    margin-left: 15px;
+}
+.SuccessMessage p {
+    font-size: 16px;
+    text-align: center;
+}
+#components_table {
+    display: block;
+    width: 100%;
+    height: 350px;
+    margin-bottom: 25px;
+    margin-left: 2%;
+    overflow: auto;
+    border-collapse: collapse;
+}
+#components_table tbody{
+    width: 100%;
+    margin: 0;
+}
+#components_table tbody tr:hover {
+    background-color: #f8f8f8;
+}
+#components_table tbody tr.greyRow {
+    background-color: #f8f8f8;
+}
+#components_table td {
+    border: none;
+    vertical-align: middle;
+}
+#components_table td, #components_table th {
+    padding-left: 15px;
+}
+#components_table td.status {
+    text-align: center;
+    font-weight: bold;
+}
+#components_table td.status-new {
+    background-color: #C1DEEE;
+}
+#components_table td.status-up {
+    background-color: #ACE0C6;
+}
+#components_table td.status-down {
+    background-color: #000000;
+    color: #FFFFFF;
+}
+#components_table td:first-child, #components_table th:first-child {
+    width: 40px;
+    text-align: center;
+    padding-left: 5px;
+}
+#components_table td:first-child + td, #components_table th:first-child + th{
+    width: 40px;
+    text-align: center;
+    padding-left: 5px;
+}
+#components_table td > a.delete{
+    visibility: hidden;
+}

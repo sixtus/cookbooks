@@ -1,0 +1,10 @@
+<nav>
+    <view name="home" default="true"/>
+    <view name="hadoopops_flashtimeline" />
+    <view name="nodes"/>
+    <view name="jobs_running"/>
+    <view name="mapred"/>
+    <view name="hdfs"/>
+    <view name="job_history"/>
+    <view name="setup"/>
+</nav>

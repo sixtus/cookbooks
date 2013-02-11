@@ -1,0 +1,13 @@
+<view>
+  <label>Settings</label>
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="HadoopOpsAppBar" layoutPanel="navigationHeader"/>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">*</param>
+    <param name="clearOnJobDispatch">False</param>
+    <param name="maxSize">1</param>
+  </module>
+  <module name="IFrameInclude" layoutPanel="viewHeader">
+    <param name="src">/custom/splunk_for_hadoopops/hadoopopssetup/splunk_for_hadoopops/show</param>
+  </module>
+</view>

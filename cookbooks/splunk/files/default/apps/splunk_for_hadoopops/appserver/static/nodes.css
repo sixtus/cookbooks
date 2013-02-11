@@ -1,0 +1,188 @@
+.NodesContainer {
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    height: auto;
+    min-height: 800px;
+    margin: auto;
+    margin-top: 10px;
+    padding: 5px;
+    width: 97%;
+}
+.NodesContainer h1 {
+    color: #3F3F3F;
+    font-size: 24px;
+    font-weight: 200;
+    line-height: 39px;
+    font-family: "Helvetica neue", Helvetica, Arial, sans-serif;
+    margin: 10px 10px 10px 20px;
+}
+.NodesContainer h2 {
+    float: left;
+    margin: 25px 20px 10px;
+}
+.NodesContainer .LegendContainer h2 {
+    font-size: 14px;
+    font-weight: bold;
+    margin: 13px 40px 0 10px;
+}
+.NodeStatus {
+    background-color: #F9F9F9;
+    background: -webkit-gradient(linear, 0% 0%, 50% 100%, from(#F9F9F9), to(#F9F9F9), color-stop(.5,#FFFFFF));
+    /* Firefox 3.6+ */
+    background: -moz-linear-gradient(top, #F9F9F9 0%, #FFFFFF 50%, #F9F9F9 100%);
+    /* IE 10 */
+    background: -ms-linear-gradient(top, #F9F9F9 0%, #FFFFFF 50%, #F9F9F9 100%);
+    border: 1px solid #D9D9D9;
+    border-radius: 4px;
+    float: left;
+    height: 62px;
+    margin-left: 1%;
+    margin-top: 10px;
+    width: 97.8%;
+}
+.NodeStatus .HadoopOpsSingleColumnTable table {
+    border-spacing: 4px;
+}
+.NodeStatus .HadoopOpsSingleColumnTable .message {
+    margin: 4px 0 0 0;
+    padding-left: 12px;
+}
+.NodeStatusHDFS,
+.NodeStatusMapReduce {
+    width: 45%;
+}
+.NodeStatusMapReduce {
+    position: absolute;
+    left: 50%;
+}
+.NodeStatus .StaticContentSample,
+.NodeControl .StaticContentSample {
+    float: left;
+    font-size: 14px;
+    font-weight: bold;
+    height: 38px;
+    margin-left: 10px;
+    margin-top: 18px;
+    width: 5%;
+}
+.NodeStatusMapReduce .StaticContentSample,
+.NodeControl .StaticContentSample {
+    width: 75px;
+}
+.NodeDetail .NodeIndicator {
+    display: none;
+}
+.NodeDetail .StaticContentSample {
+    float: left;
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 13px;
+    text-align: center;
+    width: 90%;
+}
+.NodeDetail .HadoopOpsDynamicContentSample {
+    float: left;
+    margin-top: 10px;
+    width: 140px;
+}
+.NodeDetail .HadoopOpsDynamicContentSample .dynamic_text {
+    font-size: 12px;
+}
+.NodeDetail .SimpleResultsTable .simpleResultsTableWrapper {
+    padding: 0 20px;
+}
+.NodeDetail .SimpleResultsTable table tr td[field="name"] {
+    width: 150px;
+}
+.NodeDetail .SimpleResultsTable p.resultStatusMessage.empty_results {
+    background-color: transparent;
+    margin-top: 0;
+    padding-top: 5px;
+}
+.NodeDetail .SimpleResultsTable table.splTable {
+    margin-bottom: 0;
+}
+.NodeDetail .SimpleResultsTable table.splTable th {
+    display: none;
+}
+.NodeDetail .SimpleResultsTable table.splTable tr td {
+    border: none;
+}
+.NodeStatus .HadoopOpsSingleColumnTable {
+    border-spacing: 0;
+    float: left;
+    height: 20px;
+    margin-left: 10px;
+}
+.NodeStatus .splHadoopOpsSingleColumnTable {
+    margin-top: 0;
+    table-layout: auto;
+}
+#HadoopOpsSingleColumnTable_0_2_0 .splHadoopOpsSingleColumnTable tbody tr td:last-child {
+    padding-left: 14px;
+}
+#HadoopOpsSingleColumnTable_1_2_0,
+#HadoopOpsSingleColumnTable_2_2_0 {
+    width: 70%;
+}
+#HadoopOpsSingleColumnTable_3_2_0 .splHadoopOpsSingleColumnTable tbody tr td:last-child {
+    padding-left: 9px;
+}
+#SimpleResultsTable_11_7_0 {
+    margin-bottom: 15px;
+}
+.NodeLeft {
+    float: left;
+    height: 80%;
+    margin-left: 1%;
+    width: 98%;
+}
+.NodeLeft .NodeControl {
+    background-color: #F9F9F9;
+    background: -webkit-gradient(linear, 0% 0%, 50% 100%, from(#F9F9F9), to(#F9F9F9), color-stop(.5,#FFFFFF));
+    /* Firefox 3.6+ */
+    background: -moz-linear-gradient(top, #F9F9F9 0%, #FFFFFF 50%, #F9F9F9 100%);
+    /* IE 10 */
+    background: -ms-linear-gradient(top, #F9F9F9 0%, #FFFFFF 50%, #F9F9F9 100%);
+    border: 1px solid #D9D9D9;
+    border-radius: 4px;
+    display: none;
+    height: 62px;
+    float: left;
+    margin-bottom: 20px;
+    max-width: 80%;
+    min-width: 74%;
+    width: auto;
+}
+.NodeLeft .NodeMain {
+    float: left;
+    height: 100%;
+    width: 75%;
+}
+.NodeDetail {
+    background-color: #F9F9F9;
+    background: -webkit-gradient(linear, 0% 0%, 50% 100%, from(#F9F9F9), to(#F9F9F9), color-stop(.5,#FFFFFF));
+    /* Firefox 3.6+ */
+    background: -moz-linear-gradient(top, #F9F9F9 0%, #FFFFFF 50%, #F9F9F9 100%);
+    /* IE 10 */
+    background: -ms-linear-gradient(top, #F9F9F9 0%, #FFFFFF 50%, #F9F9F9 100%);
+    border: 1px solid #D9D9D9;
+    border-radius: 4px;
+    position: absolute;
+    display: none;
+    top: 250px;
+    left: 76%; 
+    height: auto;
+    min-height: 600px;
+    width: 300px;
+}
+.NodeDetail .NodeIndicator {
+    margin-top: 10px;
+}
+.NodeLeft {
+    margin-top: 17px;
+}
+.HadoopOpsNodes {
+    padding: 0;
+}

@@ -1,0 +1,30 @@
+<%page expression_filter="h"/>
+<%inherit file="//layout/base.html" />
+<%namespace name="lib" file="//lib.html" import="*"/>
+<%!
+    import logging
+    logger = logging.getLogger('splunk.module.setup')
+%>
+<%def name="css()">
+    <%coreCSSFiles = [
+        "/static/css/view.css", 
+        "/static/css/skins/default/default.css", 
+        '/static/css/jquery.iphone-style-checkboxes.css'
+    ] %>
+    <%lib:stylesheet_tags files="${coreCSSFiles}" />
+</%def>
+<%def name="custom_css()">
+    <%lib:stylesheet_tags files="${['/static/app/%s/manage_headlines.css' % app ]}" />
+    <%lib:script_tags files="${['/static/app/%s/manage_headlines.js' % app]}" />
+</%def>
+<div class="SuccessMessage">
+  <h2>Success!</h2>
+  <hr>
+  <p>Your HadoopOps Headline has been saved.&nbsp;&nbsp;Click "OK" to return to the headlines manager.</p>
+
+  <div class="ManageHeadlinesButtons">
+    <form method="GET" action="${make_url('/custom/%s/hadoopopsheadlines/%s/manage' % (app, app))}">
+      <input type="submit" class="splButton-primary OK" value="OK" />
+    </form>
+  </div>
+</div>

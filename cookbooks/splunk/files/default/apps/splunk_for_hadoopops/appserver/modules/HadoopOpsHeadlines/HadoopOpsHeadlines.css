@@ -1,0 +1,70 @@
+table.splHadoopOpsHeadlinesTable {
+    float: left;
+    margin: 0 0 20px 10px;
+    table-layout: auto;
+    width: 97%;
+}
+table.splHadoopOpsHeadlinesTable tbody {
+    height: 180px;
+}
+table.splHadoopOpsHeadlinesTable tbody tr {
+    background-color: #FFFFFF;
+}
+table.splHadoopOpsHeadlinesTable tbody td.severity1,
+table.splHadoopOpsHeadlinesTable tbody td.severity2 {
+    background: url('HadoopOpsHeadlines/blue_info_icon.png') no-repeat scroll 4.5px center transparent;
+}
+table.splHadoopOpsHeadlinesTable tbody td.severity3 {
+    background: url('HadoopOpsHeadlines/orange_warning_triangle.png') no-repeat scroll 5px center transparent;
+}
+table.splHadoopOpsHeadlinesTable tbody td.severity4,
+table.splHadoopOpsHeadlinesTable tbody td.severity5 {
+    background: url('HadoopOpsHeadlines/red_error_x.png') no-repeat scroll 5px center transparent;
+}
+table.splHadoopOpsHeadlinesTable tbody td.date{
+    color: #C8C8C8;
+    text-align: right;
+}
+table.splHadoopOpsHeadlinesTable tbody tr.even {
+    background-color: #EEE9E9;
+}
+table.splHadoopOpsHeadlinesTable tbody tr td {
+    font-size: 14px;
+    border-bottom: 1px solid #CCC;
+    padding: 5px 0 5px 40px;
+}
+.HadoopOpsHeadlinesInner {
+    border-bottom: 1px solid #CCCCCC;
+    border-top: 1px solid #CCCCCC;
+    height: 80%;
+    margin-left: 1%;
+    overflow-y: auto;
+    width: 98%;
+}
+.HadoopOpsHeadlinesInner .message {
+    font-size: 16px;
+    font-weight: lighter;
+    margin-top: 75px;
+    text-align: center;
+}
+.HadoopOpsHeadlinesButtonContainer {
+    margin-top: 10px;
+    width: 98%;
+}
+input#manage_headlines {
+    background-color: #CCCCCC;
+    border-radius: 5px 5px 5px 5px;
+    border-width: 0;
+    color: #FFFFFA;
+    display: none;
+    float: right;
+    font-size: 10px;
+    font-weight: bold;
+    margin-right: 15px;
+    padding: 5px;
+    text-transform: uppercase;
+    width: auto;
+}
+.HadoopOpsHeadlinesManager {
+    display: none;
+}

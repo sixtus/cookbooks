@@ -1,0 +1,72 @@
+<%inherit file="//layout/view.html" />
+<%namespace file="//view/_helpers.html" import="*"/>
+<%namespace name="lib" file="//lib.html" import="*"/>
+
+<%!
+headerPanels = ["appHeader", "navigationHeader"]
+upperPanels = ["viewHeader", "splSearchControls-inline", "mainSearchControls"]
+%>
+
+<%def name="css()">
+    <% parent.css() %>
+    <%lib:stylesheet_tags files="${['/static/css/dashboard.css']}" />
+</%def>
+
+<%def name="js()">
+    <% parent.js() %>
+    <%lib:script_tags files="${['/static/app/splunk_for_hadoopops/module_loader.43compat.js']}" />
+</%def>
+
+<%def name="custom_css()">
+    <%lib:stylesheet_tags files="${['/static/app/splunk_for_hadoopops/job_history.css',
+                                    '/static/app/splunk_for_hadoopops/application.css']}" />
+</%def>
+
+% if "messaging" in modules :
+    <%call expr="parent.buildSimplePanelContainer(modules, 'messaging')"></%call>
+% endif
+
+<div class="appHeaderWrapper">
+    % for panelName in headerPanels : 
+        <%call expr="parent.buildSimplePanelContainer(modules, panelName)"></%call>
+    % endfor    
+</div>
+
+% for panelName in upperPanels : 
+    <%call expr="parent.buildSimplePanelContainer(modules, panelName)"></%call>
+% endfor
+
+<div class="ActivitiesContainer">
+
+  <h1>Job History</h1>
+
+  <div class="FilterRow splClearfix">
+    <h2>Filter By</h2>
+    <%call expr="parent.buildPanelContents(modules, 'FilterRow')"></%call>
+  </div>
+
+  <div class="PaginatorRow splClearfix">
+    <%call expr="parent.buildPanelContents(modules, 'PaginatorRow')"></%call>
+  </div>
+
+  <div class="TableRow splClearfix">
+    <%call expr="parent.buildPanelContents(modules, 'TableRow')"></%call>
+  </div>
+
+</div>
+
+<div class="DrilldownRow SplClearfix">
+  <%call expr="parent.buildPanelContents(modules, 'DrilldownRow')"></%call>
+  <div class="DrilldownPanel" id="DrilldownPanelLeft">
+    <p>Aggregate Metrics</p>
+  <%call expr="parent.buildPanelContents(modules, 'DrilldownPanelLeft')"></%call>
+  </div>
+  <div class="DrilldownPanel" id="DrilldownPanelCenter">
+    <p>Map/Reduce Metrics</p>
+  <%call expr="parent.buildPanelContents(modules, 'DrilldownPanelCenter')"></%call>
+  </div>
+  <div class="DrilldownPanel" id="DrilldownPanelRight">
+    <p>Event Timeline</p>
+  <%call expr="parent.buildPanelContents(modules, 'DrilldownPanelRight')"></%call>
+  </div>
+</div>

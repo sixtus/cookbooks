@@ -1,0 +1,19 @@
+<%page args="module" expression_filter="h" />
+<%namespace name="lib" file="//lib.html" import="*"/>
+
+<div class="HadoopOpsServiceMonitoringResults">
+</div>
+
+<div class="HadoopOpsServiceMonitoringControls">
+  <input type="button" class="manage_components" value="Manage Services" />
+</div>
+
+<div class="HadoopOpsServiceMonitoringFTRPopup">
+  <h2>Configure Service Monitoring</h2>
+  <p>You do not have any services configured. Until services are selected for monitoring, the app may not work as expected.</p>
+  <p>Click below to discover &amp; configure services in your Hadoop cluster</p>
+  <div class="ButtonRow">
+    <a class="splButton-secondary" href="#"><span>Skip</span></a>
+    <a class="splButton-primary" href="#"><span>Configure Services</span></a>
+  </div>
+</div>

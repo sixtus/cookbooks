@@ -1,0 +1,26 @@
+.splHadoopOpsMultiSelectInfo {
+    float: left;
+    margin-top: 15px;
+}
+.splHadoopOpsMultiSelectInfo .value {
+    font-size: 14px;
+    font-weight: bold;  
+    width: 100px; 
+}
+.splHadoopOpsMultiSelectInfo #filters_active {
+    width: auto;
+}
+
+.splHadoopOpsMultiSelectInfo thead tr td {
+    font-size: 14px;
+    text-transform: capitalize;
+}
+.splHadoopOpsMultiSelectInfo tbody tr td {
+    font-size: 14px;
+}
+.HadoopOpsMultiSelectInfoInner.islast {
+    margin-bottom: 20px;
+}
+.HadoopOpsMultiSelectInfoInner.notop {
+    border-top: none;
+}

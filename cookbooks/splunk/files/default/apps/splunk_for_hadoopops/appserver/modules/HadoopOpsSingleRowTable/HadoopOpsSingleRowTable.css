@@ -1,0 +1,43 @@
+.label {
+    float: left;
+    margin: 25px 0 0 20px;
+    width: 100px;
+}
+.label span {
+    font-weight: lighter;
+    padding: 2px;
+    font-size: 20px;
+}
+.message {
+    font-size: 18px;
+    font-weight: lighter;
+    text-align: center;
+}
+.splHadoopOpsSingleRowTable {
+    float: left;
+    margin-top: 6px;
+    table-layout: fixed;
+    width: 400px; 
+}
+.splHadoopOpsSingleRowTable thead tr td {
+    font-size: 14px;
+    text-transform: capitalize;
+}
+.splHadoopOpsSingleRowTable tbody tr td {
+    font-size: 20px;
+    font-weight: bold;
+}
+.HadoopOpsSingleRowTableInner {
+    border-bottom: 1px solid #CCCCCC;
+    border-top: 1px solid #CCCCCC;
+    border-radius: 1px;
+    height: 70px;
+    margin-left: 1%;
+    width: 98%;
+}
+.HadoopOpsSingleRowTableInner.islast {
+    margin-bottom: 20px;
+}
+.HadoopOpsSingleRowTableInner.notop {
+    border-top: none;
+}

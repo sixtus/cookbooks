@@ -1,0 +1,38 @@
+.ftrPopup {
+    display: none;
+    height: 275px;
+    padding: 30px;
+    width: 350px;
+    z-index: 5;
+}
+.ftrPopup h2 {
+    border-bottom: 1px solid #3F3F3F;
+    color: #3F3F3F;
+    font-size: 24px;
+    font-weight: 200;
+    margin-bottom: 35px;
+    font-family:"Helvetica nenu", Helvetica, Arial, sans-serif;
+    margin-top: 15px;
+    padding-bottom: 20px;
+    text-align: center;
+}
+.ftrPopup p {
+    font-family:"Helvetica nenu", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+}
+.ftrPopup span.emph {
+    font-weight: bold;
+}
+.ftrPopup .ButtonRow {
+    margin-top: 50px;
+}
+.ftrPopup a.splButton-primary {
+    float: right;
+}
+.ftrPopup a.splButton-primary span,
+.ftrPopup a.splButton-secondary span {
+    width: 100px;
+}
+.popupContent {
+    padding: 10px;
+}

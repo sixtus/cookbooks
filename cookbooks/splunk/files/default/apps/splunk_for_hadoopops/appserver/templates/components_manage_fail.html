@@ -1,0 +1,27 @@
+<%page expression_filter="h"/>
+<%inherit file="//layout/base.html" />
+<%namespace name="lib" file="//lib.html" import="*"/>
+<%!
+    import logging
+    logger = logging.getLogger('splunk')
+%>
+<%def name="css()">
+    <%coreCSSFiles = [
+        "/static/css/view.css", 
+        "/static/css/skins/default/default.css"
+    ] %>
+    <%lib:stylesheet_tags files="${coreCSSFiles}" />
+</%def>
+<%def name="custom_css()">
+    <%lib:stylesheet_tags files="${['/static/app/%s/components_manage.css' % app ]}" />
+</%def>
+<div class="SuccessMessage">
+  <h2>Hadoop Oops!</h2>
+  <hr>
+  <p>Your HadoopOps Services could not be processed: search timed out.</p>
+  <p>Click "OK" to return to services manager.</p>
+
+  <div class="ManageComponentsButtons">
+    <a class="splButton-primary" href="${make_url('/custom/%s/hadoopopscomponents/discover' % app)}">OK</a>
+  </div>
+</div>

@@ -1,0 +1,97 @@
+<%page expression_filter="h"/>
+<%inherit file="//layout/base.html" />
+<%namespace name="lib" file="//lib.html" import="*"/>
+<%!
+    from splunk.appserver.mrsparkle.lib import util
+    import splunk.util
+    import datetime
+
+    import logging
+    logger = logging.getLogger('splunk')
+%>
+<%def name="css()">
+    <%coreCSSFiles = [
+        "/static/css/view.css", 
+        "/static/css/skins/default/default.css"
+    ] %>
+    <%lib:stylesheet_tags files="${coreCSSFiles}" />
+</%def>
+<%def name="custom_css()">
+    <%lib:stylesheet_tags files="${['/static/app/%s/components_manage.css' % app ]}" />
+    <%lib:script_tags files="${['/static/app/%s/components_manage.js' % app]}" />
+</%def>
+<div class="ManageComponentsContainer">
+  <h2>Manage Services:</h2>
+  <hr/>
+% if len(components) > 0:
+  <table class="splTable" id="components_table" cellpadding="0" cellspacing="0" border="0" >
+    <thead>
+      <tr>
+        <th data-field='monitored'>
+          <span class="sortLabel">Monitor</span>
+          <input type="checkbox" title="Select All">
+        </th>
+        <th>
+          <span class="sortLabel">Status</span>
+        </th>
+        <th data-field='host' style="width:200px">
+          <span class="sortLabel">Host</span>
+        </th>
+        <th data-field='service' style="width:175px">
+          <span class="sortLabel">Service</span>
+        </th>
+        <th data-field='created_at' style="width:150px">
+          <span class="sortLabel">Discovered</span>
+        </th>
+        <th>
+          <span></span>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+    % for component in components:
+        <%
+          status = component.get('status', 'undefined')
+          host = component.get('host', 'undefined')
+          service = component.get('service', 'undefined')
+          created_at = component.get('created_at')
+          created_datetime = datetime.datetime.fromtimestamp(created_at, splunk.util.localTZ)
+          id = component.get('id')
+          statusClass = 'status-new'
+          if status == 'up':
+            statusClass = ''
+          elif status == 'down':
+            statusClass = 'status-down'
+        %>
+      <tr ${'data-id=%s' % id if (id is not None) else ''}>
+        <td><input type="checkbox" ${'checked' if (component.get('monitored',False)) else ''}></td>
+        <td class="status ${statusClass}">${status}</td>
+        <td>${host}</td>
+        <td>${service}</td>
+        <td ${'data-value=%s' % created_at}>${created_datetime.isoformat()}</td>
+        <td>
+          <a class='delete' href="#">
+            <img width="14px" height="17px" src="${make_url('/static/app/%s/images/trash_can_icon.png' % app)}"/>
+          </a>
+        </td>
+      </tr>
+    % endfor
+% else:
+  <p class="statusMessage">No components found...</p>
+% endif
+    </tbody>
+  </table>
+
+  <div class="ManageComponentsButtons">
+    <a class="splButton-primary saveAll" href="${make_url('/custom/%s/hadoopopscomponents/saveAll' % app)}" key="${util.getFormKey()}">Save</a>
+    <a class="splButton-secondary cancel" href="#">Cancel</a>
+  </div>
+  <div class="loading">
+    <div class="loading-message">
+      <p>Please wait, this may take a few minutes...</p>
+      <img width="128" height="15"
+        src="${make_url('/static/app/%s/images/server_restart_loader.gif' % app)}"/>
+    </div>
+    <div class="loading-overlay"></div>
+  </div>
+</div>

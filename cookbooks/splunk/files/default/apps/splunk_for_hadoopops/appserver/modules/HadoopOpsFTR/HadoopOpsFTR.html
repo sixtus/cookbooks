@@ -1,0 +1,13 @@
+<%page args="module" expression_filter="h" />
+<%namespace name="lib" file="//lib.html" import="*"/>
+<div class="ftrPopup">
+  <h2>This App Needs Configuration</h2>
+  <p><span class="emph">This app has not been configured yet.</p>
+  <p>Until it is configured, it may not work as expected.</p>
+  <p class="AdminConfig">Please click 'Configure' below to perform initial config.</p>
+  <p style="display:none" class="nonAdminConfig">Please notify your Splunk admin about this message.</p>
+  <div class="ButtonRow">
+    <a class="splButton-secondary"><span>Ignore</span></a>
+    <a class="splButton-primary" href="${module['configLink']}"><span>Configure</span></a>
+  </div>
+</div>

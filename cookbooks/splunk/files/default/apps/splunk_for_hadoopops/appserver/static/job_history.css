@@ -1,0 +1,124 @@
+.ActivitiesContainer {
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    margin: auto;
+    margin-top: 20px;
+    padding: 10px;
+    width: 97%;
+}
+.ActivitiesContainer h1 {
+    color: #111111;
+    font-size: 24px;
+    font-weight: 200;
+    font-family: "Helvetica nenu", Helvetica, arial, sans-serif;
+    margin-left: 15px;
+    margin-top: 5px;
+    line-height: 39px;
+}
+.ActivitiesContainer h2 {
+    float: left;
+    margin: 25px 20px 10px;
+}
+.DrilldownRow {
+    background-color: #F9F9F9;
+    background: -webkit-gradient(linear, 0% 0%, 50% 100%, from(#F9F9F9), to(#F9F9F9), color-stop(.5,#FFFFFF));
+    background: -moz-linear-gradient(top, #F9F9F9 0%, #FFFFFF 50%, #F9F9F9 100%);
+    /* Firefox 3.6+ */
+    background: -moz-linear-gradient(top, #F9F9F9 0%, #FFFFFF 50%, #F9F9F9 100%);
+    /* IE 10 */
+    background: -ms-linear-gradient(top, #F9F9F9 0%, #FFFFFF 50%, #F9F9F9 100%);
+    display: none;
+    height: 435px;
+    margin-left: 6.5%;
+    width: 87%; 
+}
+.DrilldownPanel {
+    float: left;
+    height: 100%;
+    width: 24%;
+}
+.DrilldownPanel p {
+    font-size: 18px;
+    padding: 2px 0 0 30px;
+}
+#DrilldownPanelRight {
+    width: 50%;
+}
+
+.FilterRow {
+    background-color: #F9F9F9;
+    background: -webkit-gradient(linear, 0% 0%, 50% 100%, from(#F9F9F9), to(#F9F9F9), color-stop(.5,#FFFFFF));
+    background: -moz-linear-gradient(top, #F9F9F9 0%, #FFFFFF 50%, #F9F9F9 100%);
+    /* Firefox 3.6+ */
+    background: -moz-linear-gradient(top, #F9F9F9 0%, #FFFFFF 50%, #F9F9F9 100%);
+    /* IE 10 */
+    background: -ms-linear-gradient(top, #F9F9F9 0%, #FFFFFF 50%, #F9F9F9 100%);
+    border: 1px solid #D9D9D9;
+    border-radius: 4px;
+    height: 62px;
+    margin-left: 5px;
+    margin-top: 10px;
+    min-height: 50px;
+    width: 99%;
+}
+.SingleValue {
+    font-size: 12px;
+}
+.SingleValue .singleResult {
+    font-size: 15px;
+    vertical-align: 0;
+}
+.FilterRow .SplunkModule {
+    float: left;
+    margin-top: 15px;
+}
+.FilterRow .HadoopOpsCustomTimeRangePicker {
+    height: 18px;
+    width: 135px;
+}
+.PaginatorRow .Paginator,
+.PaginatorRow .Count {
+    float: right;
+    margin: 10px 0;
+}
+.PaginatorRow .Count {
+    margin-top: 15px;
+    width: 100px;
+}
+.PaginatorRow .Count .perPageLabel span {
+    color: #66CBFF;
+}
+.TableRow table tr.expanded {
+    height: 475px;
+    background-color: #F9F9F9;
+    background: -webkit-gradient(linear, 0% 0%, 50% 100%, from(#F9F9F9), to(#F9F9F9), color-stop(.5,#FFFFFF));
+    background: -moz-linear-gradient(top, #F9F9F9 0%, #FFFFFF 50%, #F9F9F9 100%);
+    /* Firefox 3.6+ */
+    background: -moz-linear-gradient(top, #F9F9F9 0%, #FFFFFF 50%, #F9F9F9 100%);
+    /* IE 10 */
+    background: -ms-linear-gradient(top, #F9F9F9 0%, #FFFFFF 50%, #F9F9F9 100%);
+    font-weight: bold;
+}
+.TableRow table th {
+    border-left: 1px solid #CCCCCC;
+    border-right: 1px solid #CCCCCC;
+}
+.TableRow table th:first-child,
+.TableRow table th:last-child {
+    border-left: none;
+    border-right: none;
+}
+.TableRow th:first-child,
+.TableRow td:first-child {
+    padding-left: 15px;
+}
+.TableRow td:first-child {
+    background: url("images/expand_arrow_closed.png") no-repeat scroll left center transparent;
+}
+.TableRow td.arrowOpen {
+    background: url("images/expand_arrow_open.png") no-repeat scroll left 10px transparent;
+}
+.TableRow td.arrowClosed {
+    background: url("images/expand_arrow_closed.png") no-repeat scroll left center transparent;
+}

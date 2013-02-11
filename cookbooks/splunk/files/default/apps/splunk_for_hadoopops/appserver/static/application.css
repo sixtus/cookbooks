@@ -1,0 +1,171 @@
+body {
+    background-color: #F7F7F7;
+    color: #3f3f3f;
+}
+
+.dashboardCell .SplunkModule.HadoopOpsSingleRowTable {
+    padding: 0px;
+}
+.appHeader .accountBarItems a {
+    color: #111111;
+}
+.AccountBar {
+    background-color: #61B7E3;
+    background-image: linear-gradient(bottom, rgb(97,184,227) 8%, rgb(133,210,249) 54%);
+    background-image: -o-linear-gradient(bottom, rgb(97,184,227) 8%, rgb(133,210,249) 54%);
+    background-image: -moz-linear-gradient(bottom, rgb(97,184,227) 8%, rgb(133,210,249) 54%);
+    background-image: -webkit-linear-gradient(bottom, rgb(97,184,227) 8%, rgb(133,210,249) 54%);
+    background-image: -ms-linear-gradient(bottom, rgb(97,184,227) 8%, rgb(133,210,249) 54%);
+
+    background-image: -webkit-gradient(
+	linear,
+	left bottom,
+	left top,
+	color-stop(0.08, rgb(97,184,227)),
+	color-stop(0.54, rgb(133,210,249))
+    );
+}
+
+.appHeaderWrapper h1 {
+    color: #FFFFFF;
+    line-height: 45px;
+    padding-top: 4px;
+}
+.appLogo {
+    background: url("images/Splunk_logo.png") no-repeat scroll 0 0 transparent;
+    margin-top: 15px;
+    margin-left: 3px;
+    height: 39px;
+    padding-right: 10px;
+}
+.HadoopOpsAppBar {
+    padding: 1px 10px;
+}
+.HadoopOpsAppBar .auxLinks {
+    float: right;
+    margin-right: 10px;
+    font-size: 11px; 
+}
+div.SplunkModule.HadoopOpsComponents {
+    margin-left: 12px;
+    margin-top: 20px;
+    padding: 10px 10px 30px 0;
+    width: 95%;
+}
+.navigationHeader {
+    background-color: #111111;
+}
+.splHeader-dashboard h2 {
+    color: #3F3F3F;
+    font-size: 24px;
+    font-weight: 200;
+    margin-bottom: 20px;
+	font-family:"Helvetica nenu", Helvetica, Arial, sans-serif;
+    margin-left: 15px;
+    margin-top: 15px;
+}
+.AccountBar #applicationsMenuActivator .splIcon-triangle-3-s {
+    float: right;
+    margin: 10px 0 0 5px;
+    background-image: url("images/nav_black_down_arrow.png");
+    background-position: 0 0;
+}
+ul.appBarNav li a {
+    font-size: 12px;
+    font-weight: normal;
+	padding: 0px 17px;
+	color: #FFF;
+}
+
+.splOverlay {
+	opacity: 0.5;
+}
+
+.splView-home .splHeader-popup {
+    display: none;
+}
+
+.popupContainer {
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+}
+
+.popupContent {
+    -moz-border-radius: 8px;
+	border-radius: 8px;
+    -webkit-box-shadow: 0px 0px 100px rgba(0, 0, 0, 0.50);
+	-moz-box-shadow: 0px 0px 100px rgba(0, 0, 0, 0.50)	;
+	box-shadow: 0px 0px 100px rgba(0, 0, 0, 0.50);
+    padding: 0;
+}
+.popupContent iframe {
+    width: 800px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	border: 0;
+}
+
+.splView-setup .IFrameInclude {
+    background-color: #F7F7F7;
+}
+.splView-home .SingleValueHolder  { 
+    background-color: transparent;
+    background-image: none;
+    border-top: 1px solid #CCCCCC;
+    border-radius: 0;
+    box-shadow: none;
+    text-align: center;
+    width: 100%;
+}
+.splView-home .SingleValue { 
+    background-color: #FFFFFF;
+    float: left;
+    width: 95%;
+}
+.splView-home .SingleValue .singleResult {
+    background-color: #FFFFFF;
+    font-size:  18px; 
+} 
+.splView-home .SingleValue .singleLabel {
+    background-color: #FFFFFF;
+    font-weight: 100;
+    position: relative; 
+    top: 3px; 
+}
+.splView-home .HadoopOpsHeadlines {
+    height: 220px;
+}
+.splView-job_history .SingleValue {
+    font-size: 12px;
+}
+.splView-job_history .SingleValue .singleResult {
+    font-size: 15px;
+    vertical-align: 0;
+}
+.splView-job_history .HadoopOpsCustomTimeRangePicker .timeRangeActivator {
+    font-weight: bold;
+}
+.splView-job_history .HadoopOpsCustomTimeRangePicker .timeRangeActivatorWrapper {
+    background-color: #ADADAD;
+    background-image: none;
+    background-repeat: none;
+    border-radius: 4px 4px 4px 4px;
+    border: 1px solid #9F9F9F;
+    color: #FFFFFF;
+    height: 15px;
+    line-height: 13px;
+    padding: 3px 5px 0 8px;
+}
+.splView-job_history .splMenu.timeRangeMenu ul div.innerMenuWrapper,
+.splView-job_history .splMenu.CountMenu ul div.innerMenuWrapper {
+   background-color: #F9F9F9;
+}
+.splView-job_history .HadoopOpsCustomTimeRangePicker .timeRangeActivatorWrapper span.splIcon-triangle-4-s {
+    background: url('images/white_down_arrow.png') no-repeat scroll center center transparent;
+    float: right;
+    margin: 4px 0 0;
+}
+.dashboardCell .meta{
+    margin-top: 5px;
+    padding-right: 10px;
+}

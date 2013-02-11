@@ -1,0 +1,28 @@
+[92bac0e2-bfb0-40b9-8bc1-97395268fd2f]
+alert_name = Hadoop Job Submitted Alert
+label = JobSubmitted
+message = $message$
+disabled = 0
+
+[2acf17dc-8ed5-471c-8b80-53f666ee91b6]
+alert_name = Hadoop Disk Usage Alert
+label = HDFS Disk Usage
+message = $message$
+disabled = 0
+
+[1fc71267-31ed-4365-8249-a62418cf1feb]
+alert_name = Hadoop Job Failed Alert
+label = JobFailed
+message = Job id=$job_id$ has FAILED
+disabled = 0
+
+[b40d7886-45b0-43c8-a6dd-803eb928758b]
+alert_name = Hadoop Job Completed Alert
+label = JobCompleted
+message = Job id=$job_id$ completed successfully
+disabled = 0
+
+[e732000e-ab9e-4549-a278-40683413c14c]
+alert_name = Hadoop Job Killed Alert
+label = JobKilled
+message = JobID=$job_id$ has been killed

@@ -1,0 +1,11 @@
+<%page args="module" expression_filter="h" />
+<%namespace name="lib" file="//lib.html" import="*"/>
+<%
+rangemap = module['params'].get('rangeMap', {})
+keys = sorted(rangemap.items(), key = lambda tup: (int(tup[1]["order"])))
+%>
+<div class="HadoopOpsSimpleTRPContainer">
+% for key in keys:
+  <input type="button" id="${key[1].get('range')}" class="SimpleTimeRange ${"selected" if key[1].get('selected') else ''}" value="${key[0]}" />
+% endfor
+</div>
