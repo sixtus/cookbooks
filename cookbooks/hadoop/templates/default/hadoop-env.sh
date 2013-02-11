@@ -29,17 +29,6 @@ export HADOOP_LOG_DIR=/var/log/hadoop
 # File naming remote slave hosts.  $HADOOP_HOME/conf/slaves by default.
 # export HADOOP_SLAVES=${HADOOP_HOME}/conf/slaves
 
-# host:path where hadoop code should be rsync'd from.  Unset by default.
-# export HADOOP_MASTER=master:/home/$USER/src/hadoop
-
-# Seconds to sleep between slave commands.  Unset by default.  This
-# can be useful in large clusters, where, e.g., slave rsyncs can
-# otherwise arrive faster than the master can service them.
-# export HADOOP_SLAVE_SLEEP=0.1
-
-# The directory where pid files are stored. /tmp by default.
-# export HADOOP_PID_DIR=/var/hadoop/pids
-
 # A string representing this instance of hadoop. $USER by default.
 # export HADOOP_IDENT_STRING=$USER
 

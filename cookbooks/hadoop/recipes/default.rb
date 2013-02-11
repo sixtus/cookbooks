@@ -40,6 +40,7 @@ end.first
 %w(
   core-site.xml
   hadoop-env.sh
+  hadoop-metrics2.properties
   hdfs-site.xml
   log4j.properties
   mapred-site.xml

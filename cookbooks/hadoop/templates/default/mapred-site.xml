@@ -10,6 +10,12 @@
   </property>
 <% end %>
 
+  <!-- http://hadoop.apache.org/docs/r1.0.1/cluster_setup.html#Configuring+the+Hadoop+Daemons -->
+  <property>
+    <name>mapred.task.tracker.task-controller</name>
+    <value>org.apache.hadoop.mapred.DefaultTaskController</value>
+  </property>
+
   <property>
     <name>mapred.task.timeout</name>
     <value>1800000</value>
@@ -46,11 +52,13 @@
     <value>/mapred/system</value>
   </property>
 
+  <!-- do not create /var/tmp in HDFS for staging area -->
   <property>
     <name>mapreduce.jobtracker.staging.root.dir</name>
     <value>/user</value>
   </property>
 
+  <!-- make sure these are stored on the dedicated hadoop disks -->
   <property>
     <name>mapred.local.dir</name>
     <value><%= node[:hadoop][:tmp_dir].map { |dir| "#{dir}/${user.name}/mapred/local" }.join(',') %></value>
