@@ -1,6 +1,6 @@
 #!/bin/bash
 
-KV="3.7.1-zentoo"
+KV="3.7.7-zentoo"
 
 BASE_URL="https://raw.github.com/zentoo/kernels/master"
 

@@ -80,15 +80,24 @@ usedesc() {
 	grep ":$1 - " ${d}/profiles/use.local.desc
 }
 
-# genkernel helper
 mklnx() {
-	genkernel --oldconfig \
-		--install \
-		--symlink \
-		--no-ramdisk-modules \
-		--no-splash \
-		--no-keymap \
-		--lvm \
-		--mdadm \
-		all
+	# build kernel
+	pushd /usr/src/linux
+	local KV=$(make kernelversion)
+	make "$@" || exit 1
+	cp arch/x86/boot/bzImage /boot/kernel-${KV} || exit 1
+	popd
+
+	# build initramfs
+	dracut --force /boot/initramfs-${KV}.img || exit 1
+
+	if partx -s -o SCHEME /dev/sda | grep -q gpt; then
+		sed -i -e '/^GRUB_CMDLINE_LINUX=/s/=.*/="rd.md=1 rd.lvm=1 rd.lvm.vg=vg"/' /etc/default/grub || exit 1
+		mkdir -p /boot/grub2 || exit 1
+		grub2-mkconfig -o /boot/grub2/grub.cfg || exit 1
+
+		for device in /dev/sd?; do
+			grub2-install ${device}
+		done
+	fi
 }
