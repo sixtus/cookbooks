@@ -2,7 +2,7 @@
 
 KV="3.7.7-zentoo"
 
-BASE_URL="https://raw.github.com/zentoo/kernels/master"
+BASE_URL="https://raw.github.com/zentoo/kernels/next"
 
 # cleanup old cruft first
 for i in linux-*; do
@@ -38,6 +38,7 @@ else
 
 	make oldconfig || exit 1
 	make -j2 || exit 1
+	make modules_install || exit 1
 
 	cp arch/x86/boot/bzImage /boot/kernel-${KV} || exit 1
 
@@ -46,7 +47,7 @@ else
 
 	# build initramfs
 	emerge -n sys-kernel/dracut || exit 1
-	dracut /boot/initramfs-${KV}.img || exit 1
+	dracut --force /boot/initramfs-${KV}.img || exit 1
 fi
 
 # use UUID for rootfs in fstab
