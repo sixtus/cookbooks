@@ -1,3 +1,11 @@
+template "/etc/env.d/99splunk" do
+  source "99splunk"
+  owner "root"
+  group "root"
+  mode "0644"
+  notifies :run, 'execute[env-update]'
+end
+
 directory "/etc/ssl/splunk" do
   owner "root"
   group "root"

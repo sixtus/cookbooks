@@ -1,11 +1,13 @@
-remote_directory "/opt/splunk/etc/apps/SplunkForNagios" do
-  source "apps/SplunkForNagios"
-  files_owner "root"
-  files_group "root"
-  files_mode "0644"
-  owner "root"
-  group "root"
-  mode "0755"
+directory "/opt/splunk/etc/apps/SplunkForNagios" do
+  action :delete
+  recursive true
+  not_if { File.directory?("/opt/splunk/etc/apps/SplunkForNagios/.git") }
+end
+
+git "/opt/splunk/etc/apps/SplunkForNagios" do
+  repository "https://github.com/zenops/splunk-for-nagios"
+  reference "master"
+  action :sync
   notifies :restart, "service[splunk]"
 end
 

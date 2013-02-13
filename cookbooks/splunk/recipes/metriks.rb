@@ -1,15 +1,12 @@
-directory "/opt/splunk/etc/apps/ganymed" do
+directory "/opt/splunk/etc/apps/metriks" do
   action :delete
   recursive true
+  not_if { File.directory?("/opt/splunk/etc/apps/metriks/.git") }
 end
 
-remote_directory "/opt/splunk/etc/apps/metriks" do
-  source "apps/metriks"
-  files_owner "root"
-  files_group "root"
-  files_mode "0644"
-  owner "root"
-  group "root"
-  mode "0755"
+git "/opt/splunk/etc/apps/metriks" do
+  repository "https://github.com/zenops/splunk-metriks"
+  reference "master"
+  action :sync
   notifies :restart, "service[splunk]"
 end

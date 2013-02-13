@@ -57,3 +57,7 @@ end
     mode "0755"
   end
 end
+
+execute "env-update" do
+  action :nothing
+end
