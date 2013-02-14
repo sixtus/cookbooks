@@ -37,11 +37,6 @@
   </property>
 
   <property>
-    <name>mapred.task.timeout</name>
-    <value>180000</value>
-  </property>
-
-  <property>
     <name>mapred.child.java.opts</name>
     <value>-Duser.timezone=UTC -Dfile.encoding=UTF-8 -Xmx16g -Djava.io.tmpdir=<%= File.join(node[:hadoop][:tmp_dir].last, 'java') %></value>
   </property>
