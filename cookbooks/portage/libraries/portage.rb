@@ -56,7 +56,7 @@ module Gentoo
         return nil if ::File.exists?(conf_file) && same_content?(conf_file, content)
 
         if Process.euid == 0
-          ::File.open("#{conf_file}", "w") { |f| f << content + "\n" }
+          ::File.open(conf_file, "w") { |f| f << content + "\n" }
           Chef::Log.info("Created #{conf_file} \"#{content}\".")
         else
           Chef::Log.warn("skipping #{conf_file} in non-root mode")
