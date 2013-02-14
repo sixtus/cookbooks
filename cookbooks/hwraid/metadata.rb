@@ -8,4 +8,6 @@ license "Apache v2.0"
 
 version "1.0.0"
 
-depends "sudo", "~> 1.0.0"
+supports "gentoo"
+
+depends "sudo"
