@@ -42,7 +42,12 @@
   </property>
 
   <property>
-    <name>mapred.speculative.execution</name>
+    <name>mapred.map.tasks.speculative.execution</name>
+    <value>false</value>
+  </property>
+
+  <property>
+    <name>mapred.reduce.tasks.speculative.execution</name>
     <value>false</value>
   </property>
 
