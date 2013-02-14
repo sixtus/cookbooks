@@ -11,7 +11,7 @@ package "sys-cluster/hadoop"
   directory dir do
     owner "hadoop"
     group "hadoop"
-    mode "0755"
+    mode "0775"
   end
 end
 
