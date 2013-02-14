@@ -16,7 +16,7 @@ def cookbook_metadata
     Dir[File.join(COOKBOOKS_DIR, "*/metadata.json")],
     Dir[File.join(SITE_COOKBOOKS_DIR, "*/metadata.json")],
   ].flatten.sort_by do |filename|
-    File.basename(File.dirname(filename))
+    File.dirname(filename)
   end
 
   files.map do |file|
