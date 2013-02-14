@@ -4,33 +4,29 @@ GEM
     activesupport (3.2.12)
       i18n (~> 0.6)
       multi_json (~> 1.0)
-    archive-tar-minitar (0.5.2)
     blankslate (2.1.2.4)
     bluecloth (2.2.0)
     bunny (0.7.9)
-    chef (10.18.2)
+    chef (10.22.0)
       bunny (>= 0.6.0, < 0.8.0)
       erubis
       highline (>= 1.6.9)
-      json (>= 1.4.4, <= 1.6.1)
+      json (>= 1.4.4, <= 1.7.7)
       mixlib-authentication (>= 1.3.0)
       mixlib-cli (>= 1.1.0)
       mixlib-config (>= 1.1.2)
       mixlib-log (>= 1.3.0)
       mixlib-shellout
       moneta (< 0.7.0)
-      net-ssh (~> 2.2.2)
+      net-ssh (~> 2.6)
       net-ssh-multi (~> 1.1.0)
       ohai (>= 0.6.0)
       rest-client (>= 1.0.4, < 1.7.0)
       treetop (~> 1.4.9)
       uuidtools
       yajl-ruby (~> 1.1)
-    childprocess (0.3.8)
-      ffi (~> 1.0, >= 1.0.11)
     coderay (1.0.8)
     erubis (2.7.0)
-    ffi (1.3.1)
     foodcritic (1.7.0)
       erubis
       gherkin (~> 2.11.1)
@@ -40,17 +36,16 @@ GEM
       rak (~> 1.4)
       treetop (~> 1.4.10)
       yajl-ruby (~> 1.1.0)
-    gherkin (2.11.5)
-      json (>= 1.4.6)
+    gherkin (2.11.6)
+      json (>= 1.7.6)
     gist (3.1.1)
     gli (2.5.4)
     highline (1.6.15)
     i18n (0.6.1)
     ipaddress (0.8.0)
-    json (1.5.5)
+    json (1.7.7)
     knife-dsl (0.1.0)
       chef (~> 10.0)
-    log4r (1.1.10)
     method_source (0.7.1)
     mime-types (1.21)
     mixlib-authentication (1.3.0)
@@ -61,11 +56,9 @@ GEM
     mixlib-shellout (1.1.0)
     moneta (0.6.0)
     multi_json (1.6.0)
-    net-scp (1.0.4)
-      net-ssh (>= 1.99.1)
-    net-ssh (2.2.2)
-    net-ssh-gateway (1.1.0)
-      net-ssh (>= 1.99.1)
+    net-ssh (2.6.5)
+    net-ssh-gateway (1.2.0)
+      net-ssh (>= 2.6.5)
     net-ssh-multi (1.1)
       net-ssh (>= 2.1.4)
       net-ssh-gateway (>= 0.99.0)
@@ -110,17 +103,6 @@ GEM
       polyglot
       polyglot (>= 0.3.1)
     uuidtools (2.1.3)
-    vagrant (1.0.6)
-      archive-tar-minitar (= 0.5.2)
-      childprocess (~> 0.3.1)
-      erubis (~> 2.7.0)
-      i18n (~> 0.6.0)
-      json (~> 1.5.1)
-      log4r (~> 1.1.9)
-      net-scp (~> 1.0.4)
-      net-ssh (~> 2.2.2)
-    vagrant-zentoo (0.1.3)
-      vagrant (>= 1.0.3)
     yajl-ruby (1.1.0)
 
 PLATFORMS
@@ -128,12 +110,9 @@ PLATFORMS
 
 DEPENDENCIES
   activesupport
-  chef (~> 10.18)
+  chef (~> 10.22)
   foodcritic
   highline
   knife-dsl
-  ohai (~> 6.16)
   rake
   showoff
-  vagrant
-  vagrant-zentoo
