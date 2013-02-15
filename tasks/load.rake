@@ -104,7 +104,7 @@ namespace :load do
 
     n.from_file(File.join(NODES_DIR, "#{fqdn}.rb"))
 
-    printf "  + %-20.20s [%s]\n", n[:fqdn], n.chef_environment
+    printf "  + %-20.20s [%s]\n", n.name, n.chef_environment
     n.save
   end
 
