@@ -82,7 +82,7 @@ namespace :node do
       # do nothing
     end
 
-    Rake::Task['load:cookbook'].invoke('openssl')
+    knife :cookbook_upload, ['openssl', '--force']
 
     # remove node
     begin
