@@ -75,6 +75,4 @@ if tagged?("nagios-client")
     servicegroups "system"
     env [:testing, :development]
   end
-
-  nagios_service_escalation "CONNTRACK"
 end
