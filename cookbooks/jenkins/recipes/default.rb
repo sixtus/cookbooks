@@ -12,3 +12,7 @@ end
 service "jenkins" do
   action [:enable, :start]
 end
+
+package "app-text/sloccount"
+
+include_recipe "jenkins::extras"
