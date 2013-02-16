@@ -54,6 +54,8 @@ end.each do |n|
   end
 end
 
+directory "/var/lock/subsys"
+
 include_recipe "shorewall::ipv4"
 
 if node[:ipv6_enabled]
