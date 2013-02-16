@@ -151,7 +151,7 @@ cookbook_file "/etc/init.d/nsca" do
 end
 
 service "nsca" do
-  action [:enable, :start]
+  action [:disable, :stop]
 end
 
 # Web UI

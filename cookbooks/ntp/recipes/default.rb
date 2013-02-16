@@ -44,5 +44,6 @@ if tagged?("nagios-client")
   nagios_service "TIME" do
     check_command "check_nrpe!check_time"
     servicegroups "system"
+    env [:testing, :development]
   end
 end

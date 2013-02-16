@@ -3,6 +3,8 @@ define :nagios_service do
 
   params[:service_description] ||= name
   params[:host_name] ||= node[:fqdn]
+  params[:env] ||= []
+  params[:env] |= [:production, :staging]
 
   node.default[:nagios][:services][name] = params
 end

@@ -32,6 +32,7 @@ if tagged?("nagios-client")
     check_interval 1440
     notification_interval 1440
     servicegroups "postfix,openssl"
+    env [:testing, :development]
   end
 
   nagios_service_dependency "POSTFIX-TLS" do

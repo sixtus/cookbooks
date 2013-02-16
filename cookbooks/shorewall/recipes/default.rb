@@ -73,6 +73,7 @@ if tagged?("nagios-client")
     check_command "check_nrpe!check_conntrack"
     notification_interval 15
     servicegroups "system"
+    env [:testing, :development]
   end
 
   nagios_service_escalation "CONNTRACK"

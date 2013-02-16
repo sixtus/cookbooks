@@ -89,6 +89,7 @@ end
 
       nagios_service "METRO-#{build.upcase}-#{arch.upcase}" do
         check_command "check_nrpe!check_metro_#{build}_#{arch}"
+        env [:testing, :development]
       end
     end
   end

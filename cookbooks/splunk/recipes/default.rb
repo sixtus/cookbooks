@@ -65,5 +65,6 @@ if tagged?("nagios-client")
 
   nagios_service "SPLUNKD" do
     check_command "check_nrpe!check_splunkd"
+    env [:testing, :development]
   end
 end

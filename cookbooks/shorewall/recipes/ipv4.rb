@@ -64,5 +64,6 @@ if tagged?("nagios-client")
   nagios_service "SHOREWALL" do
     check_command "check_nrpe!check_shorewall"
     servicegroups "system"
+    env [:testing, :development]
   end
 end

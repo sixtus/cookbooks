@@ -36,5 +36,6 @@ if tagged?("nagios-client")
 
   nagios_service "GANYMED" do
     check_command "check_nrpe!check_ganymed"
+    env [:testing, :development]
   end
 end

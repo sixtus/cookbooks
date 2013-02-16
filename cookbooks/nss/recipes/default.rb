@@ -25,5 +25,6 @@ if tagged?("nagios-client")
 
   nagios_service "NSCD" do
     check_command "check_nrpe!check_nscd"
+    env [:testing, :development]
   end
 end

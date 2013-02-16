@@ -39,5 +39,6 @@ if tagged?("nagios-client")
   nagios_service "SYSLOG" do
     check_command "check_nrpe!check_syslog"
     servicegroups "system"
+    env [:testing, :development]
   end
 end
