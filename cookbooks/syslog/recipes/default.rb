@@ -6,10 +6,6 @@ directory "/etc/syslog-ng/conf.d" do
   mode "0755"
 end
 
-service "syslog-ng" do
-  action :nothing
-end
-
 template "/etc/syslog-ng/syslog-ng.conf" do
   source "syslog-ng.conf"
   owner "root"
