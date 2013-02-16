@@ -28,13 +28,6 @@ cookbook_file "/etc/conf.d/ntpd" do
   notifies :restart, "service[ntpd]"
 end
 
-directory "/var/lib/openntpd/chroot" do
-  owner "root"
-  group "root"
-  mode "0755"
-  recursive true
-end
-
 service "openrdate" do
   action [:enable, :start]
 end
