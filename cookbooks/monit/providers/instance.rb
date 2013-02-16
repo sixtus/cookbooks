@@ -2,8 +2,6 @@ include ChefUtils::Account
 include ChefUtils::RandomResource
 
 action :create do
-  package "app-admin/monit"
-
   file "/etc/init.d/monit-#{rrand}" do
     path "/etc/init.d/monit"
     action :delete
@@ -76,4 +74,10 @@ action :create do
       servicegroups "monit"
     end
   end
+end
+
+def initialize(*args)
+  super
+  @action = :create
+  @run_context.include_recipe "monit"
 end
