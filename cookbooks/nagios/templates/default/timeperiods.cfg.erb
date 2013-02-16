@@ -20,15 +20,3 @@ define timeperiod {
   name            never
   alias           No Time Is A Good Time
 }
-
-<% @contacts.each do |c| %>
-<% if c.include?(:on_call) and not c[:on_call].empty? %>
-define timeperiod {
-  timeperiod_name <%= c[:id] %>-on-call
-  alias on-call timeperiod for <%= c[:id] %>
-<% c[:on_call].sort.each do |date, time| %>
-  <%= date %> <%= time %>
-<% end %>
-}
-<% end %>
-<% end %>

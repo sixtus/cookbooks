@@ -28,7 +28,7 @@ file "/var/nagios/rw/nagios.cmd" do
 end
 
 template "/usr/lib/nagios/plugins/notify" do
-  source "notify"
+  source "notify.#{node[:nagios][:notifier]}"
   owner "root"
   group "nagios"
   mode "0750"
@@ -36,7 +36,7 @@ end
 
 # retrieve data from the search index
 contacts = node.run_state[:users].select do |u|
-  u.include?(:nagios_contact_groups)
+  u[:tags] and not (u[:tags] & ["hostmaster", "nagios"]).empty?
 end.sort_by do |u|
   u[:id]
 end
