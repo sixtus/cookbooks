@@ -1,18 +1,22 @@
 include ChefUtils::Account
+include ChefUtils::RandomResource
 
 action :create do
   package "app-admin/monit"
 
-  file "/etc/init.d/monit" do
+  file "/etc/init.d/monit-#{rrand}" do
+    path "/etc/init.d/monit"
     action :delete
   end
 
-  directory "/etc/monit.d" do
+  directory "/etc/monit.d-#{rrand}" do
+    path "/etc/monit.d"
     action :delete
     recursive true
   end
 
-  file "/etc/monitrc" do
+  file "/etc/monitrc-#{rrand}" do
+    path "/etc/monitrc"
     action :delete
   end
 
@@ -33,17 +37,13 @@ action :create do
               :pidfile => pidfile
   end
 
-  service "monit.#{user[:name]}" do
-    action :nothing
-  end
-
   if new_resource.manage
     template "#{user[:dir]}/.monitrc.local" do
       source new_resource.template
       owner user[:name]
       group user[:group][:name]
       variables :user => user
-      notifies :restart, resources(:service => "monit.#{user[:name]}")
+      notifies :restart, "service[monit.#{user[:name]}]"
     end
   else
     file "#{user[:dir]}/.monitrc.local" do
@@ -59,7 +59,7 @@ action :create do
     group user[:group][:name]
     mode "0600"
     variables :user => user
-    notifies :restart, resources(:service => "monit.#{user[:name]}")
+    notifies :restart, "service[monit.#{user[:name]}]"
   end
 
   service "monit.#{user[:name]}" do
