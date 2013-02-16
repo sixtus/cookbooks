@@ -69,10 +69,20 @@ else
     group "root"
   end
 
+  directory "#{node[:vim][:rcdir]}/bundle/solarized/.git" do
+    action :delete
+    recursive true
+  end
+
   remote_directory "#{node[:vim][:rcdir]}/bundle/powerline" do
     source "powerline"
     owner "root"
     group "root"
+  end
+
+  directory "#{node[:vim][:rcdir]}/bundle/powerline/.git" do
+    action :delete
+    recursive true
   end
 end
 
