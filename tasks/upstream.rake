@@ -43,7 +43,7 @@ namespace :upstream do
   desc "Show missing picks from master"
   task :cherry do
     limit = %x(git show --oneline ":/^Merge branch 'upstream'").split($/).first.split(/\s/).first
-    sh("git cherry -v upstream master #{limit}")
+    sh("git cherry -v upstream master #{limit} | grep -v ^-")
   end
 
 end
