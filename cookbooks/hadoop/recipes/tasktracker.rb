@@ -1,6 +1,6 @@
 tag("hadoop-tasktracker")
 
-include_recipe "hadoop::default"
+include_recipe "hadoop"
 
 # java tmp dir for map/reduce
 directory File.join(node[:hadoop][:tmp_dir].last, 'java') do

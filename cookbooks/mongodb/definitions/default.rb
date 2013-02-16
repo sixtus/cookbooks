@@ -24,7 +24,7 @@ define :mongodb_instance, :nfiles => "1024" do
               "MONGODB-#{name.upcase}"
             end
 
-  include_recipe "mongodb::default"
+  include_recipe "mongodb"
 
   # data for solr searches
   tag("mongodb")
@@ -154,7 +154,7 @@ define :mongos_instance do
               "MONGOS-#{name.upcase}"
             end
 
-  include_recipe "mongodb::default"
+  include_recipe "mongodb"
 
   tag("mongos")
 

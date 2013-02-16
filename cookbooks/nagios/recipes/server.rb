@@ -8,7 +8,7 @@ end
 
 package "net-analyzer/nagios"
 
-include_recipe "nagios::default"
+include_recipe "nagios"
 include_recipe "nagios::livestatus"
 include_recipe "nagios::nrpe"
 include_recipe "nagios::nsca"

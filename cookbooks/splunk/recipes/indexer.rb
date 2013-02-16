@@ -4,7 +4,7 @@ node.set[:syslog][:archivedir] = false
 
 package "net-analyzer/splunk"
 
-include_recipe "splunk::default"
+include_recipe "splunk"
 
 ## users
 splunk_users = Proc.new do |u|

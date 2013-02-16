@@ -1,6 +1,6 @@
 tag("hadoop-datanode")
 
-include_recipe "hadoop::default"
+include_recipe "hadoop"
 
 service "hadoop-datanode" do
   action [:enable, :start]

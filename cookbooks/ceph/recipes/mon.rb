@@ -1,6 +1,6 @@
 tag('ceph-mon')
 
-include_recipe "ceph::default"
+include_recipe "ceph"
 include_recipe "ceph::conf"
 
 cluster_node = "#{node[:ceph][:cluster]}-#{node[:hostname]}"

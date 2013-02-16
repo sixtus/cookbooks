@@ -1,6 +1,6 @@
 tag("mysql-server")
 
-include_recipe "mysql::default"
+include_recipe "mysql"
 
 case node[:platform]
 when "gentoo"

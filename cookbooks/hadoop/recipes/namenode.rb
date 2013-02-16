@@ -1,6 +1,6 @@
 tag("hadoop-namenode")
 
-include_recipe "hadoop::default"
+include_recipe "hadoop"
 
 service "hadoop-namenode" do
   action [:enable, :start]

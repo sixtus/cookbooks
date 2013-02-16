@@ -4,7 +4,7 @@ end
 
 package "net-analyzer/nagios-check_pidfile"
 
-include_recipe "nagios::default"
+include_recipe "nagios"
 
 directory "/var/run/nrpe" do
   action :delete
