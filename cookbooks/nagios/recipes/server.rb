@@ -196,6 +196,13 @@ template "/usr/share/nagios/htdocs/index.php" do
   mode "0644"
 end
 
+cookbook_file "/usr/share/nagios/htdocs/side.php" do
+  source "side.php"
+  owner "nagios"
+  group "nagios"
+  mode "0644"
+end
+
 # nagios health check
 nrpe_command "check_nagios" do
   command "/usr/lib/nagios/plugins/check_nagios -F /var/nagios/status.dat -C /usr/sbin/nagios -e 5"

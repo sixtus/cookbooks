@@ -11,7 +11,7 @@ get_config() {
 }
 
 command=/usr/libexec/${SVCNAME}
-command_args="-c ${CFGFILE} --daemon"
+command_args="-c ${CFGFILE}"
 pidfile=$(get_config pid_file)
 reloadsig=HUP
 
