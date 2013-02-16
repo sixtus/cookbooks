@@ -5,6 +5,7 @@ node_name          "<%= node[:fqdn] %>"
 log_level          :info
 log_location       "/var/log/chef/client.log"
 verbose_logging    false
+enable_reporting   false
 
 ssl_verify_mode    :verify_none
 chef_server_url    "<%= node[:chef][:client][:server_url] %>"

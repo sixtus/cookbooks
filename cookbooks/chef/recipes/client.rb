@@ -23,8 +23,14 @@ unless solo?
     mode "0644"
   end
 
+  if node.chef_environment == 'production'
+    chef_action = [:enable, :start]
+  else
+    chef_action = [:disable, :stop]
+  end
+
   service "chef-client" do
-    action [:enable, :start]
+    action chef_action
   end
 
   splunk_input "monitor:///var/log/chef/*.log"
@@ -53,7 +59,7 @@ unless solo?
   end
 end
 
-if tagged?("nagios-client")
+if tagged?("nagios-client") and node.chef_environment == 'production'
   nrpe_command "check_chef_client" do
     command "/usr/lib/nagios/plugins/check_pidfile /var/run/chef/client.pid"
   end
