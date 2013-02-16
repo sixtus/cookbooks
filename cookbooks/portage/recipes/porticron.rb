@@ -10,7 +10,8 @@ end
 
 # we do this manually, since we cannot depend on the cron cookbook
 %w(hourly weekly).each do |f|
-  directory "/etc/cron.#{f}" do
+  directory "/etc/cron.#{f}-#{rrand}" do
+    path "/etc/cron.#{f}"
     mode "0750"
   end
 end

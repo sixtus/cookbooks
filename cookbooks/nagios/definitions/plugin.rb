@@ -10,13 +10,15 @@ define :nagios_plugin,
 
   include_recipe "nagios::nrpe"
 
-  directory "/usr/lib/nagios" do
+  directory "/usr/lib/nagios-#{rrand}" do
+    path "/usr/lib/nagios"
     owner "root"
     group "root"
     mode "0755"
   end
 
-  directory "/usr/lib/nagios/plugins" do
+  directory "/usr/lib/nagios/plugins-#{rrand}" do
+    path "/usr/lib/nagios/plugins"
     owner "root"
     group "nagios"
     mode "0750"

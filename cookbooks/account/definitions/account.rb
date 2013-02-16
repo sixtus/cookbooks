@@ -22,7 +22,8 @@ define :account,
 
   key_source = params[:key_source]
 
-  group params[:gid] do
+  group "#{params[:gid]}-#{rrand}" do
+    group_name params[:gid]
     append true
   end
 
@@ -51,7 +52,8 @@ define :account,
     home_group ||= "root"
   end
 
-  directory File.dirname(home) do
+  directory "/home-#{rrand}" do
+    path File.dirname(home)
     owner "root"
     group "root"
     mode "0755"
@@ -126,7 +128,8 @@ define :accounts_from_databag,
     account_from_databag user[:id]
 
     params[:groups].each do |g|
-      group g do
+      group "#{g}-#{rrand}" do
+        group_name g
         members user[:id]
         append true
       end
