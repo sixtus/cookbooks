@@ -5,29 +5,37 @@ require "net/http"
 require "uri"
 require "haml"
 
-NAGIOS_BASE = "https://<%= node[:fqdn] %>/nagios"
-HIPCHAT_URL = "https://api.hipchat.com/v1/rooms/message?auth_token=#{node[:nagios][:hipchat][:auth_token]}"
+def hipchat_send(auth_token, data)
+  uri = URI.parse("https://api.hipchat.com/v1/rooms/message?auth_token=#{auth_token}")
 
-uri = URI.parse(HIPCHAT_URL)
+  http = Net::HTTP.start(uri.host, uri.port, use_ssl: true)
+
+  req = Net::HTTP::Post.new(uri.request_uri)
+  req.set_form_data(data)
+
+  http.request(req)
+end
+
+auth_token = "<%= node[:hipchat][:auth_token] %>"
+room_id = "<%= node[:hipchat][:room_id] %>"
+from = "Nagios"
+
+NAGIOS_BASE = "https://<%= node[:fqdn] %>/nagios"
 message = Haml::Engine.new(DATA.read).render(binding)
-state = ENV['NAGIOS_HOSTSTATE'] || ENV['NAGIOS_SERVICESTATE']
+
+state = ENV['NAGIOS_SERVICESTATE'] || ENV['NAGIOS_HOSTSTATE']
 color = "green"
 
 if ENV['NAGIOS_NOTIFICATIONTYPE'] == "PROBLEM"
   color = state == "WARNING" ? "yellow" : "red"
 end
 
-http = Net::HTTP.start(uri.host, uri.port, use_ssl: true)
-
-req = Net::HTTP::Post.new(uri.request_uri)
-req.set_form_data({
-  "room_id" => node[:nagios][:hipchat][:room_id],
-  "from" => "Nagios",
-  "message" => message,
-  "color" => color
+hipchat_send(auth_token, {
+  room_id: room_id,
+  from: from,
+  message: message,
+  color: color,
 })
-
-http.request(req)
 
 __END__
 - if ARGV[0] == "host"
