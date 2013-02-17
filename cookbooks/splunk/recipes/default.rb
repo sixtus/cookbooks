@@ -47,6 +47,13 @@ end
   end
 end
 
+template "/opt/splunk/bin/scripts/hipchat-alert.rb" do
+  source "hipchat-alert.rb"
+  owner "root"
+  group "root"
+  mode "0750"
+end
+
 cookbook_file "/etc/init.d/splunk" do
   source "splunk.initd"
   owner "root"
