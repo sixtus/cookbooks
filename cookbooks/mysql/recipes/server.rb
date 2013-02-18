@@ -68,11 +68,6 @@ when "gentoo"
       backup 0
     end
 
-    # syslog and logrotate configuration
-    syslog_config "90-mysql" do
-      template "syslog.conf"
-    end
-
     template "/etc/logrotate.d/mysql" do
       source "logrotate.conf"
       owner "root"
@@ -88,7 +83,16 @@ when "gentoo"
       end
     end
 
-    # init script
+    cookbook_file "/usr/libexec/mysqld-wait-ready" do
+      source "mysqld-wait-ready"
+      owner "root"
+      group "root"
+      mode "0755"
+    end
+
+    systemd_tmpfiles "mysql"
+    systemd_unit "mysql.service"
+
     service "mysql" do
       action [:enable, :start]
     end

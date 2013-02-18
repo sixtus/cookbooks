@@ -25,6 +25,8 @@ template "/etc/ganymed/config.yml" do
   notifies :restart, "service[ganymed]"
 end
 
+systemd_unit "ganymed.service"
+
 service "ganymed" do
   action [:enable, :start]
 end

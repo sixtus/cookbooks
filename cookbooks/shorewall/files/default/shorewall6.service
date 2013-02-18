@@ -1,0 +1,13 @@
+[Unit]
+Description=The Shoreline IPv6 Firewall
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/sbin/shorewall6 start
+ExecReload=/sbin/shorewall6 restart
+ExecStop=/sbin/shorewall6 stop
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

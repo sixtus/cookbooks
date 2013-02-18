@@ -1,0 +1,11 @@
+[Unit]
+Description=Beanstalk Server
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/beanstalkd -b /var/lib/beanstalkd -f 60000 -p 11300 -l 0.0.0.0 -u beanstalk
+Restart=always
+OOMScoreAdjust=-990
+
+[Install]
+WantedBy=multi-user.target

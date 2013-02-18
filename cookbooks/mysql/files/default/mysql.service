@@ -1,0 +1,19 @@
+[Unit]
+Description=MySQL Database Server
+ConditionPathExists=/etc/mysql/my.cnf
+After=network.target
+
+[Service]
+ExecStart=/usr/sbin/mysqld --log-error=/dev/stderr
+ExecStartPost=/usr/libexec/mysqld-wait-ready $MAINPID
+ExecStop=/bin/kill -15 $MAINPID
+PIDFile=/var/run/mysqld/mysqld.pid
+Restart=always
+User=mysql
+Group=mysql
+PrivateTmp=true
+TimeoutSec=900
+OOMScoreAdjust=-990
+
+[Install]
+WantedBy=multi-user.target

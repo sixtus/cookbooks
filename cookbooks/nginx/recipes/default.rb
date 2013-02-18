@@ -62,6 +62,10 @@ end
   end
 end
 
+systemd_tmpfiles "nginx"
+
+systemd_unit "nginx.service"
+
 service "nginx" do
   action [:enable, :start]
   supports [:reload]

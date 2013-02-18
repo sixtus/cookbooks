@@ -15,9 +15,8 @@ if tagged?("nagios-client")
   nagios_plugin "check_mongodb"
 end
 
-service "mongos" do
-  action [:disable, :stop]
-end
+systemd_unit "mongos@.service"
+systemd_tmpfiles "mongodb"
 
 node[:mongos][:instances].each do |cluster, params|
   mongodb_mongos cluster do

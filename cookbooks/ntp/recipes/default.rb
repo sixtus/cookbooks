@@ -1,14 +1,7 @@
 package "net-misc/openrdate"
 
-cookbook_file "/etc/conf.d/openrdate" do
-  source "openrdate.confd"
-  owner "root"
-  group "root"
-  mode "0644"
-end
-
 service "openrdate" do
-  action [:enable, :start]
+  action [:disable, :stop]
 end
 
 package "net-misc/openntpd"
@@ -39,6 +32,8 @@ cookbook_file "/etc/conf.d/ntpd" do
   mode "0644"
   notifies :restart, "service[ntpd]"
 end
+
+systemd_unit "ntpd.service"
 
 service "ntpd" do
   action [:enable, :start]

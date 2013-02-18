@@ -10,4 +10,5 @@ MONGODB_PORT="<%= @port %>"
 # Set extra options here, such as disabling the admin web server
 MONGODB_OPTIONS="<%= @opts.join(' ') %>"
 
+MONGODB_NFILES="<%= @nfiles %>"
 rc_ulimit="-n <%= @nfiles %>"

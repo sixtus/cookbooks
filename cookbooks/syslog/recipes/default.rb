@@ -18,6 +18,8 @@ syslog_config "00-local" do
   template "local.conf"
 end
 
+systemd_unit "syslog-ng.service"
+
 service "syslog-ng" do
   action [:enable, :start]
 end

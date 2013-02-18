@@ -1,17 +1,24 @@
 # Configuration File For Chef (chef-client)
 
-node_name          "<%= node[:fqdn] %>"
+node_name "<%= node[:fqdn] %>"
 
-log_level          :info
-log_location       "/var/log/chef/client.log"
-verbose_logging    false
-enable_reporting   false
+require "madvertise-logging"
 
-ssl_verify_mode    :verify_none
-chef_server_url    "<%= node[:chef][:client][:server_url] %>"
+ImprovedLogger.class_eval do
+    attr_accessor :sync, :formatter
+end
 
-file_cache_path    "/var/lib/chef/cache"
-file_backup_path   "/var/lib/chef/backup"
+log_level :info
+log_location ImprovedLogger.new(:syslog, "chef-client")
+
+verbose_logging false
+enable_reporting false
+
+ssl_verify_mode :verify_none
+chef_server_url "<%= node[:chef][:client][:server_url] %>"
+
+file_cache_path "/var/lib/chef/cache"
+file_backup_path "/var/lib/chef/backup"
 
 <% if node[:chef][:client][:airbrake][:key] and ['production', 'staging'].include?(node.chef_environment) %>
 require "airbrake_handler"

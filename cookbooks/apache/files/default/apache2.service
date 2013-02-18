@@ -1,0 +1,11 @@
+[Unit]
+Description=Apache Web Server
+ConditionPathExists=/etc/apache2/httpd.conf
+After=network.target
+
+[Service]
+ExecStart=/usr/sbin/apache2 -DNO_DETACH -f /etc/apache2/httpd.conf
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

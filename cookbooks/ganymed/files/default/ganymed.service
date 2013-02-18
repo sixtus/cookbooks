@@ -1,0 +1,13 @@
+[Unit]
+Description=Ganymed Metriks Daemon
+ConditionPathExists=/etc/ganymed/config.yml
+After=network.target
+
+[Service]
+Type=forking
+PIDFile=/var/run/ganymed.pid
+ExecStart=/usr/bin/ganymed -c /etc/ganymed/config.yml -e production -p /var/run/ganymed.pid -d
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

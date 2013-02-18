@@ -35,8 +35,14 @@ when "gentoo"
     include_recipe "base::resolv"
     include_recipe "base::sysctl"
     include_recipe "baselayout"
-    include_recipe "sysvinit"
-    include_recipe "openrc"
+
+    if systemd?
+      include_recipe "systemd"
+    else
+      include_recipe "sysvinit"
+      include_recipe "openrc"
+    end
+
     include_recipe "portage"
     include_recipe "portage::porticron"
     include_recipe "openssl"

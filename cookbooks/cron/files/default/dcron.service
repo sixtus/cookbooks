@@ -1,0 +1,11 @@
+[Unit]
+Description=Periodic Command Scheduler
+
+[Service]
+Type=forking
+ExecStart=/usr/sbin/crond -l info -M /usr/bin/crond-journal
+PIDFile=/run/crond.pid
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

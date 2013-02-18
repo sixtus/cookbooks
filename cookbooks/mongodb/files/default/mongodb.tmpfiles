@@ -1,0 +1,4 @@
+# systemd tmpfile settings for mysql
+# See tmpfiles.d(5) for details
+
+d /var/run/mongodb 0755 mongodb mongodb -

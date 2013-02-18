@@ -1,19 +1,47 @@
+# systemd goodies
+_systemd_running() {
+	[[ $(</proc/1/cmdline) == /usr/bin/systemd ]]
+}
+
+alias cgls=systemd-cgls
+alias cgtop=systemd-cgtop
+
+sc() {
+	if [[ $USER == "root" ]]; then
+		systemctl $*
+	else
+		systemctl --user $*
+	fi
+}
+
+jf() {
+	journalctl -f -n${1:-20}
+}
+
 # init script helpers
+_svc() {
+	if _systemd_running; then
+		sc $1 $2
+	else
+		/etc/init.d/$2 $1
+	fi
+}
+
 sva () {
 	for svc in "$@"; do
-		/etc/init.d/${svc} start
+		_svc start ${svc}
 	done
 }
 
 svo () {
 	for svc in "$@"; do
-		/etc/init.d/${svc} stop
+		_svc stop ${svc}
 	done
 }
 
 svr () {
 	for svc in "$@"; do
-		/etc/init.d/${svc} restart
+		_svc restart ${svc}
 	done
 }
 

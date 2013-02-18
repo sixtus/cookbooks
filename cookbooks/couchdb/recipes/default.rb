@@ -1,3 +1,5 @@
+include_recipe "erlang"
+
 package "dev-db/couchdb"
 
 directory "/var/lib/couchdb" do

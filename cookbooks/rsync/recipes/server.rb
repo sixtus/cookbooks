@@ -8,6 +8,8 @@ template "/etc/rsyncd.conf" do
   notifies :restart, "service[rsyncd]"
 end
 
+systemd_unit "rsyncd.service"
+
 service "rsyncd" do
   action [:enable, :start]
 end

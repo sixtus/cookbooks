@@ -3,7 +3,7 @@ action :create do
 
   # multiplex service
   svcname = "mongos.#{name}"
-  nagname = svcname.upcase.gsub(/[\.@]/, '-')
+  nagname = svcname.upcase.gsub(/\./, '-')
 
   # retrieve configdbs from index
   configdb = node.run_state[:nodes].select do |n|
@@ -12,13 +12,18 @@ action :create do
     "#{n[:fqdn]}:#{n[:mongoc][:port]}"
   end.sort
 
+  systemd = systemd?
+
   file "/var/log/mongodb/#{svcname}.log" do
     owner "mongodb"
     group "mongodb"
     mode "0644"
+    not_if { systemd }
   end
 
-  splunk_input "monitor:///var/log/mongodb/#{svcname}.log"
+  splunk_input "monitor:///var/log/mongodb/#{svcname}.log" do
+    not_if { systemd }
+  end
 
   template "/etc/logrotate.d/#{svcname}" do
     source "mongodb.logrotate"
@@ -26,6 +31,7 @@ action :create do
     group "root"
     mode "0644"
     variables :name => name
+    not_if { systemd }
   end
 
   cookbook_file "/etc/init.d/#{svcname}" do
@@ -33,6 +39,7 @@ action :create do
     owner "root"
     group "root"
     mode "0755"
+    not_if { systemd }
   end
 
   template "/etc/conf.d/#{svcname}" do

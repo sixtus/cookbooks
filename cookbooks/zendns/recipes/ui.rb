@@ -4,6 +4,7 @@ capistrano_skeleton "zendns"
 
 monit_instance "zendns" do
   manage false
+  action :delete if systemd_running?
 end
 
 nginx_unicorn "zendns" do

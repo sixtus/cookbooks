@@ -103,6 +103,8 @@ template "/etc/conf.d/apache2" do
   notifies :restart, "service[apache2]"
 end
 
+systemd_unit "apache2.service"
+
 service "apache2" do
   supports [:reload]
   action [:start, :enable]

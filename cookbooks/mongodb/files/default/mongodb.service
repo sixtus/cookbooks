@@ -1,0 +1,21 @@
+[Unit]
+Description=MongoDB Server
+ConditionPathExists=/etc/conf.d/%p
+After=network.target
+
+[Service]
+User=mongodb
+EnvironmentFile=/etc/conf.d/%p
+ExecStart=/usr/bin/mongod \
+	--bind_ip $MONGODB_IP \
+	--port $MONGODB_PORT \
+	--dbpath $MONGODB_DATA \
+	--unixSocketPrefix $MONGODB_RUN \
+	--pidfilepath /run/mongodb/%p.pid \
+	--fork --syslog \
+	$MONGODB_OPTIONS
+Restart=always
+LimitNOFILE=$MONGODB_NFILES
+
+[Install]
+WantedBy=multi-user.target

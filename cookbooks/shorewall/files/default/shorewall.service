@@ -1,0 +1,13 @@
+[Unit]
+Description=The Shoreline IPv4 Firewall
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/sbin/shorewall start
+ExecReload=/sbin/shorewall restart
+ExecStop=/sbin/shorewall stop
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

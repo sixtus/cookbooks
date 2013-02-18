@@ -1,4 +1,5 @@
 package "app-admin/chef"
+package "dev-ruby/syslogger"
 
 if node[:chef][:client][:airbrake][:key]
   package "dev-ruby/airbrake_handler"
@@ -23,24 +24,23 @@ unless solo?
     mode "0644"
   end
 
-  service "chef-client" do
-    action [:disable, :stop]
-  end
-
-  # distribute chef-client runs randomly
-  chef_minute = IPAddr.new(node[:primary_ipaddress]).to_i % 60
-
-  # and only converge automatically in production
-  if node.chef_environment == 'production'
-    chef_action = :create
-  else
-    chef_action = :delete
-  end
-
   cron "chef-client" do
     command "/usr/bin/ruby19 -E UTF-8 /usr/bin/chef-client -c /etc/chef/client.rb >/dev/null"
-    minute chef_minute
-    action chef_action
+    minute IPAddr.new(node[:primary_ipaddress]).to_i % 60
+    action :delete unless node.chef_environment == 'production'
+    action :delete if systemd_running?
+  end
+
+  systemd_unit "chef-client.service"
+  systemd_unit "chef-client.timer"
+
+  service "chef-client.timer" do
+    action [:enable, :start]
+    only_if { systemd_running? }
+  end
+
+  file "/var/lock/chef-client.lock" do
+    only_if { node.chef_environment != 'production' }
   end
 
   splunk_input "monitor:///var/log/chef/*.log"
@@ -50,12 +50,6 @@ unless solo?
     owner "root"
     group "root"
     mode "0644"
-  end
-
-  file "/var/log/chef/client.log" do
-    owner "root"
-    group "root"
-    mode "0600"
   end
 
   directory "/etc/chef/cache" do

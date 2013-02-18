@@ -9,6 +9,8 @@ if node[:smart][:devices].any?
     notifies :restart, "service[smartd]"
   end
 
+  systemd_unit "smartd.service"
+
   if node[:smart][:devices].empty?
     service "smartd" do
       action [:disable, :stop]

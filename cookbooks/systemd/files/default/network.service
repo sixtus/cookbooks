@@ -1,0 +1,15 @@
+[Unit]
+Description=Network
+ConditionPathExists=/etc/ifup
+Wants=network.target
+Before=network.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+SuccessExitStatus=0 2
+ExecStart=/bin/sh /etc/ifup
+ExecStop=/bin/sh /etc/ifdown
+
+[Install]
+WantedBy=multi-user.target

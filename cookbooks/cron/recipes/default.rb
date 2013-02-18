@@ -14,6 +14,17 @@ template "/etc/conf.d/dcron" do
   notifies :restart, "service[dcron]"
 end
 
+cookbook_file "/usr/bin/crond-journal" do
+  source "crond-journal.sh"
+  owner "root"
+  group "root"
+  mode "0755"
+end
+
+systemd_tmpfiles "dcron"
+
+systemd_unit "dcron.service"
+
 service "dcron" do
   action [:enable, :start]
 end
@@ -56,6 +67,7 @@ end
 if tagged?("nagios-client")
   cron "heartbeat" do
     command "/usr/bin/touch /tmp/.check_cron"
+    minute "0"
   end
 
   nagios_plugin "check_cron"

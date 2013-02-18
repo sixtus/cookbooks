@@ -1,0 +1,14 @@
+[Unit]
+Description=Network Time Service
+ConditionPathExists=/etc/ntpd.conf
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/usr/sbin/ntpd -s
+PIDFile=/var/run/openntpd.pid
+PrivateTmp=true
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

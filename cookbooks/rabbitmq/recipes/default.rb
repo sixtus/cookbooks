@@ -1,3 +1,5 @@
+include_recipe "erlang"
+
 package "net-misc/rabbitmq-server"
 
 directory "/var/log/rabbitmq" do
