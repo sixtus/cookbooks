@@ -39,29 +39,18 @@ hipchat_send(auth_token, {
 
 __END__
 - if ARGV[0] == "host"
-  %strong Host #{ENV['NAGIOS_NOTIFICATIONTYPE']}
-  %br/
-  Host:
+  %strong Host #{ENV['NAGIOS_NOTIFICATIONTYPE']}:
   %a{:href => "#{NAGIOS_BASE}/cgi-bin/extinfo.cgi?type=1&host=#{ENV['NAGIOS_HOSTNAME']}"}= ENV['NAGIOS_HOSTNAME']
-  %br/
-  State: #{ENV['NAGIOS_HOSTSTATE']}
-  %br/
-  Output: #{ENV['NAGIOS_HOSTOUTPUT']}
+  is #{ENV['NAGIOS_HOSTSTATE']} (#{ENV['NAGIOS_HOSTOUTPUT']})
   - if ENV['NAGIOS_NOTIFICATIONTYPE'] == "ACKNOWLEDGEMENT"
     %br/
     Comment by #{ENV['NAGIOS_HOSTACKAUTHOR']}: #{ENV['NAGIOS_HOSTACKCOMMENT']}
 - else
-  %strong Service #{ENV['NAGIOS_NOTIFICATIONTYPE']}
-  %br/
-  Host:
-  %a{:href => "#{NAGIOS_BASE}/cgi-bin/extinfo.cgi?type=1&host=#{ENV['NAGIOS_HOSTNAME']}"}= ENV['NAGIOS_HOSTNAME']
-  %br/
-  Service:
+  %strong Service #{ENV['NAGIOS_NOTIFICATIONTYPE']}:
   %a{:href => "#{NAGIOS_BASE}/cgi-bin/extinfo.cgi?type=2&host=#{ENV['NAGIOS_HOSTNAME']}&service=#{ENV['NAGIOS_SERVICEDESC']}"}= ENV['NAGIOS_SERVICEDESC']
-  %br/
-  State: #{ENV['NAGIOS_SERVICESTATE']}
-  %br/
-  Output: #{ENV['NAGIOS_SERVICEOUTPUT']}
+  on
+  %a{:href => "#{NAGIOS_BASE}/cgi-bin/extinfo.cgi?type=1&host=#{ENV['NAGIOS_HOSTNAME']}"}= ENV['NAGIOS_HOSTNAME']
+  is #{ENV['NAGIOS_SERVICESTATE']} (#{ENV['NAGIOS_SERVICEOUTPUT']})
   - if ENV['NAGIOS_NOTIFICATIONTYPE'] == "ACKNOWLEDGEMENT"
     %br/
     Comment by #{ENV['NAGIOS_SERVICEACKAUTHOR']}: #{ENV['NAGIOS_SERVICEACKCOMMENT']}
