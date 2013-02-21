@@ -17,10 +17,6 @@ when "gentoo"
 when "mac_os_x"
   package "beanstalk"
 
-  service "mxcl.beanstalk" do
-    action [:start]
-  end
-
 end
 
 # nagios
