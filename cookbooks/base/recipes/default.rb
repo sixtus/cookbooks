@@ -55,6 +55,7 @@ when "mac_os_x"
   include_recipe "iterm"
 
   # need to upgrade this one as early as possible or dircolors will break
+  package "xz"
   package "coreutils" do
     action :upgrade
   end
