@@ -37,7 +37,8 @@ define :nagios_plugin,
       params[:source] = params[:name]
     end
 
-    cookbook_file "/usr/lib/nagios/plugins/#{params[:name]}" do
+    cookbook_file "/usr/lib/nagios/plugins/#{params[:name]}-#{rrand}" do
+      path "/usr/lib/nagios/plugins/#{params[:name]}"
       source params[:source]
       cookbook params[:cookbook] if params[:cookbook]
       owner "root"

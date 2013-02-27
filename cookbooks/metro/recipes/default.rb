@@ -35,7 +35,8 @@ end
       ".control/strategy/seed" => "stage3",
       ".control/strategy/build" => "remote",
     }.each do |path, content|
-      directory "#{builddir}/#{File.dirname(path)}" do
+      directory "#{builddir}/#{File.dirname(path)}-#{rrand}" do
+        path "#{builddir}/#{File.dirname(path)}"
         owner "root"
         group "root"
         mode "0755"
