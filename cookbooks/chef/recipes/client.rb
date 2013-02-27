@@ -24,7 +24,23 @@ unless solo?
   end
 
   service "chef-client" do
-    action [:enable, :start]
+    action [:disable, :stop]
+  end
+
+  # distribute chef-client runs randomly
+  chef_minute = IPAddr.new(node[:primary_ipaddress]).to_i % 60
+
+  # and only converge automatically in production
+  if node.chef_environment == 'production'
+    chef_action = :create
+  else
+    chef_action = :delete
+  end
+
+  cron "chef-client" do
+    command "/usr/bin/ruby19 -E UTF-8 /usr/bin/chef-client -c /etc/chef/client.rb >/dev/null"
+    minute chef_minute
+    action chef_action
   end
 
   splunk_input "monitor:///var/log/chef/*.log"
@@ -50,16 +66,5 @@ unless solo?
 
   link "/etc/chef/cache" do
     to "/var/lib/chef/cache"
-  end
-end
-
-if tagged?("nagios-client")
-  nrpe_command "check_chef_client" do
-    command "/usr/lib/nagios/plugins/check_pidfile /var/run/chef/client.pid"
-  end
-
-  nagios_service "CHEF-CLIENT" do
-    check_command "check_nrpe!check_chef_client"
-    servicegroups "chef"
   end
 end

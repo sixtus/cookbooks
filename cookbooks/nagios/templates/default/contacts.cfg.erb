@@ -2,51 +2,17 @@
 # CONTACTS.CFG - CONTACTS & CONTACT GROUPS
 ###############################################################################
 
-<% @contactgroups = %w(everyone on-call emergency) %>
-
-<% @contacts.each do |c| %>
-<% @contactgroups |= c[:nagios_contact_groups] %>
-<% c[:nagios_contact_groups] = %w(everyone) if c[:nagios_contact_groups].empty? %>
 define contact {
   use generic-contact
-  contact_name <%= c[:id] %>
-  alias <%= c[:comment] %>
-  email <%= c[:email] %>
-  contactgroups <%= c[:nagios_contact_groups].sort.join(",") %>
-  service_notification_period 24x7
-  host_notification_period 24x7
-}
-
-<% if c.include?(:pager) %>
-<% if c.include?(:on_call) and not c[:on_call].empty? %>
-define contact {
-  use generic-contact
-  contact_name <%= c[:id] %>-on-call
-  alias <%= c[:comment] %>
-  pager <%= c[:pager] %>
+  contact_name on-call
+  alias on-call
+  email <%= node[:contacts][:hostmaster] %>
   contactgroups on-call
-  service_notification_period <%= c[:id] %>-on-call
-  host_notification_period <%= c[:id] %>-on-call
-}
-<% end %>
-
-<% if c[:nagios_emergency_contact] %>
-define contact {
-  use generic-contact
-  contact_name <%= c[:id] %>-emergency
-  alias <%= c[:comment] %>
-  pager <%= c[:pager] %>
-  contactgroups emergency
   service_notification_period 24x7
   host_notification_period 24x7
 }
-<% end %>
-<% end %>
-<% end %>
 
-<% @contactgroups.sort.each do |cg| %>
 define contactgroup {
-  contactgroup_name <%= cg %>
-  alias <%= cg %>
+  contactgroup_name on-call
+  alias on-call
 }
-<% end %>

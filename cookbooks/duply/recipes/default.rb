@@ -60,6 +60,7 @@ node[:backup][:configs].each do |name, params|
       check_command "check_nrpe!check_duplybackup_#{name}"
       check_interval 1440
       notification_interval 180
+      env [:testing, :development]
     end
   end
 end

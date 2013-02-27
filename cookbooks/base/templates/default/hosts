@@ -9,7 +9,9 @@
 
 # IPv4 and IPv6 localhost aliases
 127.0.0.1 localhost
+<% if node[:primary_ip6address] %>
 ::1 localhost
+<% end %>
 
 # this node
 <% if node[:primary_ipaddress] %>

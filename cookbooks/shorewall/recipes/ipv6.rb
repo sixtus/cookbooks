@@ -36,8 +36,6 @@ end
   end
 end
 
-directory "/var/lock/subsys"
-
 service "shorewall6" do
   action [:enable, :start]
 end
@@ -58,5 +56,6 @@ if tagged?("nagios-client")
   nagios_service "SHOREWALL6" do
     check_command "check_nrpe!check_shorewall6"
     servicegroups "system"
+    env [:testing, :development]
   end
 end

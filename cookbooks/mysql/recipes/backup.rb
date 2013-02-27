@@ -1,7 +1,5 @@
 include_recipe "mysql::server"
 
-package "dev-db/xtrabackup-bin"
-
 %w(
   mysql_full_backup
   mysql_full_clean

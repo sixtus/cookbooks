@@ -1,6 +1,6 @@
 tag("hadoop-jobtracker")
 
-include_recipe "hadoop::default"
+include_recipe "hadoop"
 
 service "hadoop-jobtracker" do
   action [:enable, :start]

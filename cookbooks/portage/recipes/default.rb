@@ -19,7 +19,8 @@ user "portage" do
   shell "/bin/false"
 end
 
-group "portage" do
+group "portage-#{rrand}" do
+  group_name "portage"
   gid 250
   append true
   members %w(portage)

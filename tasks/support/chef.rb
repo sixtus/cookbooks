@@ -19,6 +19,10 @@ def cookbook_metadata
     File.dirname(filename)
   end
 
+  files.select! do |file|
+    File.exist?(File.join(File.dirname(file), 'metadata.rb'))
+  end
+
   files.map do |file|
     cookbook = File.basename(File.dirname(file))
     metadata = parse_json(File.read(file)).symbolize_keys

@@ -64,6 +64,6 @@ node[:hadoop][:tmp_dir].each do |dir|
   end
 end
 
-splunk_input "monitor:///var/log/hadoop/hadoop.log" do
-  sourcetype "hadoop"
+if tagged?("splunk-forwarder")
+  include_recipe "splunk::hadoop-ops"
 end

@@ -3,8 +3,7 @@ unless node.recipe?("splunk::indexer") or node.role?("logger")
 
   package "net-analyzer/splunkforwarder"
 
-  include_recipe "splunk::default"
-  include_recipe "splunk::hadoop-ops"
+  include_recipe "splunk"
 
   indexer_nodes = node.run_state[:nodes].select do |n|
     n[:tags].include?("splunk-indexer")

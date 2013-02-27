@@ -6,10 +6,6 @@ directory "/var/log/rabbitmq" do
   mode "0750"
 end
 
-service "epmd" do
-  action [:enable, :start]
-end
-
 service "rabbitmq" do
   action [:enable, :start]
 end

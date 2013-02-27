@@ -16,6 +16,7 @@ default[:vim][:plugins] = {
   :auto_mkdir => "https://github.com/DataWraith/auto_mkdir",
   :coffee_script => "https://github.com/kchmck/vim-coffee-script",
   :endwise => "https://github.com/tpope/vim-endwise",
+  :git => "https://github.com/tpope/vim-git",
   :haml => "https://github.com/tpope/vim-haml",
   :javascript => "https://github.com/pangloss/vim-javascript",
   :markdown => "https://github.com/tpope/vim-markdown",

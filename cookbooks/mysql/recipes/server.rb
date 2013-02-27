@@ -1,6 +1,6 @@
 tag("mysql-server")
 
-include_recipe "mysql::default"
+include_recipe "mysql"
 
 case node[:platform]
 when "gentoo"
@@ -142,8 +142,6 @@ if tagged?("nagios-client")
     servicegroups "mysql"
   end
 
-  nagios_service_escalation "MYSQL"
-
   # MySQL user for check_mysql_health and others
   mysql_nagios_password = get_password("mysql/nagios")
 
@@ -202,7 +200,4 @@ if tagged?("nagios-client")
   nagios_service_dependency "MYSQL-SLAVELAG" do
     depends %w(MYSQL-SLAVEIO MYSQL-SLAVESQL)
   end
-
-  nagios_service_escalation "MYSQL-SLAVEIO"
-  nagios_service_escalation "MYSQL-SLAVESQL"
 end

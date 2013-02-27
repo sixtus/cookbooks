@@ -54,6 +54,8 @@ end.each do |n|
   end
 end
 
+directory "/var/lock/subsys"
+
 include_recipe "shorewall::ipv4"
 
 if node[:ipv6_enabled]
@@ -71,7 +73,6 @@ if tagged?("nagios-client")
     check_command "check_nrpe!check_conntrack"
     notification_interval 15
     servicegroups "system"
+    env [:testing, :development]
   end
-
-  nagios_service_escalation "CONNTRACK"
 end

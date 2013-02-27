@@ -2,18 +2,6 @@ case node[:platform]
 when "gentoo"
   case node[:java][:vm]
   when /^icedtea-/
-    portage_package_use "x11-libs/cairo" do
-      use %w(X)
-    end
-
-    portage_package_use "x11-libs/gdk-pixbuf" do
-      use %w(X)
-    end
-
-    portage_package_use "app-text/ghostscript-gpl" do
-      use %w(cups)
-    end
-
     portage_package_use "dev-java/icedtea" do
       use %w(javascript -webstart)
     end

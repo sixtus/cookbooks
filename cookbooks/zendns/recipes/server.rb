@@ -13,9 +13,7 @@ template "/etc/powerdns/pdns.conf" do
   notifies :restart, "service[pdns]"
 end
 
-package "dev-libs/mongo"
 package "dev-ruby/madvertise-logging"
-package "dev-ruby/mongo"
 
 cookbook_file "/usr/libexec/zendnspipe" do
   source "zendnspipe.rb"

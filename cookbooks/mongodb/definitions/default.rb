@@ -24,7 +24,7 @@ define :mongodb_instance, :nfiles => "1024" do
               "MONGODB-#{name.upcase}"
             end
 
-  include_recipe "mongodb::default"
+  include_recipe "mongodb"
 
   # data for solr searches
   tag("mongodb")
@@ -80,8 +80,6 @@ define :mongodb_instance, :nfiles => "1024" do
   end
 
   if tagged?("ganymed-client")
-    package 'dev-ruby/mongo'
-
     ganymed_collector svcname do
       source "mongodb.rb"
       variables :name => name,
@@ -154,7 +152,7 @@ define :mongos_instance do
               "MONGOS-#{name.upcase}"
             end
 
-  include_recipe "mongodb::default"
+  include_recipe "mongodb"
 
   tag("mongos")
 

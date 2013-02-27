@@ -1,4 +1,4 @@
-package "net-libs/nodejs"
+include_recipe "nodejs"
 
 capistrano_skeleton "zendns"
 

@@ -18,7 +18,7 @@ namespace :node do
     # create SSL cert
     ENV['BATCH'] = "1"
     Rake::Task['ssl:do_cert'].invoke(args.fqdn)
-    Rake::Task['load:cookbook'].invoke('openssl')
+    knife :cookbook_upload, ['openssl', '--force']
 
     b = binding()
     erb = Erubis::Eruby.new(File.read(File.join(TEMPLATES_DIR, 'node.rb')))
@@ -39,7 +39,7 @@ namespace :node do
   desc "Bootstrap the specified node"
   task :bootstrap, :fqdn, :ipaddress, :role do |t, args|
     Rake::Task['node:create'].invoke(args.fqdn, args.ipaddress, args.role)
-    knife :bootstrap, [args.fqdn, "--distro", "gentoo", "-P", "tux"]
+    sh("knife bootstrap #{args.fqdn} --distro gentoo -P tux")
   end
 
   desc "Quickstart & Bootstrap the specified node"
@@ -82,7 +82,7 @@ namespace :node do
       # do nothing
     end
 
-    Rake::Task['load:cookbook'].invoke('openssl')
+    knife :cookbook_upload, ['openssl', '--force']
 
     # remove node
     begin

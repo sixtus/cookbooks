@@ -6,10 +6,6 @@ directory "/etc/syslog-ng/conf.d" do
   mode "0755"
 end
 
-service "syslog-ng" do
-  action :nothing
-end
-
 template "/etc/syslog-ng/syslog-ng.conf" do
   source "syslog-ng.conf"
   owner "root"
@@ -43,5 +39,6 @@ if tagged?("nagios-client")
   nagios_service "SYSLOG" do
     check_command "check_nrpe!check_syslog"
     servicegroups "system"
+    env [:testing, :development]
   end
 end

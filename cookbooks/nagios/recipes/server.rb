@@ -8,7 +8,7 @@ end
 
 package "net-analyzer/nagios"
 
-include_recipe "nagios::default"
+include_recipe "nagios"
 include_recipe "nagios::livestatus"
 include_recipe "nagios::nrpe"
 include_recipe "nagios::nsca"
@@ -28,7 +28,7 @@ file "/var/nagios/rw/nagios.cmd" do
 end
 
 template "/usr/lib/nagios/plugins/notify" do
-  source "notify"
+  source "notify.#{node[:nagios][:notifier]}"
   owner "root"
   group "nagios"
   mode "0750"
@@ -36,7 +36,7 @@ end
 
 # retrieve data from the search index
 contacts = node.run_state[:users].select do |u|
-  u.include?(:nagios_contact_groups)
+  u[:tags] and not (u[:tags] & ["hostmaster", "nagios"]).empty?
 end.sort_by do |u|
   u[:id]
 end
@@ -151,7 +151,7 @@ cookbook_file "/etc/init.d/nsca" do
 end
 
 service "nsca" do
-  action [:enable, :start]
+  action [:disable, :stop]
 end
 
 # Web UI
@@ -191,6 +191,13 @@ end
 
 template "/usr/share/nagios/htdocs/index.php" do
   source "index.php"
+  owner "nagios"
+  group "nagios"
+  mode "0644"
+end
+
+cookbook_file "/usr/share/nagios/htdocs/side.php" do
+  source "side.php"
   owner "nagios"
   group "nagios"
   mode "0644"

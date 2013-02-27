@@ -96,6 +96,7 @@ if tagged?("nagios-client")
   nagios_service "PING" do
     check_command "check_ping!100.0,20%!500.0,60%"
     servicegroups "system"
+    env [:testing, :development]
   end
 
   nrpe_command "check_zombie_procs" do
@@ -105,6 +106,7 @@ if tagged?("nagios-client")
   nagios_service "ZOMBIES" do
     check_command "check_nrpe!check_zombie_procs"
     servicegroups "system"
+    env [:testing, :development]
   end
 
   nrpe_command "check_total_procs" do
@@ -132,6 +134,7 @@ if tagged?("nagios-client")
     check_command "check_nrpe!check_lib_users"
     servicegroups "system"
     notification_period "never"
+    env [:testing, :development]
   end
 
   if node[:virtualization][:role] == "host"
@@ -144,6 +147,7 @@ if tagged?("nagios-client")
     nagios_service "RAID" do
       check_command "check_nrpe!check_raid"
       servicegroups "system"
+      env [:testing, :development]
     end
 
     nagios_plugin "check_mem"
@@ -155,6 +159,7 @@ if tagged?("nagios-client")
     nagios_service "MEMORY" do
       check_command "check_nrpe!check_mem"
       servicegroups "system"
+      env [:testing, :development]
     end
 
     nrpe_command "check_load" do
@@ -164,6 +169,7 @@ if tagged?("nagios-client")
     nagios_service "LOAD" do
       check_command "check_nrpe!check_load"
       servicegroups "system"
+      env [:testing, :development]
     end
 
     nrpe_command "check_disks" do
@@ -174,9 +180,8 @@ if tagged?("nagios-client")
       check_command "check_nrpe!check_disks"
       notification_interval 15
       servicegroups "system"
+      env [:testing, :development]
     end
-
-    nagios_service_escalation "DISKS"
 
     nrpe_command "check_swap" do
       command "/usr/lib/nagios/plugins/check_swap -w 75% -c 50%"
@@ -186,6 +191,7 @@ if tagged?("nagios-client")
       check_command "check_nrpe!check_swap"
       notification_interval 180
       servicegroups "system"
+      env [:testing, :development]
     end
 
     sudo_rule "nagios-ethtool" do
@@ -204,6 +210,7 @@ if tagged?("nagios-client")
       check_command "check_nrpe!check_link_usage"
       servicegroups "system"
       check_interval 10
+      env [:testing, :development]
     end
 
     execute "check_link_usage" do

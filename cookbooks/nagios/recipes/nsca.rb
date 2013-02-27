@@ -13,7 +13,7 @@ directory "/var/run/nsca" do
   recursive true
 end
 
-include_recipe "nagios::default"
+include_recipe "nagios"
 
 master = node.run_state[:nodes].select do |n|
   n[:tags].include?("nagios-master")

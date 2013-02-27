@@ -18,10 +18,6 @@ directory "/var/log/couchdb" do
   mode "0750"
 end
 
-service "epmd" do
-  action [:enable, :start]
-end
-
 service "couchdb" do
   action [:enable, :start]
 end

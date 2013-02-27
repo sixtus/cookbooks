@@ -67,6 +67,7 @@ if tagged?("nagios-client")
   nagios_service "CRON" do
     check_command "check_nrpe!check_cron"
     servicegroups "system"
+    env [:testing, :development]
   end
 
   nagios_plugin "check_long_running_cronjobs"
@@ -78,5 +79,6 @@ if tagged?("nagios-client")
   nagios_service "CRONJOBS" do
     check_command "check_nrpe!check_long_running_cronjobs"
     check_interval 60
+    env [:testing, :development]
   end
 end

@@ -17,6 +17,6 @@ define :syslog_config, :source => nil, :variables => {} do
     source template
     cookbook params[:cookbook] if params[:cookbook]
     variables params[:variables]
-    notifies :restart, resources(:service => "syslog-ng")
+    notifies :restart, "service[syslog-ng]"
   end
 end

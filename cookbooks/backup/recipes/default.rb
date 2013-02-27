@@ -15,7 +15,8 @@ end.each do |u|
     home_mode "0711"
   end
 
-  group "backup" do
+  group "backup-#{rrand}" do
+    group_name "backup"
     members u[:id]
     append true
   end

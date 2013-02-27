@@ -130,11 +130,13 @@ if tagged?("nagios-client")
   nagios_service "POSTFIX" do
     check_command "check_nrpe!check_postfix"
     servicegroups "postfix"
+    env [:testing, :development]
   end
 
   nagios_service "SMTP" do
     check_command "check_nrpe!check_smtp"
     servicegroups "postfix"
+    env [:testing, :development]
   end
 
   nagios_service_dependency "SMTP" do

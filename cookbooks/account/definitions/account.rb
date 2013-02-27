@@ -22,11 +22,13 @@ define :account,
 
   key_source = params[:key_source]
 
-  group params[:gid] do
+  group "#{params[:gid]}-#{rrand}" do
+    group_name params[:gid]
     append true
   end
 
-  user params[:name] do
+  user "#{params[:name]}-#{rrand}" do
+    username params[:name]
     uid params[:uid]
     gid params[:gid]
     shell params[:shell]
@@ -38,7 +40,8 @@ define :account,
 
   if params[:action] == :create
     params[:groups].each do |g|
-      group g do
+      group "#{g}-#{rrand}" do
+        group_name g
         members params[:name]
         append true
       end
@@ -51,7 +54,8 @@ define :account,
     home_group ||= "root"
   end
 
-  directory File.dirname(home) do
+  directory "/home-#{rrand}" do
+    path File.dirname(home)
     owner "root"
     group "root"
     mode "0755"
@@ -59,27 +63,31 @@ define :account,
     not_if { File.directory?(File.dirname(home)) }
   end
 
-  directory home do
+  directory "#{home}-#{rrand}" do
+    path home
     owner home_owner
     group home_group
     mode params[:home_mode]
   end
 
-  directory "#{home}/.ssh" do
+  directory "#{home}/.ssh-#{rrand}" do
+    path "#{home}/.ssh"
     owner home_owner
     group home_group
     mode "0700"
   end
 
   if key_source
-    cookbook_file "#{home}/.ssh/id_rsa" do
+    cookbook_file "#{home}/.ssh/id_rsa-#{rrand}" do
+      path "#{home}/.ssh/id_rsa"
       source key_source
       owner home_owner
       group home_group
       mode "0600"
     end
 
-    cookbook_file "#{home}/.ssh/id_rsa.pub" do
+    cookbook_file "#{home}/.ssh/id_rsa.pub-#{rrand}" do
+      path "#{home}/.ssh/id_rsa.pub"
       source "#{key_source}.pub"
       owner home_owner
       group home_group
@@ -91,7 +99,8 @@ define :account,
   # if it's empty -- i.e. [] -- then we would create an empty
   # authorized keys but with nil, the file is not created.
   unless params[:authorized_keys].nil?
-    file "#{home}/.ssh/authorized_keys" do
+    file "#{home}/.ssh/authorized_keys-#{rrand}" do
+      path "#{home}/.ssh/authorized_keys"
       content(params[:authorized_keys].join("\n") + "\n")
       owner home_owner
       group home_group
@@ -126,7 +135,8 @@ define :accounts_from_databag,
     account_from_databag user[:id]
 
     params[:groups].each do |g|
-      group g do
+      group "#{g}-#{rrand}" do
+        group_name g
         members user[:id]
         append true
       end
