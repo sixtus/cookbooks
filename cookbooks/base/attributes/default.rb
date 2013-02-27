@@ -140,10 +140,7 @@ when "gentoo"
   end
 
 when "mac_os_x"
-  # coreutils is missing xz dependency
-  node.set[:packages] = %w(xz coreutils)
-
-  node.set[:packages] += %w(
+  node.set[:packages] = %w(
     ack
     atool
     colordiff
@@ -158,7 +155,6 @@ when "mac_os_x"
     netcat
     nmap
     pwgen
-    ssh-copy-id
     wget
   )
 end
