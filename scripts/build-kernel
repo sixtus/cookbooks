@@ -2,7 +2,7 @@
 
 KV="3.7.7-zentoo"
 
-BASE_URL="https://raw.github.com/zentoo/kernels/master"
+BASE_URL="https://raw.github.com/zentoo/kernels/next"
 
 # cleanup old cruft first
 for i in linux-*; do
@@ -34,7 +34,7 @@ else
 
 	pushd linux
 
-	wget -nv -O .config "https://raw.github.com/zentoo/quickstart/master/profiles/${KV}-generic.kconfig" || exit 1
+	wget -nv -O .config "https://raw.github.com/zentoo/quickstart/next/profiles/${KV}-generic.kconfig" || exit 1
 
 	make oldconfig || exit 1
 	make -j2 || exit 1
