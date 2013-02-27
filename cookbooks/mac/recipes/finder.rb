@@ -68,13 +68,6 @@ mac_userdefaults "disable file quarantine" do
   notifies :run, "execute[kill-mac-procs]"
 end
 
-mac_userdefaults "show full path in finder window" do
-  domain "com.apple.finder"
-  key "_FXShowPosixPathInTitle"
-  value true
-  notifies :run, "execute[kill-mac-procs]"
-end
-
 mac_userdefaults "disable finder animations" do
   domain "com.apple.finder"
   key "DisableAllAnimations"
