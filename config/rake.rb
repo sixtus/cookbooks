@@ -19,7 +19,7 @@ SSL_ORGANIZATIONAL_UNIT_NAME = "Operations"
 SSL_EMAIL_ADDRESS = "hostmaster@example.com"
 
 # The upstream branch to track
-UPSTREAM_BRANCH="next"
+UPSTREAM_BRANCH="zenops/next"
 
 # cookbooks that should always be uploaded
 FORCED_COOKBOOKS = %w(
