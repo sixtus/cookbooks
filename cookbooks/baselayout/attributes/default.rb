@@ -16,10 +16,6 @@ default[:baselayout][:groups] = {
     :gid => 3,
     :members => "root,bin,adm",
   },
-  :adm => {
-    :gid => 4,
-    :members => "root,adm,daemon",
-  },
   :tty => {
     :gid => 5,
     :members => "",
