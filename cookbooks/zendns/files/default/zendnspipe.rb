@@ -52,7 +52,7 @@ def get_records(domain, host, qtype)
     return cursor if cursor.count > 0
 
     # wildcard handling (yes, it sucks)
-    return [] if host == '*'
+    return [] if host == '*' or !host
     parts = host.split('.')
 
     # delete all previous wildcards
