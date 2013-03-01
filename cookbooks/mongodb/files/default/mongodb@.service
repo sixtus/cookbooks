@@ -1,0 +1,12 @@
+[Unit]
+Description=MongoDB instance (%I)
+ConditionPathExists=/etc/conf.d/mongodb.%I
+After=network.target
+
+[Service]
+EnvironmentFile=/etc/conf.d/mongodb.%I
+ExecStart=/usr/bin/mongod --port $PORT --dbpath $DBPATH --unixSocketPrefix /run/mongodb
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

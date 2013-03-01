@@ -1,7 +1,7 @@
 /var/log/mongodb/<%= @name %>.log {
-	missingok
-	sharedscripts
-	postrotate
-		/bin/kill -USR1 `cat /var/run/mongodb/<%= @name %>.pid`
-	endscript
+  missingok
+  sharedscripts
+  postrotate
+    /bin/kill -USR1 `cat /var/run/mongodb/<%= @name %>.pid`
+  endscript
 }
