@@ -25,16 +25,23 @@ export LC_ALL=en_US.UTF-8
 # commit any changes to /etc
 cd /etc
 git add -A .
-git ci -m 'automatic commit before updateworld' || :
+git ci -q -m 'automatic commit before updateworld' || :
 
 # display news items and mark them as read.
-eselect news read new | grep -v '^No news is good news.' || :
+eselect news read new &>/dev/null || :
 
 # switch to latest ruby first
 latest_ruby
 
+# initial chef-client run
+if [[ -e /etc/chef/client.pem && -z $UPDATEWORLD_INITIAL_CHEF ]]; then
+	chef-client
+	export UPDATEWORLD_INITIAL_CHEF=1
+	exec $0 $*
+fi
+
+# dummy run emerge first, so global updates don't clutter the output.
 if [[ -z $UPDATEWORLD_DONT_ASK ]]; then
-	# dummy run emerge first, so global updates don't clutter the output.
 	emerge --info &>/dev/null
 
 	eout=$(emerge @world -NDup --color=y --nospinner | grep --color=never '^\[' || :)
@@ -107,6 +114,15 @@ latest_ruby
 
 # cleanup unneeded dependencies
 depclean
+
+# systemd/udev upgrade
+if qfile -q -S -C /usr/lib/udev >/dev/null; then
+	emerge $(qfile -q -S -C /usr/lib/udev) -1 --usepkg --getbinpkg
+fi
+
+if qfile -q -S -C /usr/lib/udev >/dev/null; then
+	emerge $(qfile -q -S -C /usr/lib/udev) -1 --usepkg=n --getbinpkg=n
+fi
 
 # update config files and run chef-client/chef-solo
 if [[ -e /etc/chef/client.pem ]]; then
