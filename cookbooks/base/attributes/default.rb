@@ -12,9 +12,19 @@ else
   default[:bind_ipaddress] = node[:primary_ipaddress]
 end
 
-
 # cluster support
 default[:cluster][:name] = "default"
+
+# detect network interfaces
+node[:network][:interfaces].each do |name, int|
+  next unless int[:addresses]
+  if int[:addresses].keys.include?(node[:primary_ipaddress])
+    set[:primary_interface] = name
+    break
+  end
+end
+
+# legacy support for local networks
 default[:local_ipaddress] = nil
 
 if node[:local_ipaddress]

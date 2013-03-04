@@ -9,7 +9,11 @@
 ###############################################################################
 #ZONE	INTERFACE	ANYCAST		OPTIONS
 
-net eth0
+<% if node[:primary_interface_bridged] %>
+net <%= node[:primary_interface] %> detect bridge
+<% else %>
+net <%= node[:primary_interface] %>
+<% end %>
 
 <% node[:shorewall6][:interfaces].each do |zone, interface| %>
 <%= zone %> <%= interface %>
