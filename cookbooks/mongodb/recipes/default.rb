@@ -8,9 +8,20 @@ package "dev-ruby/mongo"
 
 file "/etc/logrotate.d/mongodb" do
   action :delete
-  not_if { node[:mongodb][:instances]["mongodb"] rescue false }
+  not_if { node[:tags].include?("mongodb") }
 end
 
 if tagged?("nagios-client")
   nagios_plugin "check_mongodb"
+end
+
+service "mongos" do
+  action [:disable, :stop]
+end
+
+node[:mongos][:instances].each do |cluster, params|
+  mongodb_mongos cluster do
+    bind_ip params[:bind_ip]
+    port params[:port]
+  end
 end

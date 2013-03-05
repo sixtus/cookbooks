@@ -7,6 +7,12 @@ node[:baselayout][:groups].each do |name, params|
   end
 end
 
+group "adm" do
+  gid 4
+  append true
+  members %w(root adm daemon)
+end
+
 group "wheel" do
   gid 10
   append true
