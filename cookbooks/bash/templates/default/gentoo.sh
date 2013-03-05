@@ -81,23 +81,26 @@ usedesc() {
 }
 
 mklnx() {
-	# build kernel
+	tmpdir=$(mktemp -d)
+
 	pushd /usr/src/linux
-	local KV=$(make kernelversion)
-	make "$@" || exit 1
-	cp arch/x86/boot/bzImage /boot/kernel-${KV} || exit 1
+
+	KV=$(make kernelversion)
+
+	make "$@"
+	make INSTALL_MOD_PATH=${tmpdir} modules_install
+
+	mkdir ${tmpdir}/boot
+	cp .config ${tmpdir}/boot/config-${KV}
+	cp arch/x86/boot/bzImage ${tmpdir}/boot/kernel-${KV}
+
 	popd
 
-	# build initramfs
-	dracut --force /boot/initramfs-${KV}.img || exit 1
+	dracut --force ${tmpdir}/boot/initramfs-${KV}.img
 
-	if partx -s -o SCHEME /dev/sda | grep -q gpt; then
-		sed -i -e '/^GRUB_CMDLINE_LINUX=/s/=.*/="rd.md=1 rd.lvm=1 rd.lvm.vg=vg"/' /etc/default/grub || exit 1
-		mkdir -p /boot/grub2 || exit 1
-		grub2-mkconfig -o /boot/grub2/grub.cfg || exit 1
+	tar cvf linux-${KV}.tar -C ${tmpdir} .
+	xz linux-${KV}.tar
+	rm -rf ${tmpdir}
 
-		for device in /dev/sd?; do
-			grub2-install ${device}
-		done
-	fi
+	echo "Image is at $(realpath linux-${KV}.tar.xz)"
 }

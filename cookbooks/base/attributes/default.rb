@@ -81,7 +81,7 @@ default[:sysctl][:net][:netfilter][:nf_conntrack_tcp_timeout_time_wait] = 120
 default[:sysctl][:net][:netfilter][:nf_conntrack_tcp_timeout_established] = 432000
 
 # skip hardware cookbooks
-default[:skip][:hardware] = false
+default[:skip][:hardware] = node[:virtualization][:role] == "guest"
 
 # provide sane default values in case ohai didn't find them
 default_unless[:cpu][:total] = 1
@@ -142,12 +142,6 @@ when "gentoo"
     sys-process/iotop
     sys-process/lsof
   )
-
-  if node[:virtualization][:role] == "host"
-    node.set[:packages] += %w(
-      sys-kernel/genkernel
-    )
-  end
 
 when "mac_os_x"
   node.set[:packages] = %w(

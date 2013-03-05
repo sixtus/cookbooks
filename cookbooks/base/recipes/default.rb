@@ -75,8 +75,8 @@ include_recipe "ssh"
 include_recipe "tmux"
 include_recipe "vim"
 
-# vservers don't have hardware access
-if root? and not solo? and node[:os] == "linux" and node[:virtualization][:role] != "guest" and not node[:skip][:hardware]
+# linux/hardware specific recipes
+if root? and not solo? and node[:os] == "linux" and not node[:skip][:hardware]
   include_recipe "hwraid"
   include_recipe "mdadm"
   include_recipe "ntp"
@@ -138,7 +138,7 @@ if tagged?("nagios-client")
     env [:testing, :development]
   end
 
-  if node[:virtualization][:role] == "host"
+  unless node[:skip][:hardware]
     nagios_plugin "check_raid"
 
     nrpe_command "check_raid" do
