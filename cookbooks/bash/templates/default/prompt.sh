@@ -257,16 +257,16 @@ __ps1_rc() {
 }
 
 if [[ $(id -u) -eq 0 ]]; then
-	USER_COLOR=${BOLD}${SOLAR_RED}
+	USER_COLOR=${SOLAR_RED}
 else
-	USER_COLOR=${SOLAR_ORANGE}
+	USER_COLOR=${BOLD}${SOLAR_RED}
 fi
 
 PS1="\[${RESET}${USER_COLOR}\]\u"
 PS1+="\[${RESET}\]@"
 PS1+="\[${RESET}${SOLAR_YELLOW}\]${_NODENAME}\[${RESET}\].${_DOMAINNAME}"
 PS1+=" \[${RESET}\][${COL_none}\$(__ps1_rc \$?)\[${RESET}]\]"
-PS1+=" \[${RESET}${SOLAR_VIOLET}\]\t"
+PS1+=" \[${RESET}${BOLD}${SOLAR_MAGENTA}\]\t"
 PS1+=" \[${RESET}${SOLAR_GREEN}\]\w"
 PS1+="\$(__ps1_virtualenv)\$(__ps1_rvm)\$(__ps1_git)"
 PS1+="\n\[${RESET}${USER_COLOR}\]\$ \[${RESET}\]"

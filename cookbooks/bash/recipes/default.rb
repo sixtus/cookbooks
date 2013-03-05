@@ -46,6 +46,13 @@ if solo? and not root?
   end
 end
 
+dir_colors = root? ? "/etc/DIR_COLORS" : "#{node[:homedir]}/.dir_colors"
+
+cookbook_file dir_colors do
+  source "dircolors.ansi-universal"
+  mode "0644"
+end
+
 %w(
   IP
   copy
