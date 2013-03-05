@@ -1,13 +1,9 @@
-# configure and update sysctl/init
-if node[:virtualization][:role] == "guest" and node[:virtualization][:system] == "linux-vserver"
-  execute "sysctl-reload" do
-    command "/bin/true"
-    action :nothing
-  end
-else
-  execute "sysctl-reload" do
-    command "/sbin/sysctl -p /etc/sysctl.conf"
-    action :nothing
+execute "sysctl-reload" do
+  command "/sbin/sysctl -p /etc/sysctl.conf"
+  action :nothing
+  not_if do
+    node[:virtualization][:system] == "linux-vserver" and
+    node[:virtualization][:role] == "guest"
   end
 end
 

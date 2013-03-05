@@ -10,3 +10,19 @@ set_unless[:shorewall][:tunnels] = {}
 set_unless[:shorewall6][:tunnels] = {}
 set_unless[:shorewall][:zones] = {}
 set_unless[:shorewall6][:zones] = {}
+
+# detect bridge device
+link = %x(ip link show)
+       .split(/\n/)
+       .select { |line| line =~ /master #{node[:primary_interface]}/ }
+       .map { |line| line.split[1].sub(/:$/, '') }
+       .reject { |device| device =~ /^veth/ }
+
+case link.size
+when 0
+  default[:primary_interface_bridged] = false
+when 1
+  default[:primary_interface_bridged] = link.first
+else
+  raise "failed to identify bridged interface" unless node[:primary_interface_bridged]
+end

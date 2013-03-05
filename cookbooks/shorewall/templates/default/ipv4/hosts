@@ -12,7 +12,11 @@
 # chef nodes
 <% node.run_state[:nodes].each do |n| %>
 <% if n[:primary_ipaddress] %>
-nodes eth0:<%= n[:primary_ipaddress] %>
+<% if node[:primary_interface_bridged] %>
+nodes <%= node[:primary_interface_bridged] %>:<%= n[:primary_ipaddress] %>
+<% else %>
+nodes <%= node[:primary_interface] %>:<%= n[:primary_ipaddress] %>
+<% end %>
 <% end %>
 <% end %>
 

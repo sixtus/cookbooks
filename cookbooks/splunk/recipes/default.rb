@@ -52,6 +52,7 @@ template "/opt/splunk/bin/scripts/hipchat-alert.rb" do
   owner "root"
   group "root"
   mode "0750"
+  only_if { node[:hipchat] and node[:hipchat][:auth_token] }
 end
 
 cookbook_file "/etc/init.d/splunk" do
