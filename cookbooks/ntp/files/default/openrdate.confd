@@ -1,0 +1,10 @@
+# Copyright 1999-2005 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: /var/cvsroot/gentoo-x86/net-misc/openrdate/files/openrdate-confd,v 1.1 2008/06/18 21:55:26 robbat2 Exp $
+
+# the NTP or RFC868/time server to get the date from
+RDATE_SERVER="pool.ntp.org"
+
+# Options to pass to rdate
+# "-n" says that we are using an NTP server instead of a RFC868/time server.
+OPENRDATE_OPTS="-n"
