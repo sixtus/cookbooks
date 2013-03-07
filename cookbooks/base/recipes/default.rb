@@ -95,7 +95,7 @@ if tagged?("nagios-client")
   include_recipe "nagios::client"
 
   nagios_service "PING" do
-    check_command "check_ping!100.0,20%!500.0,60%"
+    check_command "check_ping!250.0,20%!500.0,60%"
     servicegroups "system"
     env [:testing, :development]
   end

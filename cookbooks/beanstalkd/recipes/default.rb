@@ -12,6 +12,7 @@ when "gentoo"
 
   service "beanstalkd" do
     action [:enable, :start]
+    only_if { root? }
   end
 
 when "mac_os_x"

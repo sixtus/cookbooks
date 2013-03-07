@@ -46,6 +46,7 @@ if solo? and not root?
   end
 end
 
+# various color fixes for solarized
 dir_colors = root? ? "/etc/DIR_COLORS" : "#{node[:homedir]}/.dir_colors"
 
 cookbook_file dir_colors do
@@ -53,6 +54,14 @@ cookbook_file dir_colors do
   mode "0644"
 end
 
+colordiffrc = root? ? "/etc/colordiffrc" : "#{node[:homedir]}/.colordiffrc"
+
+cookbook_file colordiffrc do
+  source "colordiffrc"
+  mode "0644"
+end
+
+# scripts
 %w(
   IP
   copy
