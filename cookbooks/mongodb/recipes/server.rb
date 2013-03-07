@@ -43,7 +43,6 @@ template "/etc/conf.d/mongodb" do
   owner "root"
   group "root"
   mode "0644"
-  notifies :restart, "service[mongodb]"
   variables :bind_ip => node[:mongodb][:bind_ip],
             :port => node[:mongodb][:port],
             :dbpath => node[:mongodb][:dbpath],
