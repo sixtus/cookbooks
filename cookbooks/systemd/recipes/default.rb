@@ -56,7 +56,7 @@ end
 
 systemd_unit "network.service"
 
-service "network" do
+service "network.service" do
   action :enable
   provider Chef::Provider::Service::Systemd
 end
