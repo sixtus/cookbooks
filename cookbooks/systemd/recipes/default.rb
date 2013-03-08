@@ -71,5 +71,7 @@ when "gentoo"
 
     # user session support
     systemd_unit "user-session@.service"
+
+    nagios_plugin "check_systemd"
   end
 end
