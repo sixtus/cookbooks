@@ -12,17 +12,15 @@ action :create do
     "#{n[:fqdn]}:#{n[:mongoc][:port]}"
   end.sort
 
-  systemd = systemd?
-
   file "/var/log/mongodb/#{svcname}.log" do
     owner "mongodb"
     group "mongodb"
     mode "0644"
-    not_if { systemd }
+    action :delete if systemd_running?
   end
 
   splunk_input "monitor:///var/log/mongodb/#{svcname}.log" do
-    not_if { systemd }
+    not_if { systemd_running? }
   end
 
   template "/etc/logrotate.d/#{svcname}" do
@@ -31,7 +29,7 @@ action :create do
     group "root"
     mode "0644"
     variables :name => name
-    not_if { systemd }
+    action :delete if systemd_running?
   end
 
   cookbook_file "/etc/init.d/#{svcname}" do
@@ -39,7 +37,7 @@ action :create do
     owner "root"
     group "root"
     mode "0755"
-    not_if { systemd }
+    action :delete if systemd_running?
   end
 
   template "/etc/conf.d/#{svcname}" do
