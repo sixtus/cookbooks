@@ -51,7 +51,6 @@ namespace :generate do
 
       next if platforms.empty?
 
-      env.printf %{#} if version == "0.0.0"
       env.printf %{cookbook %-20s "= %s"\n}, %{"#{cookbook}",}, version
     end
 
