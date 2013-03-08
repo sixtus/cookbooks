@@ -17,14 +17,12 @@
 	au = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
 [color]
 	branch = auto
-	diff = false
+	diff = auto
 	grep = auto
 	interactive = auto
 	showbranch = auto
 	status = auto
 	ui = auto
-[pager]
-	diff = colordiff | less
 [branch]
 	autosetupmerge = true
 [push]
