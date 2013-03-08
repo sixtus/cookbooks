@@ -33,7 +33,7 @@ end
 
 if tagged?("nagios-client")
   nrpe_command "check_ganymed" do
-    command "/usr/lib/nagios/plugins/check_pidfile /var/run/ganymed.pid ganymed"
+    command "/usr/lib/nagios/plugins/check_systemd ganymed.service /run/ganymed.pid ganymed"
   end
 
   nagios_service "GANYMED" do
