@@ -31,7 +31,5 @@ hipchat_send(auth_token, {
 })
 
 __END__
-%strong
-  %a{href: ARGV[5]}= ARGV[3]
-%br/
-Reason: #{ARGV[4]}
+%strong Alert:
+%a{href: ARGV[5]}= ARGV[4]
