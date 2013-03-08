@@ -1,10 +1,6 @@
 module SystemdHelpers
   def systemd_running?
-    File.read("/proc/1/cmdline").chomp =~ /systemd/
-  end
-
-  def systemd?
-    node[:systemd] and node[:systemd][:enabled]
+    File.read("/proc/1/cmdline") =~ /systemd/
   end
 end
 

@@ -25,7 +25,7 @@ unless solo?
   end
 
   cron "chef-client" do
-    command "/usr/bin/ruby19 -E UTF-8 /usr/bin/chef-client -c /etc/chef/client.rb >/dev/null"
+    command "/usr/bin/ruby19 -E UTF-8 /usr/bin/chef-client -c /etc/chef/client.rb &>/dev/null"
     minute IPAddr.new(node[:primary_ipaddress]).to_i % 60
     action :delete unless node.chef_environment == 'production'
     action :delete if systemd_running?
