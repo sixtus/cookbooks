@@ -39,8 +39,10 @@ unless solo?
     only_if { systemd_running? }
   end
 
+  # chef-client.service has a condition on this lock
+  # so we use it to stop chef-client on testing/staging machines
   file "/var/lock/chef-client.lock" do
-    only_if { node.chef_environment != 'production' }
+    action :delete if node.chef_environment == 'production'
   end
 
   splunk_input "monitor:///var/log/chef/*.log"
