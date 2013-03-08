@@ -35,10 +35,9 @@ when "gentoo"
     include_recipe "base::resolv"
     include_recipe "base::sysctl"
     include_recipe "baselayout"
+    include_recipe "systemd"
 
-    if systemd?
-      include_recipe "systemd"
-    else
+    unless systemd_running?
       include_recipe "sysvinit"
       include_recipe "openrc"
     end
@@ -74,6 +73,7 @@ node[:packages].each do |pkg|
 end
 
 # load common recipes
+include_recipe "systemd"
 include_recipe "bash"
 include_recipe "git"
 include_recipe "lftp"
