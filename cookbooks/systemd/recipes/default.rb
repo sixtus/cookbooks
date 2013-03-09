@@ -24,6 +24,13 @@ when "gentoo"
       provider Chef::Provider::Service::Systemd
     end
 
+    template "/etc/systemd/system.conf" do
+      source "system.conf"
+      owner "root"
+      group "root"
+      mode "0644"
+    end
+
     # journal
     template "/etc/systemd/journald.conf" do
       source "journald.conf"
