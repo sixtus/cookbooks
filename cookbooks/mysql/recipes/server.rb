@@ -33,10 +33,31 @@ when "gentoo"
       mode "0644"
     end
 
+    template "/etc/logrotate.d/mysql" do
+      source "logrotate.conf"
+      owner "root"
+      group "root"
+      mode "0644"
+      action :delete if systemd_running?
+    end
+
     directory "/var/log/mysql" do
       owner "mysql"
       group "mysql"
       mode "0755"
+    end
+
+    %w(mysql.err mysql.log mysqld.err slow-queries.log).each do |l|
+      file "/var/log/mysql/#{l}" do
+        owner "mysql"
+        group "wheel"
+        mode "0640"
+        action :delete if systemd_running?
+      end
+    end
+
+    file "/etc/syslog-ng/conf.d/90-mysql.conf" do
+      action :delete
     end
 
     mysql_root_pass = get_password("mysql/root")
@@ -66,21 +87,6 @@ when "gentoo"
       group "root"
       mode "0600"
       backup 0
-    end
-
-    template "/etc/logrotate.d/mysql" do
-      source "logrotate.conf"
-      owner "root"
-      group "root"
-      mode "0644"
-    end
-
-    %w(mysql.err mysql.log mysqld.err slow-queries.log).each do |l|
-      file "/var/log/mysql/#{l}" do
-        owner "mysql"
-        group "wheel"
-        mode "0640"
-      end
     end
 
     cookbook_file "/usr/libexec/mysqld-wait-ready" do
@@ -137,7 +143,7 @@ if tagged?("nagios-client")
 
   # simple process check
   nrpe_command "check_mysql" do
-    command "/usr/lib/nagios/plugins/check_pidfile /var/run/mysqld/mysqld.pid /usr/sbin/mysqld"
+    command "/usr/lib/nagios/plugins/check_systemd mysql.service /run/mysqld/mysqld.pid /usr/sbin/mysqld"
   end
 
   nagios_service "MYSQL" do

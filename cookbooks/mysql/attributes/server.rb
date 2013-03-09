@@ -8,7 +8,7 @@ default[:mysql][:server][:sysconfdir] = "/etc/mysql"
 default[:mysql][:server][:libdir] = "/usr/lib/mysql"
 default[:mysql][:server][:localstatedir] = "/var/lib/mysql"
 default[:mysql][:server][:logdir] = "/var/log/mysql"
-default[:mysql][:server][:rundir] = "/var/run/mysqld"
+default[:mysql][:server][:rundir] = "/run/mysqld"
 default[:mysql][:server][:includedir] = "/usr/include/mysql"
 default[:mysql][:server][:datadir] = "/var/lib/mysql"
 default[:mysql][:server][:tmpdir] = "/var/tmp"
@@ -51,9 +51,6 @@ default[:mysql][:server][:thread_cache_size] = node[:mysql][:server][:max_connec
 default[:mysql][:server][:max_allowed_packet] = "16M"
 default[:mysql][:server][:wait_timeout] = "28800"
 default[:mysql][:server][:connect_timeout] = "10"
-
-# Slow Query Log
-default[:mysql][:server][:long_query_time] = "0"
 
 # Key Buffer Optimization
 default[:mysql][:server][:key_buffer_size] = "64M"
@@ -105,7 +102,6 @@ default[:mysql][:server][:detailed_monitoring] = false
   :tchit    => %w(threadcache-hitrate   90:  80:  60    180  1),
   :qchit    => %w(qcache-hitrate        90:  80:  60    180  1),
   :qclow    => %w(qcache-lowmem-prunes  1    10   60    180  1),
-  :slow     => %w(slow-queries          0.1  1    60    60   0),
   :long     => %w(long-running-procs    10   20   5     60   0),
   :tabhit   => %w(tablecache-hitrate    99:  95:  60    180  1),
   :lock     => %w(table-lock-contention 1    2    60    180  1),
@@ -138,9 +134,6 @@ end
 # calculate a bunch of thresholds from mysql attributes
 default[:mysql][:server][:nagios][:conns][:warning] = (node[:mysql][:server][:max_connections].to_i * 0.80).to_i
 default[:mysql][:server][:nagios][:conns][:critical] = (node[:mysql][:server][:max_connections].to_i * 0.95).to_i
-
-# disable checks if they are not supported by the current configuration
-default[:mysql][:server][:nagios][:slow][:enabled] = node[:mysql][:server][:long_query_time].to_i > 0
 
 if node[:mysql][:server][:detailed_monitoring]
   default[:mysql][:server][:nagios][:bphit][:enabled]   = node[:mysql][:server][:skip_innodb]
