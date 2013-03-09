@@ -4,6 +4,7 @@ ConditionPathExists=/etc/conf.d/%p
 After=network.target
 
 [Service]
+User=mongodb
 EnvironmentFile=/etc/conf.d/%p
 ExecStart=/usr/bin/mongod \
 	--bind_ip $MONGODB_IP \
