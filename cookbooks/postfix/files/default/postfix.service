@@ -3,11 +3,8 @@ Description=Postfix Mail Transfer Agent
 After=network.target
 
 [Service]
-Type=forking
-PIDFile=/var/spool/postfix/pid/master.pid
-ExecStart=/usr/sbin/postfix start
-ExecStop=/usr/sbin/postfix stop
-ExecReload=/usr/sbin/postfix reload
+ExecStart=/usr/libexec/postfix/master
+ExecReload=/bin/kill -HUP $MAINPID
 Restart=always
 
 [Install]
