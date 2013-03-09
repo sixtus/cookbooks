@@ -4,8 +4,6 @@ ConditionPathExists=/etc/conf.d/%p.%I
 After=network.target
 
 [Service]
-Type=forking
-PIDFile=/run/mongodb/%p.%I.pid
 User=mongodb
 EnvironmentFile=/etc/conf.d/%p.%I
 ExecStart=/usr/bin/mongos \
@@ -13,8 +11,7 @@ ExecStart=/usr/bin/mongos \
 	--port $MONGOS_PORT \
 	--configdb $MONGOS_CONFIGDB \
 	--unixSocketPrefix $MONGOS_RUN \
-	--pidfilepath /run/mongodb/%p.%I.pid \
-	--fork --syslog \
+	--syslog \
 	$MONGOS_OPTIONS
 Restart=always
 

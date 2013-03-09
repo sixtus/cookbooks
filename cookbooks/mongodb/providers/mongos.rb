@@ -57,7 +57,7 @@ action :create do
 
   if node[:tags].include?("nagios-client")
     nrpe_command "check_mongos_#{name}" do
-      command "/usr/lib/nagios/plugins/check_pidfile /var/run/mongodb/#{svcname}.pid mongos"
+      command "/usr/lib/nagios/plugins/check_systemd mongos@#{name}.service /run/mongodb/#{svcname}.pid mongos"
     end
 
     nagios_service nagname do

@@ -59,7 +59,7 @@ end
 
 if tagged?("nagios-client")
   nrpe_command "check_mongoc" do
-    command "/usr/lib/nagios/plugins/check_pidfile /var/run/mongodb/mongoc.pid mongod"
+    command "/usr/lib/nagios/plugins/check_systemd mongoc.service /run/mongodb/mongoc.pid mongod"
   end
 
   nagios_service "MONGOC" do
