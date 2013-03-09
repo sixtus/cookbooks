@@ -23,6 +23,18 @@ execute "pure-pw-mkdb" do
   not_if { FileUtils.uptodate?("/etc/pureftpd.pdb", %w(/etc/pureftpd.passwd)) }
 end
 
+systemd_unit "pure-ftpd.service"
+
 service "pure-ftpd" do
   action [:enable, :start]
+end
+
+if tagged?("nagios-client")
+  nrpe_command "check_pureftpd" do
+    command "/usr/lib/nagios/plugins/check_systemd pure-ftpd.service /run/pure-ftpd.pid"
+  end
+
+  nagios_service "PURE-FTPD" do
+    check_command "check_nrpe!check_pureftpd"
+  end
 end

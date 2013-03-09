@@ -1,0 +1,11 @@
+[Unit]
+Description=Pure-FTPd
+ConditionPathExists=/etc/conf.d/pure-ftpd
+After=network.target
+
+[Service]
+ExecStart=/usr/sbin/pure-ftpd $SERVER $MAX_CONN $MAX_CONN_IP $DISK_FULL $USE_NAT $AUTH $LOG $TIMEOUT $CHARCONV $MISC_OTHER $UPSCRIPT
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
