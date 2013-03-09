@@ -1,0 +1,10 @@
+[Unit]
+Description=PHP FastCGI Process Manager
+After=network.target
+
+[Service]
+ExecStart=/usr/lib/php5.3/bin/php-fpm -F -y /etc/php/fpm-php5.3/php-fpm.conf
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
