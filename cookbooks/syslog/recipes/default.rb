@@ -35,7 +35,7 @@ end
 
 if tagged?("nagios-client")
   nrpe_command "check_syslog" do
-    command "/usr/lib/nagios/plugins/check_pidfile /var/run/syslog-ng.pid /usr/sbin/syslog-ng"
+    command "/usr/lib/nagios/plugins/check_systemd syslog-ng.service /run/syslog-ng.pid /usr/sbin/syslog-ng"
   end
 
   nagios_service "SYSLOG" do

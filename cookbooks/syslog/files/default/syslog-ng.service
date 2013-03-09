@@ -4,7 +4,7 @@ Documentation=man:syslog-ng(8)
 
 [Service]
 Sockets=syslog.socket
-ExecStart=/usr/sbin/syslog-ng -F -p /var/run/syslog-ng.pid
+ExecStart=/usr/sbin/syslog-ng -F
 ExecReload=/bin/kill -HUP $MAINPID
 StandardOutput=null
 Restart=always
