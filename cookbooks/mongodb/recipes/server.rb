@@ -1,3 +1,5 @@
+include_recipe "mongodb"
+
 tag("mongodb")
 tag("mongodb-#{node[:mongodb][:cluster]}")
 
