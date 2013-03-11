@@ -4,6 +4,7 @@ ConditionPathExists=/etc/conf.d/pure-ftpd
 After=network.target
 
 [Service]
+EnvironmentFile=/etc/conf.d/pure-ftpd
 ExecStart=/usr/sbin/pure-ftpd $SERVER $MAX_CONN $MAX_CONN_IP $DISK_FULL $USE_NAT $AUTH $LOG $TIMEOUT $CHARCONV $MISC_OTHER $UPSCRIPT
 Restart=always
 
