@@ -1,0 +1,12 @@
+[Unit]
+Description=ZooKeeper
+After=network.target
+
+[Service]
+User=zookeeper
+Group=zookeeper
+ExecStart=/var/lib/zookeeper/wrapper.sh
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
