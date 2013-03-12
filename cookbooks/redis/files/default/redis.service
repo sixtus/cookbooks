@@ -1,0 +1,12 @@
+[Unit]
+Description=Redis Server
+After=network.target
+
+[Service]
+User=redis
+Group=redis
+ExecStart=/usr/sbin/redis-server /etc/redis.conf
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
