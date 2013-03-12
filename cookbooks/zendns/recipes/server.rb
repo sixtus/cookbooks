@@ -23,6 +23,8 @@ cookbook_file "/usr/libexec/zendnspipe" do
   notifies :restart, "service[pdns]"
 end
 
+systemd_unit "pdns.service"
+
 service "pdns" do
   action [:enable, :start]
 end
