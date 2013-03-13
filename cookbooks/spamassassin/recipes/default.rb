@@ -22,6 +22,14 @@ directory "/var/lib/spamassassin" do
   group "spamd"
 end
 
+template "/etc/spamassassin/local.cf" do
+  source "local.cf"
+  owner "root"
+  group "root"
+  mode "0644"
+  notifies :reload, "service[spamd]"
+end
+
 execute "sa-update" do
   command "/usr/bin/sa-update || :"
   notifies :reload, "service[spamd]"
