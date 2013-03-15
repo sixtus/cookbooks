@@ -1,0 +1,10 @@
+[Unit]
+Description=xinetd
+After=network.target
+
+[Service]
+ExecStart=/usr/sbin/xinetd -dontfork
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
