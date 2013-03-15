@@ -1,0 +1,13 @@
+[Unit]
+Description=RabbitMQ Messaging server
+Requires=epmd.service
+After=network.target epmd.service
+
+[Service]
+User=rabbitmq
+Group=rabbitmq
+ExecStart=/usr/libexec/rabbitmq/rabbitmq-server
+ExecStop=/usr/sbin/rabbitmqctl stop
+
+[Install]
+WantedBy=multi-user.target
