@@ -1,0 +1,10 @@
+[Unit]
+Description=CouchDB
+Requires=epmd.service
+After=network.target epmd.service
+
+[Service]
+User=couchdb
+Group=couchdb
+ExecStart=/usr/bin/couchdb -o /dev/stdout -e /dev/stderr
+Restart=always

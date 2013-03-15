@@ -20,6 +20,9 @@ directory "/var/log/couchdb" do
   mode "0750"
 end
 
+systemd_tmpfiles "couchdb"
+systemd_unit "couchdb.service"
+
 service "couchdb" do
   action [:enable, :start]
 end
