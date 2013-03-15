@@ -139,6 +139,8 @@ end
 
 include_recipe "nagios::extras"
 
+systemd_unit "nagios.service"
+
 service "nagios" do
   action [:enable, :start]
 end
