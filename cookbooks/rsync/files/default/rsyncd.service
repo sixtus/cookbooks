@@ -1,0 +1,12 @@
+[Unit]
+Description=rsync daemon
+ConditionPathExists=/etc/rsyncd.conf
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/rsync --daemon --no-detach
+PIDFile=/var/run/rsyncd.pid
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

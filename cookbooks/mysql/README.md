@@ -251,15 +251,6 @@ external resources are mentioned to help in optimizing server performance.
   : The number of seconds that the mysqld server waits for a connect packet
   before responding with `Bad handshake`.
 
-## Slow Query Log
-
-`mysql[:server][:long_query_time] = "0"`
-  : If a query takes longer than this many seconds, the server increments the
-  `Slow_queries status` variable and the query is logged to the slow query log
-  file. This value is measured in real time, not CPU time, so a query that is
-  under the threshold on a lightly loaded system might be above the threshold
-  on a heavily loaded one.
-
 ## Key Buffer Optimization
 
 `mysql[:server][:key_buffer_size] = "64M"`

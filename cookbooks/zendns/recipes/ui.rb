@@ -2,8 +2,11 @@ include_recipe "nodejs"
 
 capistrano_skeleton "zendns"
 
+systemd_user_session "zendns"
+
 monit_instance "zendns" do
   manage false
+  action :delete if systemd_running?
 end
 
 nginx_unicorn "zendns" do

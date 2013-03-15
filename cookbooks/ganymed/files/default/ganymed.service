@@ -1,0 +1,11 @@
+[Unit]
+Description=Ganymed Metriks Daemon
+ConditionPathExists=/etc/ganymed/config.yml
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/ganymed -c /etc/ganymed/config.yml -e production
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

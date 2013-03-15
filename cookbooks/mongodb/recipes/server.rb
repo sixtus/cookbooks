@@ -1,3 +1,5 @@
+include_recipe "mongodb"
+
 tag("mongodb")
 tag("mongodb-#{node[:mongodb][:cluster]}")
 
@@ -43,13 +45,14 @@ template "/etc/conf.d/mongodb" do
   owner "root"
   group "root"
   mode "0644"
-  notifies :restart, "service[mongodb]"
   variables :bind_ip => node[:mongodb][:bind_ip],
             :port => node[:mongodb][:port],
             :dbpath => node[:mongodb][:dbpath],
             :nfiles => node[:mongodb][:nfiles],
             :opts => opts
 end
+
+systemd_unit "mongodb.service"
 
 service "mongodb" do
   action [:enable, :start]
@@ -65,7 +68,7 @@ end
 
 if tagged?("nagios-client")
   nrpe_command "check_mongodb" do
-    command "/usr/lib/nagios/plugins/check_pidfile /var/run/mongodb/mongodb.pid mongod"
+    command "/usr/lib/nagios/plugins/check_systemd mongodb.service /run/mongodb/mongodb.pid mongod"
   end
 
   nagios_service "MONGODB" do

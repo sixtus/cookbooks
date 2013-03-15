@@ -109,6 +109,8 @@ execute "postmap-recipient" do
   only_if { FileUtils.uptodate?('/etc/postfix/recipient', ['/etc/postfix/recipient.db']) }
 end
 
+systemd_unit "postfix.service"
+
 service "postfix" do
   action [:enable, :start]
 end

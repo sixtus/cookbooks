@@ -1,0 +1,8 @@
+[Unit]
+Description=Chef Client
+ConditionPathExists=/etc/chef/client.rb
+ConditionPathExists=!/var/lock/chef-client.lock
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/ruby19 -E UTF-8 /usr/bin/chef-client -c /etc/chef/client.rb

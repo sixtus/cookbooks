@@ -1,6 +1,6 @@
 # Mongodb essentials
 MONGOS_EXEC="/usr/bin/mongos"
-MONGOS_RUN="/var/run/mongodb"
+MONGOS_RUN="/run/mongodb"
 MONGOS_USER="mongodb"
 
 MONGOS_IP="<%= @bind_ip %>"

@@ -1,7 +1,7 @@
 package "net-firewall/shorewall6"
 
 execute "shorewall6-restart" do
-  command "/sbin/shorewall6 restart"
+  command "/sbin/shorewall6 -q restart"
   action :nothing
 end
 
@@ -36,9 +36,13 @@ end
   end
 end
 
+systemd_unit "shorewall6.service"
+
 service "shorewall6" do
   action [:enable, :start]
 end
+
+splunk_input "monitor:///var/log/shorewall6-init.log"
 
 if tagged?("nagios-client")
   sudo_rule "nagios-shorewall6" do

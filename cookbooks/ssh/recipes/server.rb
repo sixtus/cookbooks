@@ -10,6 +10,8 @@ template "/etc/ssh/sshd_config" do
   notifies :restart, "service[sshd]"
 end
 
+systemd_unit "sshd.service"
+
 service "sshd" do
   action [:enable, :start]
 end

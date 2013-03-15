@@ -12,8 +12,8 @@ checkconfig() {
     return 1
   fi
 
-  mkdir -p ${MONGOS_RUN:-/var/run/mongodb}
-  chown ${MONGOS_USER:-mongodb}: ${MONGOS_RUN:-/var/run/mongodb}
+  mkdir -p ${MONGOS_RUN:-/run/mongodb}
+  chown ${MONGOS_USER:-mongodb}: ${MONGOS_RUN:-/run/mongodb}
 }
 
 start() {
@@ -22,13 +22,13 @@ start() {
   ebegin "Starting ${SVCNAME}"
   start-stop-daemon --start \
     --background --make-pidfile \
-    --pidfile ${MONGOS_RUN:-/var/run/mongodb}/${SVCNAME}.pid \
+    --pidfile ${MONGOS_RUN:-/run/mongodb}/${SVCNAME}.pid \
     --user ${MONGOS_USER:-mongodb} \
     --exec ${MONGOS_EXEC:-/usr/bin/mongos} \
     -- \
     --bind_ip ${MONGOS_IP:-127.0.0.1} \
     --port ${MONGOS_PORT:-27018} \
-    --unixSocketPrefix ${MONGOS_RUN:-/var/run/mongodb} \
+    --unixSocketPrefix ${MONGOS_RUN:-/run/mongodb} \
     --logappend --logpath /var/log/mongodb/${SVCNAME}.log \
     --configdb ${MONGOS_CONFIGDB} \
     ${MONGOS_OPTIONS}
@@ -37,6 +37,6 @@ start() {
 
 stop() {
   ebegin "Stopping ${SVCNAME}"
-  start-stop-daemon --stop --pidfile ${MONGOS_RUN:-/var/run/mongodb}/${SVCNAME}.pid
+  start-stop-daemon --stop --pidfile ${MONGOS_RUN:-/run/mongodb}/${SVCNAME}.pid
   eend $?
 }

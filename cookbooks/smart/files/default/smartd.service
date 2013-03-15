@@ -1,0 +1,12 @@
+[Unit]
+Description=S.M.A.R.T. Daemon
+ConditionPathExists=/etc/smartd.conf
+After=basic.target
+
+[Service]
+ExecStart=/usr/sbin/smartd -p /run/smartd.pid
+PIDFile=/run/smartd.pid
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

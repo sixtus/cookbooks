@@ -2,7 +2,7 @@
 
 if pgrep -f /usr/sbin/crond >/dev/null; then
 	if [[ -e /tmp/.check_cron ]]; then
-		stamp=$(($(stat -c %Y /tmp/.check_cron) + 600))
+		stamp=$(($(stat -c %Y /tmp/.check_cron) + 7200))
 		now=$(date +%s)
 
 		if [[ $now -gt $stamp ]]; then

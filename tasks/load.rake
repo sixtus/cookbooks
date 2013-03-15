@@ -16,7 +16,7 @@ namespace :load do
   task :all => [ :cookbooks, :nodes, :roles, :environments, :databags ]
 
   desc "Upload all cookbooks"
-  task :cookbooks => [ :pull, 'generate:metadata' ]
+  task :cookbooks => [ 'generate:metadata' ]
   task :cookbooks do
     puts ">>> Uploading cookbooks"
     cookbook_metadata.each do |cookbook, metadata|
@@ -91,7 +91,6 @@ namespace :load do
   end
 
   desc "Upload a single node definition"
-  task :node => [ :pull ]
   task :node, :fqdn do |t, args|
     fqdn = args.fqdn
 
@@ -109,7 +108,6 @@ namespace :load do
   end
 
   desc "Upload all node definitions"
-  task :nodes => [ :pull ]
   task :nodes do
     puts ">>> Uploading nodes"
 
@@ -124,7 +122,6 @@ namespace :load do
   end
 
   desc "Upload a single role definition"
-  task :role => [ :pull ]
   task :role, :name do |t, args|
     name = args.name
 
@@ -137,7 +134,6 @@ namespace :load do
   end
 
   desc "Upload all role definitions"
-  task :roles => [ :pull ]
   task :roles do
     puts ">>> Uploading roles"
 
@@ -152,7 +148,6 @@ namespace :load do
   end
 
   desc "Upload a single environment definition"
-  task :environment => [ :pull ]
   task :environment, :name do |t, args|
     name = args.name
 
@@ -165,7 +160,6 @@ namespace :load do
   end
 
   desc "Upload all environment definitions"
-  task :environments => [ :pull ]
   task :environments do
     puts ">>> Uploading environments"
 
@@ -180,7 +174,6 @@ namespace :load do
   end
 
   desc "Upload a single databag"
-  task :databag => [ :pull ]
   task :databag, :name do |t, args|
     name = args.name
 
@@ -213,7 +206,6 @@ namespace :load do
   end
 
   desc "Upload all data bags"
-  task :databags => [ :pull ]
   task :databags do
     bags = Dir[ File.join(BAGS_DIR, "*/") ].map do |f|
       File.basename(f)

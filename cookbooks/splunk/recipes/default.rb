@@ -62,6 +62,8 @@ cookbook_file "/etc/init.d/splunk" do
   mode "0755"
 end
 
+systemd_unit "splunk.service"
+
 service "splunk" do
   action [:enable, :start]
 end

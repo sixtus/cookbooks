@@ -1,0 +1,12 @@
+[Unit]
+Description=PowerDNS Server Daemon
+After=network.target
+
+[Service]
+ExecStart=/usr/sbin/pdns_server --daemon=no
+ExecReload=/usr/bin/pdns_control cycle
+ExecStop=/usr/bin/pdns_control quit
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

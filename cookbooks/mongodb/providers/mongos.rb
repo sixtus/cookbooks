@@ -3,7 +3,7 @@ action :create do
 
   # multiplex service
   svcname = "mongos.#{name}"
-  nagname = svcname.upcase.gsub(/[\.@]/, '-')
+  nagname = svcname.upcase.gsub(/\./, '-')
 
   # retrieve configdbs from index
   configdb = node.run_state[:nodes].select do |n|
@@ -16,9 +16,12 @@ action :create do
     owner "mongodb"
     group "mongodb"
     mode "0644"
+    action :delete if systemd_running?
   end
 
-  splunk_input "monitor:///var/log/mongodb/#{svcname}.log"
+  splunk_input "monitor:///var/log/mongodb/#{svcname}.log" do
+    not_if { systemd_running? }
+  end
 
   template "/etc/logrotate.d/#{svcname}" do
     source "mongodb.logrotate"
@@ -26,6 +29,7 @@ action :create do
     group "root"
     mode "0644"
     variables :name => name
+    action :delete if systemd_running?
   end
 
   cookbook_file "/etc/init.d/#{svcname}" do
@@ -33,6 +37,7 @@ action :create do
     owner "root"
     group "root"
     mode "0755"
+    action :delete if systemd_running?
   end
 
   template "/etc/conf.d/#{svcname}" do
@@ -52,7 +57,7 @@ action :create do
 
   if node[:tags].include?("nagios-client")
     nrpe_command "check_mongos_#{name}" do
-      command "/usr/lib/nagios/plugins/check_pidfile /var/run/mongodb/#{svcname}.pid mongos"
+      command "/usr/lib/nagios/plugins/check_systemd mongos@#{name}.service /run/mongodb/#{svcname}.pid mongos"
     end
 
     nagios_service nagname do

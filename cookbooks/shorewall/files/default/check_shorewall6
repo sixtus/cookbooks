@@ -29,12 +29,8 @@ case "$STATE" in
         echo "$STATELINE"
         exit 0
         ;;
-    Stopped)
-        echo "$STATELINE"
-        exit 2
-        ;;
     *)
         echo "$STATELINE"
-        exit 3
+        exit 2
         ;;
 esac

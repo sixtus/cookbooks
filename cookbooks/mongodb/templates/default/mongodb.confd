@@ -1,6 +1,6 @@
 # Mongodb essentials
 MONGODB_EXEC="/usr/bin/mongod"
-MONGODB_RUN="/var/run/mongodb"
+MONGODB_RUN="/run/mongodb"
 MONGODB_DATA="<%= @dbpath %>"
 MONGODB_USER="mongodb"
 
@@ -10,4 +10,5 @@ MONGODB_PORT="<%= @port %>"
 # Set extra options here, such as disabling the admin web server
 MONGODB_OPTIONS="<%= @opts.join(' ') %>"
 
+MONGODB_NFILES="<%= @nfiles %>"
 rc_ulimit="-n <%= @nfiles %>"

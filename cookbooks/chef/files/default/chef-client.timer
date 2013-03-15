@@ -1,0 +1,10 @@
+[Unit]
+Description=Chef Client Timer
+
+[Timer]
+Unit=chef-client.service
+OnBootSec=300
+OnUnitInactiveSec=300
+
+[Install]
+WantedBy=multi-user.target

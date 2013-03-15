@@ -1,0 +1,12 @@
+[Unit]
+Description=Linux Container (%I)
+ConditionPathExists=/etc/lxc/%I/config
+After=network.target
+
+[Service]
+EnvironmentFile=/etc/lxc/%I/env
+ExecStart=/usr/sbin/lxc-start -n %I ${INIT_COMMAND}
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

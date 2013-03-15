@@ -9,8 +9,8 @@ else
   node.run_state[:users] = search(:users)
 end
 
-# figure out if we're a nagios/ganymed client first, so recipes can conditionally
-# install nagios/ganymed plugins
+# figure out if we're a nagios client first, so recipes can conditionally
+# install nagios plugins
 nagios_masters = node.run_state[:nodes].select do |n|
   n[:tags].include?("nagios-master")
 end
@@ -35,8 +35,13 @@ when "gentoo"
     include_recipe "base::resolv"
     include_recipe "base::sysctl"
     include_recipe "baselayout"
-    include_recipe "sysvinit"
-    include_recipe "openrc"
+    include_recipe "systemd"
+
+    unless systemd_running?
+      include_recipe "sysvinit"
+      include_recipe "openrc"
+    end
+
     include_recipe "portage"
     include_recipe "portage::porticron"
     include_recipe "openssl"
@@ -68,8 +73,10 @@ node[:packages].each do |pkg|
 end
 
 # load common recipes
+include_recipe "systemd"
 include_recipe "bash"
 include_recipe "git"
+include_recipe "htop"
 include_recipe "lftp"
 include_recipe "ssh"
 include_recipe "tmux"

@@ -62,6 +62,10 @@ end
   end
 end
 
+systemd_tmpfiles "nginx"
+
+systemd_unit "nginx.service"
+
 service "nginx" do
   action [:enable, :start]
   supports [:reload]
@@ -121,7 +125,7 @@ end
 
 if tagged?("nagios-client")
   nrpe_command "check_nginx" do
-    command "/usr/lib/nagios/plugins/check_pidfile /var/run/nginx.pid /usr/sbin/nginx"
+    command "/usr/lib/nagios/plugins/check_systemd nginx.service /run/nginx.pid /usr/sbin/nginx"
   end
 
   nagios_service "NGINX" do

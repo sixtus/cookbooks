@@ -10,6 +10,8 @@ when "gentoo"
     notifies :restart, "service[beanstalkd]"
   end
 
+  systemd_unit "beanstalkd.service"
+
   service "beanstalkd" do
     action [:enable, :start]
     only_if { root? }

@@ -32,6 +32,9 @@ cookbook_file "/etc/init.d/nrpe" do
   mode "0755"
 end
 
+systemd_unit "nrpe.service"
+
 service "nrpe" do
   action [:enable, :start]
+  supports [:reload]
 end

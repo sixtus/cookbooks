@@ -18,6 +18,8 @@ syslog_config "00-local" do
   template "local.conf"
 end
 
+systemd_unit "syslog-ng.service"
+
 service "syslog-ng" do
   action [:enable, :start]
 end
@@ -33,7 +35,7 @@ end
 
 if tagged?("nagios-client")
   nrpe_command "check_syslog" do
-    command "/usr/lib/nagios/plugins/check_pidfile /var/run/syslog-ng.pid /usr/sbin/syslog-ng"
+    command "/usr/lib/nagios/plugins/check_systemd syslog-ng.service /run/syslog-ng.pid /usr/sbin/syslog-ng"
   end
 
   nagios_service "SYSLOG" do

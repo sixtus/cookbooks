@@ -16,6 +16,14 @@ node.set[:shorewall6][:zones] = {}
 
 include_recipe "shorewall::rules"
 
+# LXC support
+if node[:primary_interface] == "lxc0"
+  shorewall_lxc_bridge "lxc" do
+    interface node[:primary_interface]
+    bridged node[:primary_interface_bridged]
+  end
+end
+
 # binhost rules
 node.run_state[:nodes].select do |n|
   n[:tags].include?("portage-binhost")

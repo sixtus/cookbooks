@@ -1,0 +1,11 @@
+[Unit]
+Description=Jenkins CI Server
+After=network.target
+
+[Service]
+User=jenkins
+ExecStart=/usr/bin/java -Djava.awt.headless=true -DJENKINS_HOME=/var/lib/jenkins/home -jar /usr/lib/jenkins/jenkins.war --httpPort=8080
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

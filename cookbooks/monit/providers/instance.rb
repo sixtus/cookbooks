@@ -1,23 +1,6 @@
 include ChefUtils::Account
-include ChefUtils::RandomResource
 
 action :create do
-  file "/etc/init.d/monit-#{rrand}" do
-    path "/etc/init.d/monit"
-    action :delete
-  end
-
-  directory "/etc/monit.d-#{rrand}" do
-    path "/etc/monit.d"
-    action :delete
-    recursive true
-  end
-
-  file "/etc/monitrc-#{rrand}" do
-    path "/etc/monitrc"
-    action :delete
-  end
-
   user = get_user(new_resource.name)
   pidfile = if user[:name] == "root"
               "/var/run/monit.pid"
@@ -62,6 +45,7 @@ action :create do
 
   service "monit.#{user[:name]}" do
     action [:enable, :start]
+    not_if { systemd_running? }
   end
 
   if node[:tags].include?("nagios-client")
@@ -76,8 +60,32 @@ action :create do
   end
 end
 
+action :delete do
+  user = get_user(new_resource.name)
+  pidfile = if user[:name] == "root"
+              "/var/run/monit.pid"
+            else
+              "#{user[:dir]}/.monit.pid"
+            end
+
+  service "monit.#{user[:name]}" do
+    action [:disable, :stop]
+  end
+
+  file "/etc/init.d/monit.#{user[:name]}" do
+    action :delete
+  end
+
+  file "#{user[:dir]}/.monitrc.local" do
+    action :delete
+  end
+
+  file "#{user[:dir]}/.monitrc" do
+    action :delete
+  end
+end
+
 def initialize(*args)
   super
-  @action = :create
   @run_context.include_recipe "monit"
 end

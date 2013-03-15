@@ -58,13 +58,22 @@ template "/etc/conf.d/zookeeper" do
   notifies :restart, "service[zookeeper]"
 end
 
+cookbook_file "/var/lib/zookeeper/wrapper.sh" do
+  source "wrapper.sh"
+  owner "root"
+  group "root"
+  mode "0755"
+end
+
+systemd_unit "zookeeper.service"
+
 service "zookeeper" do
   action [:enable, :start]
 end
 
 if tagged?("nagios-client")
   nrpe_command "check_zookeeper" do
-    command "/usr/lib/nagios/plugins/check_pidfile /var/run/zookeeper.pid"
+    command "/usr/lib/nagios/plugins/check_systemd zookeeper.service /run/zookeeper.pid"
   end
 
   nagios_service "ZOOKEEPER" do

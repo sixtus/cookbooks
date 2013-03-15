@@ -9,7 +9,7 @@ execute "eselect php set fpm php#{node[:php][:slot]}" do
   end
 end
 
-directory "/var/run/php-fpm" do
+directory "/run/php-fpm" do
   owner "root"
   group "root"
   mode "0755"
@@ -46,13 +46,16 @@ template "/etc/conf.d/php-fpm" do
   notifies :restart, "service[php-fpm]"
 end
 
+systemd_tmpfiles "php-fpm"
+systemd_unit "php-fpm.service"
+
 service "php-fpm" do
   action [:enable, :start]
 end
 
 if tagged?("nagios-client")
   nrpe_command "check_php_fpm" do
-    command "/usr/lib/nagios/plugins/check_pidfile /var/run/php-fpm.pid php-fpm"
+    command "/usr/lib/nagios/plugins/check_systemd php-fpm.service /run/php-fpm.pid php-fpm"
   end
 
   nagios_service "PHP-FPM" do
