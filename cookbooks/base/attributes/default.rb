@@ -138,7 +138,6 @@ when "gentoo"
     sys-apps/less
     sys-apps/pciutils
     sys-fs/ncdu
-    sys-process/htop
     sys-process/iotop
     sys-process/lsof
   )
@@ -154,7 +153,6 @@ when "mac_os_x"
     gnu-sed
     gnu-tar
     keychain
-    midnight-commander
     ncdu
     netcat
     nmap

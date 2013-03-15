@@ -9,8 +9,8 @@ else
   node.run_state[:users] = search(:users)
 end
 
-# figure out if we're a nagios/ganymed client first, so recipes can conditionally
-# install nagios/ganymed plugins
+# figure out if we're a nagios client first, so recipes can conditionally
+# install nagios plugins
 nagios_masters = node.run_state[:nodes].select do |n|
   n[:tags].include?("nagios-master")
 end
@@ -76,6 +76,7 @@ end
 include_recipe "systemd"
 include_recipe "bash"
 include_recipe "git"
+include_recipe "htop"
 include_recipe "lftp"
 include_recipe "ssh"
 include_recipe "tmux"
