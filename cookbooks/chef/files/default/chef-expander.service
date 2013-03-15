@@ -1,0 +1,13 @@
+[Unit]
+Description=Chef Expander
+Requires=rabbitmq.service chef-solr.service
+After=network.target rabbitmq.service chef-solr.service
+
+[Service]
+User=chef
+Group=chef
+ExecStart=/usr/bin/chef-expander -c /etc/chef/solr.rb
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
