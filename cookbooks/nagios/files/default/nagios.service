@@ -1,0 +1,15 @@
+[Unit]
+Description=Nagios
+After=network.target
+
+[Service]
+ExecStartPre=/usr/bin/touch /var/nagios/nagios.log /var/nagios/status.sav
+ExecStartPre=/bin/chown nagios:nagios /var/nagios/nagios.log /var/nagios/status.sav
+ExecStartPre=/bin/rm -f /var/nagios/rw/nagios.cmd
+ExecStart=/usr/sbin/nagios /etc/nagios/nagios.cfg
+ExecReload=/bin/kill -HUP $MAINPID
+ExecStopPost=/bin/rm -f /var/nagios/status.log /var/nagios/nagios.tmp /var/nagios/rw/nagios.cmd
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

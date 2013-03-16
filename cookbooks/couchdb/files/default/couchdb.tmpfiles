@@ -1,0 +1,4 @@
+# systemd tmpfile settings for mysql
+# See tmpfiles.d(5) for details
+
+d /run/couchdb 0755 couchdb couchdb -

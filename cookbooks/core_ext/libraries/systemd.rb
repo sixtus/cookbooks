@@ -1,6 +1,6 @@
 module SystemdHelpers
   def systemd_running?
-    File.read("/proc/1/cmdline") =~ /systemd/
+    File.read("/proc/1/cmdline") =~ /systemd/ rescue false
   end
 end
 

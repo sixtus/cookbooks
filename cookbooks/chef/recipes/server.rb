@@ -102,9 +102,17 @@ execute "wait-for-chef-solr" do
   action :nothing
 end
 
+systemd_unit "chef-solr.service"
+
 service "chef-solr" do
   action [:start, :enable]
   notifies :run, "execute[wait-for-chef-solr]", :immediately
+end
+
+systemd_unit "chef-expander.service"
+
+service "chef-expander" do
+  action [:start, :enable]
 end
 
 template "/etc/conf.d/chef-server-api" do
@@ -123,6 +131,8 @@ template "/etc/chef/server.rb" do
   notifies :restart, "service[chef-server-api]", :immediately
   variables :amqp_pass => amqp_pass
 end
+
+systemd_unit "chef-server-api.service"
 
 service "chef-server-api" do
   action [:start, :enable]

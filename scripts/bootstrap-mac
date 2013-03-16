@@ -4,10 +4,7 @@
 echo ">>> Setting XCode to /Applications/Xcode.app"
 sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer || exit 1
 
-# updates
-echo ">>> Installing Mac OS X software updates"
-sudo softwareupdate -ia || exit 1
-
+# reset homebrew repo
 echo ">>> Bootstrapping Homebrew"
 sudo rm -rf /usr/local/.git
 sudo git clone --bare https://github.com/mxcl/homebrew /usr/local/.git
@@ -26,7 +23,8 @@ brew install autoconf automake apple-gcc42 libtool pkg-config openssl readline l
 
 # bootstrap rvm/bundler
 $(dirname $0)/bootstrap || exit 1
-source ~/.rvm/scripts/rvm && source .rvmrc
+source ~/.rvm/scripts/rvm || exit 1
+source .rvmrc || exit 1
 
 # run rake solo
 rake solo || exit 1

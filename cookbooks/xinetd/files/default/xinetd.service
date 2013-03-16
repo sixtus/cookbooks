@@ -1,10 +1,9 @@
 [Unit]
-Description=Erlang Port Mapper Daemon
+Description=xinetd
 After=network.target
 
 [Service]
-Type=forking
-ExecStart=/usr/bin/epmd -daemon
+ExecStart=/usr/sbin/xinetd -dontfork
 Restart=always
 
 [Install]

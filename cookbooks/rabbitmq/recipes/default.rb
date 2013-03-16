@@ -8,6 +8,8 @@ directory "/var/log/rabbitmq" do
   mode "0750"
 end
 
+systemd_unit "rabbitmq.service"
+
 service "rabbitmq" do
   action [:enable, :start]
 end

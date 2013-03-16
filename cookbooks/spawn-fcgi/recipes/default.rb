@@ -10,3 +10,5 @@ end
 file "/etc/conf.d/spawn-fcgi" do
   action :delete
 end
+
+systemd_unit "spawn-fcgi@.service"
