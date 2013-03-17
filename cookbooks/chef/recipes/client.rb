@@ -1,5 +1,6 @@
 package "app-admin/chef"
 package "dev-ruby/syslogger"
+package "dev-ruby/madvertise-logging"
 
 if node[:chef][:client][:airbrake][:key]
   package "dev-ruby/airbrake_handler"
