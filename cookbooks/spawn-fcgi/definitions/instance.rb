@@ -36,7 +36,7 @@ define :spawn_fcgi do
 
   if tagged?("nagios-client")
     nrpe_command "check_spawn-fcgi_#{name}" do
-      command "/usr/lib/nagios/plugins/check_pidfile /var/run/spawn-fcgi/#{name}"
+      command "/usr/lib/nagios/plugins/check_systemd spawn-fcgi@#{name}.service /run/spawn-fcgi/#{name}"
     end
 
     nagios_service "FCGI-#{name.upcase}" do

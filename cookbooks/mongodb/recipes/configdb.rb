@@ -45,6 +45,8 @@ template "/etc/conf.d/mongoc" do
             :opts => opts
 end
 
+systemd_unit "mongoc.service"
+
 service "mongoc" do
   action [:enable, :start]
 end

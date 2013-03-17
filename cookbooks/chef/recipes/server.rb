@@ -215,7 +215,7 @@ if tagged?("nagios-client")
   end
 
   nrpe_command "check_chef_solr" do
-    command "/usr/lib/nagios/plugins/check_pidfile /var/run/chef/solr.pid"
+    command "/usr/lib/nagios/plugins/check_systemd chef-solr.service /run/chef/solr.pid"
   end
 
   nagios_service "CHEF-SOLR" do
@@ -224,7 +224,7 @@ if tagged?("nagios-client")
   end
 
   nrpe_command "check_chef_expander" do
-    command "/usr/lib/nagios/plugins/check_pidfile /var/run/chef/expander.pid"
+    command "/usr/lib/nagios/plugins/check_systemd chef-expander.service /run/chef/expander.pid"
   end
 
   nagios_service "CHEF-EXPANDER" do
