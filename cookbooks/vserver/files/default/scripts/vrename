@@ -16,6 +16,6 @@ echo $NEW > name
 echo $NEW > uts/nodename
 rm cache run vdir
 ln -s /etc/vservers/.defaults/cachebase/$NEW cache
-ln -s /var/run/vservers/$NEW run
+ln -s /run/vservers/$NEW run
 ln -s /etc/vservers/.defaults/vdirbase/$NEW vdir
 popd >/dev/null
