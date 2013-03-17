@@ -1222,7 +1222,7 @@ sub new {
 	my $device = shift;
 
 	my $this = {
-		lockdir => "/var/lock",
+		lockdir => "/run/lock",
 		lockfile => undef,
 		device => $device,
 		fh => undef,
@@ -1233,7 +1233,7 @@ sub new {
 
 sub lock {
 	my $self = shift;
-	# create lock in style: /var/lock/LCK..ttyS0
+	# create lock in style: /run/lock/LCK..ttyS0
 	my $device = shift;
 	my ($lockfile) = $self->{device} =~ m#/dev/(.+)#;
 	$lockfile = "$self->{lockdir}/LCK..$lockfile";
