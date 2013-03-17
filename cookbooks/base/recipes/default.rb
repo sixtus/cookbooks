@@ -69,6 +69,7 @@ end
 
 # install base packages
 portage_package_keywords "dev-ruby/haml"
+portage_package_mask ">=dev-lang/python-3"
 
 node[:packages].each do |pkg|
   package pkg
