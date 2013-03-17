@@ -23,4 +23,4 @@ exec 2> >(logger -i -p "${LOG_FACILITY}.error" -t "${PROGRAM}")
     <% end %>
   fi
 
-) 9>/var/lock/${PROGRAM}.lock
+) 9>/run/lock/${PROGRAM}.lock

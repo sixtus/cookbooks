@@ -28,4 +28,4 @@ exec 2> >(logger -i -p "${LOG_FACILITY}.error" -t "${PROGRAM}")
   lftp -c "open backup; put -O $(hostname -f)/mysql <%= node[:mysql][:backup][:copy][:dir] %>/xtrabackup_full_${DATE}.tar.gz"
 <% end %>
 
-) 9>/var/lock/${PROGRAM}.lock
+) 9>/run/lock/${PROGRAM}.lock
