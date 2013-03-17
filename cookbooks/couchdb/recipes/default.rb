@@ -8,12 +8,6 @@ directory "/var/lib/couchdb" do
   mode "0755"
 end
 
-directory "/var/run/couchdb" do
-  owner "couchdb"
-  group "couchdb"
-  mode "0755"
-end
-
 directory "/var/log/couchdb" do
   owner "couchdb"
   group "couchdb"
