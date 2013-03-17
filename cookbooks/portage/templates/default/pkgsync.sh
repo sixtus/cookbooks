@@ -27,4 +27,4 @@ rsync() {
 		env PKGDIR=${PKGDIR}/${arch} emaint -f binhost >/dev/null
 	done
 
-) 9>/var/lock/${PROGRAM}.lock
+) 9>/run/lock/${PROGRAM}.lock
