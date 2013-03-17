@@ -12,5 +12,19 @@ template "/etc/sysctl.conf" do
   group "root"
   mode "0644"
   source "sysctl.conf"
-  notifies :run, "execute[sysctl-reload]"
+  notifies :run, "execute[sysctl-reload]" unless systemd_running?
+end
+
+# systemd
+service "systemd-sysctl.service" do
+  action [:enable, :start]
+  only_if { systemd_running? }
+end
+
+template "/etc/sysctl.d/base.conf" do
+  owner "root"
+  group "root"
+  mode "0644"
+  source "sysctl.conf"
+  notifies :restart, "service[systemd-sysctl.service]"
 end
