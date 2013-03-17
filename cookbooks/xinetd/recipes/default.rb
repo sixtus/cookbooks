@@ -15,7 +15,7 @@ end
 
 if tagged?("nagios-client")
   nrpe_command "check_xinetd" do
-    command "/usr/lib/nagios/plugins/check_pidfile /var/run/xinetd.pid /usr/sbin/xinetd"
+    command "/usr/lib/nagios/plugins/check_systemd xinetd.service /run/xinetd.pid /usr/sbin/xinetd"
   end
 
   nagios_service "XINETD" do
