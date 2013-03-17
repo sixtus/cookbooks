@@ -158,7 +158,6 @@ module Gentoo
           eix,
           "--nocolor",
           "--pure-packages",
-          "--stable",
           '--format "<category>/<name>\t<bestversion:VERSION>\t<installedversions:VERSION>\n"',
         ].join(" ")
 
