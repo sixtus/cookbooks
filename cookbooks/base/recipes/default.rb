@@ -68,6 +68,8 @@ when "mac_os_x"
 end
 
 # install base packages
+portage_package_keywords "dev-ruby/haml"
+
 node[:packages].each do |pkg|
   package pkg
 end
