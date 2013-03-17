@@ -1,0 +1,4 @@
+# systemd tmpfile settings for mysql
+# See tmpfiles.d(5) for details
+
+d /run/spawn-fcgi 0755 root root -
