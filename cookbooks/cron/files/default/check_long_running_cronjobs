@@ -9,7 +9,7 @@ if ($0 =~ /check_long_runners_like_([a-z]*)/ ) {
 	open(PS, "ps --no-headers --sort start -o pid,etime,cmd -e | grep \"$1\" |") or die( "open: $!" );
 }
 else {
-	open(PS, "ps --no-headers --sort start -o pid,etime,cmd --ppid `cat /var/run/crond.pid`|") or die( "open: $!" );
+	open(PS, "ps --no-headers --sort start -o pid,etime,cmd --ppid `cat /run/crond.pid`|") or die( "open: $!" );
 }
 
 my $wrn_secs = 3600*6;
