@@ -20,4 +20,4 @@ CHEF_SERVER_OPTS="-e production"
 #CHEF_SERVER_BINARY="/usr/bin/chef-server"
 
 # PID file location.
-#CHEF_SERVER_PIDFILE="/var/run/chef/server.%s.pid"
+CHEF_SERVER_PIDFILE="/run/chef-server.%s.pid"

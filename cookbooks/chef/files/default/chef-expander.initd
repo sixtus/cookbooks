@@ -7,13 +7,13 @@ depend() {
 }
 
 CHEF_EXPANDER_BINARY=${CHEF_EXPANDER_BINARY:-/usr/bin/chef-expander}
-CHEF_EXPANDER_PIDFILE=${CHEF_EXPANDER_PIDFILE:-/var/run/chef/expander.pid}
+CHEF_EXPANDER_PIDFILE=${CHEF_EXPANDER_PIDFILE:-/run/chef-expander.pid}
 CHEF_EXPANDER_LOGFILE=${CHEF_EXPANDER_LOGFILE:-/var/log/chef/expander.log}
 CONFIGFILE=${CONFIGFILE:-/etc/chef/solr.rb}
 CHEF_USER=${CHEF_USER:-chef}
 CHEF_GROUP=${CHEF_GROUP:-chef}
 
-CHEF_DIRS=( /etc/chef /var/lib/chef /var/log/chef /var/run/chef )
+CHEF_DIRS=( /etc/chef /var/lib/chef /var/log/chef )
 
 fix_owners() {
 	for i in ${CHEF_DIRS[@]} ${CONFIGFILE}; do
