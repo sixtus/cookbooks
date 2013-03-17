@@ -44,6 +44,7 @@ when "gentoo"
 
     include_recipe "portage"
     include_recipe "portage::porticron"
+    include_recipe "lib_users"
     include_recipe "openssl"
     include_recipe "nss"
     include_recipe "syslog::client"
@@ -127,25 +128,6 @@ if tagged?("nagios-client")
   nagios_service "PROCS" do
     check_command "check_nrpe!check_total_procs"
     servicegroups "system"
-  end
-
-  sudo_rule "nagios-lib_users" do
-    user "nagios"
-    runas "root"
-    command "NOPASSWD: /usr/bin/lib_users"
-  end
-
-  nagios_plugin "check_lib_users"
-
-  nrpe_command "check_lib_users" do
-    command "/usr/lib/nagios/plugins/check_lib_users"
-  end
-
-  nagios_service "LIB-USERS" do
-    check_command "check_nrpe!check_lib_users"
-    servicegroups "system"
-    notification_period "never"
-    env [:testing, :development]
   end
 
   unless node[:skip][:hardware]
