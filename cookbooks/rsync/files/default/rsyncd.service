@@ -5,7 +5,7 @@ After=network.target
 
 [Service]
 ExecStart=/usr/bin/rsync --daemon --no-detach
-PIDFile=/var/run/rsyncd.pid
+PIDFile=/run/rsyncd.pid
 Restart=always
 
 [Install]
