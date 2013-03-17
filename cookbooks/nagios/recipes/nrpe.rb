@@ -2,6 +2,8 @@ package "net-analyzer/nrpe" do
   action :upgrade
 end
 
+portage_package_keywords "net-analyzer/nagios-check_pidfile"
+
 package "net-analyzer/nagios-check_pidfile"
 
 include_recipe "nagios"
