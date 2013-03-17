@@ -1,3 +1,5 @@
+portage_package_keywords "=sys-apps/portage-2.2* **"
+
 package "sys-apps/portage" do
   action :upgrade
 end

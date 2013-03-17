@@ -14,6 +14,9 @@ end
 case node[:platform]
 when "gentoo"
   if root?
+    portage_package_keywords "~sys-apps/dbus-1.6.8"
+    portage_package_keywords "~sys-apps/systemd-197"
+
     package "sys-apps/systemd"
 
     node.default[:portage][:USE] += %w(systemd)

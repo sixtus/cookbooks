@@ -36,6 +36,7 @@ latest_ruby
 # initial chef-client run
 if [[ -e /etc/chef/client.pem && -z $UPDATEWORLD_INITIAL_CHEF ]]; then
 	chef-client
+	echo
 	export UPDATEWORLD_INITIAL_CHEF=1
 	exec $0 $*
 fi
@@ -70,8 +71,8 @@ depclean
 
 # first try to resolve preserved-libs with binpkgs. if this fails, the second
 # run will pick up remaining libs.
-emerge @preserved-rebuild --quiet
-emerge @preserved-rebuild --quiet --usepkg=n --getbinpkg=n
+emerge @preserved-rebuild --quiet || :
+emerge @preserved-rebuild --quiet --usepkg=n --getbinpkg=n || :
 
 # this fucker needs to be run after every upgrade, since noone can be sure what
 # has been broken. dude, srsly - can't we simply have PYTHON_TARGETS?
