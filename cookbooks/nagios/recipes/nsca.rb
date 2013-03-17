@@ -8,11 +8,6 @@ package "net-analyzer/nsca" do
   action :upgrade
 end
 
-directory "/var/run/nsca" do
-  action :delete
-  recursive true
-end
-
 include_recipe "nagios"
 
 master = node.run_state[:nodes].select do |n|
