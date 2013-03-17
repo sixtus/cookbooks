@@ -6,6 +6,7 @@ After=network.target
 User=chef
 Group=chef
 ExecStart=/usr/bin/chef-solr -c /etc/chef/solr.rb
+SyslogIdentifier=chef-solr
 Restart=always
 
 [Install]

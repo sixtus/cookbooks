@@ -6,3 +6,4 @@ After=network.target
 
 [Service]
 ExecStart=/usr/bin/ruby19 -E UTF-8 /usr/bin/chef-client -c /etc/chef/client.rb
+SyslogIdentifier=chef-client

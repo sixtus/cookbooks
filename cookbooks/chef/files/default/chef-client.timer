@@ -3,8 +3,8 @@ Description=Chef Client Timer
 
 [Timer]
 Unit=chef-client.service
-OnBootSec=300
-OnUnitInactiveSec=300
+OnBootSec=3600
+OnUnitInactiveSec=3600
 
 [Install]
 WantedBy=multi-user.target

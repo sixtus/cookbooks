@@ -1,7 +1,13 @@
 # Configuration File For Chef (chef-server)
 
-log_level          :info
-log_location       "/var/log/chef/server.log"
+require "madvertise-logging"
+
+ImprovedLogger.class_eval do
+  attr_accessor :sync, :formatter
+end
+
+log_level :warn
+log_location ImprovedLogger.new(:syslog, "chef-client")
 
 ssl_verify_mode    :verify_none
 signing_ca_path    "/etc/chef/certificates"

@@ -5,7 +5,7 @@ node_name "<%= node[:fqdn] %>"
 require "madvertise-logging"
 
 ImprovedLogger.class_eval do
-    attr_accessor :sync, :formatter
+  attr_accessor :sync, :formatter
 end
 
 log_level :info
