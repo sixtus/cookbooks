@@ -5,7 +5,8 @@ After=network.target
 [Service]
 User=zookeeper
 Group=zookeeper
-ExecStart=/var/lib/zookeeper/wrapper.sh
+ExecStart=/opt/zookeeper/bin/zkServer.sh
+SyslogIdentifier=zookeeper
 Restart=always
 
 [Install]

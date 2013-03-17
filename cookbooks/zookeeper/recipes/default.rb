@@ -4,6 +4,22 @@ include_recipe "java"
 
 package "sys-cluster/zookeeper"
 
+template "/opt/zookeeper/bin/zkServer.sh" do
+  source "zkServer.sh"
+  owner "root"
+  group "root"
+  mode "0755"
+  notifies :restart, "service[zookeeper]"
+end
+
+template "/opt/zookeeper/conf/log4j.properties" do
+  source "log4j.properties"
+  owner "root"
+  group "root"
+  mode "0644"
+  notifies :restart, "service[zookeeper]"
+end
+
 nodes = node.run_state[:nodes].select do |n|
   n[:tags].include?("zookeeper") and
   n[:zookeeper][:ensamble] == node[:zookeeper][:ensamble]
@@ -24,45 +40,12 @@ template "/opt/zookeeper/conf/zoo.cfg" do
   variables :nodes => nodes
 end
 
-template "/opt/zookeeper/conf/log4j.properties" do
-  source "log4j.properties"
-  owner "root"
-  group "root"
-  mode "0644"
-  notifies :restart, "service[zookeeper]"
-end
-
 file "/var/lib/zookeeper/myid" do
   content "#{myid}\n"
   owner "root"
   group "root"
   mode "0644"
   notifies :restart, "service[zookeeper]"
-end
-
-directory "/var/log/zookeeper" do
-  owner "zookeeper"
-  group "zookeeper"
-  mode "0755"
-end
-
-splunk_input "monitor:///var/log/zookeeper/zookeeper.log" do
-  sourcetype "zookeeper"
-end
-
-template "/etc/conf.d/zookeeper" do
-  source "zookeeper.confd"
-  owner "root"
-  group "root"
-  mode "0644"
-  notifies :restart, "service[zookeeper]"
-end
-
-cookbook_file "/var/lib/zookeeper/wrapper.sh" do
-  source "wrapper.sh"
-  owner "root"
-  group "root"
-  mode "0755"
 end
 
 systemd_unit "zookeeper.service"
@@ -73,7 +56,7 @@ end
 
 if tagged?("nagios-client")
   nrpe_command "check_zookeeper" do
-    command "/usr/lib/nagios/plugins/check_systemd zookeeper.service /run/zookeeper.pid"
+    command "/usr/lib/nagios/plugins/check_systemd zookeeper.service"
   end
 
   nagios_service "ZOOKEEPER" do

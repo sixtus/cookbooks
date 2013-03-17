@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # JVM options
 JVM_OPTS=""
 
@@ -10,9 +12,11 @@ INSTALL_DIR=/opt/zookeeper
 CLASSPATH="${INSTALL_DIR}/conf:${CLASSPATH}"
 
 for i in ${INSTALL_DIR}/zookeeper-*.jar; do
-	CLASSPATH="${i}:${CLASSPATH}"
+  CLASSPATH="${i}:${CLASSPATH}"
 done
 
 for i in ${INSTALL_DIR}/lib/*.jar; do
-	CLASSPATH="${i}:${CLASSPATH}"
+  CLASSPATH="${i}:${CLASSPATH}"
 done
+
+exec /usr/bin/java $JVM_OPTS -cp $CLASSPATH $MAIN $CONFIG
