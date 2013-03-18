@@ -8,11 +8,6 @@ package "net-analyzer/nagios-check_pidfile"
 
 include_recipe "nagios"
 
-directory "/var/run/nrpe" do
-  action :delete
-  recursive true
-end
-
 directory "/etc/nagios/nrpe.d" do
   owner "nagios"
   group "nagios"

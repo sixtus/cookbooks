@@ -14,7 +14,7 @@ end
 
 if tagged?("nagios-client")
   nrpe_command "check_postgrey" do
-    command "/usr/lib/nagios/plugins/check_pidfile /var/run/postgrey.pid /usr/sbin/postgrey"
+    command "/usr/lib/nagios/plugins/check_pidfile /run/postgrey.pid /usr/sbin/postgrey"
   end
 
   nagios_service "POSTGREY" do

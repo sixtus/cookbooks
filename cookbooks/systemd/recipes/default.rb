@@ -35,11 +35,14 @@ when "gentoo"
     end
 
     # journal
+    service "systemd-journald.service"
+
     template "/etc/systemd/journald.conf" do
       source "journald.conf"
       owner "root"
       group "root"
       mode "0644"
+      notifies :restart, "service[systemd-journald.service]"
     end
 
     # networking

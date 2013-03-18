@@ -3,7 +3,7 @@ include ChefUtils::Account
 action :create do
   user = get_user(new_resource.name)
   pidfile = if user[:name] == "root"
-              "/var/run/monit.pid"
+              "/run/monit.pid"
             else
               "#{user[:dir]}/.monit.pid"
             end
@@ -63,7 +63,7 @@ end
 action :delete do
   user = get_user(new_resource.name)
   pidfile = if user[:name] == "root"
-              "/var/run/monit.pid"
+              "/run/monit.pid"
             else
               "#{user[:dir]}/.monit.pid"
             end

@@ -1,6 +1,13 @@
 # Configuration File For Chef SOLR Indexer (chef-solr-indexer)
 
-log_location       "/var/log/chef/solr.log"
+require "madvertise-logging"
+
+ImprovedLogger.class_eval do
+  attr_accessor :sync, :formatter
+end
+
+log_level :warn
+log_location ImprovedLogger.new(:syslog, "chef-client")
 
 search_index_path  "/var/lib/chef/search_index"
 

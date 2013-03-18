@@ -106,7 +106,6 @@ case node[:platform]
 when "gentoo"
   node.set[:packages] = %w(
     app-admin/apache-tools
-    app-admin/lib_users
     app-admin/pwgen
     app-admin/pydf
     app-admin/sysstat

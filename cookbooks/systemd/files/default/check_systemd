@@ -3,7 +3,7 @@
 if [[ $# -lt 1 ]]; then
 	echo "Usage: check_systemd <unit> [<pidfile>]"
 	echo
-	echo "Example: check_systemd sshd.service /var/run/sshd.pid"
+	echo "Example: check_systemd sshd.service /run/sshd.pid"
 	exit -1
 fi
 

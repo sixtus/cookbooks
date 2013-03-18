@@ -15,3 +15,10 @@ default[:mongoc][:dbpath] = "/var/lib/mongoc"
 default[:mongoc][:nfiles] = 16384
 
 default[:mongos][:instances] = {}
+
+default[:mongodb][:backup][:dir] = "/var/backup/mongodb"
+default[:mongodb][:backup][:keep] = "14" # keep 14 days worth of backup
+
+# backup schedule (wday, hour)
+default[:mongodb][:backup][:full_backup] = ['2', '11']
+default[:mongodb][:backup][:full_clean]  = ['4', '11']

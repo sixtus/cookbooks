@@ -42,7 +42,7 @@ unless solo?
 
   # chef-client.service has a condition on this lock
   # so we use it to stop chef-client on testing/staging machines
-  file "/var/lock/chef-client.lock" do
+  file "/run/lock/chef-client.lock" do
     action :delete if node.chef_environment == 'production'
   end
 

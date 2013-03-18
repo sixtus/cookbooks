@@ -5,7 +5,7 @@ define :spawn_fcgi do
   }.merge(params.symbolize_keys)
 
   p[:socket] = {
-    :path => "/var/run/spawn-fcgi/#{params[:name]}.sock",
+    :path => "/run/spawn-fcgi/#{params[:name]}.sock",
     :address => "127.0.0.1",
     :user => "nobody",
     :group => "nobody",
