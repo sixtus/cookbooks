@@ -8,6 +8,7 @@ when "gentoo"
     group "root"
     mode "0644"
     notifies :restart, "service[beanstalkd]"
+    only_if { root? }
   end
 
   systemd_unit "beanstalkd.service"
