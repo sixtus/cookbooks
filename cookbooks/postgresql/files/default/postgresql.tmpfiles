@@ -1,0 +1,4 @@
+# systemd tmpfile settings for postgresql
+# See tmpfiles.d(5) for details
+
+d /run/postgresql 0755 postgres postgres -

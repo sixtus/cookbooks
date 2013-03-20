@@ -44,7 +44,11 @@ template "#{confdir}/pg_ident.conf" do
   notifies :reload, "service[postgresql-9.1]"
 end
 
+systemd_tmpfiles "postgresql"
+systemd_unit "postgresql@.service"
+
 service "postgresql-9.1" do
+  service_name "postgresql@9.1" if systemd_running?
   action [:enable, :start]
   supports [:reload]
 end
