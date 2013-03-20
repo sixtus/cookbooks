@@ -12,11 +12,15 @@ set_unless[:shorewall][:zones] = {}
 set_unless[:shorewall6][:zones] = {}
 
 # detect bridge device
-link = %x(ip link show)
-       .split(/\n/)
-       .select { |line| line =~ /master #{node[:primary_interface]}/ }
-       .map { |line| line.split[1].sub(/:$/, '') }
-       .reject { |device| device =~ /^veth/ }
+begin
+  link = %x(ip link show)
+         .split(/\n/)
+         .select { |line| line =~ /master #{node[:primary_interface]}/ }
+         .map { |line| line.split[1].sub(/:$/, '') }
+         .reject { |device| device =~ /^veth/ }
+rescue
+  link = []
+end
 
 case link.size
 when 0
