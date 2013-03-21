@@ -111,8 +111,6 @@ usedesc() {
 mklnx() {
 	tmpdir=$(mktemp -d)
 
-	pushd /usr/src/linux
-
 	KV=$(make kernelversion)
 
 	make "$@"
@@ -121,8 +119,6 @@ mklnx() {
 	mkdir ${tmpdir}/boot
 	cp .config ${tmpdir}/boot/config-${KV}
 	cp arch/x86/boot/bzImage ${tmpdir}/boot/kernel-${KV}
-
-	popd
 
 	dracut --force ${tmpdir}/boot/initramfs-${KV}.img
 
