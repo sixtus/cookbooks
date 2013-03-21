@@ -32,6 +32,7 @@ if node[:platform] == "gentoo"
     default[:portage][:profile] = "#{set[:portage][:portdir]}/profiles/default/linux/#{node[:portage][:arch]}/11.0"
 
     default[:portage][:SYNC] = "rsync://rsync.zentoo.org/zentoo-portage"
+    default[:portage][:BINHOST] = "http://chef.zenops.net/${ARCH}/"
     default[:portage][:MIRRORS] = %w(
     http://www.zentoo.org
     http://ftp.spline.de/pub/gentoo
