@@ -35,6 +35,10 @@ when "gentoo"
     include_recipe "base::resolv"
     include_recipe "base::sysctl"
     include_recipe "baselayout"
+
+    include_recipe "portage"
+    include_recipe "portage::porticron"
+
     include_recipe "systemd"
 
     unless systemd_running?
@@ -42,8 +46,6 @@ when "gentoo"
       include_recipe "openrc"
     end
 
-    include_recipe "portage"
-    include_recipe "portage::porticron"
     include_recipe "lib_users"
     include_recipe "openssl"
     include_recipe "nss"
@@ -86,21 +88,20 @@ include_recipe "ssh"
 include_recipe "tmux"
 include_recipe "vim"
 
-# linux/hardware specific recipes
-if root? and not solo? and node[:os] == "linux" and not node[:skip][:hardware]
+# linux specific recipes
+if node[:os] == "linux" and root?
+  include_recipe "account"
   include_recipe "hwraid"
+  include_recipe "lxc"
   include_recipe "mdadm"
   include_recipe "ntp"
-  include_recipe "shorewall"
+  include_recipe "shorewall" unless solo?
   include_recipe "smart"
 
   cron_daily "xfs_fsr" do
     command "/usr/sbin/xfs_fsr -t 600"
   end
 end
-
-# use account cookbook in root mode
-include_recipe "account" if root?
 
 if tagged?("nagios-client")
   include_recipe "nagios::client"
