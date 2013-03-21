@@ -51,6 +51,9 @@ when "gentoo"
     include_recipe "cron"
     include_recipe "sudo"
     include_recipe "ssh::server"
+
+    portage_package_keywords "dev-ruby/haml"
+    portage_package_mask ">=dev-lang/python-3"
   end
 
 when "mac_os_x"
@@ -69,9 +72,6 @@ when "mac_os_x"
 end
 
 # install base packages
-portage_package_keywords "dev-ruby/haml"
-portage_package_mask ">=dev-lang/python-3"
-
 node[:packages].each do |pkg|
   package pkg
 end
