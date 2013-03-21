@@ -48,7 +48,7 @@ systemd_tmpfiles "postgresql"
 systemd_unit "postgresql@.service"
 
 service "postgresql-9.1" do
-  service_name "postgresql@9.1" if systemd_running?
+  service_name "postgresql@9.1.service" if systemd_running?
   action [:enable, :start]
   supports [:reload]
 end
