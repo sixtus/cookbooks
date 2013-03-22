@@ -26,16 +26,16 @@ namespace :upstream do
     sh("git branch -t -f next zenops/next")
   end
 
-  desc "Show changes to upstream"
-  task :changes => [ :pull ]
-  task :changes do
-    sh("git diff --diff-filter=DMTUXB #{UPSTREAM_BRANCH} master")
-  end
-
   desc "Merge upstream branch"
   task :merge => [ :pull ]
   task :merge do
     sh("git merge #{UPSTREAM_BRANCH}")
+  end
+
+  desc "Show changes to upstream"
+  task :changes, :branch do |t, args|
+    args.with_defaults(branch: UPSTREAM_BRANCH)
+    sh("git diff --diff-filter=DMTUXB #{args.branch} HEAD")
   end
 
   desc "Show missing picks from upstream"
