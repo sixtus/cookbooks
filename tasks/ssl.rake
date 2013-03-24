@@ -77,7 +77,9 @@ namespace :ssl do
       puts("** SSL Certificate for #{cn} already exists, skipping.")
     end
 
-    knife :cookbook_upload, ["openssl", "--force"]
+    if not Process.euid == 0
+      knife :cookbook_upload, ["openssl", "--force"]
+    end
   end
 
   desc "Create a new SSL certificate"

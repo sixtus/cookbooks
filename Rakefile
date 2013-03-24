@@ -14,11 +14,15 @@ if Process.euid > 0
 end
 
 require 'chef'
-require 'knife/dsl'
 
-require 'benchmark'
-require 'json'
-require 'active_support/core_ext/hash/indifferent_access'
+begin
+  require 'knife/dsl'
+  require 'benchmark'
+  require 'json'
+  require 'active_support/core_ext/hash/indifferent_access'
+rescue LoadError
+  $stderr.puts "Knife DSL cannot be loaded. Skipping some rake tasks ..."
+end
 
 # load constants from rake config file.
 require File.expand_path('../config/rake', __FILE__)
