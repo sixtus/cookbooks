@@ -39,7 +39,6 @@ package "www-servers/nginx"
   /etc/nginx/servers
   /etc/ssl/nginx
   /var/log/nginx
-  /var/tmp/nginx
 ).each do |d|
   directory d do
     owner "root"
@@ -49,6 +48,7 @@ package "www-servers/nginx"
 end
 
 %w(
+  /var/tmp/nginx
   /var/tmp/nginx/client
   /var/tmp/nginx/fastcgi
   /var/tmp/nginx/proxy
