@@ -1,7 +1,7 @@
 default[:contacts][:cron] = "root@#{node[:fqdn]}"
 
 # seed with host specific data to make it idempotent
-srand(node[:fqdn].hash)
+srand(IPAddr.new(node[:primary_ipaddress]).to_i)
 
 set_unless[:cron][:hourly][:minute] = rand(60)
 
