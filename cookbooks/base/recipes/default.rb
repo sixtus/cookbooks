@@ -91,15 +91,21 @@ include_recipe "vim"
 # linux specific recipes
 if node[:os] == "linux" and root?
   include_recipe "account"
-  include_recipe "hwraid"
-  include_recipe "lxc"
-  include_recipe "mdadm"
-  include_recipe "ntp"
-  include_recipe "shorewall" unless solo?
-  include_recipe "smart"
 
-  cron_daily "xfs_fsr" do
-    command "/usr/sbin/xfs_fsr -t 600"
+  unless node[:virtualization][:role] == "guest"
+    include_recipe "lxc"
+    include_recipe "ntp"
+    include_recipe "shorewall"
+  end
+
+  unless node[:skip][:hardware]
+    include_recipe "hwraid"
+    include_recipe "mdadm"
+    include_recipe "smart"
+
+    cron_daily "xfs_fsr" do
+      command "/usr/sbin/xfs_fsr -t 600"
+    end
   end
 end
 
