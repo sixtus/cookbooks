@@ -1,3 +1,5 @@
+include_recipe "postgresql::server"
+
 package "app-office/openerp"
 
 group "postgres" do
@@ -7,10 +9,18 @@ group "postgres" do
 end
 
 admin_password = get_password("openerp/admin")
-
-# create user and database with:
-# createuser --createdb --pwprompt --superuser --no-createrole --username postgres openerp
 db_password = get_password("openerp/db")
+
+postgresql_role "openerp" do
+  password db_password
+  superuser true
+  createdb true
+  createrole true
+  inherit true
+  login true
+end
+
+postgresql_database "openerp"
 
 template "/etc/openerp/openerp.cfg" do
   source "openerp.cfg"

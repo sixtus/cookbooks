@@ -35,7 +35,11 @@ when "gentoo"
     end
 
     # journal
-    service "systemd-journald.service"
+    service "systemd-journald.service" do
+      action :nothing
+      provider Chef::Provider::Service::Systemd
+      only_if { systemd_running? }
+    end
 
     template "/etc/systemd/journald.conf" do
       source "journald.conf"
