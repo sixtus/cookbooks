@@ -4,7 +4,7 @@ if solo?
   node.run_state[:roles] = []
   node.run_state[:users] = []
 else
-  node.run_state[:nodes] = search(:node, "ipaddress:[* TO *]")
+  node.run_state[:nodes] = search(:node, "primary_ipaddress:[* TO *]")
   node.run_state[:roles] = search(:role)
   node.run_state[:users] = search(:users)
 end
