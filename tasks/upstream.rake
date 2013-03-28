@@ -41,7 +41,7 @@ namespace :upstream do
   desc "Show missing picks from upstream"
   task :cherry, :upstream  do |t, args|
     args.with_defaults(upstream: UPSTREAM_BRANCH)
-    limit = %x(git show --oneline ":/^Merge branch '#{args.upstream}'")
+    limit = %x(git show --oneline ":/^Merge.*'#{args.upstream}'")
             .split($/).first
             .split(/\s/).first
     sh("git cherry -v #{args.upstream} HEAD #{limit}")
