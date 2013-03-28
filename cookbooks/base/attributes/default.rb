@@ -80,8 +80,9 @@ default[:sysctl][:net][:netfilter][:nf_conntrack_max] = 262144
 default[:sysctl][:net][:netfilter][:nf_conntrack_tcp_timeout_time_wait] = 120
 default[:sysctl][:net][:netfilter][:nf_conntrack_tcp_timeout_established] = 432000
 
-# skip hardware cookbooks
-default[:skip][:hardware] = node[:virtualization][:role] == "guest" rescue false
+# vrtualization foo
+default[:virtualization][:role] = "host"
+default[:skip][:hardware] = node[:virtualization][:role] == "guest"
 
 # provide sane default values in case ohai didn't find them
 default_unless[:cpu][:total] = 1
