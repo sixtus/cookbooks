@@ -27,7 +27,6 @@ NOLIBS = [
     "/dev/shm/*",
     "/drm",
     "*/var/nagios/spool/checkresults/neb*",
-    "/var/lib/druid/indexCache/*",
 ]
 
 FP_EXCLUDES = [

@@ -1,4 +1,5 @@
 portage_package_keywords "=sys-apps/portage-2.2* **"
+portage_package_mask ">=app-portage/eix-0.28" # broken
 
 package "sys-apps/portage" do
   action :upgrade

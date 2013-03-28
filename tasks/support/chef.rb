@@ -1,5 +1,3 @@
-require 'active_support/hash_with_indifferent_access'
-
 # monkeypatch data_bag_item for better DSL
 class Chef::DataBagItem
   def method_missing(sym, *args, &block)
