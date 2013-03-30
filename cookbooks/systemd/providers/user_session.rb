@@ -16,11 +16,20 @@ action :enable do
   end
 
   execute "systemd-reload-#{user[:name]}" do
-    command "systemctl --user daemon-reload"
-    user user[:name]
-    group user[:group][:name]
+    command "su -l -c 'systemctl --user daemon-reload' #{user[:name]}"
     action :nothing
     only_if { systemd_running? }
+  end
+
+  systemd_user_unit "dbus.socket" do
+    user user[:name]
+    cookbook "systemd"
+  end
+
+  systemd_user_unit "dbus.service" do
+    user user[:name]
+    cookbook "systemd"
+    action [:create, :enable, :start]
   end
 end
 
