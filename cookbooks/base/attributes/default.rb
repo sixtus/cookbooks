@@ -116,6 +116,11 @@ when "gentoo"
     app-misc/mc
     app-shells/bash-completion
     app-text/dos2unix
+    dev-libs/icu
+    dev-libs/libffi
+    dev-libs/libxml2
+    dev-libs/libxslt
+    dev-libs/libyaml
     dev-ruby/haml
     dev-util/strace
     mail-client/mailx
@@ -145,18 +150,32 @@ when "gentoo"
 when "mac_os_x"
   node.set[:packages] = %w(
     ack
+    apple-gcc42
     atool
+    autoconf
+    automake
     colordiff
     dos2unix
     findutils
     gawk
     gnu-sed
     gnu-tar
+    icu4c
     keychain
+    libffi
+    libksba
+    libtool
+    libxml2
+    libxslt
+    libyaml
     ncdu
     netcat
     nmap
+    openssl
+    pkg-config
     pwgen
+    readline
+    sqlite
     wget
   )
 end
