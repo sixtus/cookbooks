@@ -56,7 +56,7 @@ when "gentoo"
     end
 
     portage_package_use "sys-fs/lvm2" do
-      use %w(static static-lis)
+      use %w(static static-libs)
     end
 
     # systemd support
