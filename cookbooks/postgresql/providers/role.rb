@@ -6,23 +6,23 @@ action :create do
   command = ''
 
   unless exists?
-    command += "CREATE ROLES #{new_resource.role}"
-    action = 'Created'
+    command += "CREATE ROLE #{new_resource.role}"
+    action = "created"
   else
     command += "ALTER ROLE #{new_resource.role}"
-    action = 'Altered'
+    action = "altered"
   end
 
-  command += " password '#{new_resource.password}'" if new_resource.password
-  command += " superuser" if new_resource.superuser
-  command += " inherit" if new_resource.inherit
-  command += " createrole" if new_resource.createrole
-  command += " createdb" if new_resource.createdb
-  command += " login" if new_resource.login
+  command += " PASSWORD '#{new_resource.password}'" if new_resource.password
+  command += " SUPERUSER" if new_resource.superuser
+  command += " INHERIT" if new_resource.inherit
+  command += " CREATEROLE" if new_resource.createrole
+  command += " CREATEDB" if new_resource.createdb
+  command += " LOGIN" if new_resource.login
 
   begin
     connection.exec(command)
-    Chef::Log.info "postgresql_role[#{new_resource.name}]: #{action} role #{new_resource.role}"
+    Chef::Log.info "postgresql_role[#{new_resource.name}] #{action} role #{new_resource.role}"
     new_resource.updated_by_last_action(true)
   ensure
     close
