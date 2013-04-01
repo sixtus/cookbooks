@@ -108,7 +108,7 @@ module Gentoo
         version = @new_resource.version.to_s
 
         unless package_info[:current_version]
-          Chef::Log.info("No version found. Installing package[#{package_info[:package_atom]}].")
+          Chef::Log.info("package[#{@new_resource.name}] installing #{package_info[:package_atom]}")
           return true
         end
 
@@ -116,7 +116,7 @@ module Gentoo
         when :install
           return false if version == ""
           return false if package_info[:current_version] == version
-          Chef::Log.info("Installing package[#{package_info[:package_atom]}] (version requirements unmet).")
+          Chef::Log.info("package[#{@new_resource.name}] installing #{package_info[:package_atom]} (version requirements unmet)")
           true
 
         when :upgrade
@@ -124,7 +124,7 @@ module Gentoo
           true
 
         else
-          raise Chef::Exceptions::Package, "Unknown action :#{action}"
+          raise Chef::Exceptions::Package, "Unknown action: #{action}"
         end
       end
 
