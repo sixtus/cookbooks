@@ -4,8 +4,8 @@ include ChefUtils::Password
 action :create do
   unless exists?
     begin
-      connection.exec("create database #{new_resource.database}")
-      Chef::Log.info "postgresql_database[#{new_resource.name}]: Created database #{new_resource.database}"
+      connection.exec("CREATE DATABASE #{new_resource.database} OWNER #{new_resource.owner}")
+      Chef::Log.info "postgresql_database[#{new_resource.name}] created database #{new_resource.database}"
       new_resource.updated_by_last_action(true)
     ensure
       close

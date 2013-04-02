@@ -87,7 +87,13 @@ when "gentoo"
     end
 
     # user session support
+    systemd_unit "systemd-stop-user-sessions.service"
     systemd_unit "user-session@.service"
+
+    service "systemd-stop-user-sessions.service" do
+      action :enable
+      provider Chef::Provider::Service::Systemd
+    end
 
     nagios_plugin "check_systemd"
   end

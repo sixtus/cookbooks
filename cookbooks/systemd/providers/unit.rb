@@ -1,12 +1,22 @@
 action :create do
   path = "/usr/lib/systemd/system/#{new_resource.name}"
 
-  cookbook_file path do
-    source new_resource.name
-    owner "root"
-    group "root"
-    mode "0644"
-    notifies :run, "execute[systemd-reload]", :immediately
+  if new_resource.template
+    template path do
+      source new_resource.name
+      owner "root"
+      group "root"
+      mode "0644"
+      notifies :run, "execute[systemd-reload]", :immediately
+    end
+  else
+    cookbook_file path do
+      source new_resource.name
+      owner "root"
+      group "root"
+      mode "0644"
+      notifies :run, "execute[systemd-reload]", :immediately
+    end
   end
 end
 

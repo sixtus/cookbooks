@@ -6,3 +6,4 @@ end
 actions :create, :query
 
 attribute :database, :kind_of => String, :name_attribute => true
+attribute :owner, :kind_of => String, :default => "postgres"

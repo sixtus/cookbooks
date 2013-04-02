@@ -4,3 +4,5 @@ def initialize(name, run_context=nil)
 end
 
 actions :create, :delete
+
+attribute :template, kind_of: String, default: nil

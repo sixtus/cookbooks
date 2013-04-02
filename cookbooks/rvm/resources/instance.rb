@@ -1,8 +1,8 @@
-def initialize(name, run_context=nil)
-  super(name, run_context)
-  @action = :create
-end
-
 actions :create, :delete
 
-attribute :version, :kind_of => String, :default => "1.6.5"
+attribute :version, :kind_of => String, :default => "1.19.1"
+
+def initialize(name, run_context=nil)
+  super
+  @action = :create
+end

@@ -1,38 +1,38 @@
-include ChefUtils::Account
-
-def infer_vars(user, version = nil)
-  user = get_user(user)
-  path = user[:name] == "root" ? "/usr/local/rvm" : "#{user[:dir]}/.rvm"
-  rvmrc = user[:name] == "root" ? "/etc/rvmrc" : "#{user[:dir]}/.rvmrc"
-
-  return {
-    :user => user[:name],
-    :group => user[:group][:name],
-    :homedir => user[:dir],
-    :path => path,
-    :rvmrc => rvmrc,
-    :version => version,
-  }
-end
+include ChefUtils::RVM
 
 action :create do
-  rvm = infer_vars(new_resource.name, new_resource.version)
+  rvm = infer_rvm_vars(new_resource.name, new_resource.version)
 
-  bash "install rvm-#{rvm[:version]}" do
+  template "#{rvm[:homedir]}/.gemrc" do
+    source "gemrc"
+    cookbook "rvm"
+    owner rvm[:user]
+    mode "0644"
+    variables :rvm => rvm
+  end
+
+  bash_env = {
+    'USER' => rvm[:user],
+    'HOME' => rvm[:homedir],
+    'TERM' => 'dumb'
+  }
+
+  bash "install-rvm-#{rvm[:user]}" do
     code <<-EOS
     export USER=#{rvm[:user]}
     export HOME=#{rvm[:homedir]}
 
     tmpfile=$(mktemp)
-    curl -s -L http://get.rvm.io -o ${tmpfile}
+    curl -s -L -k https://get.rvm.io -o ${tmpfile}
     chmod +x ${tmpfile}
-    ${tmpfile} --branch #{rvm[:version]}
+    ${tmpfile} --branch #{rvm[:version]} >/dev/null
     rm -f ${tmpfile}
     EOS
 
     not_if { ::File.read("#{rvm[:path]}/VERSION").split.first == rvm[:version] rescue false }
     user rvm[:user]
     group rvm[:group]
+    environment(bash_env)
   end
 
   portage_preserve_libs "rvm-#{rvm[:user]}" do
@@ -44,10 +44,15 @@ action :create do
 end
 
 action :delete do
-  rvm = infer_vars(new_resource.user)
+  rvm = infer_rvm_vars(new_resource.name)
 
   directory rvm[:path] do
     action :delete
     recursive true
   end
+end
+
+def initialize(*args)
+  super
+  @run_context.include_recipe "rvm"
 end

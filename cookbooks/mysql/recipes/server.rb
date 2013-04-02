@@ -8,7 +8,7 @@ when "gentoo"
   package "dev-db/maatkit"
   package "dev-db/mysqltuner"
   package "dev-db/mytop"
-  package "dev-db/xtrabackup-bin"
+  package "dev-db/xtrabackup-bin" if node[:portage][:repo] == "zentoo"
   package "dev-ruby/mysql-ruby"
 
   # configuration files
