@@ -9,7 +9,7 @@ action :create do
       source new_resource.name
       cookbook new_resource.cookbook if new_resource.cookbook
       owner user[:name]
-      group user[:group]
+      group user[:group][:name]
       mode "0644"
       notifies :run, "execute[systemd-reload-#{user[:name]}]", :immediately
     end
@@ -18,7 +18,7 @@ action :create do
       source new_resource.name
       cookbook new_resource.cookbook if new_resource.cookbook
       owner user[:name]
-      group user[:group]
+      group user[:group][:name]
       mode "0644"
       notifies :run, "execute[systemd-reload-#{user[:name]}]", :immediately
     end
