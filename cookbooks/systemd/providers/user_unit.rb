@@ -8,8 +8,8 @@ action :create do
     template path do
       source new_resource.name
       cookbook new_resource.cookbook if new_resource.cookbook
-      owner "root"
-      group "root"
+      owner user[:name]
+      group user[:group]
       mode "0644"
       notifies :run, "execute[systemd-reload-#{user[:name]}]", :immediately
     end
@@ -17,8 +17,8 @@ action :create do
     cookbook_file path do
       source new_resource.name
       cookbook new_resource.cookbook if new_resource.cookbook
-      owner "root"
-      group "root"
+      owner user[:name]
+      group user[:group]
       mode "0644"
       notifies :run, "execute[systemd-reload-#{user[:name]}]", :immediately
     end
