@@ -10,7 +10,7 @@ action :create do
               new_resource.homedir
             end
 
-  akf = new_resource.authorized_keys_for
+  akf = [new_resource.authorized_keys_for, node[user][:deployers]].uniq.flatten
 
   group user do
     gid uid if uid
