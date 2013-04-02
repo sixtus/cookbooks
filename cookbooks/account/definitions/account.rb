@@ -10,6 +10,7 @@ define :account,
        :home_owner => nil,
        :home_group => nil,
        :authorized_keys => [],
+       :authorized_keys_for => [],
        :key_source => nil,
        :action => :create do
   include_recipe "account"
@@ -99,9 +100,12 @@ define :account,
   # if it's empty -- i.e. [] -- then we would create an empty
   # authorized keys but with nil, the file is not created.
   unless params[:authorized_keys].nil?
+    authorized_keys = authorized_keys_for(params[:authorized_keys_for].flatten.uniq).
+      concat(params[:authorized_keys])
+
     file "#{home}/.ssh/authorized_keys-#{rrand}" do
       path "#{home}/.ssh/authorized_keys"
-      content(params[:authorized_keys].join("\n") + "\n")
+      content(authorized_keys.join("\n") + "\n")
       owner home_owner
       group home_group
       mode "0600"
