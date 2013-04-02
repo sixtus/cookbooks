@@ -113,6 +113,9 @@ if node[:os] == "linux" and root?
   unless node[:virtualization][:role] == "guest"
     include_recipe "lxc"
     include_recipe "ntp"
+  end
+
+  unless vserver_guest?
     include_recipe "shorewall"
   end
 
