@@ -1,0 +1,26 @@
+#!/bin/bash
+
+if [[ $# -lt 1 ]]; then
+	echo "Usage: check_systemd_user <user> <unit>"
+	echo
+	echo "Example: check_systemd_user rails-app unicorn.service"
+	exit -1
+fi
+
+USER=$1
+UNIT=$2
+
+sc() {
+	sudo -n -u $USER env XDG_RUNTIME_DIR=/run/user/$(id -u $USER) systemctl --user "$@"
+}
+
+sc is-active $UNIT &>/dev/null
+ret=$?
+
+sc status $UNIT | sed 's/.*Active: //;tn;d;:n'
+
+if [[ $ret -eq 0 ]]; then
+	exit 0
+else
+	exit 2
+fi
