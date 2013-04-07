@@ -1,5 +1,3 @@
-default[:contacts][:cron] = "root@#{node[:fqdn]}"
-
 # seed with host specific data to make it idempotent
 srand(IPAddr.new(node[:primary_ipaddress]).to_i)
 

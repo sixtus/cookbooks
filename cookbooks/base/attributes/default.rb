@@ -37,8 +37,9 @@ if node[:local_ipaddress]
   end
 end
 
-# this should be overriden globally or per-role
-default[:contacts][:hostmaster] = "root@#{node[:fqdn]}"
+# this is automatically inferred from the Chef servers domain by default but
+# may be overridden on a per-role or per-node basis
+default[:contacts][:hostmaster] = "hostmaster@#{node[:chef_domain]}"
 
 # localization/i18n
 default[:timezone] = "Europe/Berlin"

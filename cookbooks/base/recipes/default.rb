@@ -9,13 +9,24 @@ else
   node.run_state[:users] = search(:users)
 end
 
-# figure out if we're a nagios client first, so recipes can conditionally
-# install nagios plugins
-nagios_masters = node.run_state[:nodes].select do |n|
-  n[:tags].include?("nagios-master")
+# select basic infrastructure nodes from the index for easy access in recipes
+{
+  :chef => "chef",
+  :splunk => "splunk-indexer",
+  :nagios => "nagios",
+  :mx => "mx",
+}.each do |key, role|
+  node.run_state[key] = node.run_state[:nodes].select do |n|
+    n.role?(role)
+  end
 end
 
-if nagios_masters.any?
+if node.run_state[:chef].any?
+  node.set[:chef_domain] = node.run_state[:chef].first[:domain]
+  node.load_attributes # reload attributes to make the magic happen
+end
+
+if node.run_state[:nagios].any?
   tag("nagios-client")
 end
 
