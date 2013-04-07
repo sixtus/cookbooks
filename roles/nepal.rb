@@ -1,8 +1,8 @@
-description "Mail Relay Server"
+description "Nepal"
 
 run_list(%w(
   role[base]
-  recipe[postfix::relay]
+  recipe[nepal]
 ))
 
 override_attributes({

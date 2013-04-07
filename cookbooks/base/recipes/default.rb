@@ -81,10 +81,27 @@ when "gentoo"
     include_recipe "lib_users"
     include_recipe "openssl"
     include_recipe "nss"
-    include_recipe "syslog::client"
-    include_recipe "cron"
     include_recipe "sudo"
     include_recipe "ssh::server"
+
+    # XXX: these will go away after systemd integration is complete
+    include_recipe "cron"
+    include_recipe "syslog::client"
+
+    # these are only usefull in non-solo mode and only if the specified role
+    # has been deployed on another node (see above)
+    if node.run_state[:chef].any?
+      include_recipe "chef::client"
+    end
+
+    if node.run_state[:splunk].any?
+      include_recipe "splunk::forwarder" unless node.role?("splunk-indexer")
+      include_recipe "ganymed"
+    end
+
+    if node.run_state[:mx].any?
+      include_recipe "postfix::satelite" unless node[:skip][:postfix_satelite]
+    end
   end
 
 when "mac_os_x"
