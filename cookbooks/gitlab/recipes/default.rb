@@ -138,6 +138,12 @@ deploy_branch "/var/lib/git/gitlab" do
       cwd release_path
       user "git"
     end
+
+    rvm_shell "gitlab-assets" do
+      code "bundle exec rake assets:precompile RAILS_ENV=production"
+      cwd release_path
+      user "git"
+    end
   end
 
   after_restart do
