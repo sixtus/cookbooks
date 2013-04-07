@@ -107,7 +107,7 @@ cron_weekly "metro" do
   command "exec /usr/local/metro/scripts/ezbuild.sh #{builds}"
 end
 
-# need to add vboxnet0 to our nodes
-shorewall_interface "nodes" do
+# need to add vboxnet0 to shorewall config
+shorewall_interface "net" do
   interface "vboxnet0 0.0.0.0 optional"
 end

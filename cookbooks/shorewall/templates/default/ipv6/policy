@@ -14,7 +14,6 @@
 <%= params[:source] %> <%= params[:dest] %> <%= params[:policy] %> - -
 <% end %>
 
-nodes all ACCEPT - -
 $FW all ACCEPT - -
 net all DROP - -
 all all REJECT - -
