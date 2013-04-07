@@ -24,44 +24,6 @@ if node[:primary_interface] == "lxc0"
   end
 end
 
-# binhost rules
-node.run_state[:nodes].select do |n|
-  n[:tags].include?("portage-binhost")
-end.each do |n|
-  if n[:primary_ipaddress]
-    shorewall_rule "portage-binhost@#{n[:fqdn]}" do
-      source "net:#{n[:primary_ipaddress]}"
-      destport "rsync"
-    end
-  end
-
-  if n[:primary_ip6address]
-    shorewall6_rule "portage-binhost@#{n[:fqdn]}" do
-      source "net:<#{n[:primary_ip6address]}>"
-      destport "rsync"
-    end
-  end
-end
-
-# nagios rules
-node.run_state[:nodes].select do |n|
-  n[:tags].include?("nagios-master")
-end.each do |n|
-  if n[:primary_ipaddress]
-    shorewall_rule "nagios-master@#{n[:fqdn]}" do
-      source "net:#{n[:primary_ipaddress]}"
-      destport "4949,5666"
-    end
-  end
-
-  if n[:primary_ip6address]
-    shorewall6_rule "nagios-master@#{n[:fqdn]}" do
-      source "net:<#{n[:primary_ip6address]}>"
-      destport "5666"
-    end
-  end
-end
-
 include_recipe "shorewall::ipv4"
 
 if node[:ipv6_enabled]

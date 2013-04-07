@@ -106,3 +106,8 @@ end.flatten.join(' ')
 cron_weekly "metro" do
   command "exec /usr/local/metro/scripts/ezbuild.sh #{builds}"
 end
+
+# need to add vboxnet0 to our nodes
+shorewall_interface "nodes" do
+  interface "vboxnet0 0.0.0.0 optional"
+end
