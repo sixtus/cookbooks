@@ -16,7 +16,7 @@ action :enable do
   end
 
   execute "systemd-reload-#{user[:name]}" do
-    command "su -l -c 'systemctl --user daemon-reload' #{user[:name]}"
+    command %{su -l -c 'env XDG_RUNTIME_DIR="/run/user/#{user[:uid]}" systemctl --user daemon-reload' #{user[:name]}}
     action :nothing
     only_if { systemd_running? }
   end
