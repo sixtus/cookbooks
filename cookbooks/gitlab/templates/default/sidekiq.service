@@ -1,0 +1,11 @@
+[Unit]
+Description=Sidekiq Workers
+
+[Service]
+ExecStart=/var/lib/git/.rvm/bin/default_bundle exec sidekiq -q post_receive,mailer,system_hook,project_web_hook,gitlab_shell,common,default -e production
+Restart=always
+WorkingDirectory=/var/lib/git/gitlab/current
+SyslogIdentifier=sidekiq
+
+[Install]
+WantedBy=default.target

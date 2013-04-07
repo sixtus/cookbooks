@@ -1,0 +1,7 @@
+production:
+  adapter: postgresql
+  encoding: unicode
+  database: gitlab_production
+  pool: 5
+  username: gitlab
+  password: <%= @postgres_password %>

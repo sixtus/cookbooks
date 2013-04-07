@@ -1,0 +1,13 @@
+[Unit]
+Description=Unicorn Server
+
+[Service]
+ExecStart=/var/lib/git/.rvm/bin/default_bundle exec unicorn -c /var/lib/git/gitlab/current/config/unicorn.rb -E production config.ru
+ExecReload=/bin/kill -USR2 $MAINPID
+ExecStop=/bin/kill -QUIT $MAINPID
+Restart=always
+WorkingDirectory=/var/lib/git/gitlab/current
+SyslogIdentifier=unicorn
+
+[Install]
+WantedBy=default.target
