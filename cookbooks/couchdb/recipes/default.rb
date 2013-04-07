@@ -22,14 +22,6 @@ template "/etc/couchdb/local.ini" do
   notifies :restart, "service[couchdb]"
 end
 
-template "/etc/couchdb/local.ini" do
-  source "local.ini"
-  owner "root"
-  group "couchdb"
-  mode "0660"
-  notifies :restart, "service[couchdb]"
-end
-
 systemd_tmpfiles "couchdb"
 systemd_unit "couchdb.service"
 
