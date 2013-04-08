@@ -1,0 +1,7 @@
+production:
+  adapter: postgresql
+  encoding: unicode
+  database: gitlabci_production
+  pool: 5
+  username: gitlabci
+  password: <%= @postgres_password %>

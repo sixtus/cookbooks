@@ -2,7 +2,7 @@
 Description=Sidekiq Workers
 
 [Service]
-ExecStart=<%= @homedir %>/.rvm/bin/default_bundle exec sidekiq -q post_receive,mailer,system_hook,project_web_hook,gitlab_shell,common,default -e production
+ExecStart=<%= @homedir %>/.rvm/bin/default_bundle exec sidekiq -q runner,common,default -e production
 Restart=always
 WorkingDirectory=<%= @homedir %>/current
 SyslogIdentifier=sidekiq

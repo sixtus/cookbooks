@@ -2,15 +2,13 @@
 user: git
 
 # Url to gitlab instance. Used for api calls. Should be ends with slash.
-gitlab_url: "http://localhost/"
+gitlab_url: "https://<%= node[:gitlab][:host] %>/"
 
 http_settings:
-#  user: someone
-#  password: somepass
-  self_signed_cert: false
+  self_signed_cert: true
 
 # Repositories path
-repos_path: "/var/lib/git/repositories"
+repos_path: "<%= @homedir %>/repositories"
 
 # File used as authorized_keys for gitlab user
-auth_file: "/var/lib/git/.ssh/authorized_keys"
+auth_file: "<%= @homedir %>/.ssh/authorized_keys"

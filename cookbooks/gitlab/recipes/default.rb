@@ -1,26 +1,3 @@
-## gitlab user account
-group "git"
-
-account "git" do
-  comment "gitlab"
-  home "/var/lib/git"
-  home_mode "0755"
-  gid "git"
-end
-
-rvm_instance "git"
-
-rvm_default_ruby "ruby-2.0.0-p0" do
-  user "git"
-end
-
-rvm_wrapper "git-default" do
-  prefix "default"
-  ruby_string "default"
-  binaries %w(bundle)
-  user "git"
-end
-
 ## databases
 include_recipe "redis"
 include_recipe "postgresql::server"
@@ -36,43 +13,51 @@ postgresql_database "gitlab_production" do
   owner "gitlab"
 end
 
-## directory layout
+## user & rvm
+homedir = "/var/app/gitlab"
+
+deploy_skeleton "git" do
+  homedir homedir
+end
+
+deploy_rvm_ruby "git" do
+  ruby_version "ruby-2.0.0-p0"
+end
+
+## gitlab-shell
 %w(
-  /var/lib/git/backups
-  /var/lib/git/gitlab
-  /var/lib/git/gitlab/shared
-  /var/lib/git/gitlab/shared/config
-  /var/lib/git/gitlab/shared/log
-  /var/lib/git/gitlab/shared/pids
-  /var/lib/git/satellites
+  backups
+  satellites
 ).each do |dir|
-  directory dir do
+  directory "#{homedir}/#{dir}" do
     owner "git"
     group "git"
     mode "0755"
   end
 end
 
-## gitlab-shell
-git "/var/lib/git/gitlab-shell" do
+git "#{homedir}/gitlab-shell" do
   repository "https://github.com/gitlabhq/gitlab-shell.git"
-  reference "v1.1.0"
+  reference "v1.2.0"
 end
 
-template "/var/lib/git/gitlab-shell/config.yml" do
+template "#{homedir}/gitlab-shell/config.yml" do
   source "config.yml"
   user "git"
   group "git"
   mode "0644"
+  variables({
+    homedir: homedir,
+  })
 end
 
 execute "gitlab-shell-install" do
-  command "su -l -c 'cd /var/lib/git/gitlab-shell && ./bin/install >/dev/null' git"
+  command "su -l -c 'cd #{homedir}/gitlab-shell && ./bin/install >/dev/null' git"
   user "root"
-  not_if { File.exist?("/var/lib/git/gitlab-shell/.installed") }
+  not_if { File.exist?("#{homedir}/gitlab-shell/.installed") }
 end
 
-file "/var/lib/git/gitlab-shell/.installed"
+file "#{homedir}/gitlab-shell/.installed"
 
 ## gitlab
 %w(
@@ -80,13 +65,14 @@ file "/var/lib/git/gitlab-shell/.installed"
   gitlab.yml
   unicorn.rb
 ).each do |file|
-  template "/var/lib/git/gitlab/shared/config/#{file}" do
+  template "#{homedir}/shared/config/#{file}" do
     source file
     owner "git"
     group "git"
     mode "640"
     variables({
       postgres_password: postgres_password,
+      homedir: homedir
     })
   end
 end
@@ -98,15 +84,21 @@ unicorn = systemd_user_unit "unicorn.service" do
   user "git"
   action [:create, :enable]
   supports [:reload]
+  variables({
+    homedir: homedir,
+  })
 end
 
 sidekiq = systemd_user_unit "sidekiq.service" do
   template "sidekiq.service"
   user "git"
   action [:create, :enable]
+  variables({
+    homedir: homedir,
+  })
 end
 
-deploy_branch "/var/lib/git/gitlab" do
+deploy_branch homedir do
   repository "https://github.com/gitlabhq/gitlabhq.git"
   revision "5-0-stable"
   user "git"
@@ -119,7 +111,7 @@ deploy_branch "/var/lib/git/gitlab" do
 
   before_symlink do
     rvm_shell "gitlab-bundle-install" do
-      code "bundle install --path /var/lib/git/gitlab/shared/bundle --quiet --deployment --without 'development test mysql'"
+      code "bundle install --path #{homedir}/shared/bundle --quiet --deployment --without 'development test mysql'"
       cwd release_path
       user "git"
     end
@@ -128,10 +120,10 @@ deploy_branch "/var/lib/git/gitlab" do
       code "bundle exec rake gitlab:setup force=yes RAILS_ENV=production"
       cwd release_path
       user "git"
-      not_if { File.exist?("/var/lib/git/gitlab/shared/.seeded") }
+      not_if { File.exist?("#{homedir}/shared/.seeded") }
     end
 
-    file "/var/lib/git/gitlab/shared/.seeded"
+    file "#{homedir}/shared/.seeded"
 
     rvm_shell "gitlab-migrate" do
       code "bundle exec rake db:migrate RAILS_ENV=production"
@@ -154,9 +146,9 @@ deploy_branch "/var/lib/git/gitlab" do
   end
 end
 
-nginx_unicorn "gitlab" do
-  homedir "/var/lib/git/gitlab"
-  port 80
+nginx_server "gitlab" do
+  template "nginx.conf"
+  homedir homedir
 end
 
 shorewall_rule "gitlab" do
@@ -165,4 +157,15 @@ end
 
 shorewall6_rule "gitlab" do
   destport "http,https"
+end
+
+if tagged?("nagios-client")
+  nrpe_command "check_gitlab_unicorn" do
+    command "/usr/lib/nagios/plugins/check_pidfile #{homedir}/shared/pids/unicorn.pid"
+  end
+
+  nagios_service "GITLAB-UNICORN" do
+    check_command "check_nrpe!check_gitlab_unicorn"
+    servicegroups name
+  end
 end
