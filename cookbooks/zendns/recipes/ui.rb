@@ -22,4 +22,8 @@ if node.chef_environment == "production"
   nginx_server "zendns" do
     template "nginx.conf"
   end
+
+  shorewall_rule "zendns-ui" do
+    destport "http,https"
+  end
 end

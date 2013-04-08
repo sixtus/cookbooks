@@ -123,6 +123,8 @@ when "gentoo"
     dev-libs/libxslt
     dev-libs/libyaml
     dev-ruby/haml
+    dev-ruby/madvertise-logging
+    dev-ruby/syslogger
     dev-util/strace
     mail-client/mailx
     net-analyzer/bwm-ng
