@@ -3,10 +3,12 @@ include ChefUtils::Account
 action :create do
   user = new_resource.name
   homedir = get_user(user)[:homedir]
+  ruby_version = new_resource.ruby_version
 
   rvm_instance user
 
-  rvm_default_ruby new_resource.ruby_version do
+  rvm_default_ruby "#{user}-#{ruby_version}" do
+    ruby_string ruby_version
     user user
   end
 

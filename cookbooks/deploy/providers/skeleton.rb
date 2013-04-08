@@ -21,7 +21,7 @@ action :create do
     home_mode "0755"
     gid user
     groups groups
-    authorized_keys_for akf
+    authorized_keys_for akf if akf
     key_source key_source if key_source
   end
 
