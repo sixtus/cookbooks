@@ -10,6 +10,10 @@ when "gentoo"
     mode "0644"
   end
 
+  ssl_certificate "/etc/ssl/certs/wildcard.#{node[:chef_domain]}" do
+    cn "wildcard.#{node[:chef_domain]}"
+  end
+
   ruby_block "cleanup-ca-certificates" do
     block do
       Find.find('/etc/ssl/certs') do |path|
