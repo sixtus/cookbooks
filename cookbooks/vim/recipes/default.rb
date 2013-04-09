@@ -25,7 +25,7 @@ when "mac_os_x"
   end
 
   file "/usr/local/bin/vim" do
-    content "#!/bin/sh\nexec /Applications/MacVim.app/Contents/MacOS/Vim $*"
+    content "#!/bin/sh\nexec /Applications/MacVim.app/Contents/MacOS/Vim \"$@\""
     mode "0755"
   end
 end
