@@ -91,7 +91,33 @@ namespace :generate do
     File.open(File.join(path, "#{login}.rb"), "w") do |f|
       f.puts(erb.result(b))
     end
+  end
 
+  desc "Generate a default OpenVPN/Tunnelblick config"
+  task :tunnelblick do
+    remote = "chef." + URI.parse(Chef::Config[:chef_server_url]).host.split('.')[1..-1].join('.')
+    login = Chef::Config[:node_name]
+
+    b = binding()
+    erb = Erubis::Eruby.new(File.read(File.join(TEMPLATES_DIR, 'openvpn.conf')))
+
+    tmpdir = Dir.mktmpdir
+    path = File.join(tmpdir, "#{COMPANY_NAME} VPN.tblk")
+    FileUtils.mkdir_p(path)
+
+    File.open(File.join(path, "config.ovpn"), "w") do |f|
+      f.puts(erb.result(b))
+    end
+
+    FileUtils.cp(File.join(SSL_CERT_DIR, "ca.crt"),
+                 File.join(path, "ca.crt"))
+    FileUtils.cp(File.join(SSL_CERT_DIR, "#{login}.crt"),
+                 File.join(path, "#{login}.crt"))
+    FileUtils.cp(File.join(SSL_CERT_DIR, "#{login}.key"),
+                 File.join(path, "#{login}.key"))
+
+    puts ">>> Configuration is at #{path}"
+    system("open '#{path}' || :")
   end
 
 end
