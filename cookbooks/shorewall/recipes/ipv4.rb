@@ -30,6 +30,7 @@ end
   accounting
   hosts
   interfaces
+  masq
   policy
   rules
   tunnels
