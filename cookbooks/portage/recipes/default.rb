@@ -168,7 +168,7 @@ end
 end
 
 binhosts = node.run_state[:nodes].select do |n|
-  n[:tags].include?("portage-binhost") and n[:primary_ipaddress]
+  n[:tags].include?("portage-binhost") and n[:primary_ipaddress] rescue false
 end.map do |n|
   n[:primary_ipaddress]
 end

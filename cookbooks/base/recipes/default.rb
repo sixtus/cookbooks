@@ -23,7 +23,10 @@ end
 
 if node.run_state[:chef].any?
   node.set[:chef_domain] = node.run_state[:chef].first[:domain]
-  node.load_attributes # reload attributes to make the magic happen
+
+  # this is awful but needed to keep attribute precedence
+  node.load_attributes
+  node.apply_expansion_attributes(node.expand!('server'))
 end
 
 if node.run_state[:nagios].any?
