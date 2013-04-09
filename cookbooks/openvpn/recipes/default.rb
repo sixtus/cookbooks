@@ -43,7 +43,7 @@ end
 shorewall_zone "vpn"
 
 shorewall_interface "vpn" do
-  interface "tun0"
+  interface "tun0 - routeback"
 end
 
 shorewall_tunnel "vpn" do
