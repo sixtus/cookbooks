@@ -1,7 +1,7 @@
 description "The production environment"
 
 cookbook "R",                 "= 1.0.0"
-cookbook "account",           "= 2.0.1"
+cookbook "account",           "= 2.0.2"
 cookbook "apache",            "= 0.2.0"
 cookbook "backup",            "= 1.0.1"
 cookbook "base",              "= 3.0.3"

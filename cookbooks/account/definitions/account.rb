@@ -9,8 +9,8 @@ define :account,
        :home_mode => "0750",
        :home_owner => nil,
        :home_group => nil,
-       :authorized_keys => [],
-       :authorized_keys_for => [],
+       :authorized_keys => nil,
+       :authorized_keys_for => nil,
        :key_source => nil,
        :action => :create do
   include_recipe "account"
@@ -99,13 +99,13 @@ define :account,
   # don't create an authorized keys file if authorized_keys is nil.
   # if it's empty -- i.e. [] -- then we would create an empty
   # authorized keys but with nil, the file is not created.
-  unless params[:authorized_keys].nil?
-    authorized_keys = authorized_keys_for(params[:authorized_keys_for].flatten.uniq).
-      concat(params[:authorized_keys])
+  if !params[:authorized_keys].nil? or !params[:authorized_keys_for].nil?
+    authorized_keys = authorized_keys_for([params[:authorized_keys_for]].flatten.compact)
+    authorized_keys += [params[:authorized_keys]].flatten.compact
 
     file "#{home}/.ssh/authorized_keys-#{rrand}" do
       path "#{home}/.ssh/authorized_keys"
-      content(authorized_keys.join("\n") + "\n")
+      content(authorized_keys.sort.uniq.join("\n") + "\n")
       owner home_owner
       group home_group
       mode "0600"
