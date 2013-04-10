@@ -1,4 +1,4 @@
 # /etc/conf.d/dcron
 
 # Options to pass to dcron at startup
-DCRON_OPTS="-m <%= @node[:contacts][:cron] %>"
+DCRON_OPTS="-m <%= @node[:contacts][:hostmaster] %>"

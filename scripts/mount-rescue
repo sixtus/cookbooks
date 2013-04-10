@@ -9,8 +9,8 @@ mount /dev/vg/usr $2/usr
 mount /dev/vg/var $2/var
 
 [[ -e /dev/vg/log ]] && mount /dev/vg/log $2/var/log
-[[ -e /dev/vg/opt ]] && mount /dev/vg/log $2/opt
-[[ -e /dev/vg/home ]] && mount /dev/vg/log $2/home
+[[ -e /dev/vg/opt ]] && mount /dev/vg/opt $2/opt
+[[ -e /dev/vg/home ]] && mount /dev/vg/home $2/home
 
 mount --bind /dev $2/dev
 mount -t proc proc $2/proc
@@ -21,9 +21,9 @@ chroot $2 /bin/bash
 
 umount $2/proc
 umount $2/dev
-umount $2/home
-umount $2/opt
-umount $2/var/log
+[[ -e /dev/vg/home ]] && umount $2/home
+[[ -e /dev/vg/opt ]] && umount $2/opt
+[[ -e /dev/vg/log ]] && umount $2/var/log
 umount $2/var
 umount $2/usr
 umount $2

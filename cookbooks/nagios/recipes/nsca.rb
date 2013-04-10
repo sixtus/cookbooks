@@ -11,7 +11,7 @@ end
 include_recipe "nagios"
 
 master = node.run_state[:nodes].select do |n|
-  n[:tags].include?("nagios-master")
+  n[:tags].include?("nagios-master") rescue false
 end.first
 
 template "/etc/nagios/send_nsca.cfg" do

@@ -152,6 +152,10 @@ nginx_server "chef-server-api" do
   template "nginx.conf"
 end
 
+shorewall_rule "chef-server" do
+  destport "http,https"
+end
+
 # CouchDB maintenance
 require 'open-uri'
 

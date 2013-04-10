@@ -9,13 +9,27 @@ else
   node.run_state[:users] = search(:users)
 end
 
-# figure out if we're a nagios client first, so recipes can conditionally
-# install nagios plugins
-nagios_masters = node.run_state[:nodes].select do |n|
-  n[:tags].include?("nagios-master")
+# select basic infrastructure nodes from the index for easy access in recipes
+{
+  :chef => "chef",
+  :splunk => "splunk-indexer",
+  :nagios => "nagios",
+  :mx => "mx",
+}.each do |key, role|
+  node.run_state[key] = node.run_state[:nodes].select do |n|
+    n.role?(role)
+  end
 end
 
-if nagios_masters.any?
+if node.run_state[:chef].any?
+  node.set[:chef_domain] = node.run_state[:chef].first[:domain]
+
+  # this is awful but needed to keep attribute precedence
+  node.load_attributes
+  node.apply_expansion_attributes(node.expand!('server'))
+end
+
+if node.run_state[:nagios].any?
   tag("nagios-client")
 end
 
@@ -70,10 +84,27 @@ when "gentoo"
     include_recipe "lib_users"
     include_recipe "openssl"
     include_recipe "nss"
-    include_recipe "syslog::client"
-    include_recipe "cron"
     include_recipe "sudo"
     include_recipe "ssh::server"
+
+    # XXX: these will go away after systemd integration is complete
+    include_recipe "cron"
+    include_recipe "syslog::client"
+
+    # these are only usefull in non-solo mode and only if the specified role
+    # has been deployed on another node (see above)
+    if node.run_state[:chef].any?
+      include_recipe "chef::client"
+    end
+
+    if node.run_state[:splunk].any?
+      include_recipe "splunk::forwarder" unless node.role?("splunk-indexer")
+      include_recipe "ganymed"
+    end
+
+    if node.run_state[:mx].any?
+      include_recipe "postfix::satelite" unless node[:skip][:postfix_satelite]
+    end
   end
 
 when "mac_os_x"

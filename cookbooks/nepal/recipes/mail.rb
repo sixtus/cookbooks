@@ -5,8 +5,6 @@ portage_package_use "mail-mta/postfix|mysql" do
   use %w(mysql)
 end
 
-node.set[:skip][:postfix_satelite] = true
-
 include_recipe "postfix::local"
 
 mysql_dom_password = get_password("mysql/nepal_mail_dom")

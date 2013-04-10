@@ -3,12 +3,13 @@ include ChefUtils::RVM
 action :create do
   rvm = infer_rvm_vars(new_resource.name, new_resource.version)
 
-  template "#{rvm[:homedir]}/.gemrc" do
-    source "gemrc"
-    cookbook "rvm"
-    owner rvm[:user]
-    mode "0644"
-    variables :rvm => rvm
+  %w(gem irb rvm).each do |file|
+    template "#{rvm[:homedir]}/.#{file}rc" do
+      source "#{file}rc"
+      cookbook "rvm"
+      owner rvm[:user]
+      mode "0644"
+    end
   end
 
   bash_env = {

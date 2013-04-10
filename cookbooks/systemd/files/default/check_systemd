@@ -10,7 +10,7 @@ fi
 UNIT=$1
 shift
 
-if [[ $(</proc/1/cmdline) == /usr/bin/systemd* ]]; then
+if [[ $(</proc/1/cmdline) =~ systemd ]]; then
 	systemctl -q is-active $UNIT &>/dev/null
 	ret=$?
 

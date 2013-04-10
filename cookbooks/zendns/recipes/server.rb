@@ -13,8 +13,6 @@ template "/etc/powerdns/pdns.conf" do
   notifies :restart, "service[pdns]"
 end
 
-package "dev-ruby/madvertise-logging"
-
 cookbook_file "/usr/libexec/zendnspipe" do
   source "zendnspipe.rb"
   owner "root"
@@ -27,6 +25,15 @@ systemd_unit "pdns.service"
 
 service "pdns" do
   action [:enable, :start]
+end
+
+shorewall_rule "zendns-tcp" do
+  destport "domain"
+end
+
+shorewall_rule "zendns-udp" do
+  destport "domain"
+  proto "udp"
 end
 
 if tagged?('ganymed-client')

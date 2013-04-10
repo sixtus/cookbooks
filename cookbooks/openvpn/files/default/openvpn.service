@@ -1,0 +1,10 @@
+[Unit]
+Description=OpenVPN daemon
+After=network.target
+
+[Service]
+ExecStart=/usr/sbin/openvpn --config /etc/openvpn/openvpn.conf --syslog openvpn --user openvpn --group openvpn
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

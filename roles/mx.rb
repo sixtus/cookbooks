@@ -6,7 +6,7 @@ run_list(%w(
 ))
 
 override_attributes({
-  "skip" => {
-    "postfix_satelite" => true,
+  :skip => {
+    :postfix_satelite => true,
   },
 })

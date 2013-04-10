@@ -40,6 +40,13 @@ namespace :ssl do
       sh("openssl req -config #{SSL_CONFIG_FILE} -new -nodes -x509 -days 3650 -subj '#{subject}' -newkey rsa:4096 -out #{SSL_CERT_DIR}/ca.crt -keyout #{SSL_CA_DIR}/ca.key")
       sh("openssl ca -config #{SSL_CONFIG_FILE} -gencrl -out #{SSL_CERT_DIR}/ca.crl")
     end
+
+    chef_domain = URI.parse(Chef::Config[:chef_server_url]).host.
+      split(".")[1..-1].join(".")
+
+    ENV['BATCH'] = "1"
+    args = Rake::TaskArguments.new([:cn], ["*.#{chef_domain}"])
+    Rake::Task["ssl:do_cert"].execute(args)
   end
 
   task :do_cert => [ :init ]

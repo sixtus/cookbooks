@@ -13,12 +13,6 @@
 fw firewall
 net ipv6
 
-<% if node[:primary_interface_bridged] %>
-nodes:net bport
-<% else %>
-nodes:net ipv6
-<% end %>
-
 <% node[:shorewall6][:zones].each do |zone, ztype| %>
 <%= zone %> <%= ztype %>
 <% end %>

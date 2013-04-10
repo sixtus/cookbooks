@@ -16,17 +16,19 @@ action :enable do
   end
 
   execute "systemd-reload-#{user[:name]}" do
-    command "su -l -c 'systemctl --user daemon-reload' #{user[:name]}"
+    command %{su -l -c 'env XDG_RUNTIME_DIR="/run/user/#{user[:uid]}" systemctl --user daemon-reload' #{user[:name]}}
     action :nothing
     only_if { systemd_running? }
   end
 
-  systemd_user_unit "dbus.socket" do
+  systemd_user_unit "#{user[:name]}-dbus.socket" do
+    unit "dbus.socket"
     user user[:name]
     cookbook "systemd"
   end
 
-  systemd_user_unit "dbus.service" do
+  systemd_user_unit "#{user[:name]}-dbus.service" do
+    unit "dbus.service"
     user user[:name]
     cookbook "systemd"
     action [:create, :enable, :start]
