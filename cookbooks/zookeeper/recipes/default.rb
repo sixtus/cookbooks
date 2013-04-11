@@ -21,7 +21,9 @@ template "/opt/zookeeper/conf/log4j.properties" do
 end
 
 nodes = node.run_state[:nodes].select do |n|
+  n[:tags] and
   n[:tags].include?("zookeeper") and
+  n[:zookeeper] and
   n[:zookeeper][:ensamble] == node[:zookeeper][:ensamble]
 end.sort_by do |n|
   n[:fqdn]

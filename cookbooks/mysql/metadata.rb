@@ -10,6 +10,3 @@ version "2.0.3"
 
 supports "gentoo"
 supports "mac_os_x"
-
-depends "nagios"
-depends "syslog"

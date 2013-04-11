@@ -21,6 +21,11 @@ end
   end
 end
 
+# need this for bootstrapping the chef server
+if node.role?("chef")
+  node.run_state[:chef] = [node]
+end
+
 if node.run_state[:chef].any?
   node.set[:chef_domain] = node.run_state[:chef].first[:domain]
 

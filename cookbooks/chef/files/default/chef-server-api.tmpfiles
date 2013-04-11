@@ -1,0 +1,4 @@
+# systemd tmpfile settings for chef
+# See tmpfiles.d(5) for details
+
+d /run/chef 0755 chef chef -

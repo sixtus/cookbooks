@@ -4,6 +4,12 @@ if node[:chef][:client][:airbrake][:key]
   package "dev-ruby/airbrake_handler"
 end
 
+directory "/etc/chef" do
+  owner "chef"
+  group "root"
+  mode "0750"
+end
+
 directory "/var/log/chef" do
   owner "chef"
   group "chef"
@@ -11,6 +17,7 @@ directory "/var/log/chef" do
 end
 
 directory "/var/lib/chef/cache" do
+  owner "chef"
   group "root"
   mode "0750"
 end

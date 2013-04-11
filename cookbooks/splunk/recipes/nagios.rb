@@ -12,6 +12,7 @@ git "/opt/splunk/etc/apps/SplunkForNagios" do
 end
 
 master = node.run_state[:nodes].select do |n|
+  n[:tags] and
   n[:tags].include?("nagios-master")
 end.first
 
