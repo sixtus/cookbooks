@@ -57,10 +57,6 @@ when "gentoo"
     portage_package_keywords "dev-ruby/haml"
     portage_package_mask ">=dev-lang/python-3"
 
-    portage_package_use "sys-apps/systemd" do
-      use %w(static-libs)
-    end
-
     portage_package_use "sys-fs/udev" do
       use %w(static-libs)
     end
