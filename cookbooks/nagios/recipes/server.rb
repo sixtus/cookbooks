@@ -183,6 +183,10 @@ nginx_server "nagios" do
   template "nginx.conf"
 end
 
+shorewall_rule "nagios" do
+  destport "80,443"
+end
+
 file "/var/www/localhost/htdocs/index.php" do
   action :delete
 end
