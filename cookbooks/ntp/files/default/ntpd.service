@@ -4,8 +4,7 @@ ConditionPathExists=/etc/ntpd.conf
 After=network.target
 
 [Service]
-Type=forking
-ExecStart=/usr/sbin/ntpd -s
+ExecStart=/usr/sbin/ntpd -n
 PrivateTmp=true
 Restart=always
 
