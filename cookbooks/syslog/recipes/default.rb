@@ -1,9 +1,12 @@
 package "app-admin/syslog-ng"
 
 directory "/etc/syslog-ng/conf.d" do
-  owner "root"
-  group "root"
-  mode "0755"
+  action :delete
+  recursive true
+end
+
+indexer_nodes = node.run_state[:nodes].select do |n|
+  n[:tags].include?("splunk-indexer") rescue false
 end
 
 template "/etc/syslog-ng/syslog-ng.conf" do
@@ -12,28 +15,20 @@ template "/etc/syslog-ng/syslog-ng.conf" do
   group "root"
   mode "0640"
   notifies :restart, "service[syslog-ng]"
+  variables :indexer_nodes => indexer_nodes
 end
-
-syslog_config "00-local" do
-  template "local.conf"
-end
-
-systemd_unit "syslog-ng.service"
 
 service "syslog-ng" do
-  action [:enable, :start]
+  if systemd_running?
+    action [:disable, :stop]
+  else
+    action [:enable, :start]
+  end
 end
 
 include_recipe "syslog::logrotate"
 
-cookbook_file "/etc/logrotate.d/syslog-ng" do
-  owner "root"
-  group "root"
-  mode "0644"
-  source "syslog-ng.logrotate"
-end
-
-if tagged?("nagios-client")
+if tagged?("nagios-client") and not systemd_running?
   nrpe_command "check_syslog" do
     command "/usr/lib/nagios/plugins/check_systemd syslog-ng.service /run/syslog-ng.pid /usr/sbin/syslog-ng"
   end

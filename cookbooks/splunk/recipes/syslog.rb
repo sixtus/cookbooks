@@ -1,15 +1,3 @@
-include_recipe "syslog::server"
-
-syslog_config "90-splunk" do
-  template "syslog.conf"
-end
-
-directory "/opt/splunk/etc/apps/syslog_priority_lookup" do
-  action :delete
-  recursive true
-  not_if { File.directory?("/opt/splunk/etc/apps/syslog_priority_lookup/.git") }
-end
-
 git "/opt/splunk/etc/apps/syslog_priority_lookup" do
   repository "https://github.com/zenops/splunk-syslog_priority_lookup"
   reference "master"

@@ -87,10 +87,8 @@ when "gentoo"
     include_recipe "nss"
     include_recipe "sudo"
     include_recipe "ssh::server"
-
-    # XXX: these will go away after systemd integration is complete
     include_recipe "cron"
-    include_recipe "syslog::client"
+    include_recipe "syslog"
 
     # these are only usefull in non-solo mode and only if the specified role
     # has been deployed on another node (see above)

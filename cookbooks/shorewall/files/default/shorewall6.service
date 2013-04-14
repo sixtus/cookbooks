@@ -5,6 +5,7 @@ After=network.target
 [Service]
 Type=oneshot
 ExecStart=/sbin/shorewall6 start
+ExecStartPost=/usr/lib/systemd/systemd-sysctl
 ExecReload=/sbin/shorewall6 restart
 ExecStop=/sbin/shorewall6 stop
 RemainAfterExit=yes
