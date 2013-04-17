@@ -15,8 +15,6 @@ file "/var/log/mongodb/mongoc.log" do
   mode "0644"
 end
 
-splunk_input "monitor:///var/log/mongodb/mongoc.log"
-
 template "/etc/logrotate.d/mongoc" do
   source "mongodb.logrotate"
   owner "root"
