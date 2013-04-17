@@ -184,7 +184,11 @@ unless solo?
       false
     end
   end.each do |u|
-    u = get_user(u[:id])
+    begin
+      u = get_user(u[:id])
+    rescue ArgumentError
+      next
+    end
 
     directory "#{u[:dir]}/.chef" do
       owner u[:name]
