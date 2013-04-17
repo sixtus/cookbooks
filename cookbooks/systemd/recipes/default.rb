@@ -17,6 +17,14 @@ when "gentoo"
     portage_package_keywords "~sys-apps/dbus-1.6.8"
     portage_package_keywords "~sys-apps/systemd-200"
 
+    portage_package_use "sys-apps/dbus" do
+      if %x(qlist -ICe sys-apps/systemd).chomp == ""
+        use %w(-systemd)
+      else
+        use %w(systemd)
+      end
+    end
+
     portage_package_use "sys-apps/systemd" do
       use %w(static-libs python)
     end
