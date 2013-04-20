@@ -6,6 +6,7 @@ After=network.target
 [Service]
 EnvironmentFile=/etc/lxc/%I/env
 ExecStart=/usr/sbin/lxc-start -n %I ${INIT_COMMAND}
+ExecStop=/usr/sbin/lxc-stop -n %I
 RemainAfterExit=yes
 
 [Install]

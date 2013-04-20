@@ -11,3 +11,10 @@ end
 cron_daily "logrotate.cron" do
   command "/usr/sbin/logrotate /etc/logrotate.conf"
 end
+
+cookbook_file "/etc/logrotate.d/syslog-ng" do
+  owner "root"
+  group "root"
+  mode "0644"
+  source "syslog-ng.logrotate"
+end

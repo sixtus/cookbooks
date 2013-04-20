@@ -21,50 +21,16 @@ execute "root-ssh-key" do
   creates "/root/.ssh/id_rsa"
 end
 
-package "app-admin/denyhosts"
-
-cookbook_file "/etc/denyhosts.conf" do
-  source "denyhosts.conf"
-  owner "root"
-  group "root"
-  mode "0640"
+package "app-admin/denyhosts" do
+  action :remove
 end
 
-allowed_hosts = node.run_state[:nodes].select do |n|
-  n[:primary_ipaddress]
-end.map do |n|
-  n[:primary_ipaddress]
-end + node[:denyhosts][:whitelist]
-
-file "/var/lib/denyhosts/allowed-hosts" do
-  content allowed_hosts.sort.join("\n")
-  owner "root"
-  group "root"
-  mode "0644"
-end
-
-# Need this during bootstrap when syslog-ng has not created the file, but
-# denyhosts fails if it does not exist. d'oh
-file "/var/log/auth.log" do
-  owner "root"
-  group "wheel"
-  mode "0640"
-end
-
-service "denyhosts" do
-  action [:disable, :stop]
+file "/etc/denyhosts.conf" do
+  action :delete
 end
 
 cron "denyhosts" do
-  minute "*/10"
-  command "/usr/bin/denyhosts.py -c /etc/denyhosts.conf"
-end
-
-cookbook_file "/etc/logrotate.d/denyhosts" do
-  source "denyhosts.logrotate"
-  owner "root"
-  group "root"
-  mode "0644"
+  action :delete
 end
 
 if tagged?("nagios-client")

@@ -57,6 +57,8 @@ template "/root/.chef/knife.rb" do
   owner "root"
   group "root"
   mode "0600"
+  variables :client_key => "/root/.chef/client.pem",
+            :node_name => "root"
 end
 
 directory "/etc/chef/certificates" do
@@ -139,6 +141,18 @@ service "chef-server-api" do
   action [:start, :enable]
 end
 
+file "/etc/chef/validation.pem" do
+  owner "chef"
+  group "chef"
+  mode "0400"
+end
+
+file "/etc/chef/webui.pem" do
+  owner "chef"
+  group "chef"
+  mode "0400"
+end
+
 # nginx SSL proxy
 ssl_ca "/etc/ssl/nginx/#{node[:fqdn]}-ca" do
   notifies :reload, "service[nginx]"
@@ -155,6 +169,47 @@ end
 
 shorewall_rule "chef-server" do
   destport "http,https"
+end
+
+# create knife config and client key for hostmasters
+unless solo?
+  node.run_state[:users].select do |u|
+    if u[:tags] and u[:tags].include?("hostmaster")
+      true
+    elsif u[:nodes]
+      u[:nodes][node[:fqdn]] and
+      u[:nodes][node[:fqdn]][:tags] and
+      u[:nodes][node[:fqdn]][:tags].include?("hostmaster")
+    else
+      false
+    end
+  end.each do |u|
+    begin
+      u = get_user(u[:id])
+    rescue ArgumentError
+      next
+    end
+
+    directory "#{u[:dir]}/.chef" do
+      owner u[:name]
+      group u[:group][:name]
+      mode "0700"
+    end
+
+    execute "knife-client-#{u[:name]}" do
+      command "knife client create -a -d #{u[:name]} | tail -n+2 > #{u[:dir]}/.chef/client.pem"
+      creates "#{u[:dir]}/.chef/client.pem"
+    end
+
+    template "#{u[:dir]}/.chef/knife.rb" do
+      source "knife.rb"
+      owner u[:name]
+      group u[:group][:name]
+      mode "0600"
+      variables :client_key => "#{u[:dir]}/.chef/client.pem",
+                :node_name => u[:name]
+    end
+  end
 end
 
 # CouchDB maintenance

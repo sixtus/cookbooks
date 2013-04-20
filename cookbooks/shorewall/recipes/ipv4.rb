@@ -48,7 +48,11 @@ end
 systemd_unit "shorewall.service"
 
 service "shorewall" do
-  action [:enable, :start]
+  if node[:virtualization][:role] == "guest"
+    action [:disable]
+  else
+    action [:enable, :start]
+  end
 end
 
 splunk_input "monitor:///var/log/shorewall-init.log"

@@ -3,8 +3,7 @@ Description=Erlang Port Mapper Daemon
 After=network.target
 
 [Service]
-Type=forking
-ExecStart=/usr/bin/epmd -daemon
+ExecStart=/usr/bin/epmd
 Restart=always
 
 [Install]

@@ -23,8 +23,6 @@ file "/var/log/mongodb/mongodb.log" do
   mode "0644"
 end
 
-splunk_input "monitor:///var/log/mongodb/mongodb.log"
-
 template "/etc/logrotate.d/mongodb" do
   source "mongodb.logrotate"
   owner "root"

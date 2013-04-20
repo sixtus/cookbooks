@@ -68,6 +68,8 @@ service "splunk" do
   action [:enable, :start]
 end
 
+include_recipe "splunk::systemd" if systemd_running?
+
 if tagged?("nagios-client")
   nrpe_command "check_splunkd" do
     command "/usr/lib/nagios/plugins/check_pidfile /opt/splunk/var/run/splunk/splunkd.pid splunkd"

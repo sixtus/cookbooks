@@ -19,10 +19,6 @@ action :create do
     action :delete if systemd_running?
   end
 
-  splunk_input "monitor:///var/log/mongodb/#{svcname}.log" do
-    not_if { systemd_running? }
-  end
-
   template "/etc/logrotate.d/#{svcname}" do
     source "mongodb.logrotate"
     owner "root"

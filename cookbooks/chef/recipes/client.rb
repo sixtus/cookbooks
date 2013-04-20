@@ -7,7 +7,7 @@ end
 directory "/etc/chef" do
   owner "chef"
   group "root"
-  mode "0750"
+  mode "0755"
 end
 
 directory "/var/log/chef" do
@@ -23,6 +23,12 @@ directory "/var/lib/chef/cache" do
 end
 
 unless solo?
+  file "/etc/chef/client.pem" do
+    owner "root"
+    group "root"
+    mode "0400"
+  end
+
   template "/etc/chef/client.rb" do
     source "client.rb"
     owner "root"
