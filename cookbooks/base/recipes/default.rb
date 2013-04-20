@@ -21,6 +21,11 @@ end
   end
 end
 
+# need this for bootstrapping the chef server
+if node.role?("chef")
+  node.run_state[:chef] = [node]
+end
+
 if node.run_state[:chef].any?
   node.set[:chef_domain] = node.run_state[:chef].first[:domain]
 
@@ -56,10 +61,6 @@ when "gentoo"
     # basic keywords & use flags
     portage_package_keywords "dev-ruby/haml"
     portage_package_mask ">=dev-lang/python-3"
-
-    portage_package_use "sys-apps/systemd" do
-      use %w(static-libs)
-    end
 
     portage_package_use "sys-fs/udev" do
       use %w(static-libs)

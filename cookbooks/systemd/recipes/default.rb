@@ -15,7 +15,11 @@ case node[:platform]
 when "gentoo"
   if root?
     portage_package_keywords "~sys-apps/dbus-1.6.8"
-    portage_package_keywords "~sys-apps/systemd-197"
+    portage_package_keywords "~sys-apps/systemd-200"
+
+    portage_package_use "sys-apps/systemd" do
+      use %w(static-libs python)
+    end
 
     package "sys-apps/systemd"
 

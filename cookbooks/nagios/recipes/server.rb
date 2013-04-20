@@ -48,7 +48,7 @@ end.map do |c|
 end
 
 hosts = node.run_state[:nodes].select do |n|
-  n[:tags].include?("nagios-client")
+  n[:tags].include?("nagios-client") rescue false
 end.sort_by do |n|
   n[:fqdn]
 end
@@ -181,6 +181,10 @@ end
 
 nginx_server "nagios" do
   template "nginx.conf"
+end
+
+shorewall_rule "nagios" do
+  destport "80,443"
 end
 
 file "/var/www/localhost/htdocs/index.php" do

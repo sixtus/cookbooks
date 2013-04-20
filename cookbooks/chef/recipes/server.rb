@@ -132,6 +132,7 @@ template "/etc/chef/server.rb" do
   variables :amqp_pass => amqp_pass
 end
 
+systemd_tmpfiles "chef-server-api"
 systemd_unit "chef-server-api.service"
 
 service "chef-server-api" do
@@ -208,13 +209,12 @@ end
 
 # nagios service checks
 if tagged?("nagios-client")
-  nagios_service "CHEF-SERVER" do
-    check_command "check_http!-S -s 'This is the Chef API Server.'"
-    servicegroups "chef"
+  nrpe_command "check_chef_server" do
+    command "/usr/lib/nagios/plugins/check_http -H chef.#{node[:chef_domain]} -S -s 'This is the Chef API Server.'"
   end
 
-  nagios_service "CHEF-SERVER-SSL" do
-    check_command "check_http!-S -C 21"
+  nagios_service "CHEF-SERVER" do
+    check_command "check_nrpe!check_chef_server"
     servicegroups "chef"
   end
 
