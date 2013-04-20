@@ -8,3 +8,6 @@ User=couchdb
 Group=couchdb
 ExecStart=/usr/bin/couchdb -o /dev/stdout -e /dev/stderr
 Restart=always
+
+[Install]
+WantedBy=multi-user.target
