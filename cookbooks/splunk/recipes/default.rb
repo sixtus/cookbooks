@@ -68,7 +68,7 @@ service "splunk" do
   action [:enable, :start]
 end
 
-include_recipe "splunk::systemd" if systemd_running?
+include_recipe "splunk::systemd"
 
 if tagged?("nagios-client")
   nrpe_command "check_splunkd" do

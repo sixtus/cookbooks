@@ -19,16 +19,12 @@ template "/etc/syslog-ng/syslog-ng.conf" do
 end
 
 service "syslog-ng" do
-  if systemd_running?
-    action [:disable, :stop]
-  else
-    action [:enable, :start]
-  end
+  action [:enable, :start]
 end
 
 include_recipe "syslog::logrotate"
 
-if tagged?("nagios-client") and not systemd_running?
+if tagged?("nagios-client")
   nrpe_command "check_syslog" do
     command "/usr/lib/nagios/plugins/check_systemd syslog-ng.service /run/syslog-ng.pid /usr/sbin/syslog-ng"
   end

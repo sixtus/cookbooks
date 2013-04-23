@@ -1,6 +1,5 @@
-git "/opt/splunk/etc/apps/systemd-journal" do
-  repository "https://github.com/zenops/splunk-systemd-journal"
-  reference "master"
-  action :sync
+directory "/opt/splunk/etc/apps/systemd-journal" do
+  action :delete
+  recursive true
   notifies :restart, "service[splunk]"
 end
