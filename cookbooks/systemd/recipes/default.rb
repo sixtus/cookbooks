@@ -47,6 +47,8 @@ when "gentoo"
     end
 
     # journal
+    systemd_unit "systemd-journald.socket"
+
     service "systemd-journald.service" do
       action :nothing
       provider Chef::Provider::Service::Systemd
