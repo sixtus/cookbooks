@@ -17,9 +17,9 @@ Before=sockets.target
 IgnoreOnIsolate=yes
 
 [Socket]
-ListenStream=/dev/log
 ListenStream=/run/systemd/journal/stdout
 ListenDatagram=/run/systemd/journal/socket
+ListenDatagram=/dev/log
 SocketMode=0666
 PassCredentials=yes
 PassSecurity=yes
