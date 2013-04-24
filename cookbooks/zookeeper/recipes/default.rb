@@ -63,5 +63,53 @@ if tagged?("nagios-client")
 
   nagios_service "ZOOKEEPER" do
     check_command "check_nrpe!check_zookeeper"
+    servicegroups "zookeeper"
+  end
+
+  nagios_plugin "check_zookeeper" do
+    source "check_zookeeper.rb"
+  end
+
+  nrpe_command "check_zookeeper_status" do
+    command "/usr/lib/nagios/plugins/check_zookeeper -m Status -H localhost"
+  end
+
+  nagios_service "ZOOKEEPER-STATUS" do
+    check_command "check_nrpe!check_zookeeper_status"
+    servicegroups "zookeeper"
+  end
+
+  nrpe_command "check_zookeeper_readonly" do
+    command "/usr/lib/nagios/plugins/check_zookeeper -m ReadOnly -H localhost"
+  end
+
+  nagios_service "ZOOKEEPER-READONLY" do
+    check_command "check_nrpe!check_zookeeper_readonly"
+    servicegroups "zookeeper"
+  end
+
+  nrpe_command "check_zookeeper_followers" do
+    command "/usr/lib/nagios/plugins/check_zookeeper -m Followers -n #{nodes.map {|n| n[:fqdn]}.join(" -n ")}"
+  end
+
+  nagios_service "ZOOKEEPER-FOLLOWERS" do
+    check_command "check_nrpe!check_zookeeper_followers"
+  end
+
+  {
+    :connections => [250, 500],
+    :watches => [1000, 2000],
+    :latency => [1000, 2000],
+    :requests => [20, 50],
+    :files => [2048, 4096],
+  }.each do |mode, threshold|
+    nrpe_command "check_zookeeper_#{mode}" do
+      command "/usr/lib/nagios/plugins/check_zookeeper -m #{mode.capitalize} -H localhost -w #{threshold[0]} -c #{threshold[1]}"
+    end
+
+    nagios_service "ZOOKEEPER-#{mode.to_s.upcase}" do
+      check_command "check_nrpe!check_zookeeper_#{mode}"
+      servicegroups "zookeeper"
+    end
   end
 end
