@@ -7,6 +7,7 @@ nginx_default_use_flags = %w(
   aio
   nginx_modules_http_realip
   nginx_modules_http_stub_status
+  nginx_modules_http_metrics
 )
 
 portage_package_use "www-servers/nginx" do
