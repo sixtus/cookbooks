@@ -37,10 +37,14 @@ template "#{node[:zookeeper][:confdir]}/zoo.cfg" do
   variables :nodes => nodes
 end
 
+directory node[:zookeeper][:datadir] do
+  recursive true
+end
+
 file "#{node[:zookeeper][:datadir]}/myid" do
   content "#{myid}\n"
   mode "0644"
-  notifies :restart, "service[zookeeper]"
+  notifies :restart, "service[zookeeper]" unless node[:platform] == "mac_os_x"
 end
 
 case node[:platform]
