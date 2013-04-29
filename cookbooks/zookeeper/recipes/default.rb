@@ -2,22 +2,26 @@ tag("zookeeper")
 
 include_recipe "java"
 
-package "sys-cluster/zookeeper"
+case node[:platform]
+when "gentoo"
+  package "sys-cluster/zookeeper"
 
-template "/opt/zookeeper/bin/zkServer.sh" do
-  source "zkServer.sh"
-  owner "root"
-  group "root"
-  mode "0755"
-  notifies :restart, "service[zookeeper]"
+  template "/opt/zookeeper/bin/zkServer.sh" do
+    source "zkServer.sh"
+    owner "root"
+    group "root"
+    mode "0755"
+    notifies :restart, "service[zookeeper]" unless node[:platform] == "mac_os_x"
+  end
+
+when "mac_os_x"
+  package "zookeeper"
 end
 
-template "/opt/zookeeper/conf/log4j.properties" do
+template "#{node[:zookeeper][:confdir]}/log4j.properties" do
   source "log4j.properties"
-  owner "root"
-  group "root"
   mode "0644"
-  notifies :restart, "service[zookeeper]"
+  notifies :restart, "service[zookeeper]" unless node[:platform] == "mac_os_x"
 end
 
 nodes = zookeeper_nodes
@@ -26,27 +30,26 @@ myid = nodes.index do |n|
   n[:fqdn] == node[:fqdn]
 end.to_i + 1
 
-template "/opt/zookeeper/conf/zoo.cfg" do
+template "#{node[:zookeeper][:confdir]}/zoo.cfg" do
   source "zoo.cfg"
-  owner "root"
-  group "root"
   mode "0644"
-  notifies :restart, "service[zookeeper]"
+  notifies :restart, "service[zookeeper]" unless node[:platform] == "mac_os_x"
   variables :nodes => nodes
 end
 
-file "/var/lib/zookeeper/myid" do
+file "#{node[:zookeeper][:datadir]}/myid" do
   content "#{myid}\n"
-  owner "root"
-  group "root"
   mode "0644"
   notifies :restart, "service[zookeeper]"
 end
 
-systemd_unit "zookeeper.service"
+case node[:platform]
+when "gentoo"
+  systemd_unit "zookeeper.service"
 
-service "zookeeper" do
-  action [:enable, :start]
+  service "zookeeper" do
+    action [:enable, :start]
+  end
 end
 
 if tagged?("nagios-client")
