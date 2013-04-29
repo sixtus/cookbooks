@@ -20,14 +20,7 @@ template "/opt/zookeeper/conf/log4j.properties" do
   notifies :restart, "service[zookeeper]"
 end
 
-nodes = node.run_state[:nodes].select do |n|
-  n[:tags] and
-  n[:tags].include?("zookeeper") and
-  n[:zookeeper] and
-  n[:zookeeper][:ensamble] == node[:zookeeper][:ensamble]
-end.sort_by do |n|
-  n[:fqdn]
-end
+nodes = zookeeper_nodes
 
 myid = nodes.index do |n|
   n[:fqdn] == node[:fqdn]
@@ -97,7 +90,7 @@ if tagged?("nagios-client")
   end
 
   {
-    :connections => [250, 500],
+    :connections => [750, 1000],
     :watches => [1000, 2000],
     :latency => [1000, 2000],
     :requests => [20, 50],
