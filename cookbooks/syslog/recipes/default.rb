@@ -18,6 +18,8 @@ template "/etc/syslog-ng/syslog-ng.conf" do
   variables :indexer_nodes => indexer_nodes
 end
 
+systemd_unit "syslog-ng.service"
+
 service "syslog-ng" do
   action [:enable, :start]
 end
