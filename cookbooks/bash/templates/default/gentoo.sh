@@ -114,6 +114,8 @@ mklnx() {
 
 	dracut --force ${tmpdir}/boot/initramfs-${KV}.img
 
+	rsync -rltgoDK ${tmpdir}/ /
+
 	tar cvf linux-${KV}.tar -C ${tmpdir} .
 	xz linux-${KV}.tar
 	rm -rf ${tmpdir}
