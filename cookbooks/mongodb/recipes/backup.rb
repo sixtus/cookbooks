@@ -13,7 +13,7 @@ end
 directory node[:mongodb][:backup][:dir] do
   owner "root"
   group "root"
-  mode "0700"
+  mode "0755"
   recursive true
 end
 
