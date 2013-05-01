@@ -5,6 +5,7 @@ description "Mixin for servers that need to handle huge amounts of connections"
 
 default_attributes({
   :nginx => {
+    :worker_processes => "8",
     :worker_connections => "16384",
     :fastcgi_buffers => 4096,
     :client_body_timeout => 10,

@@ -22,11 +22,10 @@ __version__ = "0.5"
 
 # These are no true libs so don't make our process a deleted libs user
 NOLIBS = [
-    "/SYSV*",
     "/dev/zero",
     "/dev/shm/*",
-    "/drm",
     "*/var/nagios/spool/checkresults/neb*",
+    "/tmp/hsperfdata*",
 ]
 
 FP_EXCLUDES = [

@@ -3,15 +3,11 @@ nginx_default_use_flags = %w(
   -nginx_modules_http_memcached
   -nginx_modules_http_ssi
   -nginx_modules_http_userid
+  -syslog
   aio
-  syslog
-  nginx_modules_http_empty_gif
-  nginx_modules_http_geo
-  nginx_modules_http_geoip
-  nginx_modules_http_gzip_static
-  nginx_modules_http_headers_more
   nginx_modules_http_realip
   nginx_modules_http_stub_status
+  nginx_modules_http_metrics
 )
 
 portage_package_use "www-servers/nginx" do
@@ -68,7 +64,6 @@ systemd_unit "nginx.service"
 
 service "nginx" do
   action [:enable, :start]
-  supports [:reload]
 end
 
 ssl_certificate "/etc/ssl/nginx/nginx" do
@@ -94,10 +89,6 @@ end
 
 nginx_module "log" do
   template "log.conf"
-end
-
-file "/etc/syslog-ng/conf.d/90-nginx.conf" do
-  action :delete
 end
 
 cookbook_file "/etc/logrotate.d/nginx" do

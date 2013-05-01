@@ -1,15 +1,17 @@
 require 'open-uri'
+require 'yajl'
 
 collect do
-  status = open("http://localhost:8031").read.split("\n")
+  uri = "http://localhost:8031/metrics"
+  status = Yajl::Parser.new(:symbolize_keys => true).parse(open(uri))
 
-  active = status[0].split[2].to_i
-  accepts, handled, requests = status[2].split.map(&:to_i)
-  _, reading, _, writing, _, waiting = status[3].split
+  Metriks.histogram('nginx.connections').update(status[:connections])
+  Metriks.histogram('nginx.connections:reading').update(status[:reading])
+  Metriks.histogram('nginx.connections:writing').update(status[:writing])
+  Metriks.histogram('nginx.connections:waiting').update(status[:connections] - (status[:reading] + status[:writing]))
+  Metriks.derive('nginx.requests').mark(status[:requests])
 
-  Metriks.histogram('nginx.connections').update(active.to_i)
-  Metriks.histogram('nginx.connections:reading').update(reading.to_i)
-  Metriks.histogram('nginx.connections:writing').update(writing.to_i)
-  Metriks.histogram('nginx.connections:waiting').update(waiting.to_i)
-  Metriks.derive('nginx.requests').mark(requests)
+  status[:status_codes].each do |code, count|
+    Metriks.derive("nginx.status:#{code}").mark(count)
+  end
 end
