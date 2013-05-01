@@ -1,0 +1,14 @@
+[Unit]
+Description=Hadoop %I
+After=network.target
+
+[Service]
+User=hadoop
+Group=hadoop
+Environment=HADOOP_LOGFILE=%I.log
+ExecStart=/opt/hadoop/bin/hadoop --config /opt/hadoop/conf %I
+SyslogIdentifier=hadoop-%I
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

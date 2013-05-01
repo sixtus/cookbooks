@@ -1,4 +1,6 @@
-default[:hadoop][:tmp_dir] = [ "/var/tmp/hadoop" ]
+default[:hadoop][:rack_id] = "/default/rack"
+default[:hadoop][:tmp_dir] = "/var/tmp/hadoop"
+default[:hadoop][:java_tmp] = "/var/tmp/java"
 
 default[:hadoop][:fs][:inmemory] = "200"
 

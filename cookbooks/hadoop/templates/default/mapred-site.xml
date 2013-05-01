@@ -6,9 +6,19 @@
 <% if @job_tracker %>
   <property>
     <name>mapred.job.tracker</name>
-    <value><%= @job_tracker[:primary_ipaddress] %>:9001</value>
+    <value><%= @job_tracker[:fqdn] %>:9001</value>
   </property>
 <% end %>
+
+  <property>
+    <name>mapred.jobtracker.taskScheduler</name>
+    <value>org.apache.hadoop.mapred.FairScheduler</value>
+  </property>
+
+  <property>
+    <name>mapred.fairscheduler.preemption</name>
+    <value>true</value>
+  </property>
 
   <!-- http://hadoop.apache.org/docs/r1.0.1/cluster_setup.html#Configuring+the+Hadoop+Daemons -->
   <property>
@@ -17,13 +27,8 @@
   </property>
 
   <property>
-    <name>mapred.task.timeout</name>
-    <value>3600000</value>
-  </property>
-
-  <property>
     <name>mapred.tasktracker.map.tasks.maximum</name>
-    <value>6</value>
+    <value>4</value>
   </property>
 
   <property>
@@ -38,7 +43,7 @@
 
   <property>
     <name>mapred.child.java.opts</name>
-    <value>-Duser.timezone=UTC -Dfile.encoding=UTF-8 -Xmx16g -Djava.io.tmpdir=<%= File.join(node[:hadoop][:tmp_dir].last, 'java') %></value>
+    <value>-Duser.timezone=UTC -Dfile.encoding=UTF-8 -Xmx16g -Djava.io.tmpdir=<%= node[:hadoop][:java_tmp] %></value>
   </property>
 
   <property>
@@ -66,7 +71,7 @@
   <!-- make sure these are stored on the dedicated hadoop disks -->
   <property>
     <name>mapred.local.dir</name>
-    <value><%= node[:hadoop][:tmp_dir].map { |dir| "#{dir}/${user.name}/mapred/local" }.join(',') %></value>
+    <value><%= node[:hadoop][:tmp_dir] %>/${user.name}/mapred/local</value>
   </property>
 
 </configuration>
