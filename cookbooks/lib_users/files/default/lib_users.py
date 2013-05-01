@@ -22,6 +22,7 @@ __version__ = "0.5"
 
 # These are no true libs so don't make our process a deleted libs user
 NOLIBS = [
+    "/SYSV*",
     "/dev/zero",
     "/dev/shm/*",
     "*/var/nagios/spool/checkresults/neb*",
