@@ -82,6 +82,13 @@ when "gentoo"
       include_recipe "openrc"
     end
 
+    cookbook_file "/usr/local/bin/service" do
+      source "service.sh"
+      owner "root"
+      group "root"
+      mode "0755"
+    end
+
     include_recipe "lib_users"
     include_recipe "openssl"
     include_recipe "nss"

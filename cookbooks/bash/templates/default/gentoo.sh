@@ -1,6 +1,6 @@
 # systemd goodies
 _systemd_running() {
-	[[ $(</proc/1/cmdline) == /usr/bin/systemd ]]
+	[[ $(</proc/1/cmdline) =~ systemd ]]
 }
 
 alias cgls=systemd-cgls
@@ -19,29 +19,21 @@ jf() {
 }
 
 # init script helpers
-_svc() {
-	if _systemd_running; then
-		sc $1 $2
-	else
-		/etc/init.d/$2 $1
-	fi
-}
-
 sva () {
 	for svc in "$@"; do
-		_svc start ${svc}
+		service start ${svc}
 	done
 }
 
 svo () {
 	for svc in "$@"; do
-		_svc stop ${svc}
+		service stop ${svc}
 	done
 }
 
 svr () {
 	for svc in "$@"; do
-		_svc restart ${svc}
+		service restart ${svc}
 	done
 }
 

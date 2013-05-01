@@ -2,6 +2,6 @@
     missingok
     sharedscripts
     postrotate
-        /etc/init.d/syslog-ng reload > /dev/null 2>&1 || true
+        service reload syslog-ng > /dev/null 2>&1 || true
     endscript
 }
