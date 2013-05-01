@@ -44,6 +44,12 @@ directory node[:script_path] do
   mode "0755"
 end
 
+# create accounts first so we can login if initial chef-client run fails for
+# some reason
+if node[:os] == "linux" and root?
+  include_recipe "account"
+end
+
 # load platform specific base recipes
 case node[:platform]
 
@@ -145,8 +151,6 @@ include_recipe "vim"
 
 # linux specific recipes
 if node[:os] == "linux" and root?
-  include_recipe "account"
-
   unless node[:virtualization][:role] == "guest"
     include_recipe "lxc"
     include_recipe "ntp"
