@@ -6,13 +6,22 @@
 <% if @name_node %>
   <property>
     <name>fs.default.name</name>
-    <value>hdfs://<%= @name_node[:primary_ipaddress] %>:9000/</value>
+    <value>hdfs://<%= @name_node[:fqdn] %>:9000/</value>
+  </property>
+  <property>
+    <name>dfs.hosts.exclude</name>
+    <value>/var/lib/hadoop/dfs.hosts.exclude</value>
   </property>
 <% end %>
 
   <property>
+    <name>topology.script.file.name</name>
+    <value>/opt/hadoop/conf/topology.sh</value>
+  </property>
+
+  <property>
     <name>hadoop.tmp.dir</name>
-    <value><%= node[:hadoop][:tmp_dir].first %>/${user.name}</value>
+    <value><%= node[:hadoop][:tmp_dir] %>/${user.name}</value>
   </property>
 
   <property>

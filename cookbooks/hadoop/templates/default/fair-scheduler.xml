@@ -1,0 +1,5 @@
+<?xml version="1.0"?>  
+<allocations>
+  <defaultMinSharePreemptionTimeout>120</defaultMinSharePreemptionTimeout>
+  <fairSharePreemptionTimeout>120</fairSharePreemptionTimeout>  
+</allocations>

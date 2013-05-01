@@ -6,7 +6,6 @@ package "sys-cluster/hadoop"
   /var/lib/hadoop
   /var/log/hadoop
   /var/run/hadoop
-  /var/tmp/hadoop
 ).each do |dir|
   directory dir do
     owner "hadoop"
@@ -15,19 +14,17 @@ package "sys-cluster/hadoop"
   end
 end
 
-%w(
-  namenode
-  datanode
-  jobtracker
-  tasktracker
-).each do |svc|
-  cookbook_file "/etc/init.d/hadoop-#{svc}" do
-    source "#{svc}.initd"
-    owner "root"
-    group "root"
-    mode "0755"
-  end
+directory "/opt/hadoop/logs" do
+  action :delete
+  recursive true
+  only_if { File.directory?("/opt/hadoop/logs") }
 end
+
+link "/opt/hadoop/logs" do
+  to "/var/log/hadoop"
+end
+
+systemd_unit "hadoop@.service"
 
 name_node = node.run_state[:nodes].select do |n|
   n[:tags] && n[:tags].include?("hadoop-namenode")
@@ -44,6 +41,7 @@ end.first
   hdfs-site.xml
   log4j.properties
   mapred-site.xml
+  fair-scheduler.xml
 ).each do |f|
   template "/opt/hadoop/conf/#{f}" do
     source f
@@ -55,15 +53,61 @@ end.first
   end
 end
 
-node[:hadoop][:tmp_dir].each do |dir|
-  directory dir do
-    owner "hadoop"
-    group "hadoop"
-    mode "0777"
-    recursive true
-  end
+template "/opt/hadoop/conf/topology.sh" do
+  source "topology.sh"
+  owner "root"
+  group "hadoop"
+  mode "0554"
+end
+
+datanodes = node.run_state[:nodes].select do |n|
+  n[:tags] and n[:tags].include?("hadoop-datanode")
+end
+
+topology = datanodes.map do |n|
+  "#{node[:ipaddress]} #{node[:hadoop][:rack_id] || '/default/rack'}"
+end.join("\n") + "\n"
+
+file "/opt/hadoop/conf/topology.data" do
+  action :create
+  owner "root"
+  group "hadoop"
+  mode "0644"
+  content topology
+end
+
+directory node[:hadoop][:tmp_dir] do
+  owner "hadoop"
+  group "hadoop"
+  mode "0777"
+  recursive true
+end
+
+directory node[:hadoop][:java_tmp] do
+  owner "hadoop"
+  group "hadoop"
+  mode "0777"
+  recursive true
+end
+
+nagios_plugin "check_hdfs" do
+  source "check_hdfs.rb"
 end
 
 if tagged?("splunk-forwarder")
   include_recipe "splunk::hadoop-ops"
+
+  directory "/opt/splunk/etc/apps/Splunk_TA_hadoopops/local" do
+    owner "root"
+    group "root"
+    mode "0755"
+  end
+
+  template "/opt/splunk/etc/apps/Splunk_TA_hadoopops/local/inputs.conf" do
+    source "splunk/inputs.conf"
+    owner "root"
+    group "root"
+    mode "0644"
+    notifies :restart, "service[splunk]"
+  end
 end
