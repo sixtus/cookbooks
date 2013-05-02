@@ -160,14 +160,15 @@ if node[:os] == "linux" and root?
     include_recipe "shorewall"
   end
 
+  cron_daily "xfs_fsr" do
+    command "/usr/sbin/xfs_fsr -t 600"
+    action :delete if node[:skip][:hardware]
+  end
+
   unless node[:skip][:hardware]
     include_recipe "hwraid"
     include_recipe "mdadm"
     include_recipe "smart"
-
-    cron_daily "xfs_fsr" do
-      command "/usr/sbin/xfs_fsr -t 600"
-    end
   end
 end
 
