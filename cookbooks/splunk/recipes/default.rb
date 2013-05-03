@@ -19,12 +19,17 @@ ssl_certificate "/etc/ssl/splunk/server" do
   notifies :restart, "service[splunk]"
 end
 
+pass4symmkey = get_password("splunk/pass4symmkey")
+
 template "/opt/splunk/etc/system/default/server.conf" do
   source "server.conf"
   owner "root"
   group "root"
   mode "0644"
   notifies :restart, "service[splunk]"
+  variables({
+    pass4symmkey: pass4symmkey,
+  })
 end
 
 directory "/opt/splunk/etc/system/local" do
