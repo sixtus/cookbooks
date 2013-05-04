@@ -18,7 +18,7 @@ query = Proc.new do |u|
 end
 
 accounts_from_databag "hostmasters" do
-  groups %w(adm cron portage wheel)
+  groups %w(adm cron portage wheel systemd-journal)
   query query
 end
 
