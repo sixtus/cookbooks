@@ -47,6 +47,7 @@ namespace :ssl do
     ENV['BATCH'] = "1"
     args = Rake::TaskArguments.new([:cn], ["*.#{chef_domain}"])
     Rake::Task["ssl:do_cert"].execute(args)
+    knife :cookbook_upload, ["openssl", "--force"]
   end
 
   task :do_cert => [ :init ]
@@ -84,7 +85,7 @@ namespace :ssl do
       puts("** SSL Certificate for #{cn} already exists, skipping.")
     end
 
-    if not Process.euid == 0
+    if ENV['BATCH'] != "1" and not Process.euid == 0
       knife :cookbook_upload, ["openssl", "--force"]
     end
   end
@@ -104,6 +105,7 @@ namespace :ssl do
     end
 
     ENV['BATCH'] = old_batch
+    knife :cookbook_upload, ["openssl", "--force"]
   end
 
   desc "Revoke an existing SSL certificate"
@@ -112,6 +114,7 @@ namespace :ssl do
     sh("openssl ca -config #{SSL_CONFIG_FILE} -revoke #{SSL_CERT_DIR}/#{keyfile}.crt")
     sh("openssl ca -config #{SSL_CONFIG_FILE} -gencrl -out #{SSL_CERT_DIR}/ca.crl")
     sh("rm #{SSL_CERT_DIR}/#{keyfile}.{csr,crt,key}")
+    knife :cookbook_upload, ['openssl', '--force']
   end
 
   desc "Renew expiring certificates"
@@ -130,5 +133,6 @@ namespace :ssl do
     end
 
     ENV['BATCH'] = old_batch
+    knife :cookbook_upload, ["openssl", "--force"]
   end
 end

@@ -81,8 +81,6 @@ namespace :node do
       # do nothing
     end
 
-    knife :cookbook_upload, ['openssl', '--force']
-
     # remove node
     begin
       File.unlink(File.join(TOPDIR, "nodes", "#{fqdn}.rb"))
