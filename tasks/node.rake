@@ -9,11 +9,10 @@ namespace :node do
     end
   end
 
-  desc "Create a new node with SSL certificates and chef client key"
+  desc "Create a new node with SSL certificates"
   task :create => [ :pull ]
-  task :create, :fqdn, :ipaddress, :role do |t, args|
+  task :create, :fqdn, :ipaddress do |t, args|
     Rake::Task['node:checkdns'].invoke(args.fqdn, args.ipaddress)
-    args.with_defaults(:role => "base")
 
     # create SSL cert
     ENV['BATCH'] = "1"
@@ -38,12 +37,12 @@ namespace :node do
 
   desc "Bootstrap the specified node"
   task :bootstrap, :fqdn, :ipaddress, :role do |t, args|
-    Rake::Task['node:create'].invoke(args.fqdn, args.ipaddress, args.role)
+    Rake::Task['node:create'].invoke(args.fqdn, args.ipaddress)
     sh("knife bootstrap #{args.fqdn} --distro gentoo -P tux")
   end
 
   desc "Quickstart & Bootstrap the specified node"
-  task :quickstart, :fqdn, :ipaddress, :profile, :role do |t, args|
+  task :quickstart, :fqdn, :ipaddress, :profile do |t, args|
     args.with_defaults(:profile => 'generic-two-disk-md')
 
     # sanity check
@@ -66,7 +65,7 @@ namespace :node do
     wait_with_ping(args.ipaddress, true)
 
     # run normal bootstrap
-    Rake::Task['node:bootstrap'].invoke(args.fqdn, args.ipaddress, args.role)
+    Rake::Task['node:bootstrap'].invoke(args.fqdn, args.ipaddress)
   end
 
   desc "Delete the specified node, client key and SSL certificates"
