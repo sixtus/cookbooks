@@ -1,6 +1,11 @@
 include_recipe "nagios::nrpe"
 include_recipe "nagios::nsca"
 
-portage_package_keywords "dev-ruby/nagios"
+case node[:platform]
+when "gentoo"
+  portage_package_keywords "dev-ruby/nagios"
+  package "dev-ruby/nagios"
 
-package "dev-ruby/nagios"
+when "debian"
+  gem_package "nagios"
+end
