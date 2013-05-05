@@ -47,6 +47,10 @@ namespace :solo do
     end
   end
 
+  task :debian => :create_solo_config do
+    run_solo
+  end
+
   task :gentoo => :create_solo_config do
     run_solo
   end

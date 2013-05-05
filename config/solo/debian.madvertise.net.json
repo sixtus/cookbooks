@@ -1,0 +1,10 @@
+{
+  "primary_ipaddress": "10.35.0.2",
+
+  "current_email": "bb@xnull.de",
+  "current_name": "Benedikt Böhm",
+
+  "run_list": [
+    "recipe[base]"
+  ]
+}

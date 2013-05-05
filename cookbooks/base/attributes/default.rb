@@ -150,6 +150,50 @@ when "gentoo"
     sys-process/lsof
   )
 
+when "debian"
+  node.set[:packages] = %w(
+    ack
+    apache2-utils
+    atool
+    bash-completion
+    dnsutils
+    bwm-ng
+    colordiff
+    dos2unix
+    ethtool
+    hdparm
+    icu
+    iotop
+    iproute2
+    iptraf-ng
+    keychain
+    less
+    libffi
+    libxml2
+    libxslt
+    libyaml
+    lsof
+    mailx
+    mc
+    mtr
+    ncdu
+    netcat
+    nmap
+    pciutils
+    pwgen
+    pydf
+    strace
+    syslogger
+    sysstat
+    tcpdump
+    tcptraceroute
+    telnet-bsd
+    traceroute
+    whois
+    xz-utils
+    brokenpackage
+  )
+
 when "mac_os_x"
   node.set[:packages] = %w(
     ack

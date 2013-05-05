@@ -1,15 +1,15 @@
 default[:ssh][:config] = case node[:platform]
-                         when "gentoo"
-                           root? ? "/etc/ssh/ssh_config" : "#{node[:homedir]}/.ssh/config"
                          when "mac_os_x"
                            "#{node[:homedir]}/.ssh/config"
+                         else
+                           root? ? "/etc/ssh/ssh_config" : "#{node[:homedir]}/.ssh/config"
                          end
 
 default[:ssh][:hostsfile] = case node[:platform]
-                            when "gentoo"
-                              root? ? "/etc/ssh/ssh_known_hosts" : "#{node[:homedir]}/.ssh/known_hosts"
                             when "mac_os_x"
                               "#{node[:homedir]}/.ssh/known_hosts"
+                            else
+                              root? ? "/etc/ssh/ssh_known_hosts" : "#{node[:homedir]}/.ssh/known_hosts"
                             end
 
 default[:ssh][:additional_host_keys] = []
