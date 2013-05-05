@@ -2,6 +2,9 @@ case node[:platform]
 when "gentoo"
   package "net-ftp/lftp"
 
+when "debian"
+  package "lftp"
+
 when "mac_os_x"
   package "lftp"
 
