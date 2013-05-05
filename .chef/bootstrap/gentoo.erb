@@ -12,21 +12,25 @@ sed -i -e "s/^hostname.*/hostname=\"${hostname}\"/" /etc/conf.d/hostname
 hostname ${hostname}
 
 emerge --sync
-
 emerge --nospinner --keep-going=n --noreplace --quiet app-admin/chef
 
+mkdir -p /etc/chef
 mkdir -p /var/log/chef
 
-cat <<'EOF' > /etc/chef/client.rb
-log_level        :info
-file_cache_path  "/var/lib/chef/cache"
-chef_server_url  "<%= Chef::Config[:chef_server_url] %>"
-validation_client_name "<%= Chef::Config[:node_name] %>"
-EOF
+(
+cat <<'EOP'
+<%= validation_key %>
+EOP
+) > /tmp/validation.pem
+awk NF /tmp/validation.pem > /etc/chef/validation.pem
+rm /tmp/validation.pem
+chmod 0600 /etc/chef/validation.pem
 
-cat <<'EOF' > /etc/chef/validation.pem
-<%= IO.read(Chef::Config[:client_key]) %>
-EOF
+(
+cat <<'EOP'
+<%= config_content %>
+EOP
+) > /etc/chef/client.rb
 
 /usr/bin/chef-client
 /usr/bin/chef-client'

@@ -4,6 +4,9 @@ log_location STDOUT
 node_name "<%= node_name %>"
 client_key "<%= TOPDIR %>/.chef/client.pem"
 
+validation_client_name "<%= node_name %>"
+validation_key "<%= TOPDIR %>/.chef/client.pem"
+
 chef_server_url "https://<%= chef_server_url %>"
 
 cache_type 'BasicFile'

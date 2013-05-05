@@ -1,0 +1,47 @@
+/bin/bash -c '
+
+export LANG=en_US.UTF-8
+
+fqdn=<%= @config[:server_name] %>
+hostname=${fqdn/.*}
+domainname=${fqdn#*.}
+
+echo "127.0.0.1 ${hostname}.${domainname} ${hostname} localhost" > /etc/hosts
+echo ${hostname} > /etc/hostname
+hostname ${hostname}
+
+aptitude update
+aptitude upgrade -y
+aptitude install -y sudo wget lsb-release
+
+echo "deb http://deb.bearstech.com/squeeze ruby-1.9.3/" > /etc/apt/sources.list.d/ruby1.9.3.list"
+apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10
+aptitude update
+aptitude install -y --force-yes ruby1.9.3 build-essential wget
+
+gem update --no-rdoc --no-ri
+gem install ohai --no-rdoc --no-ri --verbose
+gem install chef --no-rdoc --no-ri --verbose <%= bootstrap_version_string %>
+
+aptitude install -y opscode-keyring chef
+aptitude install -y opscode-keyring chef
+
+mkdir -p /etc/chef /var/log/chef
+
+(
+cat <<'EOP'
+<%= validation_key %>
+EOP
+) > /tmp/validation.pem
+awk NF /tmp/validation.pem > /etc/chef/validation.pem
+rm /tmp/validation.pem
+chmod 0600 /etc/chef/validation.pem
+
+(
+cat <<'EOP'
+<%= config_content %>
+EOP
+) > /etc/chef/client.rb
+
+/usr/bin/chef-client
+/usr/bin/chef-client'
