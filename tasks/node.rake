@@ -36,9 +36,10 @@ namespace :node do
   end
 
   desc "Bootstrap the specified node"
-  task :bootstrap, :fqdn, :ipaddress, :role do |t, args|
+  task :bootstrap, :fqdn, :ipaddress do |t, args|
+    ENV['DISTRO'] ||= "gentoo"
     Rake::Task['node:create'].invoke(args.fqdn, args.ipaddress)
-    sh("knife bootstrap #{args.fqdn} --distro gentoo -P tux")
+    sh("knife bootstrap #{args.fqdn} --distro #{ENV['DISTRO']} -P tux")
   end
 
   desc "Quickstart & Bootstrap the specified node"
