@@ -8,4 +8,8 @@ if root?
   link "/run/lock" do
     to "/var/lock"
   end
+
+  gem_package "haml"
+  gem_package "syslogger"
+  gem_package "madvertise-logging"
 end

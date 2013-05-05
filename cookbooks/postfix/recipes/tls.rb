@@ -1,6 +1,12 @@
 include_recipe "postfix"
 include_recipe "openssl"
 
+directory "/etc/ssl/postfix" do
+  owner "root"
+  group "root"
+  mode "0755"
+end
+
 ssl_ca "/etc/ssl/postfix/ca" do
   notifies :restart, "service[postfix]"
 end
