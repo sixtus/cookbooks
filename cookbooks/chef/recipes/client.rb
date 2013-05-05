@@ -1,7 +1,12 @@
-package "app-admin/chef"
-
-if node[:chef][:client][:airbrake][:key]
+case node[:platform]
+when "gentoo"
+  package "app-admin/chef"
   package "dev-ruby/airbrake_handler"
+
+when "debian"
+  gem_package "chef"
+  gem_package "airbrake_handler"
+
 end
 
 directory "/etc/chef" do
@@ -37,7 +42,7 @@ unless solo?
   end
 
   cron "chef-client" do
-    command "/usr/bin/ruby19 -E UTF-8 /usr/bin/chef-client -c /etc/chef/client.rb &>/dev/null"
+    command "/usr/bin/ruby -E UTF-8 /usr/bin/chef-client -c /etc/chef/client.rb &>/dev/null"
     minute IPAddr.new(node[:primary_ipaddress]).to_i % 60
     action :delete unless node.chef_environment == 'production'
     action :delete if systemd_running?
