@@ -3,25 +3,9 @@
 node[:baselayout][:groups].each do |name, params|
   group name do
     gid params[:gid]
+    append true if params[:append]
     members params[:members].split(",")
   end
-end
-
-group "adm" do
-  gid 4
-  append true
-  members %w(root adm daemon)
-end
-
-group "wheel" do
-  gid 10
-  append true
-  members %w(root)
-end
-
-group "users" do
-  gid 100
-  append true
 end
 
 node[:baselayout][:users].each do |name, params|
