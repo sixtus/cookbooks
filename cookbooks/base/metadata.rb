@@ -13,6 +13,7 @@ supports "gentoo"
 supports "mac_os_x"
 
 depends "account"
+depends "apt"
 depends "baselayout"
 depends "bash"
 depends "chef"

@@ -38,6 +38,5 @@ if node[:platform] == "debian"
     traceroute
     whois
     xz-utils
-    brokenpackage
   )
 end
