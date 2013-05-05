@@ -6,6 +6,9 @@ when "gentoo"
     package "dev-vcs/git-extras"
   end
 
+when "debian"
+  package "git"
+
 when "mac_os_x"
   package "git"
   package "git-extras"
