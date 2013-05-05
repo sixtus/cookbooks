@@ -1,11 +1,10 @@
-# remove old cruft
-%w(common perl shell).each do |p|
-  package "net-firewall/shorewall-#{p}" do
-    action :remove
-  end
-end
+case node[:platform]
+when "gentoo"
+  package "net-firewall/shorewall"
 
-package "net-firewall/shorewall"
+when "debian"
+  package "shorewall"
+end
 
 execute "shorewall-restart" do
   command "/sbin/shorewall -q restart"

@@ -1,4 +1,10 @@
-package "net-firewall/shorewall6"
+case node[:platform]
+when "gentoo"
+  package "net-firewall/shorewall6"
+
+when "debian"
+  package "shorewall6"
+end
 
 execute "shorewall6-restart" do
   command "/sbin/shorewall6 -q restart"
