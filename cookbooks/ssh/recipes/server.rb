@@ -13,24 +13,14 @@ end
 systemd_unit "sshd.service"
 
 service "sshd" do
+  service_name "sshd"
+  service_name "ssh" if node[:platform] == "debian"
   action [:enable, :start]
 end
 
 execute "root-ssh-key" do
   command "ssh-keygen -f /root/.ssh/id_rsa -N '' -C root@#{node[:fqdn]}"
   creates "/root/.ssh/id_rsa"
-end
-
-package "app-admin/denyhosts" do
-  action :remove
-end
-
-file "/etc/denyhosts.conf" do
-  action :delete
-end
-
-cron "denyhosts" do
-  action :delete
 end
 
 if tagged?("nagios-client")
