@@ -53,6 +53,7 @@ end
 directory "/var/mail" do
   action :delete
   recursive true
+  not_if { File.symlink?("/var/mail") }
 end
 
 link "/var/spool/mail" do
