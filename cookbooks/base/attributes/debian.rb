@@ -11,18 +11,17 @@ if node[:platform] == "debian"
     dos2unix
     ethtool
     hdparm
-    icu
+    libicu44
     iotop
-    iproute2
-    iptraf-ng
+    iproute
     keychain
     less
-    libffi
+    libffi5
     libxml2
-    libxslt
-    libyaml
+    libxslt1.1
+    libyaml-0-2
     lsof
-    mailx
+    heirloom-mailx
     mc
     mtr
     ncdu
@@ -32,11 +31,10 @@ if node[:platform] == "debian"
     pwgen
     pydf
     strace
-    syslogger
     sysstat
     tcpdump
     tcptraceroute
-    telnet-bsd
+    telnet
     traceroute
     whois
     xz-utils
