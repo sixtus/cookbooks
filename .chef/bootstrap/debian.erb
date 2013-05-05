@@ -22,7 +22,8 @@ gem update --no-rdoc --no-ri
 gem install ohai ruby-shadow --no-rdoc --no-ri --verbose
 gem install chef --no-rdoc --no-ri --verbose <%= bootstrap_version_string %>
 
-exit 0
+# remove some hetzner cruft
+rm -f /root/.{profile,bash_profile,bashrc}
 
 mkdir -p /etc/chef /var/log/chef
 
