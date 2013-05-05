@@ -8,12 +8,15 @@ if root?
   include_recipe "base::sysctl"
   include_recipe "baselayout"
   include_recipe "sysvinit"
-end
 
-# load distro specific base recipe
-include_recipe "base::#{node[:platform]}"
+  # load distro specific base recipe
+  include_recipe "base::#{node[:platform]}"
 
-if false and root?
+  # install base packages
+  node[:packages].each do |pkg|
+    package pkg
+  end
+
   cookbook_file "/usr/local/bin/service" do
     source "service.sh"
     owner "root"

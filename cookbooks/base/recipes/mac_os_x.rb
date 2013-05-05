@@ -9,3 +9,8 @@ package "xz"
 package "coreutils" do
   action :upgrade
 end
+
+# install base packages
+node[:packages].each do |pkg|
+  package pkg
+end
