@@ -50,6 +50,11 @@ if node[:platform] == "gentoo"
       :gid => 11,
       :members => "root",
     },
+    :mail => {
+      :gid => 12,
+      :members => "",
+      :append => true,
+    },
     :news => {
       :gid => 13,
       :members => "news",
@@ -151,6 +156,12 @@ if node[:platform] == "gentoo"
       :gid => 0,
       :home => "/sbin",
       :shell => "/sbin/halt",
+    },
+    :mail => {
+      :uid => 8,
+      :gid => 12,
+      :home => "/var/spool/mail",
+      :shell => "/sbin/nologin",
     },
     :news => {
       :uid => 9,

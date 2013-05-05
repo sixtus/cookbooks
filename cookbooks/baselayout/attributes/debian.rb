@@ -36,6 +36,7 @@ if node[:platform] == "debian"
     :mail => {
       :gid => 8,
       :members => "",
+      :append => true,
     },
     :news => {
       :gid => 9,
