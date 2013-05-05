@@ -4,7 +4,6 @@ if node[:platform] == "debian"
     ack
     apache2-utils
     atool
-    bash-completion
     dnsutils
     bwm-ng
     colordiff
