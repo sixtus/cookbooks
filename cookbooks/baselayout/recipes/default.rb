@@ -17,7 +17,7 @@ node[:baselayout][:users].each do |name, params|
             end
 
   user "#{name}-#{rrand}" do
-    user_name name
+    username name
     password "*"
     uid params[:uid]
     gid params[:gid]

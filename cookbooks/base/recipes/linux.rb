@@ -30,6 +30,7 @@ if root?
   include_recipe "nss"
   include_recipe "sudo"
   include_recipe "ssh::server"
+  include_recipe "postfix"
   include_recipe "cron"
   include_recipe "syslog"
 
