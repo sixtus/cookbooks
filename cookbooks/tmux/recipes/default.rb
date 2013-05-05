@@ -2,6 +2,9 @@ case node[:platform]
 when "gentoo"
   package "app-misc/tmux"
 
+when "debian"
+  package "tmux"
+
 when "mac_os_x"
   package "tmux"
 
