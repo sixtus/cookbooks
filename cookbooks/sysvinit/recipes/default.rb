@@ -1,4 +1,4 @@
-if node[:virtualization][:role] == "guest" and node[:virtualization][:system] == "linux-vserver"
+if vserver_guest? or systemd_running?
   execute "init-reload" do
     command "/bin/true"
     action :nothing

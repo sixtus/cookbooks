@@ -21,15 +21,6 @@ if root?
   # systemd support
   include_recipe "systemd"
 
-  unless systemd_running?
-    include_recipe "sysvinit"
-    include_recipe "openrc"
-  end
-
-  cookbook_file "/usr/local/bin/service" do
-    source "service.sh"
-    owner "root"
-    group "root"
-    mode "0755"
-  end
+  # support openrc until machine is converted to systemd
+  include_recipe "openrc" unless systemd_running?
 end

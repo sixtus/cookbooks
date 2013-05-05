@@ -7,12 +7,20 @@ if root?
   include_recipe "base::resolv"
   include_recipe "base::sysctl"
   include_recipe "baselayout"
+  include_recipe "sysvinit"
 end
 
 # load distro specific base recipe
 include_recipe "base::#{node[:platform]}"
 
 if false and root?
+  cookbook_file "/usr/local/bin/service" do
+    source "service.sh"
+    owner "root"
+    group "root"
+    mode "0755"
+  end
+
   include_recipe "lib_users"
   include_recipe "openssl"
   include_recipe "nss"
