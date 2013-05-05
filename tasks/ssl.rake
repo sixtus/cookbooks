@@ -44,10 +44,12 @@ namespace :ssl do
     chef_domain = URI.parse(Chef::Config[:chef_server_url]).host.
       split(".")[1..-1].join(".")
 
-    ENV['BATCH'] = "1"
-    args = Rake::TaskArguments.new([:cn], ["*.#{chef_domain}"])
-    Rake::Task["ssl:do_cert"].execute(args)
-    knife :cookbook_upload, ["openssl", "--force"]
+    if chef_domain != ""
+      ENV['BATCH'] = "1"
+      args = Rake::TaskArguments.new([:cn], ["*.#{chef_domain}"])
+      Rake::Task["ssl:do_cert"].execute(args)
+      knife :cookbook_upload, ["openssl", "--force"]
+    end
   end
 
   task :do_cert => [ :init ]
