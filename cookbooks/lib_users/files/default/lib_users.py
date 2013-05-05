@@ -1,4 +1,4 @@
-#!/usr/bin/python2 -tt
+#!/usr/bin/python -tt
 """
 Libusers - a script that finds users of libs that have been deleted/replaced
 """
