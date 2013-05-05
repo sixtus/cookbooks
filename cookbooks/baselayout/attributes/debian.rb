@@ -94,7 +94,7 @@ if node[:platform] == "debian"
       :gid => 30,
       :members => "",
     },
-    :www-data => {
+    :'www-data' => {
       :gid => 33,
       :members => "",
     },
@@ -162,12 +162,6 @@ if node[:platform] == "debian"
   }
 
   default[:baselayout][:users] = {
-    :root => {
-      :uid => 0,
-      :gid => 0,
-      :home => "/root",
-      :shell => "/bin/bash",
-    },
     :daemon => {
       :uid => 1,
       :gid => 1,

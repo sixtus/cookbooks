@@ -44,8 +44,8 @@ directory node[:script_path] do
   mode "0755"
 end
 
-include_recipe "linux" if node[:os] == "linux"
-include_recipe "mac_os_x" if node[:platform] == "mac_os_x"
+include_recipe "base::linux" if node[:os] == "linux"
+include_recipe "base::mac_os_x" if node[:platform] == "mac_os_x"
 
 # install base packages
 node[:packages].each do |pkg|
