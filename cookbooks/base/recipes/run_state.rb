@@ -28,11 +28,13 @@ end
 
 if node.run_state[:chef].any?
   node.set[:chef_domain] = node.run_state[:chef].first[:domain]
-
-  # this is awful but needed to keep attribute precedence
-  node.load_attributes
-  node.apply_expansion_attributes(node.expand!('server'))
+else
+  node.set[:chef_domain] = node[:domain]
 end
+
+# this is awful but needed to keep attribute precedence
+node.load_attributes
+node.apply_expansion_attributes(node.expand!('server'))
 
 if node.run_state[:nagios].any?
   tag("nagios-client")

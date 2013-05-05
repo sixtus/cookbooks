@@ -1,17 +1,41 @@
-%w(sys-process/dcron dev-util/lockrun).each do |p|
-  package p
-end
-
-%w(d hourly daily weekly monthly).each do |dir|
-  directory "/etc/cron.#{dir}" do
-    mode "0750"
+case node[:platform]
+when "gentoo"
+  %w(sys-process/dcron dev-util/lockrun).each do |p|
+    package p
   end
-end
 
-template "/etc/conf.d/dcron" do
-  source "dcron.confd.erb"
-  mode "0644"
-  notifies :restart, "service[dcron]"
+  %w(d hourly daily weekly monthly).each do |dir|
+    directory "/etc/cron.#{dir}" do
+      mode "0750"
+    end
+  end
+
+  template "/etc/conf.d/dcron" do
+    source "dcron.confd"
+    mode "0644"
+    notifies :restart, "service[dcron]"
+  end
+
+when "debian"
+  apt_repository "balocco" do
+    uri "http://apt.balocco.name"
+    distribution node[:lsb][:codename]
+    components %w(main)
+    keyserver "keyserver.ubuntu.com"
+    key "92B84A1E"
+  end
+
+  package "cron" do
+    action :remove
+  end
+
+  package "dcron"
+
+  template "/etc/default/dcron" do
+    source "dcron.defaults"
+    mode "0644"
+    notifies :restart, "service[dcron]"
+  end
 end
 
 cookbook_file "/usr/bin/crond-journal" do
@@ -22,7 +46,6 @@ cookbook_file "/usr/bin/crond-journal" do
 end
 
 systemd_tmpfiles "dcron"
-
 systemd_unit "dcron.service"
 
 service "dcron" do
