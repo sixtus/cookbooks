@@ -8,6 +8,7 @@ if root?
   include_recipe "base::sysctl"
   include_recipe "baselayout"
   include_recipe "sysvinit"
+  include_recipe "systemd"
 
   # load distro specific base recipe
   include_recipe "base::#{node[:platform]}"

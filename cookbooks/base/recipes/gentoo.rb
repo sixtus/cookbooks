@@ -18,9 +18,6 @@ if root?
     use %w(static static-libs)
   end
 
-  # systemd support
-  include_recipe "systemd"
-
   # support openrc until machine is converted to systemd
   include_recipe "openrc" unless systemd_running?
 end
