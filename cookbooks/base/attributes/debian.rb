@@ -29,6 +29,7 @@ if node[:platform] == "debian"
     pciutils
     pwgen
     pydf
+    realpath
     strace
     sysstat
     tcpdump

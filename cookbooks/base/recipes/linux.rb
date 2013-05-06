@@ -159,6 +159,7 @@ if tagged?("nagios-client")
       user "nagios"
       runas "root"
       command "NOPASSWD: /usr/sbin/ethtool"
+      command "NOPASSWD: /sbin/ethtool" if node[:platform] == "debian"
     end
 
     nagios_plugin "check_link_usage"

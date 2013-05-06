@@ -108,22 +108,22 @@ when "gentoo"
       action :enable
       provider Chef::Provider::Service::Systemd
     end
+  end
+end
 
-    if tagged?("nagios-client")
-      nagios_plugin "check_systemd"
-      nagios_plugin "check_systemd_user"
+if tagged?("nagios-client")
+  nagios_plugin "check_systemd"
+  nagios_plugin "check_systemd_user"
 
-      sudo_rule "nagios-systemd-active" do
-        user "nagios"
-        runas "ALL"
-        command "NOPASSWD: /bin/env XDG_RUNTIME_DIR=/run/user/* systemctl --user is-active *"
-      end
+  sudo_rule "nagios-systemd-active" do
+    user "nagios"
+    runas "ALL"
+    command "NOPASSWD: /bin/env XDG_RUNTIME_DIR=/run/user/* systemctl --user is-active *"
+  end
 
-      sudo_rule "nagios-systemd-status" do
-        user "nagios"
-        runas "ALL"
-        command "NOPASSWD: /bin/env XDG_RUNTIME_DIR=/run/user/* systemctl --user status *"
-      end
-    end
+  sudo_rule "nagios-systemd-status" do
+    user "nagios"
+    runas "ALL"
+    command "NOPASSWD: /bin/env XDG_RUNTIME_DIR=/run/user/* systemctl --user status *"
   end
 end
