@@ -9,7 +9,7 @@
 
 <frameset cols="180,*">
 <frame src="side.php" name="side" frameborder="0">
-<frame src="/nagios/cgi-bin/status.cgi?host=all&servicestatustypes=24&serviceprops=42" name="main" frameborder="0">
+<frame src="/nagios/cgi-bin/status.cgi?host=all&servicestatustypes=24&serviceprops=270378" name="main" frameborder="0">
 </frameset>
 
 </html>
