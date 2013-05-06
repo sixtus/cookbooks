@@ -18,7 +18,6 @@ apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10
 aptitude update
 apt-get install -y --force-yes ruby1.9.3 build-essential wget
 
-gem update --no-rdoc --no-ri
 gem install ohai ruby-shadow --no-rdoc --no-ri --verbose
 gem install chef --no-rdoc --no-ri --verbose <%= bootstrap_version_string %>
 
@@ -42,5 +41,5 @@ cat <<'EOP'
 EOP
 ) > /etc/chef/client.rb
 
-/usr/bin/chef-client
-/usr/bin/chef-client'
+chef-client
+chef-client'
