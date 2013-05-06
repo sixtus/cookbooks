@@ -27,6 +27,8 @@ NOLIBS = [
     "/dev/shm/*",
     "*/var/nagios/spool/checkresults/neb*",
     "/tmp/hsperfdata*",
+    "/usr/lib/lxc/rootfs/*",
+    "/usr/lib64/lxc/rootfs/*",
 ]
 
 FP_EXCLUDES = [
