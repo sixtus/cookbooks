@@ -4,6 +4,7 @@ when "gentoo"
 
 when "debian"
   package "shorewall"
+
 end
 
 execute "shorewall-restart" do
@@ -41,6 +42,15 @@ end
     group "root"
     mode "0600"
     notifies :run, "execute[shorewall-restart]"
+  end
+end
+
+if node[:platform] == "debian"
+  file "/etc/default/shorewall" do
+    content "startup=1\n"
+    owner "root"
+    group "root"
+    mode "0644"
   end
 end
 
