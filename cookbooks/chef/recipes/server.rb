@@ -153,16 +153,7 @@ file "/etc/chef/webui.pem" do
   mode "0400"
 end
 
-# nginx SSL proxy
-ssl_ca "/etc/ssl/nginx/#{node[:fqdn]}-ca" do
-  notifies :reload, "service[nginx]"
-end
-
-ssl_certificate "/etc/ssl/nginx/#{node[:fqdn]}" do
-  cn node[:fqdn]
-  notifies :reload, "service[nginx]"
-end
-
+# nginx proxy
 nginx_server "chef-server-api" do
   template "nginx.conf"
 end
