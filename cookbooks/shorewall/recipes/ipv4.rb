@@ -54,7 +54,9 @@ if node[:platform] == "debian"
   end
 end
 
-systemd_unit "shorewall.service"
+systemd_unit "shorewall.service" do
+  template "shorewall.service"
+end
 
 service "shorewall" do
   if node[:virtualization][:role] == "guest"

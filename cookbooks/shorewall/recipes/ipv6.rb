@@ -42,7 +42,9 @@ end
   end
 end
 
-systemd_unit "shorewall6.service"
+systemd_unit "shorewall6.service" do
+  template "shorewall.service"
+end
 
 service "shorewall6" do
   action [:enable, :start]
