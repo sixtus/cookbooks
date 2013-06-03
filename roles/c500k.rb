@@ -21,6 +21,7 @@ default_attributes({
   :sysctl => {
     :fs => {
       :file_max => 2097152, # 2^21
+      :nr_open => 1048576, # 2^20
     },
     :net => {
       :core => {

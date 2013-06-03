@@ -69,6 +69,7 @@ default_unless[:sysctl][:kernel][:shmmni] = 4096
 
 # open files/sockets
 default[:sysctl][:fs][:file_max] = 524288 # 2^19
+default[:sysctl][:fs][:nr_open] = 262144 # 2^18
 
 # network tuning
 default[:sysctl][:net][:core][:somaxconn] = 128

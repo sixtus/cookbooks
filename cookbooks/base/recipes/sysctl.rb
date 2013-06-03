@@ -29,3 +29,10 @@ template "/etc/sysctl.d/base.conf" do
   source "sysctl.conf"
   notifies :run, "execute[sysctl-reload]"
 end
+
+template "/etc/security/limits.conf" do
+  source "limits.conf"
+  owner "root"
+  group "root"
+  mode "0644"
+end
