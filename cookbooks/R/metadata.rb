@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 description "R - the project for statistical computing"
 
 maintainer "Benedikt Böhm"

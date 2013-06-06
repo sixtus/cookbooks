@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 description "1Password"
 
 maintainer "Mike Szörnyi"

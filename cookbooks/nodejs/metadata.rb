@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 description "Event-driven I/O server-side JavaScript environment based on V8"
 
 maintainer "Benedikt Böhm"
