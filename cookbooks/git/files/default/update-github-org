@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+# gem install github_api highline rake
+
+require 'github_api'
+require 'highline/import'
+require 'rake'
+
+RakeFileUtils.verbose_flag = false
+include RakeFileUtils
+
+username = ask("Username: ")
+password = ask("Password: ") { |q| q.echo = false }
+org = File.basename(Dir.pwd)
+
+gh = Github.new({
+  basic_auth: "#{username}:#{password}",
+  auto_pagination: true,
+})
+
+gh.repos.list(org: org).sort_by { |r| r[:name] }.each do |repo|
+  if File.exist?(repo[:name])
+    puts ">>> Fetching #{org}/#{repo[:name]}"
+    Dir.chdir(repo[:name]) do
+      sh("git fetch -a")
+    end
+  else
+    puts ">>> Cloning #{org}/#{repo[:name]}"
+    sh("git clone #{repo[:ssh_url]}")
+  end
+end
