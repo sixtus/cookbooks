@@ -7,13 +7,10 @@ ImprovedLogger.class_eval do
 end
 
 log_level :warn
-log_location ImprovedLogger.new(:syslog, "chef-client")
+log_location ImprovedLogger.new(:syslog, "chef-solr")
 
-search_index_path  "/var/lib/chef/search_index"
-
-solr_jetty_path    "/var/lib/chef/solr/jetty"
-solr_home_path     "/var/lib/chef/solr/home"
-solr_data_path     "/var/lib/chef/solr/data"
-solr_heap_size     "256M"
-
-amqp_pass          "<%= @amqp_pass %>"
+solr_jetty_path "/var/lib/chef/solr/jetty"
+solr_home_path "/var/lib/chef/solr/home"
+solr_data_path "/var/lib/chef/solr/data"
+solr_heap_size "256M"
+solr_java_opts "-Djava.util.logging.config.file=/var/lib/chef/solr/home/conf/logging.properties"

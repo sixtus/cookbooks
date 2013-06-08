@@ -91,12 +91,49 @@ template "/etc/chef/solr.rb" do
   group "chef"
   mode "0600"
   notifies :restart, "service[chef-solr]"
+end
+
+template "/etc/chef/expander.rb" do
+  source "expander.rb"
+  owner "chef"
+  group "chef"
+  mode "0600"
+  notifies :restart, "service[chef-expander]"
   variables :amqp_pass => amqp_pass
 end
 
 execute "chef-solr-installer" do
   command "chef-solr-installer -c /etc/chef/solr.rb -u chef -g chef -f"
   creates "/var/lib/chef/solr/jetty"
+end
+
+%w(
+  slf4j-api-1.7.5
+  slf4j-jdk14-1.7.5
+).each do |jar|
+  cookbook_file "/var/lib/chef/solr/jetty/lib/#{jar}.jar" do
+    source "#{jar}.jar"
+    owner "chef"
+    group "chef"
+    mode "0644"
+    notifies :restart, 'service[chef-solr]'
+  end
+end
+
+cookbook_file "/var/lib/chef/solr/jetty/etc/jetty.xml" do
+  source "jetty.xml"
+  owner "chef"
+  group "chef"
+  mode "0644"
+  notifies :restart, 'service[chef-solr]'
+end
+
+cookbook_file "/var/lib/chef/solr/home/conf/logging.properties" do
+  source "logging.properties"
+  owner "chef"
+  group "chef"
+  mode "0644"
+  notifies :restart, 'service[chef-solr]'
 end
 
 execute "wait-for-chef-solr" do
