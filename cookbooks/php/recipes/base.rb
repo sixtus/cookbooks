@@ -1,6 +1,10 @@
 # remove old attributes
 node.normal_attrs[:php].delete(:extension_dir)
 
+portage_package_use "app-admin/eselect-php" do
+  use %w(fpm)
+end
+
 portage_package_use "dev-lang/php" do
   use node[:php][:default_use_flags] + node[:php][:use_flags] + node[:php][:sapi]
 end
