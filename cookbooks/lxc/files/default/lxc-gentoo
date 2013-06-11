@@ -1,0 +1,318 @@
+#!/bin/bash
+
+SUITE=${SUITE:-stable}
+
+if [[ ${SUITE} == "next" ]]; then
+    MIRROR=${MIRROR:-http://next.zentoo.org/downloads}
+else
+    MIRROR=${MIRROR:-http://www.zentoo.org/downloads}
+fi
+
+ARCH=$(portageq envvar ARCH)
+
+# defaults
+image=$MIRROR/$ARCH/base-current.tar.bz2
+ipaddress=169.254.169.254
+gateway=$(ip route show dev lxc0 proto kernel scope link | awk '{print $3}')
+
+configure_gentoo()
+{
+    rootfs=$1
+    name=$2
+
+    echo > ${rootfs}/etc/fstab
+    rm -f ${rootfs}/etc/mtab
+    ln -s /proc/self/mounts ${rootfs}/etc/mtab
+
+    rm -f /etc/systemd/system/default.target
+    ln -s /usr/lib/systemd/system/multi-user.target \
+        /etc/systemd/system/default.target
+
+    echo "LANG=${default_lang}" > "${rootfs}/etc/locale.conf"
+    echo "KEYMAP=us" > "${rootfs}/etc/vconsole.conf"
+    cat > "${rootfs}/etc/adjtime" << EOF
+0.0 0.0 0.0
+0
+LOCAL
+EOF
+
+    echo "${name}" > "${rootfs}/etc/hostname"
+    cat > "${rootfs}/etc/hosts" << EOF
+127.0.0.1 localhost
+::1 localhost
+${ipaddress} ${name}
+EOF
+
+    cat > "${rootfs}/etc/resolv.conf" << EOF
+nameserver 8.8.8.8
+nameserver 8.8.4.4
+EOF
+
+    cat > $rootfs/etc/netctl/eth0 << EOF
+Description='eth0'
+Interface=eth0
+Connection=ethernet
+ForceConnect=yes
+IP=static
+Address=('${ipaddress}/32')
+Routes=('${gateway}')
+Gateway='${gateway}'
+DNS=('8.8.8.8' '8.8.4.4')
+EOF
+
+    ln -s "/etc/systemd/system/netctl@eth0.service" "${rootfs}/etc/systemd/system/multi-user.target.wants/netctl@eth0.service"
+
+    echo "root:tux" | chroot $rootfs chpasswd
+    echo "Root password is 'tux', please change!"
+
+    return 0
+}
+
+cleanup()
+{
+    rm -rf $cache/$(basename $image)
+}
+
+download_image()
+{
+    cache=$1
+    image=$2
+
+    trap cleanup EXIT SIGHUP SIGINT SIGTERM
+
+    file=$(basename $image)
+    dir=${file/.tar*}
+
+    mkdir -p $cache
+    wget -nv -O $cache/$file $image
+
+    mkdir -p $cache/$dir
+    tar --numeric-owner -xpf $cache/$file -C $cache/$dir
+
+    trap EXIT
+    trap SIGINT
+    trap SIGTERM
+    trap SIGHUP
+
+    return 0
+}
+
+copy_image()
+{
+    cache=$1
+    image=$2
+    rootfs=$3
+
+    file=$(basename $image)
+    dir=${file/.tar*}
+
+    echo -n "Copying rootfs to $rootfs..."
+    mkdir -p $rootfs
+    rsync -Ha --numeric-ids "$cache/$dir"/ $rootfs/ || return 1
+    return 0
+}
+
+install_gentoo()
+{
+    cache="/var/cache/lxc/gentoo"
+    rootfs=$1
+
+    file=$(basename $image)
+    dir=${file/.tar*}
+
+    mkdir -p /var/lock/subsys/
+    (
+        flock -x 200
+        if [ $? -ne 0 ]; then
+            echo "Cache repository is busy."
+            return 1
+        fi
+
+        echo "Checking cache download in $cache/$(basename $image) ... "
+        if [ ! -e "$cache/$dir" ]; then
+            download_image $cache $image
+            if [ $? -ne 0 ]; then
+                echo "Failed to download image"
+                return 1
+            fi
+        fi
+
+        copy_image $cache $image $rootfs
+        if [ $? -ne 0 ]; then
+            echo "Failed to copy rootfs"
+            return 1
+        fi
+
+        return 0
+
+        ) 200>/var/lock/subsys/lxc-gentoo
+
+    return $?
+}
+
+copy_configuration()
+{
+    path=$1
+    rootfs=$2
+    name=$3
+
+    grep -q "^lxc.rootfs" $path/config 2>/dev/null || echo "lxc.rootfs = $rootfs" >> $path/config
+    cat <<EOF >> $path/config
+lxc.utsname = ${name}
+
+lxc.network.type = veth
+lxc.network.veth.pair = veth-${name}
+lxc.network.flags = up
+lxc.network.link = lxc0
+lxc.network.name = eth0
+
+# mounts that allow us to drop CAP_SYS_ADMIN
+lxc.autodev = 1
+lxc.mount.entry=sys ${rootfs}/sys sysfs ro,defaults 0 0
+lxc.mount.entry=proc ${rootfs}/proc proc nodev,noexec,nosuid 0 0
+lxc.mount.entry=/proc/sys ${rootfs}/proc/sys proc ro,bind 0 0
+
+# console access
+lxc.tty = 1
+lxc.pts = 128
+
+# drop unnecessary capabilities
+lxc.cap.drop = audit_control
+lxc.cap.drop = audit_write
+lxc.cap.drop = dac_read_search
+lxc.cap.drop = ipc_owner
+lxc.cap.drop = linux_immutable
+lxc.cap.drop = mac_admin
+lxc.cap.drop = mac_override
+lxc.cap.drop = mknod
+lxc.cap.drop = sys_boot
+lxc.cap.drop = sys_module
+lxc.cap.drop = sys_rawio
+lxc.cap.drop = sys_time
+lxc.cap.drop = sys_tty_config
+lxc.cap.drop = syslog
+
+# deny access to all devices by default, explicitly grant some permissions
+lxc.cgroup.devices.deny = a
+# /dev/null and zero
+lxc.cgroup.devices.allow = c 1:3 rw
+lxc.cgroup.devices.allow = c 1:5 rw
+# /dev/{,u}random
+lxc.cgroup.devices.allow = c 1:8 r
+lxc.cgroup.devices.allow = c 1:9 rw
+# /dev/tty{0,1}
+lxc.cgroup.devices.allow = c 4:0 rwm
+lxc.cgroup.devices.allow = c 4:1 rwm
+# /dev/tty
+lxc.cgroup.devices.allow = c 5:0 rwm
+# /dev/console
+lxc.cgroup.devices.allow = c 5:1 rwm
+# /dev/pts/*
+lxc.cgroup.devices.allow = c 5:2 rw
+lxc.cgroup.devices.allow = c 136:* rw
+# rtc
+lxc.cgroup.devices.allow = c 254:0 rwm
+EOF
+
+    return 0
+}
+
+clean()
+{
+    cache="/var/cache/lxc/gentoo"
+
+    if [ ! -e $cache ]; then
+        exit 0
+    fi
+
+    # lock, so we wont purge while someone is creating a repository
+    (
+        flock -x 200
+        if [ $? != 0 ]; then
+            echo "Cache repository is busy."
+            exit 1
+        fi
+
+        echo -n "Purging the download cache..."
+        rm --preserve-root --one-file-system -rf $cache && echo "Done." || exit 1
+        exit 0
+
+    ) 200>/var/lock/subsys/lxc-gentoo
+}
+
+usage()
+{
+    cat <<EOF
+$1 -h|--help -p|--path=<path> --clean --image=URL --ipaddress=1.2.3.4 --gateway=1.2.3.4
+EOF
+    return 0
+}
+
+options=$(getopt -o hp:n:c -l help,path:,name:,clean,image:,ipaddress:,gateway: -- "$@")
+if [ $? -ne 0 ]; then
+        usage $(basename $0)
+        exit 1
+fi
+eval set -- "$options"
+
+while true
+do
+    case "$1" in
+        -h|--help)      usage $0 && exit 0;;
+        -p|--path)      path=$2; shift 2;;
+        -n|--name)      name=$2; shift 2;;
+        -c|--clean)     clean=$2; shift 2;;
+        --image)        image=$2; shift 2;;
+        --ipaddress)    ipaddress=$2; shift 2;;
+        --gateway)      gateway=$2; shift 2;;
+        --)             shift 1; break ;;
+        *)              break ;;
+    esac
+done
+
+if [ ! -z "$clean" -a -z "$path" ]; then
+    clean || exit 1
+    exit 0
+fi
+
+if [ -z "$path" ]; then
+    echo "'path' parameter is required"
+    exit 1
+fi
+
+if [ "$(id -u)" != "0" ]; then
+    echo "This script should be run as 'root'"
+    exit 1
+fi
+
+# detect rootfs
+config="$path/config"
+if grep -q '^lxc.rootfs' $config 2>/dev/null ; then
+    rootfs=`grep 'lxc.rootfs =' $config | awk -F= '{ print $2 }'`
+else
+    rootfs=$path/rootfs
+fi
+
+
+install_gentoo $rootfs
+if [ $? -ne 0 ]; then
+    echo "failed to install gentoo"
+    exit 1
+fi
+
+configure_gentoo $rootfs $name
+if [ $? -ne 0 ]; then
+    echo "failed to configure gentoo for a container"
+    exit 1
+fi
+
+copy_configuration $path $rootfs $name
+if [ $? -ne 0 ]; then
+    echo "failed write configuration file"
+    exit 1
+fi
+
+if [ ! -z $clean ]; then
+    clean || exit 1
+    exit 0
+fi
