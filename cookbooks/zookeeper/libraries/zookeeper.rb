@@ -9,6 +9,12 @@ module ZookeeperHelpers
       n[:fqdn]
     end
   end
+
+  def zookeeper_node_names
+    zookeeper_nodes.map do |n|
+      n[:fqdn]
+    end
+  end
 end
 
 include ZookeeperHelpers
