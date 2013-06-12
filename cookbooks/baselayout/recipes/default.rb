@@ -1,27 +1,12 @@
 # ensure that system users/groups from baselayout are always correct
 # (just in case somebody has given login shells to system accounts etc)
 node[:baselayout][:groups].each do |name, params|
-  group name do
+  group "#{name}-#{rrand}" do
+    group_name name
     gid params[:gid]
+    append true if params[:append]
     members params[:members].split(",")
   end
-end
-
-group "adm" do
-  gid 4
-  append true
-  members %w(root adm daemon)
-end
-
-group "wheel" do
-  gid 10
-  append true
-  members %w(root)
-end
-
-group "users" do
-  gid 100
-  append true
 end
 
 node[:baselayout][:users].each do |name, params|
@@ -31,7 +16,8 @@ node[:baselayout][:users].each do |name, params|
               name
             end
 
-  user name do
+  user "#{name}-#{rrand}" do
+    username name
     password "*"
     uid params[:uid]
     gid params[:gid]

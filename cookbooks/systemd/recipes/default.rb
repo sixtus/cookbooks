@@ -102,28 +102,30 @@ when "gentoo"
 
     # user session support
     systemd_unit "systemd-stop-user-sessions.service"
-    systemd_unit "user-session@.service"
+    systemd_unit "user-session@.service" do
+      template "user-session@.service"
+    end
 
     service "systemd-stop-user-sessions.service" do
       action :enable
       provider Chef::Provider::Service::Systemd
     end
+  end
+end
 
-    if tagged?("nagios-client")
-      nagios_plugin "check_systemd"
-      nagios_plugin "check_systemd_user"
+if tagged?("nagios-client")
+  nagios_plugin "check_systemd"
+  nagios_plugin "check_systemd_user"
 
-      sudo_rule "nagios-systemd-active" do
-        user "nagios"
-        runas "ALL"
-        command "NOPASSWD: /bin/env XDG_RUNTIME_DIR=/run/user/* systemctl --user is-active *"
-      end
+  sudo_rule "nagios-systemd-active" do
+    user "nagios"
+    runas "ALL"
+    command "NOPASSWD: /bin/env XDG_RUNTIME_DIR=/run/user/* systemctl --user is-active *"
+  end
 
-      sudo_rule "nagios-systemd-status" do
-        user "nagios"
-        runas "ALL"
-        command "NOPASSWD: /bin/env XDG_RUNTIME_DIR=/run/user/* systemctl --user status *"
-      end
-    end
+  sudo_rule "nagios-systemd-status" do
+    user "nagios"
+    runas "ALL"
+    command "NOPASSWD: /bin/env XDG_RUNTIME_DIR=/run/user/* systemctl --user status *"
   end
 end

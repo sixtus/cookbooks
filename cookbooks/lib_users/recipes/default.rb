@@ -1,7 +1,3 @@
-package "app-admin/lib_users" do
-  action :remove
-end
-
 cookbook_file "/usr/bin/lib_users" do
   source "lib_users.py"
   owner "root"

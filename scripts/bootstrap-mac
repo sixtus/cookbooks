@@ -24,7 +24,8 @@ brew install autoconf automake apple-gcc42 libtool pkg-config openssl readline l
 # bootstrap rvm/bundler
 $(dirname $0)/bootstrap || exit 1
 source ~/.rvm/scripts/rvm || exit 1
-source .rvmrc || exit 1
+rvm install $(<.ruby-version) || exit 1
+rvm use $(<.ruby-version) || exit 1
 
 # run rake solo
 rake solo || exit 1

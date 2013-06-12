@@ -1,15 +1,15 @@
 default[:vim][:rcfile] = case node[:platform]
-                         when "gentoo"
-                           root? ? "/etc/vim/vimrc.local" : "#{node[:homedir]}/.vimrc"
                          when "mac_os_x"
                            "#{node[:homedir]}/.vimrc"
+                         else
+                           root? ? "/etc/vim/vimrc.local" : "#{node[:homedir]}/.vimrc"
                          end
 
 default[:vim][:rcdir] = case node[:platform]
-                        when "gentoo"
-                          root? ? "/etc/vim" : "#{node[:homedir]}/.vim"
                         when "mac_os_x"
                           "#{node[:homedir]}/.vim"
+                        else
+                          root? ? "/etc/vim" : "#{node[:homedir]}/.vim"
                         end
 
 default[:vim][:plugins] = {

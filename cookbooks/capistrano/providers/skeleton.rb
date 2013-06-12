@@ -4,6 +4,8 @@ action :create do
   user = new_resource.name
   uid = new_resource.uid
   groups = new_resource.groups
+  groups << "systemd-journal" if systemd_running?
+
   homedir = if new_resource.homedir == nil
               node[user][:homedir] rescue "/var/app/#{user}"
             else
@@ -17,7 +19,7 @@ action :create do
   end
 
   account user do
-    comment "capistrano skeleton for #{user}"
+    comment user
     shell "/bin/bash"
     home homedir
     home_mode "0755"

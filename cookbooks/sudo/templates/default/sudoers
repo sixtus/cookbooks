@@ -12,7 +12,7 @@ Defaults:nagios !syslog
 
 # User privilege specification
 root    ALL = (ALL) ALL
-%wheel  ALL = (ALL) <% if node[:sudo][:nopasswd] == "true" %>NOPASSWD: <% end %>ALL
+%<%= node[:sudo][:group] %>  ALL = (ALL) <% if node[:sudo][:nopasswd] == "true" %>NOPASSWD: <% end %>ALL
 
 <% node[:sudo][:rules].sort_by {|r| r[0] }.each do |name, params| %>
 # <%= name %>

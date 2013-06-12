@@ -1,4 +1,11 @@
-package "app-admin/sudo"
+case node[:platform]
+when "gentoo"
+  package "app-admin/sudo"
+
+when "debian"
+  package "sudo"
+
+end
 
 template "/etc/sudoers" do
   source "sudoers"

@@ -18,7 +18,7 @@ action :create do
     'TERM' => 'dumb'
   }
 
-  bash "install-rvm-#{rvm[:user]}" do
+  bash "install-rvm-#{rvm[:user]}-#{rvm[:version]}" do
     code <<-EOS
     export USER=#{rvm[:user]}
     export HOME=#{rvm[:homedir]}

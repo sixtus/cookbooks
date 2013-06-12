@@ -3,6 +3,12 @@ require "net/ssh"
 
 desc "Initialize the Chef repository"
 task :init do
+  unless File.exist?(CLIENT_KEY_FILE)
+    STDERR.puts "private key is missing (#{CLIENT_KEY_FILE})"
+    STDERR.puts "please contact your hostmaster for assistance"
+    exit 1
+  end
+
   # collect data
   node_name = ask('Your chef server API username: ') do |q|
     q.default = Chef::Config[:node_name] || %x(whoami).chomp
@@ -19,14 +25,5 @@ task :init do
 
   File.open(KNIFE_CONFIG_FILE, "w") do |f|
     f.puts(erb.result(b))
-  end
-
-  unless File.exist?(CLIENT_KEY_FILE)
-    File.open(CLIENT_KEY_FILE, "w") do |f|
-      Net::SSH.start(chef_server_url, node_name) do |ssh|
-        cmd = "sudo knife client create #{node_name} -a -d -u root -k /root/.chef/client.pem | tail -n+2"
-        f.write(ssh.exec!(cmd))
-      end
-    end
   end
 end

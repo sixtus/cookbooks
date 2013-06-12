@@ -98,7 +98,7 @@ if tagged?("nagios-client")
 
   {
     :connections => [750, 1000],
-    :watches => [1000, 2000],
+    :watches => [50000, 100000],
     :latency => [1000, 2000],
     :requests => [20, 50],
     :files => [2048, 4096],

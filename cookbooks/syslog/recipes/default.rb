@@ -1,4 +1,14 @@
-package "app-admin/syslog-ng"
+case node[:platform]
+when "gentoo"
+  package "app-admin/syslog-ng"
+
+when "debian"
+  package "rsyslog" do
+    action :remove
+  end
+
+  package "syslog-ng"
+end
 
 directory "/etc/syslog-ng/conf.d" do
   action :delete

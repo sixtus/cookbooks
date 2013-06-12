@@ -1,4 +1,4 @@
-#!/usr/bin/python2 -tt
+#!/usr/bin/python -tt
 """
 Libusers - a script that finds users of libs that have been deleted/replaced
 """
@@ -22,10 +22,13 @@ __version__ = "0.5"
 
 # These are no true libs so don't make our process a deleted libs user
 NOLIBS = [
+    "/SYSV*",
     "/dev/zero",
     "/dev/shm/*",
     "*/var/nagios/spool/checkresults/neb*",
     "/tmp/hsperfdata*",
+    "/usr/lib/lxc/rootfs/*",
+    "/usr/lib64/lxc/rootfs/*",
 ]
 
 FP_EXCLUDES = [

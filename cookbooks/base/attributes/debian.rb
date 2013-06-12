@@ -1,0 +1,42 @@
+# base packages
+if node[:platform] == "debian"
+  node.set[:packages] = %w(
+    ack
+    apache2-utils
+    atool
+    dnsutils
+    bwm-ng
+    colordiff
+    dos2unix
+    ethtool
+    hdparm
+    libicu44
+    iotop
+    iproute
+    keychain
+    less
+    libffi5
+    libxml2
+    libxslt1.1
+    libyaml-0-2
+    lsof
+    heirloom-mailx
+    mc
+    mtr
+    ncdu
+    netcat
+    nmap
+    pciutils
+    pwgen
+    pydf
+    realpath
+    strace
+    sysstat
+    tcpdump
+    tcptraceroute
+    telnet
+    traceroute
+    whois
+    xz-utils
+  )
+end

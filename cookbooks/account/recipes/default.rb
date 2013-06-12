@@ -17,8 +17,17 @@ query = Proc.new do |u|
   end
 end
 
+hostmaster_groups = %w(adm cron)
+
+case node[:platform]
+when "gentoo"
+  hostmaster_groups += %w(portage wheel systemd-journal)
+when "debian"
+  hostmaster_groups += %w(sudo)
+end
+
 accounts_from_databag "hostmasters" do
-  groups %w(adm cron portage wheel)
+  groups hostmaster_groups
   query query
 end
 

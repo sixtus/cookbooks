@@ -1,55 +1,74 @@
-portage_package_use "mail-mta/postfix" do
-  use node[:postfix][:use_flags].sort.uniq
-end
+case node[:platform]
+when "gentoo"
+  portage_package_use "mail-mta/postfix" do
+    use node[:postfix][:use_flags].sort.uniq
+  end
 
-package "mail-mta/postfix"
+  package "mail-mta/postfix"
 
-group "postmaster" do
-  gid 249
-end
+  group "postmaster" do
+    gid 249
+  end
 
-user "postmaster" do
-  uid 14
-  gid 249
-  comment "added by portage for mailbase"
-  home "/var/spool/mail"
-  shell "/sbin/nologin"
-end
+  user "postmaster" do
+    uid 14
+    gid 249
+    comment "added by portage for mailbase"
+    home "/var/spool/mail"
+    shell "/sbin/nologin"
+  end
 
-group "postfix" do
-  gid 207
-end
+  group "postfix" do
+    gid 207
+  end
 
-group "postdrop" do
-  gid 208
-end
+  group "postdrop" do
+    gid 208
+  end
 
-user "postfix" do
-  uid 207
-  gid 207
-  comment "added by portage for postfix"
-  home "/var/spool/postfix"
-  shell "/sbin/nologin"
+  user "postfix" do
+    uid 207
+    gid 207
+    comment "added by portage for postfix"
+    home "/var/spool/postfix"
+    shell "/sbin/nologin"
+  end
+
+when "debian"
+  package "postfix"
+
+  user "postfix" do
+    gid "postfix"
+    home "/var/spool/postfix"
+    shell "/bin/false"
+  end
+
 end
 
 group "mail" do
-  gid 12
   members %w(postfix)
   append true
 end
 
-user "mail" do
-  uid 8
-  gid 12
-  comment "added by portage for mailbase"
-  home "/var/spool/mail"
-  shell "/sbin/nologin"
+directory "/var/mail" do
+  action :delete
+  recursive true
+  not_if { File.symlink?("/var/mail") }
+end
+
+link "/var/spool/mail" do
+  action :delete
+  only_if { File.symlink?("/var/spool/mail") }
 end
 
 directory "/var/spool/mail" do
   owner "root"
   group "mail"
   mode "03775"
+end
+
+link "/var/mail" do
+  to "/var/spool/mail"
 end
 
 directory "/etc/mail" do

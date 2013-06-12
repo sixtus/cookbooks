@@ -1,4 +1,10 @@
-package "app-admin/logrotate"
+case node[:platform]
+when "gentoo"
+  package "app-admin/logrotate"
+
+when "debian"
+  package "logrotate"
+end
 
 directory "/etc/logrotate.d" do
   mode "0755"

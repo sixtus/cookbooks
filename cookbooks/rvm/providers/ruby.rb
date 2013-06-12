@@ -1,5 +1,4 @@
 include ChefUtils::RVM
-include ChefUtils::RandomResource
 
 def load_current_resource
   @rubie = normalize_ruby_string(select_ruby(new_resource.ruby_string))

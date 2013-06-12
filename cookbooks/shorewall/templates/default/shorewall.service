@@ -5,7 +5,9 @@ After=network.target
 [Service]
 Type=oneshot
 ExecStart=/sbin/shorewall start
+<% if node[:virtualization][:role] != "guest" %>
 ExecStartPost=/usr/lib/systemd/systemd-sysctl
+<% end %>
 ExecReload=/sbin/shorewall restart
 ExecStop=/sbin/shorewall stop
 RemainAfterExit=yes

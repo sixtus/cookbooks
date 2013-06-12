@@ -1,6 +1,12 @@
-if node[:smart][:devices].any?
+case node[:platform]
+when "gentoo"
   package "sys-apps/smartmontools"
 
+when "debian"
+  package "smartmontools"
+end
+
+if node[:smart][:devices].any?
   template "/etc/smartd.conf" do
     source "smartd.conf.erb"
     owner "root"
@@ -13,10 +19,14 @@ if node[:smart][:devices].any?
 
   if node[:smart][:devices].empty?
     service "smartd" do
+      service_name "smartd"
+      service_name "smartmontools" if node[:platform] == "debian"
       action [:disable, :stop]
     end
   else
     service "smartd" do
+      service_name "smartd"
+      service_name "smartmontools" if node[:platform] == "debian"
       action [:enable, :start]
     end
   end

@@ -1,11 +1,17 @@
 is_master = tagged?("nagios-master")
 
-portage_package_use "net-analyzer/nsca" do
-  use %w(minimal) unless is_master
-end
+case node[:platform]
+when "gentoo"
+  portage_package_use "net-analyzer/nsca" do
+    use %w(minimal) unless is_master
+  end
 
-package "net-analyzer/nsca" do
-  action :upgrade
+  package "net-analyzer/nsca" do
+    action :upgrade
+  end
+
+when "debian"
+  package "nsca"
 end
 
 include_recipe "nagios"

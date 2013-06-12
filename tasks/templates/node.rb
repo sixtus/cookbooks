@@ -3,9 +3,11 @@ chef_environment "production"
 set[:primary_ipaddress] = "<%= args.ipaddress %>"
 
 run_list(%w(
-<% if args.role != 'base' %>
+<% if ENV['ROLE'] != 'base' %>
   role[base]
 <% end %>
-  role[<%= args.role %>]
+<% if ENV['ROLE'] %>
+  role[<%= ENV['ROLE'] %>]
+<% end %>
 ))
 

@@ -2,6 +2,10 @@ case node[:platform]
 when "gentoo"
   package "net-misc/openssh"
 
+when "debian"
+  package "openssh-client"
+  package "openssh-server"
+
 when "mac_os_x"
   package "ssh-copy-id"
 

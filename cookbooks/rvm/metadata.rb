@@ -6,8 +6,9 @@ maintainer "Benedikt Böhm"
 maintainer_email "bb@xnull.de"
 license "Apache v2.0"
 
-version "1.0.1"
+version "2.0.1"
 
+supports "debian"
 supports "gentoo"
 
 depends "account"

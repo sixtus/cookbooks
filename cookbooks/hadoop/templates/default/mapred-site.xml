@@ -3,12 +3,12 @@
 
 <configuration>
 
-<% if @job_tracker %>
+  <% if @job_tracker %>
   <property>
     <name>mapred.job.tracker</name>
     <value><%= @job_tracker[:fqdn] %>:9001</value>
   </property>
-<% end %>
+  <% end %>
 
   <property>
     <name>mapred.jobtracker.taskScheduler</name>
@@ -72,6 +72,38 @@
   <property>
     <name>mapred.local.dir</name>
     <value><%= node[:hadoop][:tmp_dir] %>/${user.name}/mapred/local</value>
+  </property>
+
+  <!-- compression of data between the mapper and the reducer -->
+  <!-- These files are not stored in hdfs, but local /var/tmp/hadoop -->
+  <property>
+    <name>mapred.compress.map.output</name>
+    <value>true</value>
+  </property>
+
+  <!-- the whole map/reduce job will output compressed data -->
+  <property>
+    <name>mapred.output.compress</name>
+    <value>true</value>
+  </property>
+
+  <!-- codec - gzip sounds reasonable (TODO: snappy?) -->
+  <property>
+    <name>mapred.output.compression.type</name>
+    <value>BLOCK</value>
+    <description>If the job outputs are to compressed as SequenceFiles, how should
+      they be compressed? Should be one of NONE, RECORD or BLOCK.
+      Cloudera's Distribution for Hadoop switches this default to BLOCK
+      for better performance.
+    </description>
+  </property>
+  <property>
+    <name>mapred.output.compression.codec</name>
+    <value>org.apache.hadoop.io.compress.GzipCodec</value>
+  </property>
+  <property>
+    <name>mapred.map.output.compression.codec</name>
+    <value>org.apache.hadoop.io.compress.GzipCodec</value>
   </property>
 
 </configuration>

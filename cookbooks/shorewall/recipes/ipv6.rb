@@ -1,4 +1,10 @@
-package "net-firewall/shorewall6"
+case node[:platform]
+when "gentoo"
+  package "net-firewall/shorewall6"
+
+when "debian"
+  package "shorewall6"
+end
 
 execute "shorewall6-restart" do
   command "/sbin/shorewall6 -q restart"
@@ -36,7 +42,9 @@ end
   end
 end
 
-systemd_unit "shorewall6.service"
+systemd_unit "shorewall6.service" do
+  template "shorewall.service"
+end
 
 service "shorewall6" do
   action [:enable, :start]

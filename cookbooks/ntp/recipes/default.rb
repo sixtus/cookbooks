@@ -1,22 +1,15 @@
-service "openrdate" do
-  action [:disable, :stop]
-end
+case node[:platform]
+when "gentoo"
+  package "net-misc/ntp" do
+    notifies :restart, "service[ntpd]"
+  end
 
-package "net-misc/openrdate" do
-  action :remove
-end
-
-package "net-misc/openntpd" do
-  action :remove
-end
-
-package "net-misc/ntp" do
-  notifies :restart, "service[ntpd]"
+when "debian"
+  package "ntp"
 end
 
 template "/etc/ntp.conf" do
   source "ntp.conf"
-  content "server #{node[:ntp][:server]}\n"
   owner "root"
   group "root"
   mode "0644"
@@ -30,6 +23,8 @@ end
 systemd_unit "ntpd.service"
 
 service "ntpd" do
+  service_name "ntpd"
+  service_name "ntp" if node[:platform] == "debian"
   action [:enable, :start]
 end
 

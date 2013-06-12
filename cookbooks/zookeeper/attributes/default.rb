@@ -1,4 +1,4 @@
-default[:zookeeper][:ensamble] = "default"
+default[:zookeeper][:ensemble] = node[:fqdn] # do not cluster by default
 
 default[:zookeeper][:confdir] = case node[:platform]
                                 when "gentoo"

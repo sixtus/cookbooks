@@ -4,7 +4,7 @@ module ZookeeperHelpers
       n[:tags] and
       n[:tags].include?("zookeeper") and
       n[:zookeeper] and
-      n[:zookeeper][:ensamble] == node[:zookeeper][:ensamble]
+      n[:zookeeper][:ensemble] == node[:zookeeper][:ensemble]
     end.sort_by do |n|
       n[:fqdn]
     end

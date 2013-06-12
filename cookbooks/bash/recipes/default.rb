@@ -2,6 +2,10 @@ case node[:platform]
 when "gentoo"
   package "app-shells/bash"
 
+when "debian"
+  package "bash"
+  package "bash-completion"
+
 when "mac_os_x"
   package "bash"
   package "bash-completion"
@@ -24,6 +28,15 @@ end
 ).each do |f|
   template "#{node[:bash][:rcdir]}/#{f}" do
     source f
+    mode "0644"
+  end
+end
+
+if root?
+  template "/etc/profile" do
+    source "profile"
+    owner "root"
+    group "root"
     mode "0644"
   end
 end
@@ -77,4 +90,5 @@ end
 
 execute "env-update" do
   action :nothing
+  only_if { node[:platform] == "gentoo" }
 end

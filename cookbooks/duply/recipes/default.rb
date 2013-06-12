@@ -1,5 +1,12 @@
-package "net-ftp/ncftp"
-package "app-backup/duply"
+case node[:platform]
+when "gentoo"
+  package "net-ftp/ncftp"
+  package "app-backup/duply"
+
+when "debian"
+  package "ncftp"
+  package "duply"
+end
 
 %w(
   /etc/duply
