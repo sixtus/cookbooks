@@ -24,7 +24,9 @@ template "#{node[:zookeeper][:confdir]}/log4j.properties" do
   notifies :restart, "service[zookeeper]" unless node[:platform] == "mac_os_x"
 end
 
-myid = zookeeper_nodes.index do |n|
+nodes = zookeeper_nodes
+
+myid = nodes.index do |n|
   n[:fqdn] == node[:fqdn]
 end.to_i + 1
 
