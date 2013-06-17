@@ -13,51 +13,15 @@ postgresql_database "gitlab_production" do
   owner "gitlab"
 end
 
-## user & rvm
+## homedir
 homedir = "/var/app/gitlab"
 
 deploy_skeleton "git" do
   homedir homedir
 end
 
-deploy_rvm_ruby "git" do
-  ruby_version "ruby-2.0.0-p0"
-end
-
-## gitlab-shell
-%w(
-  backups
-  satellites
-).each do |dir|
-  directory "#{homedir}/#{dir}" do
-    owner "git"
-    group "git"
-    mode "0755"
-  end
-end
-
-git "#{homedir}/gitlab-shell" do
-  repository "https://github.com/gitlabhq/gitlab-shell.git"
-  reference "v1.2.0"
-end
-
-template "#{homedir}/gitlab-shell/config.yml" do
-  source "config.yml"
-  user "git"
-  group "git"
-  mode "0644"
-  variables({
-    homedir: homedir,
-  })
-end
-
-execute "gitlab-shell-install" do
-  command "su -l -c 'cd #{homedir}/gitlab-shell && ./bin/install >/dev/null' git"
-  user "root"
-  not_if { File.exist?("#{homedir}/gitlab-shell/.installed") }
-end
-
-file "#{homedir}/gitlab-shell/.installed"
+# gitlab-shell
+include_recipe "gitlab::shell"
 
 ## gitlab
 %w(
@@ -98,10 +62,12 @@ sidekiq = systemd_user_unit "sidekiq.service" do
   })
 end
 
-deploy_branch homedir do
+deploy_ruby_application "git" do
   repository "https://github.com/gitlabhq/gitlabhq.git"
   revision "5-0-stable"
   user "git"
+
+  ruby_version "ruby-2.0.0-p0"
 
   symlink_before_migrate({
     "config/database.yml" => "config/database.yml",
@@ -109,13 +75,7 @@ deploy_branch homedir do
     "config/unicorn.rb" => "config/unicorn.rb",
   })
 
-  before_symlink do
-    rvm_shell "gitlab-bundle-install" do
-      code "bundle install --path #{homedir}/shared/bundle --quiet --deployment --without 'development test mysql'"
-      cwd release_path
-      user "git"
-    end
-
+  after_bundle do
     rvm_shell "gitlab-setup" do
       code "bundle exec rake gitlab:setup force=yes RAILS_ENV=production"
       cwd release_path
@@ -146,11 +106,13 @@ deploy_branch homedir do
   end
 end
 
+## nginx proxy
 nginx_server "gitlab" do
   template "nginx.conf"
   homedir homedir
 end
 
+## open ports
 shorewall_rule "gitlab" do
   destport "http,https"
 end
@@ -159,6 +121,7 @@ shorewall6_rule "gitlab" do
   destport "http,https"
 end
 
+## monitoring
 if tagged?("nagios-client")
   nrpe_command "check_gitlab_unicorn" do
     command "/usr/lib/nagios/plugins/check_pidfile #{homedir}/shared/pids/unicorn.pid"
