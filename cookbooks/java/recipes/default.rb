@@ -1,3 +1,5 @@
+tag("java")
+
 case node[:platform]
 when "gentoo"
   case node[:java][:vm]
