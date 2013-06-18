@@ -8,7 +8,7 @@ action :create do
 
 
   homedir = if new_resource.homedir == nil
-              node[user][:homedir] rescue "/var/app/#{user}"
+              node[:etc][:passwd][user][:dir] rescue "/var/app/#{user}"
             else
               new_resource.homedir
             end
