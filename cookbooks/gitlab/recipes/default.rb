@@ -17,7 +17,7 @@ end
 homedir = "/var/app/gitlab"
 
 deploy_skeleton "git" do
-  homedir homedir
+  authorized_keys_for false
 end
 
 # gitlab-shell
