@@ -44,7 +44,7 @@ end
 systemd_user_session "git"
 
 unicorn = systemd_user_unit "unicorn.service" do
-  template "unicorn.service"
+  template true
   user "git"
   action [:create, :enable]
   supports [:reload]
@@ -54,7 +54,7 @@ unicorn = systemd_user_unit "unicorn.service" do
 end
 
 sidekiq = systemd_user_unit "sidekiq.service" do
-  template "sidekiq.service"
+  template true
   user "git"
   action [:create, :enable]
   variables({
@@ -65,7 +65,6 @@ end
 deploy_ruby_application "git" do
   repository "https://github.com/gitlabhq/gitlabhq.git"
   revision "5-0-stable"
-  user "git"
 
   ruby_version "ruby-2.0.0-p0"
 
@@ -98,7 +97,7 @@ deploy_ruby_application "git" do
     end
   end
 
-  after_restart do
+  before_restart do
     unicorn.run_action(:reload)
     unicorn.run_action(:start)
     sidekiq.run_action(:restart)
