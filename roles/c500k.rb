@@ -32,7 +32,7 @@ default_attributes({
       },
 
       :ipv4 => {
-        :ip_local_port_range => "1024 65535",
+        :ip_local_port_range => "2048 65535",
         :tcp_fin_timeout => 3,
         :tcp_max_syn_backlog => 262144,
         :tcp_max_tw_buckets => 2097152,

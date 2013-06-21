@@ -11,6 +11,10 @@ echo ${hostname} > /etc/hostname
 sed -i -e "s/^hostname.*/hostname=\"${hostname}\"/" /etc/conf.d/hostname
 hostname ${hostname}
 
+emerge -n net-misc/ntp
+timedatectl set-local-rtc 0
+ntpdate pool.ntp.org
+
 emerge --sync
 emerge --nospinner --keep-going=n --noreplace --quiet app-admin/chef
 

@@ -1,3 +1,13 @@
+commit 4ec3b616c8bcd9e5eff4e6b7a16f253d706be025
+Merge: 9c3e29a 188edf9
+Author: Benedikt Böhm <bb@xnull.de>
+Date:   Fri Jun 21 12:21:28 2013 +0200
+
+    Merge branch 'next'
+
+    This iteration add support for python and virtualenv. It also fixes
+    various issues with the newly introduced deploy_* resources.
+
 commit a3710cdd02053126fa6277a12c4d2d9b24ea73cf
 Merge: ee4d56e 02b86e5
 Author: Benedikt Böhm <bb@xnull.de>

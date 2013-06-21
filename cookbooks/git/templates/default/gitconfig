@@ -15,6 +15,7 @@
 	log1 = log --pretty=oneline --abbrev-commit --decorate
 	eu = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; $EDITOR `f`"
 	au = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
+	gredit = "!f() { git grep \"$@\"; $EDITOR $(git grep -l \"$@\"); }; f"
 [color]
 	branch = auto
 	diff = auto

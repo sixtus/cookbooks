@@ -41,7 +41,8 @@ def script_wrapper(exec_action)
 
     environment({
       'USER' => new_resource.user,
-      'HOME' => Etc.getpwnam(new_resource.user).dir
+      'HOME' => Etc.getpwnam(new_resource.user).dir,
+      'RUBYOPT' => "",
     }.merge(new_resource.environment))
 
     code script_code

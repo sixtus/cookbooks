@@ -34,7 +34,7 @@ template "#{node[:zookeeper][:confdir]}/zoo.cfg" do
   source "zoo.cfg"
   mode "0644"
   notifies :restart, "service[zookeeper]" unless node[:platform] == "mac_os_x"
-  variables :nodes => nodes
+  variables :nodes => node.zookeeper_node_names
 end
 
 directory node[:zookeeper][:datadir] do

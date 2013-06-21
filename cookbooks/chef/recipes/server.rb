@@ -212,6 +212,7 @@ unless solo?
       false
     end
   end.each do |u|
+    suspended = u[:password] == '!'
     begin
       u = get_user(u[:id])
     rescue ArgumentError
@@ -222,11 +223,14 @@ unless solo?
       owner u[:name]
       group u[:group][:name]
       mode "0700"
+      action :delete if suspended
+      recursive true
     end
 
     execute "knife-client-#{u[:name]}" do
       command "knife client create -a -d #{u[:name]} | tail -n+2 > #{u[:dir]}/.chef/client.pem"
       creates "#{u[:dir]}/.chef/client.pem"
+      not_if { suspended }
     end
 
     template "#{u[:dir]}/.chef/knife.rb" do
@@ -234,6 +238,7 @@ unless solo?
       owner u[:name]
       group u[:group][:name]
       mode "0600"
+      not_if { suspended }
       variables :client_key => "#{u[:dir]}/.chef/client.pem",
                 :node_name => u[:name]
     end

@@ -6,9 +6,12 @@ action :create do
   key_source = new_resource.key_source
   akf = new_resource.authorized_keys_for
 
+  if akf != false
+    akf = node[:deploy][:deployers] if akf and akf.empty?
+  end
 
   homedir = if new_resource.homedir == nil
-              node[user][:homedir] rescue "/var/app/#{user}"
+              node[:etc][:passwd][user][:dir] rescue "/var/app/#{user}"
             else
               new_resource.homedir
             end

@@ -57,42 +57,6 @@ namespace :generate do
     env.close
   end
 
-  desc "Generate a new user data bag"
-  task :user do
-    login = ask('Login: ') do |q|
-      q.validate = /^\w+$/
-    end
-
-    name = ask('Name: ')
-    email = ask('E-Mail: ')
-    tags = ask('Tags (space-seperated): ')
-    key = ask('SSH Public Key: ')
-
-    args = Rake::TaskArguments.new([:cn], [login])
-    Rake::Task["ssl:do_cert"].execute(args)
-
-    random = %x(pwgen -s 10 1).chomp
-
-    puts
-    puts ">>> Creating new user #{login} with password #{random} <<<"
-    puts
-
-    salt = SecureRandom.hex(8)
-    password1 = random.crypt("$1$#{salt}$")
-    salt = SecureRandom.hex(4)
-    password = random.crypt("$6$#{salt}$")
-
-    b = binding()
-    erb = Erubis::Eruby.new(File.read(File.join(TEMPLATES_DIR, 'user_databag.rb')))
-
-    path = File.join(BAGS_DIR, "users")
-    FileUtils.mkdir_p(path)
-
-    File.open(File.join(path, "#{login}.rb"), "w") do |f|
-      f.puts(erb.result(b))
-    end
-  end
-
   desc "Generate a default OpenVPN/Tunnelblick config"
   task :tunnelblick do
     remote = "chef." + URI.parse(Chef::Config[:chef_server_url]).host.split('.')[1..-1].join('.')
