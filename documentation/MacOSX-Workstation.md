@@ -66,7 +66,9 @@ http://xquartz.macosforge.org/landing/
 Homebrew and a bunch of basic shell utilities can be bootstrapped using Chef.
 
  * Open Terminal
- * git clone https://github.com/madvertise/cookbooks ~/chef && cd ~/chef
+ * git clone https://github.com/zenops/cookbooks ~/chef && cd ~/chef
+   * If you want to use the same configuration on multiple machines you should
+     create a private fork of this repository.
  * ./scripts/bootstrap-mac
    * You will be prompted to install Java. Do it!
    * After chef has bootstrapped you will be prompted to install the Menlo for
