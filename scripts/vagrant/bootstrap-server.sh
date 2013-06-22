@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# make sure udev is activated
-rc-update add udev sysinit &>/dev/null
-rc
-
 # sync & update first
 emerge --sync
 eix-update

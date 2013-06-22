@@ -14,13 +14,8 @@ namespace :server do
     hostname = fqdn.split('.').first
     domainname = fqdn.sub(/^#{hostname}\./, '')
 
-    username = args.username
-
-    salt = SecureRandom.hex(4)
-    password = "tux".crypt("$6$#{salt}$")
-
     # set FQDN
-    %x(hostname #{hostname})
+    %x(hostnamectl set-hostname #{hostname})
 
     File.open("/etc/hosts", 'w')  do |f|
       f.write("127.0.0.1 #{fqdn} #{hostname} localhost\n")
@@ -28,19 +23,17 @@ namespace :server do
 
     # create CA & SSL certificate for the server
     ENV['BATCH'] = "1"
-    Rake::Task["ssl:do_cert"].invoke(fqdn)
+    args = Rake::TaskArguments.new([:cn], ["*.#{domainname}"])
+    Rake::Task["ssl:do_cert"].execute(args)
+    args = Rake::TaskArguments.new([:cn], [fqdn])
+    Rake::Task["ssl:do_cert"].execute(fqdn)
+    knife :cookbook_upload, ["openssl", "--force"]
 
     # bootstrap the chef server
     scfg = File.join(TOPDIR, "config", "solo.rb")
     sjson = File.join(TOPDIR, "config", "solo", "server.json")
 
     sh("chef-solo -c #{scfg} -j #{sjson} -N #{fqdn} || :")
-
-    # now this one is really ugly. no idea why the init script is so damn
-    # broken that it is always stuck in starting state on the first run ...
-    sh("kill $(</var/run/chef/expander.pid)")
-    sh("/etc/init.d/chef-expander restart")
-    sh("false; while [[ $? -ne 0 ]]; do chef-solo -c #{scfg} -j #{sjson} -N #{fqdn}; done")
 
     # run chef-client to register a client key
     sh("chef-client")
@@ -49,10 +42,16 @@ namespace :server do
     sh("env EDITOR=vim knife client create root -a -d -u chef-webui -k /etc/chef/webui.pem | tail -n+2 > /root/.chef/client.pem")
 
     # create new node
-    nf = File.join(NODES_DIR, "#{fqdn}.rb")
+    b = binding()
+    erb = Erubis::Eruby.new(File.read(File.join(TEMPLATES_DIR, 'node.rb')))
 
-    File.open(nf, "w") do |fd|
-      fd.puts "run_list(%w(\n  role[chef]\n))"
+    # create new node
+    nf = File.join(TOPDIR, "nodes", "#{args.fqdn}.rb")
+
+    unless File.exists?(nf)
+      File.open(nf, "w") do |f|
+        f.puts(erb.result(b))
+      end
     end
 
     # create initial user account
@@ -61,11 +60,25 @@ namespace :server do
     rescue
     end
 
-    uf = File.join(BAGS_DIR, "users", "#{username}.rb")
+    login = args.username
+    name = login
+    tags = "hostmaster"
+    keys = []
 
-    File.open(uf, "w") do |fd|
-      fd.puts "tags %w(hostmaster)"
-      fd.puts "password '#{password}'"
+    random = "tux"
+    salt = SecureRandom.hex(8)
+    password1 = random.crypt("$1$#{salt}$")
+    salt = SecureRandom.hex(4)
+    password = random.crypt("$6$#{salt}$")
+
+    b = binding()
+    erb = Erubis::Eruby.new(File.read(File.join(TEMPLATES_DIR, 'user_databag.rb')))
+
+    path = File.join(BAGS_DIR, "users")
+    FileUtils.mkdir_p(path)
+
+    File.open(File.join(path, "#{login}.rb"), "w") do |f|
+      f.puts(erb.result(b))
     end
 
     # deploy initial repository
