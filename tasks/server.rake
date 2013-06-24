@@ -87,6 +87,16 @@ namespace :server do
     end
 
     # deploy initial repository
+    node_name = login
+    chef_server_url = fqdn
+
+    b = binding()
+    erb = Erubis::Eruby.new(File.read(File.join(TEMPLATES_DIR, 'knife.rb')))
+
+    File.open(File.expand_path(File.join(TOPDIR, ".chef", "knife.rb")), "w") do |f|
+      f.puts(erb.result(b))
+    end
+
     knife :cookbook_upload, ["--all", "--force"]
     Rake::Task['load:all'].invoke
 
