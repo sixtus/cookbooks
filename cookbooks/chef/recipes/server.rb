@@ -167,7 +167,7 @@ template "/etc/chef/server.rb" do
   owner "chef"
   group "chef"
   mode "0600"
-  notifies :restart, "service[chef-server-api]", :immediately
+  notifies :restart, "service[chef-server-api]"
   variables :amqp_pass => amqp_pass
 end
 
