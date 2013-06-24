@@ -87,11 +87,8 @@ namespace :server do
     end
 
     # deploy initial repository
-    begin
-      Rake::Task['load:all'].invoke
-    rescue
-      Rake::Task['load:all'].invoke
-    end
+    knife :cookbook_upload, ["--all", "--force"]
+    Rake::Task['load:all'].invoke
 
     # run final chef-client
     3.times do
