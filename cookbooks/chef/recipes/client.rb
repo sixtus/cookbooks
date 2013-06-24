@@ -1,6 +1,7 @@
 case node[:platform]
 when "gentoo"
   package "app-admin/chef"
+  package "dev-ruby/activesupport"
   package "dev-ruby/knife-dsl"
   package "dev-ruby/airbrake_handler"
 
