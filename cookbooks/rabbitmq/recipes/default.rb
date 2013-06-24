@@ -16,6 +16,6 @@ execute "wait-for-rabbitmq" do
 end
 
 service "rabbitmq" do
-  action [:enable, :start]
+  action [:start, :enable]
   notifies :run, "execute[wait-for-rabbitmq]", :immediately
 end
