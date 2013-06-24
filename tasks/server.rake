@@ -3,6 +3,8 @@ namespace :server do
   desc "Bootstrap a Chef Server infrastructure"
   task :bootstrap, :fqdn, :username do |t, args|
     ENV['BOOTSTRAP'] = "1"
+    ENV['BATCH'] = "1"
+    ENV['SOLO'] = "1"
 
     # sanity check
     if Process.euid > 0
@@ -22,12 +24,10 @@ namespace :server do
     end
 
     # create CA & SSL certificate for the server
-    ENV['BATCH'] = "1"
     args = Rake::TaskArguments.new([:cn], ["*.#{domainname}"])
     Rake::Task["ssl:do_cert"].execute(args)
     args = Rake::TaskArguments.new([:cn], [fqdn])
-    Rake::Task["ssl:do_cert"].execute(fqdn)
-    knife :cookbook_upload, ["openssl", "--force"]
+    Rake::Task["ssl:do_cert"].execute(args)
 
     # bootstrap the chef server
     scfg = File.join(TOPDIR, "config", "solo.rb")
@@ -46,7 +46,7 @@ namespace :server do
     erb = Erubis::Eruby.new(File.read(File.join(TEMPLATES_DIR, 'node.rb')))
 
     # create new node
-    nf = File.join(TOPDIR, "nodes", "#{args.fqdn}.rb")
+    nf = File.join(TOPDIR, "nodes", "#{fqdn}.rb")
 
     unless File.exists?(nf)
       File.open(nf, "w") do |f|
@@ -62,6 +62,7 @@ namespace :server do
 
     login = args.username
     name = login
+    email = "hostmaster@#{domainname}"
     tags = "hostmaster"
     keys = []
 

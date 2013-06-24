@@ -182,12 +182,14 @@ file "/etc/chef/validation.pem" do
   owner "chef"
   group "chef"
   mode "0400"
+  only_if { File.exist?("/etc/chef/validation.pem") }
 end
 
 file "/etc/chef/webui.pem" do
   owner "chef"
   group "chef"
   mode "0400"
+  only_if { File.exist?("/etc/chef/webui.pem") }
 end
 
 # nginx proxy
