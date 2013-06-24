@@ -12,6 +12,8 @@ namespace :server do
       exit(1)
     end
 
+    login = args.username
+
     fqdn = args.fqdn
     hostname = fqdn.split('.').first
     domainname = fqdn.sub(/^#{hostname}\./, '')
@@ -41,6 +43,9 @@ namespace :server do
     # setup a client key for root
     sh("env EDITOR=vim knife client create root -a -d -u chef-webui -k /etc/chef/webui.pem | tail -n+2 > /root/.chef/client.pem")
 
+    # setup a client key for the first user
+    sh("env EDITOR=vim knife client create #{login} -a -d -u chef-webui -k /etc/chef/webui.pem | tail -n+2 > #{TOPDIR}/.chef/client.pem")
+
     # create new node
     b = binding()
     erb = Erubis::Eruby.new(File.read(File.join(TEMPLATES_DIR, 'node.rb')))
@@ -60,7 +65,6 @@ namespace :server do
     rescue
     end
 
-    login = args.username
     name = login
     email = "hostmaster@#{domainname}"
     tags = "hostmaster"
