@@ -4,7 +4,7 @@ namespace :server do
   task :bootstrap, :fqdn, :username do |t, args|
     ENV['BOOTSTRAP'] = "1"
     ENV['BATCH'] = "1"
-    ENV['SOLO'] = "1"
+    ENV['ROLE'] = "chef"
 
     # sanity check
     if Process.euid > 0
@@ -17,6 +17,7 @@ namespace :server do
     fqdn = args.fqdn
     hostname = fqdn.split('.').first
     domainname = fqdn.sub(/^#{hostname}\./, '')
+    ipaddress = "10.42.9.2"
 
     # set FQDN
     %x(hostnamectl set-hostname #{hostname})

@@ -12,18 +12,19 @@ namespace :node do
   desc "Create a new node with SSL certificates"
   task :create => [ :pull ]
   task :create, :fqdn, :ipaddress do |t, args|
-    Rake::Task['node:checkdns'].invoke(args.fqdn, args.ipaddress)
+    fqdn, ipaddress = args.fqdn, args.ipaddress
+    Rake::Task['node:checkdns'].invoke(fqdn, ipaddress)
 
     # create SSL cert
     ENV['BATCH'] = "1"
-    Rake::Task['ssl:do_cert'].invoke(args.fqdn)
+    Rake::Task['ssl:do_cert'].invoke(fqdn)
     knife :cookbook_upload, ['openssl', '--force']
 
     b = binding()
     erb = Erubis::Eruby.new(File.read(File.join(TEMPLATES_DIR, 'node.rb')))
 
     # create new node
-    nf = File.join(TOPDIR, "nodes", "#{args.fqdn}.rb")
+    nf = File.join(TOPDIR, "nodes", "#{fqdn}.rb")
 
     unless File.exists?(nf)
       File.open(nf, "w") do |f|
@@ -32,7 +33,7 @@ namespace :node do
     end
 
     # upload to chef server
-    Rake::Task['load:node'].invoke(args.fqdn)
+    Rake::Task['load:node'].invoke(fqdn)
   end
 
   desc "Bootstrap the specified node"
