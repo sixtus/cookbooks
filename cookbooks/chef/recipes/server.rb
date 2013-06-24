@@ -73,6 +73,10 @@ directory "/var/lib/chef" do
   mode "0750"
 end
 
+link "/var/chef" do
+  to "/var/lib/chef"
+end
+
 %w(
   backup
   checksums
