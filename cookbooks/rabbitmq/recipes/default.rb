@@ -10,6 +10,12 @@ end
 
 systemd_unit "rabbitmq.service"
 
+execute "wait-for-rabbitmq" do
+  command "while ! netstat -tulpen | grep -q 5672; do sleep 1; done"
+  action :nothing
+end
+
 service "rabbitmq" do
   action [:enable, :start]
+  notifies :run, "execute[wait-for-rabbitmq]", :immediately
 end
