@@ -1,7 +1,7 @@
 namespace :server do
 
   desc "Bootstrap a Chef Server infrastructure"
-  task :bootstrap, :fqdn, :username do |t, args|
+  task :bootstrap, :fqdn, :username, :key do |t, args|
     ENV['BOOTSTRAP'] = "1"
     ENV['BATCH'] = "1"
     ENV['ROLE'] = "chef"
@@ -13,10 +13,11 @@ namespace :server do
     end
 
     login = args.username
+    key = args.key || ""
 
     fqdn = args.fqdn
     hostname = fqdn.split('.').first
-    domainname = fqdn.sub(/^#{hostname}\./, '')
+    domainname = fqdn.split('.')[1..-1].join('.')
     ipaddress = "10.42.9.2"
 
     # set FQDN
@@ -27,6 +28,7 @@ namespace :server do
     end
 
     # create CA & SSL certificate for the server
+    Rake::Task["ssl:init"].execute
     args = Rake::TaskArguments.new([:cn], ["*.#{domainname}"])
     Rake::Task["ssl:do_cert"].execute(args)
     args = Rake::TaskArguments.new([:cn], [fqdn])
@@ -41,11 +43,9 @@ namespace :server do
     # run chef-client to register a client key
     sh("chef-client")
 
-    # setup a client key for root
-    sh("env EDITOR=vim knife client create root -a -d -u chef-webui -k /etc/chef/webui.pem | tail -n+2 > /root/.chef/client.pem")
-
-    # setup a client key for the first user
-    sh("env EDITOR=vim knife client create #{login} -a -d -u chef-webui -k /etc/chef/webui.pem | tail -n+2 > #{TOPDIR}/.chef/client.pem")
+    # setup a client key for root and initial user
+    knife :client_create, %W(root -a -d -u chef-webui -k /etc/chef/webui.pem -f /root/.chef/client.pem)
+    knife :client_create, %W(#{login} -a -d -u chef-webui -k /etc/chef/webui.pem -f #{TOPDIR}/.chef/client.pem)
 
     # create new node
     b = binding()
@@ -66,26 +66,21 @@ namespace :server do
     rescue
     end
 
-    name = login
-    email = "hostmaster@#{domainname}"
-    tags = "hostmaster"
-    keys = []
+    args = Rake::TaskArguments.new([
+      :login,
+      :name,
+      :email,
+      :tags,
+      :key,
+    ], [
+      login,
+      login,
+      "hostmaster@#{domainname}",
+      "hostmaster",
+      key,
+    ])
 
-    random = "tux"
-    salt = SecureRandom.hex(8)
-    password1 = random.crypt("$1$#{salt}$")
-    salt = SecureRandom.hex(4)
-    password = random.crypt("$6$#{salt}$")
-
-    b = binding()
-    erb = Erubis::Eruby.new(File.read(File.join(TEMPLATES_DIR, 'user_databag.rb')))
-
-    path = File.join(BAGS_DIR, "users")
-    FileUtils.mkdir_p(path)
-
-    File.open(File.join(path, "#{login}.rb"), "w") do |f|
-      f.puts(erb.result(b))
-    end
+    Rake::Task["user:create"].execute(args)
 
     # deploy initial repository
     node_name = login
