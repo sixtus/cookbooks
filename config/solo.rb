@@ -22,4 +22,4 @@ cache_options({
   :skip_expires => true
 })
 
-verbose_logging false
+verbose_logging true

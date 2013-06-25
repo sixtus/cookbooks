@@ -73,6 +73,10 @@ directory "/var/lib/chef" do
   mode "0750"
 end
 
+link "/var/chef" do
+  to "/var/lib/chef"
+end
+
 %w(
   backup
   checksums
@@ -167,7 +171,7 @@ template "/etc/chef/server.rb" do
   owner "chef"
   group "chef"
   mode "0600"
-  notifies :restart, "service[chef-server-api]", :immediately
+  notifies :restart, "service[chef-server-api]"
   variables :amqp_pass => amqp_pass
 end
 
@@ -182,12 +186,14 @@ file "/etc/chef/validation.pem" do
   owner "chef"
   group "chef"
   mode "0400"
+  only_if { File.exist?("/etc/chef/validation.pem") }
 end
 
 file "/etc/chef/webui.pem" do
   owner "chef"
   group "chef"
   mode "0400"
+  only_if { File.exist?("/etc/chef/webui.pem") }
 end
 
 # nginx proxy

@@ -3,15 +3,15 @@ require "highline/import"
 namespace :user do
 
   desc "Create a new user data bag"
-  task :create do
-    login = ask('Login: ') do |q|
+  task :create, :login, :name, :email, :tags, :key do |t, args|
+    login = args.login || ask('Login: ') do |q|
       q.validate = /^\w+$/
     end
 
-    name = ask('Name: ')
-    email = ask('E-Mail: ')
-    tags = ask('Tags (space-seperated): ')
-    keys = [ask('SSH Public Key: ')]
+    name = args.name || ask('Name: ')
+    email = args.email || ask('E-Mail: ')
+    tags = args.tags || ask('Tags (space-seperated): ')
+    keys = [args.key || ask('SSH Public Key: ')]
 
     args = Rake::TaskArguments.new([:cn], [login])
     Rake::Task["ssl:do_cert"].execute(args)

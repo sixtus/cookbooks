@@ -34,7 +34,12 @@ end
 
 # this is awful but needed to keep attribute precedence
 node.load_attributes
-node.apply_expansion_attributes(node.expand!('server'))
+
+if solo?
+  node.apply_expansion_attributes(node.expand!('disk'))
+else
+  node.apply_expansion_attributes(node.expand!('server'))
+end
 
 if node.run_state[:nagios].any?
   tag("nagios-client")

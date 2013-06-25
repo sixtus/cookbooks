@@ -3,6 +3,11 @@ tag("java")
 case node[:platform]
 when "gentoo"
   case node[:java][:vm]
+  when /^oracle-jdk-bin-/
+    package "dev-java/oracle-jdk-bin" do
+      action :upgrade
+    end
+
   when /^icedtea-/
     portage_package_use "dev-java/icedtea" do
       use %w(javascript -webstart)
@@ -11,6 +16,7 @@ when "gentoo"
     package "dev-java/icedtea" do
       action :upgrade
     end
+
   else
     raise "unsupported JVM: #{node[:java][:vm]}"
   end

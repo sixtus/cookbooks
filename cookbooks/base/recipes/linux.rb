@@ -54,7 +54,7 @@ if root?
     include_recipe "ntp"
   end
 
-  unless vserver_guest?
+  if !vserver_guest? and !vbox_guest?
     include_recipe "shorewall"
   end
 

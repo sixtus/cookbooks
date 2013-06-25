@@ -1,6 +1,6 @@
 chef_environment "production"
 
-set[:primary_ipaddress] = "<%= args.ipaddress %>"
+set[:primary_ipaddress] = "<%= ipaddress %>"
 
 run_list(%w(
 <% if ENV['ROLE'] != 'base' %>

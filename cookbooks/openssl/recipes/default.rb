@@ -16,31 +16,31 @@ template "/etc/ssl/openssl.cnf" do
   mode "0644"
 end
 
-unless solo?
+if root?
   ssl_certificate "/etc/ssl/certs/wildcard.#{node[:chef_domain]}" do
     cn "wildcard.#{node[:chef_domain]}"
   end
-end
 
-ruby_block "cleanup-ca-certificates" do
-  block do
-    Find.find('/etc/ssl/certs') do |path|
-      if File.symlink?(path) and not File.exist?(path)
-        File.unlink(path)
+  ruby_block "cleanup-ca-certificates" do
+    block do
+      Find.find('/etc/ssl/certs') do |path|
+        if File.symlink?(path) and not File.exist?(path)
+          File.unlink(path)
+        end
       end
     end
-  end
 
-  only_if do
-    require 'find'
+    only_if do
+      require 'find'
 
-    result = false
+      result = false
 
-    Find.find('/etc/ssl/certs') do |path|
-      result = true if File.symlink?(path) and not File.exist?(path)
+      Find.find('/etc/ssl/certs') do |path|
+        result = true if File.symlink?(path) and not File.exist?(path)
+      end
+
+      result
     end
-
-    result
   end
 end
 

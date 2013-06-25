@@ -1,4 +1,27 @@
-commit 4ec3b616c8bcd9e5eff4e6b7a16f253d706be025
+commit 5d36fca2af0b1ac402bc1bad82eaf6488aa04fb9
+Merge: 41f7248 15e3dcf
+Author: Benedikt Böhm <bb@xnull.de>
+Date:   Tue Jun 25 09:48:24 2013 +0200
+
+    Merge branch 'next'
+
+    This iteration reintroduces vagrant support. To support Zentoo Linux
+    base boxes two new plugins have been written for vagrant which need to
+    be installed first:
+
+      vagrant plugin install vagrant-systemd
+      vagrant plugin install vagrant-zentoo
+
+    To start a Zentoo Linux base image deployed with chef-solo run:
+
+      vagrant up base
+
+    To start a local chef-server that can be used to deploy other vagrant
+    VMs on the same network run:
+
+      vagrant up chef
+
+commit 41f72484f6becc7a0d2876bc4c605475952d0d67
 Merge: 9c3e29a 188edf9
 Author: Benedikt Böhm <bb@xnull.de>
 Date:   Fri Jun 21 12:21:28 2013 +0200
