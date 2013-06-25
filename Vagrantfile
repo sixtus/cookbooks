@@ -19,7 +19,8 @@ Vagrant.configure("2") do |config|
     chef.vm.box_url = "http://www.zentoo.org/downloads/amd64/chef-server-current.box"
     chef.vm.hostname = "chef.zenops.ws"
     chef.vm.network :private_network, ip: "10.42.9.2"
-    #chef.vm.provision :shell, :path => "scripts/vagrant/bootstrap-server.sh"
+    chef.vm.synced_folder ".", "/vagrant", disabled: true
+    chef.vm.provision :shell, path: "scripts/vagrant/bootstrap-server.sh"
   end
 
 end
