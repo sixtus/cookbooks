@@ -7,7 +7,7 @@ action :create do
   akf = new_resource.authorized_keys_for
 
   if akf != false
-    akf = node[:deploy][:deployers] if akf and akf.empty?
+    akf = node[:deploy][:deployers] if akf.nil? or akf.empty?
   end
 
   homedir = if new_resource.homedir == nil
