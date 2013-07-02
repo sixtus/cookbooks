@@ -33,6 +33,7 @@ else
                   "freebsd" => ["python"],
                   "smartos" => ["python27"],
                   "gentoo" => ["dev-lang/python"],
+                  "mac_os_x" => ["python"],
                   "default" => ["python","python-dev"]
                 )
 end
