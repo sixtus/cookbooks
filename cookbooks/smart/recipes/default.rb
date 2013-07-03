@@ -7,6 +7,13 @@ when "debian"
 end
 
 if node[:smart][:devices].any?
+  cookbook_file "/usr/local/sbin/diskreport" do
+    source "diskreport.sh"
+    owner "root"
+    group "root"
+    mode "0755"
+  end
+
   template "/etc/smartd.conf" do
     source "smartd.conf.erb"
     owner "root"
