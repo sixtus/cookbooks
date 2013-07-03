@@ -81,6 +81,7 @@ end
 # build service groups
 servicegroups = []
 hosts.each do |h|
+  next unless h[:nagios]
   h[:nagios][:services].each do |name, params|
     if params[:servicegroups]
       servicegroups |= params[:servicegroups].split(",")
