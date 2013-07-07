@@ -112,10 +112,17 @@ namespace :ssl do
 
   desc "Revoke an existing SSL certificate"
   task :revoke, :cn do |t, args|
-    keyfile = args.cn.gsub("*", "wildcard")
-    sh("openssl ca -config #{SSL_CONFIG_FILE} -revoke #{SSL_CERT_DIR}/#{keyfile}.crt")
-    sh("openssl ca -config #{SSL_CONFIG_FILE} -gencrl -out #{SSL_CERT_DIR}/ca.crl")
-    sh("rm #{SSL_CERT_DIR}/#{keyfile}.{csr,crt,key}")
+    serial = %x(grep ^V.*CN=#{args.cn}\$ ca/index | awk '{print $3}').chomp
+
+    if serial.empty?
+      puts "can only revoke my own certificates. skipping #{args.cn} ..."
+    else
+      sh("openssl ca -config #{SSL_CONFIG_FILE} -revoke #{SSL_CA_DIR}/newcerts/#{serial}.pem")
+      sh("openssl ca -config #{SSL_CONFIG_FILE} -gencrl -out #{SSL_CERT_DIR}/ca.crl")
+    end
+
+    cn = args.cn.gsub("*", "wildcard")
+    sh("rm #{SSL_CERT_DIR}/#{cn}.{csr,crt,key}")
     knife :cookbook_upload, ['openssl', '--force']
   end
 
