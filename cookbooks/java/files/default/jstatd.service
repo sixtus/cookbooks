@@ -1,0 +1,10 @@
+[Unit]
+Description=Virtual Machine jstat Daemon
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/jstatd -J-Djava.security.policy=/etc/jstatd.policy
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

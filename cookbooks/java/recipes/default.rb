@@ -29,4 +29,18 @@ when "gentoo"
   package "dev-java/icedtea-bin" do
     action :remove
   end
+
+  cookbook_file "/etc/jstatd.policy" do
+    source "jstatd.policy"
+    owner "root"
+    group "root"
+    mode "0644"
+    notifies :restart, "service[jstatd]"
+  end
+
+  systemd_unit "jstatd.service"
+
+  service "jstatd" do
+    action [:enable, :start]
+  end
 end
