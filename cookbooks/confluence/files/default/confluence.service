@@ -1,0 +1,14 @@
+[Unit]
+Description=Confluence
+After=network.target
+
+[Service]
+ExecStart=/opt/confluence/bin/start-confluence.sh -fg
+ExecStop=/opt/confluence/bin/stop-confluence.sh
+#User=confluence
+#Group=confluence
+Restart=always
+SyslogIdentifier=confluence
+
+[Install]
+WantedBy=multi-user.target
