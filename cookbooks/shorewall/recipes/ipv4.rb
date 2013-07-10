@@ -55,7 +55,7 @@ if node[:platform] == "debian"
 end
 
 systemd_unit "shorewall.service" do
-  template "shorewall.service"
+  template true
 end
 
 service "shorewall" do

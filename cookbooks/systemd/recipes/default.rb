@@ -103,7 +103,7 @@ when "gentoo"
     # user session support
     systemd_unit "systemd-stop-user-sessions.service"
     systemd_unit "user-session@.service" do
-      template "user-session@.service"
+      template true
     end
 
     service "systemd-stop-user-sessions.service" do
