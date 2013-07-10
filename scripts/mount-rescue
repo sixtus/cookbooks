@@ -2,28 +2,31 @@
 
 set -e
 
-mkdir -p $2
+root_device=$1
+mount_dir=$(mktemp -d)
 
-mount $1 $2
-mount /dev/vg/usr $2/usr
-mount /dev/vg/var $2/var
+mkdir -p ${mount_dir}
 
-[[ -e /dev/vg/log ]] && mount /dev/vg/log $2/var/log
-[[ -e /dev/vg/opt ]] && mount /dev/vg/opt $2/opt
-[[ -e /dev/vg/home ]] && mount /dev/vg/home $2/home
+mount ${root_device} ${mount_dir}
+mount /dev/vg/usr ${mount_dir}/usr
+mount /dev/vg/var ${mount_dir}/var
 
-mount --bind /dev $2/dev
-mount -t proc proc $2/proc
+[[ -e /dev/vg/log ]] && mount /dev/vg/log ${mount_dir}/var/log
+[[ -e /dev/vg/opt ]] && mount /dev/vg/opt ${mount_dir}/opt
+[[ -e /dev/vg/home ]] && mount /dev/vg/home ${mount_dir}/home
+
+mount --bind /dev ${mount_dir}/dev
+mount -t proc proc ${mount_dir}/proc
 
 set +e
 
-chroot $2 /bin/bash
+chroot ${mount_dir} /bin/bash
 
-umount $2/proc
-umount $2/dev
-[[ -e /dev/vg/home ]] && umount $2/home
-[[ -e /dev/vg/opt ]] && umount $2/opt
-[[ -e /dev/vg/log ]] && umount $2/var/log
-umount $2/var
-umount $2/usr
-umount $2
+umount ${mount_dir}/proc
+umount ${mount_dir}/dev
+[[ -e /dev/vg/home ]] && umount ${mount_dir}/home
+[[ -e /dev/vg/opt ]] && umount ${mount_dir}/opt
+[[ -e /dev/vg/log ]] && umount ${mount_dir}/var/log
+umount ${mount_dir}/var
+umount ${mount_dir}/usr
+umount ${mount_dir}
