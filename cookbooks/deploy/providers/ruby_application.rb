@@ -20,12 +20,6 @@ action :create do
     symlinks nr.symlinks
     symlink_before_migrate nr.symlink_before_migrate
 
-    symlink_before_migrate({
-      "config/database.yml" => "config/database.yml",
-      "config/gitlab.yml" => "config/gitlab.yml",
-      "config/unicorn.rb" => "config/unicorn.rb",
-    })
-
     before_symlink do
       rvm_shell "#{nr.user}-bundle-install" do
         code "bundle install --path #{homedir}/shared/bundle --quiet --deployment --without '#{[nr.bundle_without].flatten.join(' ')}'"
