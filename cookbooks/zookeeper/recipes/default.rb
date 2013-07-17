@@ -113,3 +113,12 @@ if tagged?("nagios-client")
     end
   end
 end
+
+# Log cleaner cronjob:
+cron "zk-log-clean" do
+  minute "0"
+  hour "3"
+  day "*"
+  command "/opt/zookeeper/bin/zkCleanup.sh /var/lib/zookeeper/ -n 5"
+  action :create
+end
