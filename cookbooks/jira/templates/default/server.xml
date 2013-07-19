@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Server port="8005" shutdown="SHUTDOWN">
+
+    <!--APR library loader. Documentation at /docs/apr.html -->
+    <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on"/>
+    <!--Initialize Jasper prior to webapps are loaded. Documentation at /docs/jasper-howto.html -->
+    <Listener className="org.apache.catalina.core.JasperListener"/>
+    <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener"/>
+
+    <Service name="Catalina">
+        <Connector port="8080"
+
+                   maxThreads="150"
+                   minSpareThreads="25"
+                   connectionTimeout="20000"
+
+                   enableLookups="false"
+                   maxHttpHeaderSize="8192"
+                   protocol="HTTP/1.1"
+                   useBodyEncodingForURI="true"
+                   redirectPort="8443"
+                   acceptCount="100"
+                   disableUploadTimeout="true"
+
+                   scheme="https"
+                   proxyName="jira.<%= node[:chef_domain] %>"
+                   proxyPort="443"/>
+
+        <Engine name="Catalina" defaultHost="localhost">
+            <Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="true">
+                <Context path="" docBase="${catalina.home}/atlassian-jira" reloadable="false" useHttpOnly="true">
+                    <Resource name="UserTransaction" auth="Container" type="javax.transaction.UserTransaction"
+                              factory="org.objectweb.jotm.UserTransactionFactory" jotm.timeout="60"/>
+                    <Manager pathname="" />
+                </Context>
+            </Host>
+        </Engine>
+
+    </Service>
+</Server>
