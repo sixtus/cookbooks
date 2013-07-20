@@ -27,3 +27,11 @@ template "/etc/pureftpd-mysql.conf" do
 end
 
 include_recipe "pure-ftpd"
+
+shorewall_rule "ftp" do
+  destport "21"
+end
+
+shorewall6_rule "ftp" do
+  destport "21"
+end

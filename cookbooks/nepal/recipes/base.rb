@@ -103,6 +103,8 @@ execute "nepal-migratedb" do
   command "/usr/sbin/nepal-admin migrate"
 end
 
+systemd_unit "nepald.service"
+
 service "nepald" do
   action [:enable, :start]
 end

@@ -8,6 +8,8 @@ template "/etc/conf.d/postgrey" do
   notifies :restart, "service[postgrey]"
 end
 
+systemd_unit "postgrey.service"
+
 service "postgrey" do
   action [:enable, :start]
 end

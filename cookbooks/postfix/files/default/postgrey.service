@@ -1,0 +1,11 @@
+[Unit]
+Description=Postfix Greylisting Daemon
+After=network.target
+
+[Service]
+ExecStart=/usr/sbin/postgrey --unix=/var/spool/postfix/private/postgrey
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

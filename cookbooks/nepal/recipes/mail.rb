@@ -106,3 +106,11 @@ template "/etc/dovecot/conf.d/auth-nepal.conf.ext" do
   mode "0644"
   notifies :restart, "service[dovecot]"
 end
+
+shorewall_rule "mail" do
+  destport "25,465,110,143,993,995"
+end
+
+shorewall6_rule "mail" do
+  destport "25,465,110,143,993,995"
+end

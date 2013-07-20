@@ -1,0 +1,10 @@
+[Unit]
+Description=nepal Management Daemon
+After=network.target
+
+[Service]
+ExecStart=/usr/sbin/nepald
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
