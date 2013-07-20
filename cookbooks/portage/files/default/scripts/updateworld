@@ -105,12 +105,14 @@ latest_ruby
 depclean
 
 # systemd/udev upgrade
-if qfile -q -S -C /usr/lib/udev >/dev/null; then
-	emerge $(qfile -q -S -C /usr/lib/udev) -1 --usepkg --getbinpkg
-fi
+if [[ -d /usr/lib/udev ]]; then
+	if qfile -q -S -C /usr/lib/udev >/dev/null; then
+		emerge $(qfile -q -S -C /usr/lib/udev) -1 --usepkg --getbinpkg
+	fi
 
-if qfile -q -S -C /usr/lib/udev >/dev/null; then
-	emerge $(qfile -q -S -C /usr/lib/udev) -1 --usepkg=n --getbinpkg=n
+	if qfile -q -S -C /usr/lib/udev >/dev/null; then
+		emerge $(qfile -q -S -C /usr/lib/udev) -1 --usepkg=n --getbinpkg=n
+	fi
 fi
 
 # update config files and run chef-client/chef-solo
