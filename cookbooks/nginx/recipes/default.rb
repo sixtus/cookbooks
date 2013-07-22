@@ -36,6 +36,7 @@ package "www-servers/nginx"
   /etc/nginx/servers
   /etc/ssl/nginx
   /var/log/nginx
+  /var/cache/nginx
 ).each do |d|
   directory d do
     owner "root"
