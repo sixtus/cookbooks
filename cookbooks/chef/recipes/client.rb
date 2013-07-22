@@ -101,3 +101,16 @@ unless solo?
     to "/var/lib/chef/cache"
   end
 end
+
+if tagged?("nagios-client")
+  nagios_plugin "check_chef_client"
+
+  nrpe_command "check_chef_client" do
+    command "/usr/lib/nagios/plugins/check_chef_client 60"
+  end
+
+  nagios_service "CHEF-CLIENT" do
+    check_command "check_nrpe!check_chef_client"
+    servicegroups "chef"
+  end
+end

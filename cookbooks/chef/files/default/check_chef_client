@@ -1,0 +1,26 @@
+#!/bin/bash
+
+if [[ $# -lt 1 ]]; then
+	echo "Usage: check_chef <interval>"
+	echo
+	echo "Example: check_chef 60"
+	exit -1
+fi
+
+interval=$1
+shift
+
+exit_time=$(systemctl show chef-client.service --property=ActiveExitTimestamp | awk -F= '{print $2}')
+exit_time=$(date --date="$exit_time" +%s)
+now_time=$(date +%s)
+
+let diff_time=$now_time-$exit_time
+let diff_time=$diff_time/60
+
+echo "last chef-client run $diff_time minutes ago"
+
+if [[ $diff_time -gt $interval ]]; then
+	exit 2
+fi
+
+exit 0
