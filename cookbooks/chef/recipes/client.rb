@@ -39,6 +39,12 @@ when "debian"
     mode "0755"
   end
 
+  directory "/var/lib/chef" do
+    owner "root"
+    group "root"
+    mode "0750"
+  end
+
   directory "/var/lib/chef/cache" do
     owner "root"
     group "root"

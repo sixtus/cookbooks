@@ -24,3 +24,28 @@ file_backup_path "/var/lib/chef/backup"
 require "airbrake_handler"
 exception_handlers << AirbrakeHandler.new(:api_key => "<%= node[:chef][:client][:airbrake][:key] %>", :notify_host => "<%= node[:chef][:client][:airbrake][:url] %>" )
 <% end %>
+
+require 'chef/handler'
+require 'fileutils'
+
+class Chef
+  class Handler
+    class TerseFileHandler < ::Chef::Handler
+
+      attr_reader :config
+
+      def initialize(config={})
+        @config = config
+        @config[:path] ||= "/var/lib/chef/last-run.stamp"
+        @config
+      end
+
+      def report
+        FileUtils.touch(@config[:path])
+      end
+
+    end
+  end
+end
+
+report_handlers << Chef::Handler::TerseFileHandler.new
