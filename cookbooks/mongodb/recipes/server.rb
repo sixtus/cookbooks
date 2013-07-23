@@ -17,40 +17,14 @@ directory node[:mongodb][:dbpath] do
   mode "0755"
 end
 
-file "/var/log/mongodb/mongodb.log" do
-  owner "mongodb"
-  group "mongodb"
-  mode "0644"
-end
-
-template "/etc/logrotate.d/mongodb" do
-  source "mongodb.logrotate"
-  owner "root"
-  group "root"
-  mode "0644"
-  variables :name => "mongodb"
-end
-
-cookbook_file "/etc/init.d/mongodb" do
-  source "mongodb.initd"
-  owner "root"
-  group "root"
-  mode "0755"
-end
-
-template "/etc/conf.d/mongodb" do
-  source "mongodb.confd"
-  owner "root"
-  group "root"
-  mode "0644"
+systemd_unit "mongodb.service" do
+  template true
   variables :bind_ip => node[:mongodb][:bind_ip],
             :port => node[:mongodb][:port],
             :dbpath => node[:mongodb][:dbpath],
             :nfiles => node[:mongodb][:nfiles],
             :opts => opts
 end
-
-systemd_unit "mongodb.service"
 
 service "mongodb" do
   action [:enable, :start]
