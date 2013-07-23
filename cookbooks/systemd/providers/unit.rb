@@ -10,12 +10,16 @@ action :create do
   end
 
   if new_resource.template
+    source = new_resource.name
+    source = new_resource.template if new_resource.template.is_a?(String)
+
     template path do
-      source new_resource.name
+      source source
       owner "root"
       group "root"
       mode "0644"
       notifies :run, "execute[systemd-reload]", :immediately
+      variables new_resource.variables
     end
   else
     cookbook_file path do
