@@ -16,12 +16,11 @@ namespace :load do
   task :all => [ :cookbooks, :nodes, :roles, :environments, :databags ]
 
   desc "Upload all cookbooks"
-  task :cookbooks => [ 'generate:metadata' ]
   task :cookbooks do
     puts ">>> Uploading cookbooks"
-    cookbook_metadata.each do |cookbook, metadata|
-      platforms = metadata[:platforms].keys - CHEF_SOLO_PLATFORMS
-      version = metadata[:version]
+    cookbook_metadata.each do |cookbook, cookbook_path, metadata|
+      platforms = metadata.platforms.keys - CHEF_SOLO_PLATFORMS
+      version = metadata.version
 
       if platforms.empty?
         printf "  - %-20.20s [%s] (it only supports chef-solo platforms)\n", cookbook, version
@@ -78,7 +77,7 @@ namespace :load do
         # ignore overridable user templates
         next if file[:path] =~ %r{^templates/default/user-}
 
-        path = File.join(metadata[:path], file[:path])
+        path = File.join(cookbook_path, file[:path])
         checksum = Digest::MD5.hexdigest(File.read(path))
 
         if checksum != file[:checksum]
