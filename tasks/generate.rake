@@ -41,9 +41,9 @@ namespace :generate do
     env = File.open(File.join(ENVIRONMENTS_DIR, "production.rb"), "w")
     env.printf %{description "The production environment"\n\n}
 
-    cookbook_metadata.each do |cookbook, metadata|
-      platforms = metadata[:platforms].keys - CHEF_SOLO_PLATFORMS
-      version = metadata[:version]
+    cookbook_metadata.each do |cookbook, cookbook_path, metadata|
+      platforms = metadata.platforms.keys - CHEF_SOLO_PLATFORMS
+      version = metadata.version
 
       next if platforms.empty?
 
