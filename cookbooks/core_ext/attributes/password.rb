@@ -1,3 +1,5 @@
+include_attribute "base"
+
 default[:password][:directory] = if root?
                                    "/var/lib/chef/passwords"
                                  else

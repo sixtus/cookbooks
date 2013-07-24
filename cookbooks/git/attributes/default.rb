@@ -1,3 +1,5 @@
+include_attribute "base"
+
 default[:git][:email] = node[:current_email]
 default[:git][:name] = node[:current_name]
 
