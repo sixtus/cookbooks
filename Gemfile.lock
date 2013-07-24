@@ -1,3 +1,10 @@
+GIT
+  remote: git://github.com/zenops/knife-dsl.git
+  revision: b225849a8c70601d806bedd77659882a8bfa4bd9
+  specs:
+    knife-dsl (0.1.0)
+      chef
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -109,6 +116,6 @@ DEPENDENCIES
   chef (~> 10.24)
   foodcritic
   highline
-  knife-dsl
+  knife-dsl!
   rake
   showoff
