@@ -7,6 +7,13 @@ when "gentoo"
     action :remove
   end
 
+  cookbook_file "/usr/lib/ruby/site_ruby/nagios.rb" do
+    source "nagios.rb"
+    owner "root"
+    group "root"
+    mode "0755"
+  end
+
   cookbook_file "/usr/lib/ruby/site_ruby/nagios/plugin.rb" do
     source "plugin.rb"
     owner "root"
