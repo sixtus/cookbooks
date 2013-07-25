@@ -172,6 +172,9 @@ serve() {
 	python -m SimpleHTTPServer ${1:-8080}
 }
 
+# Igor's sanity helper:
+alias vi="vim"
+
 <% if solo? and not root? %>
 # unset RUBYOPT here for rvm compat
 unset RUBYOPT
