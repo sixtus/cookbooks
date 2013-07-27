@@ -38,13 +38,37 @@ namespace :upstream do
     sh("git diff --diff-filter=DMTUXB #{args.branch} HEAD")
   end
 
-  desc "Show missing picks from upstream"
-  task :cherry, :upstream  do |t, args|
+  desc "Interactively pick changes from HEAD into next"
+  task :pick, :upstream  do |t, args|
     args.with_defaults(upstream: UPSTREAM_BRANCH)
-    limit = %x(git show --oneline ":/^Merge.*'#{args.upstream}'")
-            .split($/).first
-            .split(/\s/).first
-    sh("git cherry -v #{args.upstream} HEAD #{limit}")
+
+    base = %x(git rev-parse ":/^Merge.*'#{args.upstream}'").chomp
+    files = %x(git ls-tree -r --name-only #{args.upstream} | grep -v ^environments).split($/)
+    commits = %x(git whatchanged -r --format=oneline #{base}..HEAD -- #{files.join(' ')} | grep -v ^: | awk '{print $1}').split($/).reverse
+
+    sh("git checkout next")
+
+    commits.each do |commit|
+      sh("git --no-pager log -1 #{commit}")
+      puts
+
+      sh("git show -p #{commit}")
+
+      answer = ask('Do you want to pick this commit? (y/n) ') do |q|
+        q.validate = /^(y|n)$/
+      end
+
+      next if answer != 'y'
+
+      %x(git cherry-pick #{commit})
+
+      if $?.exitstatus != 0
+        puts
+        puts "cherry-pick failed. please merge manually."
+        puts
+        sh("bash")
+      end
+    end
   end
 end
 
