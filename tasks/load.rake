@@ -76,6 +76,7 @@ namespace :load do
       files.each do |file|
         # ignore overridable user templates
         next if file[:path] =~ %r{^templates/default/user-}
+        next if file[:path] =~ %r{metadata.json$}
 
         path = File.join(cookbook_path, file[:path])
         checksum = Digest::MD5.hexdigest(File.read(path))
