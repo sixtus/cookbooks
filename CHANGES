@@ -1,4 +1,33 @@
-commit 5d36fca2af0b1ac402bc1bad82eaf6488aa04fb9
+commit d9576011a70862a24b4f59155946a02cc4033e2a
+Merge: 995da8e b445e4e
+Author: Benedikt Böhm <bb@xnull.de>
+Date:   Sun Jul 28 22:35:50 2013 +0200
+
+    Merge branch 'next'
+
+    New Features:
+
+     * add diskreport script for easy support tickets
+     * add confluence cookbook
+     * add jira cookbooks
+     * hadoop balancer cron job
+     * JVM profiling via JMX and jstatd
+     * nagios check for chef-client.timer
+     * JVM selection via eselect on Gentoo in user mode
+
+    Improvements:
+
+     * Mac OS X support has been consolidated into a single cookbook
+     * /sbin/ip now points to /bin/ip for compatibility
+     * systemd support for nepal
+     * improved support for system units as erb templates
+     * remove nginx access logs according to global logrotate config
+
+    Bugs:
+
+     * various Debian bootstrap issues
+
+commit ded089d5dd5982fe49d6cbaf4b24ecea9a046b29
 Merge: 41f7248 15e3dcf
 Author: Benedikt Böhm <bb@xnull.de>
 Date:   Tue Jun 25 09:48:24 2013 +0200
