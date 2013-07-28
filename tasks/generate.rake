@@ -36,18 +36,14 @@ namespace :generate do
     end
   end
 
-  task :metadata do
-    generate_metadata
-  end
-
   desc "Generate the production environment"
-  task :env => :metadata do
+  task :env do
     env = File.open(File.join(ENVIRONMENTS_DIR, "production.rb"), "w")
     env.printf %{description "The production environment"\n\n}
 
-    cookbook_metadata.each do |cookbook, metadata|
-      platforms = metadata[:platforms].keys - CHEF_SOLO_PLATFORMS
-      version = metadata[:version]
+    cookbook_metadata.each do |cookbook, cookbook_path, metadata|
+      platforms = metadata.platforms.keys - CHEF_SOLO_PLATFORMS
+      version = metadata.version
 
       next if platforms.empty?
 

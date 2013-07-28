@@ -4,23 +4,25 @@ if node[:platform] == "debian"
     ack
     apache2-utils
     atool
-    dnsutils
+    autoconf
+    automake
     bwm-ng
     colordiff
+    dnsutils
     dos2unix
     ethtool
     hdparm
-    libicu44
+    heirloom-mailx
     iotop
     iproute
     keychain
     less
     libffi5
+    libicu44
     libxml2
     libxslt1.1
     libyaml-0-2
     lsof
-    heirloom-mailx
     mc
     mtr
     ncdu

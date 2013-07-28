@@ -49,7 +49,32 @@ end
 
 hosts = node.run_state[:nodes].select do |n|
   n[:tags].include?("nagios-client") rescue false
-end.sort_by do |n|
+end
+
+# super ugly virtual host support for nagios
+def add_services_for_vhost(vhost)
+  node.run_state[:nodes].each do |n|
+    next if !n[:nagios] or !n[:nagios][:services]
+    n[:nagios][:services].each do |name, params|
+      vhost.default[:nagios][:services][name] = params if params[:host_name] == vhost[:fqdn]
+    end
+  end
+end
+
+vhosts = hosts.map do |h|
+  h[:nagios][:vhosts] rescue []
+end.flatten.compact.map do |v|
+  Chef::Node.new.tap do |n|
+    n.chef_environment "production"
+    n.default[:fqdn] = v[:name]
+    n.default[:primary_ipaddress] = v[:name]
+    n.default[:virtualization] = {}
+    n.default[:nagios][:services] = {}
+    add_services_for_vhost(n)
+  end
+end
+
+hosts = (vhosts + hosts).sort_by do |n|
   n[:fqdn]
 end
 
@@ -81,6 +106,7 @@ end
 # build service groups
 servicegroups = []
 hosts.each do |h|
+  next unless h[:nagios]
   h[:nagios][:services].each do |name, params|
     if params[:servicegroups]
       servicegroups |= params[:servicegroups].split(",")

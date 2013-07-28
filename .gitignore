@@ -5,4 +5,3 @@
 .chef/knife.rb
 .rake_test_cache
 config/openssl.cnf
-metadata.json

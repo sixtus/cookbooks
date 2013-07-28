@@ -1,0 +1,12 @@
+[Unit]
+Description=Jira
+After=network.target
+
+[Service]
+ExecStart=/opt/jira/bin/start-jira.sh -fg
+ExecStop=/opt/jira/bin/stop-jira.sh
+Restart=always
+SyslogIdentifier=jira
+
+[Install]
+WantedBy=multi-user.target

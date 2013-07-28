@@ -67,6 +67,9 @@ $link_target="main";
 <li>
 <a href="<?php echo $cfg["cgi_base_url"];?>/status.cgi?host=all&amp;type=detail&amp;serviceprops=34&amp;servicestatustypes=28" target="<?php echo $link_target;?>">All + Soft</a>
 </li>
+<li>
+<a href="<?php echo $cfg["cgi_base_url"];?>/status.cgi?host=all&amp;type=detail&amp;serviceprops=4096&amp;servicestatustypes=31" target="<?php echo $link_target;?>">Silenced</a>
+</li>
 </ul>
 </li>
 </ul>

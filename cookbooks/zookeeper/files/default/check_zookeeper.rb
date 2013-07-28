@@ -78,7 +78,7 @@ end
 
 module Latency
   def key
-    "zk_max_latency"
+    "zk_avg_latency"
   end
 
   def to_s(m)

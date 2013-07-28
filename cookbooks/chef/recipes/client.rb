@@ -39,6 +39,12 @@ when "debian"
     mode "0755"
   end
 
+  directory "/var/lib/chef" do
+    owner "root"
+    group "root"
+    mode "0750"
+  end
+
   directory "/var/lib/chef/cache" do
     owner "root"
     group "root"
@@ -61,10 +67,12 @@ unless solo?
     mode "0644"
   end
 
+  timer_envs = %w(production staging)
+
   cron "chef-client" do
     command "/usr/bin/ruby -E UTF-8 /usr/bin/chef-client -c /etc/chef/client.rb &>/dev/null"
     minute IPAddr.new(node[:primary_ipaddress]).to_i % 60
-    action :delete unless node.chef_environment == 'production'
+    action :delete unless timer_envs.include?(node.chef_environment)
     action :delete if systemd_running?
   end
 
@@ -79,7 +87,7 @@ unless solo?
   # chef-client.service has a condition on this lock
   # so we use it to stop chef-client on testing/staging machines
   file "/run/lock/chef-client.lock" do
-    action :delete if node.chef_environment == 'production'
+    action :delete if timer_envs.include?(node.chef_environment)
   end
 
   splunk_input "monitor:///var/log/chef/*.log"
@@ -99,5 +107,18 @@ unless solo?
 
   link "/etc/chef/cache" do
     to "/var/lib/chef/cache"
+  end
+end
+
+if tagged?("nagios-client")
+  nagios_plugin "check_chef_client"
+
+  nrpe_command "check_chef_client" do
+    command "/usr/lib/nagios/plugins/check_chef_client 60"
+  end
+
+  nagios_service "CHEF-CLIENT" do
+    check_command "check_nrpe!check_chef_client"
+    servicegroups "chef"
   end
 end

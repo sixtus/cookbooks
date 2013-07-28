@@ -8,14 +8,12 @@ package "dev-ruby/mongo"
 
 file "/etc/logrotate.d/mongodb" do
   action :delete
-  not_if { node[:tags].include?("mongodb") }
 end
 
 if tagged?("nagios-client")
   nagios_plugin "check_mongodb"
 end
 
-systemd_unit "mongos@.service"
 systemd_tmpfiles "mongodb"
 
 node[:mongos][:instances].each do |cluster, params|

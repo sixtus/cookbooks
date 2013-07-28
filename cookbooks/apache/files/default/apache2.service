@@ -4,7 +4,10 @@ ConditionPathExists=/etc/apache2/httpd.conf
 After=network.target
 
 [Service]
-ExecStart=/usr/sbin/apache2 -DNO_DETACH -f /etc/apache2/httpd.conf
+Type=forking
+PIDFile=/run/apache2.pid
+ExecStart=/usr/sbin/apache2 -f /etc/apache2/httpd.conf
+ExecReload=/bin/kill -HUP $MAINPID
 Restart=always
 
 [Install]

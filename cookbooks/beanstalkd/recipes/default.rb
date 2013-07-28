@@ -2,15 +2,6 @@ case node[:platform]
 when "gentoo"
   package "app-misc/beanstalkd"
 
-  template "/etc/conf.d/beanstalkd" do
-    source "beanstalkd.confd.erb"
-    owner "root"
-    group "root"
-    mode "0644"
-    notifies :restart, "service[beanstalkd]"
-    only_if { root? }
-  end
-
   systemd_unit "beanstalkd.service"
 
   service "beanstalkd" do

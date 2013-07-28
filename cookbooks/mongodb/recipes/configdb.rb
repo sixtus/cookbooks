@@ -9,32 +9,8 @@ directory node[:mongoc][:dbpath] do
   mode "0755"
 end
 
-file "/var/log/mongodb/mongoc.log" do
-  owner "mongodb"
-  group "mongodb"
-  mode "0644"
-end
-
-template "/etc/logrotate.d/mongoc" do
-  source "mongodb.logrotate"
-  owner "root"
-  group "root"
-  mode "0644"
-  variables :name => "mongoc"
-end
-
-cookbook_file "/etc/init.d/mongoc" do
-  source "mongodb.initd"
-  owner "root"
-  group "root"
-  mode "0755"
-end
-
-template "/etc/conf.d/mongoc" do
-  source "mongodb.confd"
-  owner "root"
-  group "root"
-  mode "0644"
+systemd_unit "mongoc.service" do
+  template true
   notifies :restart, "service[mongoc]"
   variables :bind_ip => node[:mongoc][:bind_ip],
             :port => node[:mongoc][:port],
@@ -42,8 +18,6 @@ template "/etc/conf.d/mongoc" do
             :nfiles => node[:mongoc][:nfiles],
             :opts => opts
 end
-
-systemd_unit "mongoc.service"
 
 service "mongoc" do
   action [:enable, :start]

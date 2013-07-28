@@ -1,0 +1,25 @@
+#!/bin/bash
+
+if [[ $# -lt 1 ]]; then
+	echo "Usage: check_chef <interval>"
+	echo
+	echo "Example: check_chef 60"
+	exit -1
+fi
+
+interval=$1
+shift
+
+last_run=$(stat -c %Y /var/lib/chef/last-run.stamp)
+now=$(date +%s)
+
+let diff=$now-$last_run
+let diff=$diff/60
+
+echo "last chef-client run $diff minutes ago"
+
+if [[ $diff -gt $interval ]]; then
+	exit 2
+fi
+
+exit 0

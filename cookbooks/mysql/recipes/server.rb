@@ -127,13 +127,6 @@ end
 if tagged?("nagios-client")
 
   # simple helper class for custom nagios checks
-  directory "/usr/lib/ruby/site_ruby/nagios/plugin" do
-    owner "root"
-    group "root"
-    mode "0755"
-    recursive true
-  end
-
   cookbook_file "/usr/lib/ruby/site_ruby/nagios/plugin/mysql.rb" do
     source "nagios-mysql.rb"
     owner "root"

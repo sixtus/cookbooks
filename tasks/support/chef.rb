@@ -5,27 +5,21 @@ class Chef::DataBagItem
   end
 end
 
-def generate_metadata
-  knife :cookbook_metadata, ['--all']
-end
-
 def cookbook_metadata
   files = [
-    Dir[File.join(COOKBOOKS_DIR, "*/metadata.json")],
-    Dir[File.join(SITE_COOKBOOKS_DIR, "*/metadata.json")],
+    Dir[File.join(COOKBOOKS_DIR, "*/metadata.rb")],
+    Dir[File.join(SITE_COOKBOOKS_DIR, "*/metadata.rb")],
   ].flatten.sort_by do |filename|
     File.dirname(filename)
   end
 
-  files.select! do |file|
-    File.exist?(File.join(File.dirname(file), 'metadata.rb'))
-  end
-
   files.map do |file|
-    cookbook = File.basename(File.dirname(file))
-    metadata = parse_json(File.read(file)).symbolize_keys
-    metadata[:path] = File.dirname(file)
-    [cookbook, metadata]
+    cookbook_path = File.dirname(file)
+    cookbook_name = File.basename(cookbook_path)
+    metadata = Chef::Cookbook::Metadata.new
+    metadata.name(cookbook_name)
+    metadata.from_file(file)
+    [cookbook_name, cookbook_path, metadata]
   end
 end
 

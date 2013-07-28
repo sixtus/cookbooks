@@ -24,7 +24,7 @@ gem install chef --no-rdoc --no-ri --verbose <%= bootstrap_version_string %>
 # remove some hetzner cruft
 rm -f /root/.{profile,bash_profile,bashrc}
 
-mkdir -p /etc/chef /var/log/chef
+mkdir -p /etc/chef /var/log/chef /var/lib/chef
 
 (
 cat <<'EOP'

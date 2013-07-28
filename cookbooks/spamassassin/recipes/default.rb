@@ -43,6 +43,10 @@ template "/etc/conf.d/spamd" do
   notifies :restart, "service[spamd]"
 end
 
+systemd_unit "spamd.service" do
+  template "true"
+end
+
 service "spamd" do
   action [:enable, :start]
   supports [:reload]

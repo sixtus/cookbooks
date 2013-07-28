@@ -92,7 +92,7 @@ end
 
 module DataNode
   def bean
-    "Hadoop:service=DataNode,name=FSDatasetState-DS-*"
+    "Hadoop:service=DataNode,name=FSDatasetState-*"
   end
 
   def percent_used(m)

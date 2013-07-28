@@ -1,0 +1,18 @@
+[Unit]
+Description=MongoDB Config Server
+After=network.target
+
+[Service]
+User=mongodb
+ExecStart=/usr/bin/mongod \
+	--bind_ip <%= @bind_ip %> \
+	--port <%= @port %> \
+	--dbpath <%= @dbpath %> \
+	--unixSocketPrefix /run/mongodb \
+	--syslog \
+	<%= @opts.join(' ') %>
+Restart=always
+SyslogIdentifier=mongoc
+
+[Install]
+WantedBy=multi-user.target

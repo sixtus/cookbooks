@@ -1,0 +1,18 @@
+[Unit]
+Description=MongoDB Sharding Server
+After=network.target
+
+[Service]
+User=mongodb
+ExecStart=/usr/bin/mongos \
+	--bind_ip <%= @bind_ip %> \
+	--port <%= @port %> \
+	--configdb <%= @configdb %> \
+	--unixSocketPrefix /run/mongodb \
+	--syslog \
+	<%= @opts.join(' ') %>
+Restart=always
+SyslogIdentifier=<%= @svcname %>
+
+[Install]
+WantedBy=multi-user.target

@@ -12,10 +12,10 @@ _BASHRC_DIR="${_BASHRC_DIR:-<%= node[:bash][:rcdir] %>}"
 
 # make sure all important paths are in PATH
 <% if node[:platform] == "mac_os_x" %>
-export PATH="~/bin:$(brew --prefix coreutils)/libexec/gnubin:/usr/local/sbin:/usr/local/bin:${PATH}:/usr/sbin:/usr/bin:/sbin:/bin"
+export PATH="${PATH}:~/bin:$(brew --prefix coreutils)/libexec/gnubin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 alias find="$(brew --prefix)/bin/gfind"
 <% else %>
-export PATH="~/bin:${PATH}:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+export PATH="${PATH}:~/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 <% end %>
 
 source "${_BASHRC_DIR}/detect.sh"
@@ -171,6 +171,9 @@ T() {
 serve() {
 	python -m SimpleHTTPServer ${1:-8080}
 }
+
+# Igor's sanity helper:
+alias vi="vim"
 
 <% if solo? and not root? %>
 # unset RUBYOPT here for rvm compat

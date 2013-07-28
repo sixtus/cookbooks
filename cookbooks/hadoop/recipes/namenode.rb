@@ -6,6 +6,15 @@ service "hadoop@namenode" do
   action [:enable, :start]
 end
 
+## Hadoop Balancer cronjob:
+cron "hadoop_balancer" do
+  minute "0"
+  hour "3"
+  day "*"
+  command "/opt/hadoop/bin/start-balancer.sh"
+  action :create
+end
+
 if tagged?("nagios-client")
   nrpe_command "check_hadoop_namenode" do
     command "/usr/lib/nagios/plugins/check_systemd hadoop@namenode /run/hadoop/namenode.pid"

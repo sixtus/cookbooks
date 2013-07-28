@@ -2,7 +2,7 @@
 default[:classification] = :normal
 
 # make the primary IP address overridable
-default[:primary_ipaddress] = node[:ipaddress]
+default[:primary_ipaddress] = node[:ipaddress] || "127.0.0.1"
 default[:primary_ip6address] = nil
 
 # ec2 support

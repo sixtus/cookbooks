@@ -8,13 +8,15 @@ template "/etc/conf.d/postgrey" do
   notifies :restart, "service[postgrey]"
 end
 
+systemd_unit "postgrey.service"
+
 service "postgrey" do
   action [:enable, :start]
 end
 
 if tagged?("nagios-client")
   nrpe_command "check_postgrey" do
-    command "/usr/lib/nagios/plugins/check_pidfile /run/postgrey.pid /usr/sbin/postgrey"
+    command "/usr/lib/nagios/plugins/check_systemd postgrey.service /run/postgrey.pid"
   end
 
   nagios_service "POSTGREY" do

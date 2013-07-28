@@ -1,5 +1,5 @@
 default[:backup][:encryption_password] = 'sekrit'
-default[:backup][:target_base_url] = "file:///backup"
+default[:backup][:target_base_url] = "file:///var/backup"
 
 set_unless[:backup][:configs] = Mash.new
 

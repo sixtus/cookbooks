@@ -40,3 +40,11 @@ end
 apache_vhost "nepal" do
   template "web/apache.conf"
 end
+
+shorewall_rule "web" do
+  destport "80,443"
+end
+
+shorewall6_rule "web" do
+  destport "80,443"
+end
