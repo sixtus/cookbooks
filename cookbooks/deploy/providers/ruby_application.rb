@@ -10,12 +10,12 @@ action :create do
     ruby_version nr.ruby_version
   end
 
-  deploy_branch homedir do
+  deploy_application user[:name] do
     repository nr.repository
     revision nr.revision
     user nr.user
 
-    action :force_deploy if nr.force
+    force nr.force
 
     symlinks nr.symlinks
     symlink_before_migrate nr.symlink_before_migrate
