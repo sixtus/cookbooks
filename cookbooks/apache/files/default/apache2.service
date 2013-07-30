@@ -6,7 +6,9 @@ After=network.target
 [Service]
 Type=forking
 PIDFile=/run/apache2.pid
+ExecStartPre=/usr/sbin/apache2 -f /etc/apache2/httpd.conf -t
 ExecStart=/usr/sbin/apache2 -f /etc/apache2/httpd.conf
+ExecReload=/usr/sbin/apache2 -f /etc/apache2/httpd.conf -t
 ExecReload=/bin/kill -HUP $MAINPID
 Restart=always
 

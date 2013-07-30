@@ -2,16 +2,15 @@ case node[:platform]
 when "gentoo"
   package "app-misc/beanstalkd"
 
-  systemd_unit "beanstalkd.service"
-
-  service "beanstalkd" do
-    action [:enable, :start]
-    only_if { root? }
-  end
-
 when "mac_os_x"
   package "beanstalk"
 
+end
+
+systemd_unit "beanstalkd.service"
+
+service "beanstalkd" do
+  action [:enable, :start]
 end
 
 # nagios

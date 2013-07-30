@@ -16,31 +16,17 @@ define :spawn_fcgi do
 
   name = p[:name]
 
-  link "/etc/init.d/spawn-fcgi.#{name}" do
-    to "/etc/init.d/spawn-fcgi"
-  end
-
-  template "/etc/conf.d/spawn-fcgi.#{name}" do
-    source "spawn-fcgi.confd"
+  systemd_unit "spawn-fcgi-#{name}.service" do
+    template "spawn-fcgi.service"
     cookbook "spawn-fcgi"
-    owner "root"
-    group "root"
-    mode "0644"
     variables p
-    notifies :restart, "service[spawn-fcgi.#{name}]"
   end
 
-  service "spawn-fcgi.#{name}" do
+  service "spawn-fcgi@#{name}" do
+    action [:disable, :stop]
+  end
+
+  service "spawn-fcgi-#{name}" do
     action [:enable, :start]
-  end
-
-  if tagged?("nagios-client")
-    nrpe_command "check_spawn-fcgi_#{name}" do
-      command "/usr/lib/nagios/plugins/check_systemd spawn-fcgi@#{name}.service /run/spawn-fcgi/#{name}"
-    end
-
-    nagios_service "FCGI-#{name.upcase}" do
-      check_command "check_nrpe!check_spawn-fcgi_#{name}"
-    end
   end
 end

@@ -16,14 +16,6 @@ cron "hadoop_balancer" do
 end
 
 if tagged?("nagios-client")
-  nrpe_command "check_hadoop_namenode" do
-    command "/usr/lib/nagios/plugins/check_systemd hadoop@namenode /run/hadoop/namenode.pid"
-  end
-
-  nagios_service "HADOOP-NAMENODE" do
-    check_command "check_nrpe!check_hadoop_namenode"
-  end
-
   {
     :nodes => [:NameNode, nil, nil],
     :state => [:Dfs, nil, nil],

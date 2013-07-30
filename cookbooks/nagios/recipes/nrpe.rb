@@ -4,32 +4,9 @@ when "gentoo"
     action :upgrade
   end
 
-  portage_package_keywords "net-analyzer/nagios-check_pidfile"
-
-  package "net-analyzer/nagios-check_pidfile"
-
-  cookbook_file "/etc/init.d/nrpe" do
-    source "nrpe.initd"
-    owner "root"
-    group "root"
-    mode "0755"
-  end
-
 when "debian"
   package "nagios-nrpe-server"
 
-  git "/usr/local/src/check_pidfile" do
-    repo "https://github.com/hollow/check_pidfile"
-    branch "master"
-    action :sync
-  end
-
-  execute "check_pidfile-install" do
-    command "autoreconf -i && ./configure --prefix=/usr && make install"
-    cwd "/usr/local/src/check_pidfile"
-    creates "/usr/lib/nagios/plugins/check_pidfile"
-    subscribes :run, "git[/usr/local/src/check_pidfile]", :immediately
-  end
 end
 
 include_recipe "nagios"
@@ -51,7 +28,6 @@ end
 systemd_unit "nrpe.service"
 
 service "nrpe" do
-  service_name "nagios-nrpe-server" if node[:platform] == "debian"
   action [:enable, :start]
   supports [:reload]
 end

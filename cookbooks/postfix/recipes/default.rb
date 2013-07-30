@@ -126,27 +126,13 @@ execute "newaliases" do
 end
 
 if tagged?("nagios-client")
-  nrpe_command "check_postfix" do
-    command "/usr/lib/nagios/plugins/check_pidfile /var/spool/postfix/pid/master.pid postfix/master"
-  end
-
   nrpe_command "check_smtp" do
     command "/usr/lib/nagios/plugins/check_smtp -H localhost -t 3"
-  end
-
-  nagios_service "POSTFIX" do
-    check_command "check_nrpe!check_postfix"
-    servicegroups "postfix"
-    env [:testing, :development]
   end
 
   nagios_service "SMTP" do
     check_command "check_nrpe!check_smtp"
     servicegroups "postfix"
     env [:testing, :development]
-  end
-
-  nagios_service_dependency "SMTP" do
-    depends %w(POSTFIX)
   end
 end

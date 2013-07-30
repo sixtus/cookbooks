@@ -1,0 +1,19 @@
+[Unit]
+Description=Memcached Server
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/memcached \
+	-l <%= node[:memcached][:listen] \
+	-p <%= node[:memcached][:port] %> \
+	-U <%= node[:memcached][:port] %> \
+	-m <%= node[:memcached][:memory] %> \
+	-c <%= node[:memcached][:maxconn] %>
+User=memcached
+Group=daemons
+Restart=always
+OOMScoreAdjust=-900
+
+
+[Install]
+WantedBy=multi-user.target

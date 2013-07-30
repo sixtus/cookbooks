@@ -1,0 +1,20 @@
+[Unit]
+Description=Pure-FTPd
+After=network.target
+
+[Service]
+ExecStart=/usr/sbin/pure-ftpd -S 21 \
+	-c <%= node[:pureftpd][:connections] %> \
+	-C <%= node[:pureftpd][:ip_connections] %> \
+	-k 90% \
+<% if node[:pureftpd][:auth].empty? %>
+	-l puredb:/etc/pureftpd.pdb \
+<% else %>
+	<% node[:pureftpd][:auth].each do |auth| %>-l <%= auth %> <% end %> \
+<% end %>
+	-I <%= node[:pureftpd][:idle_timeout] %> \
+	<%= node[:pureftpd][:options] %>
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

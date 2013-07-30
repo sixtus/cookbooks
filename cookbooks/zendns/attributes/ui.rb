@@ -1,7 +1,6 @@
-default[:zendns][:server_name] = node[:fqdn]
+default[:zendns][:primary_nameserver] = "ns.#{node[:chef_domain]}"
 
-default[:zendns][:ssl][:cn] = node[:fqdn]
+default[:zendns][:ui][:host] = node[:fqdn]
 
-default[:zendns][:port] = 3000
-default[:zendns][:homedir] = "/var/app/zendns"
-default[:zendns][:deployers] = []
+default[:zendns][:ui][:worker_processes] = 4
+default[:zendns][:ui][:timeout] = 30

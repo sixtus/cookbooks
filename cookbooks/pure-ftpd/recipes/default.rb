@@ -4,14 +4,6 @@ end
 
 package "net-ftp/pure-ftpd"
 
-template "/etc/conf.d/pure-ftpd" do
-  source "pure-ftpd.confd"
-  owner "root"
-  group "root"
-  mode "0644"
-  notifies :restart, "service[pure-ftpd]"
-end
-
 file "/etc/pureftpd.passwd" do
   owner "root"
   group "root"
@@ -23,18 +15,10 @@ execute "pure-pw-mkdb" do
   not_if { FileUtils.uptodate?("/etc/pureftpd.pdb", %w(/etc/pureftpd.passwd)) }
 end
 
-systemd_unit "pure-ftpd.service"
+systemd_unit "pure-ftpd.service" do
+  template true
+end
 
 service "pure-ftpd" do
   action [:enable, :start]
-end
-
-if tagged?("nagios-client")
-  nrpe_command "check_pureftpd" do
-    command "/usr/lib/nagios/plugins/check_systemd pure-ftpd.service /run/pure-ftpd.pid"
-  end
-
-  nagios_service "PURE-FTPD" do
-    check_command "check_nrpe!check_pureftpd"
-  end
 end

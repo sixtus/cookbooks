@@ -14,15 +14,4 @@ define :nginx_unicorn do
     homedir homedir
     port port
   end
-
-  if tagged?("nagios-client")
-    nrpe_command "check_#{name}_unicorn" do
-      command "/usr/lib/nagios/plugins/check_pidfile #{homedir}/shared/pids/unicorn.pid"
-    end
-
-    nagios_service "#{name.upcase}-UNICORN" do
-      check_command "check_nrpe!check_#{name}_unicorn"
-      servicegroups name
-    end
-  end
 end

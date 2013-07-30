@@ -128,4 +128,14 @@ if tagged?("nagios-client")
     runas "ALL"
     command "NOPASSWD: /bin/env XDG_RUNTIME_DIR=/run/user/* systemctl --user status *"
   end
+
+  nrpe_command "check_systemd" do
+    command "/usr/lib/nagios/plugins/check_systemd"
+  end
+
+  nagios_service "SYSTEMD" do
+    check_command "check_nrpe!check_systemd"
+    servicegroups "systemd"
+    env [:testing, :development]
+  end
 end

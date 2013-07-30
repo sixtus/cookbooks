@@ -31,34 +31,9 @@ template "/etc/php/fpm-php#{node[:php][:slot]}/php-fpm.conf" do
   notifies :restart, "service[php-fpm]"
 end
 
-template "/etc/init.d/php-fpm" do
-  source "php-fpm.initd"
-  owner "root"
-  group "root"
-  mode "0755"
-end
-
-template "/etc/conf.d/php-fpm" do
-  source "php-fpm.confd"
-  owner "root"
-  group "root"
-  mode "0644"
-  notifies :restart, "service[php-fpm]"
-end
-
 systemd_tmpfiles "php-fpm"
 systemd_unit "php-fpm.service"
 
 service "php-fpm" do
   action [:enable, :start]
-end
-
-if tagged?("nagios-client")
-  nrpe_command "check_php_fpm" do
-    command "/usr/lib/nagios/plugins/check_systemd php-fpm.service /run/php-fpm.pid php-fpm"
-  end
-
-  nagios_service "PHP-FPM" do
-    check_command "check_nrpe!check_php_fpm"
-  end
 end

@@ -4,10 +4,12 @@ Requires=epmd.service
 After=network.target epmd.service
 
 [Service]
+ExecStart=/usr/bin/couchdb -o /dev/stdout -e /dev/stderr
 User=couchdb
 Group=couchdb
-ExecStart=/usr/bin/couchdb -o /dev/stdout -e /dev/stderr
 Restart=always
+SyslogIdentifier=couchdb
+OOMScoreAdjust=-990
 
 [Install]
 WantedBy=multi-user.target

@@ -88,26 +88,11 @@ apache_vhost "00-default" do
   action default_action
 end
 
-cookbook_file "/etc/init.d/apache2" do
-  source "apache2.initd"
-  owner "root"
-  group "root"
-  mode "0755"
-end
-
-template "/etc/conf.d/apache2" do
-  source "apache2.confd"
-  mode "0644"
-  owner "root"
-  group "root"
-  notifies :restart, "service[apache2]"
-end
-
 systemd_unit "apache2.service"
 
 service "apache2" do
-  supports [:reload]
   action [:start, :enable]
+  supports [:reload]
 end
 
 cookbook_file "/etc/logrotate.d/apache2" do
@@ -121,10 +106,6 @@ end
 file "/var/log/apache2/error_log" do
   action :delete
   backup 0
-end
-
-file "/etc/syslog-ng/conf.d/90-apache.conf" do
-  action :delete
 end
 
 # nagios service checks

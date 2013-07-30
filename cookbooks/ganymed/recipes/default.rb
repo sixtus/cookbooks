@@ -40,26 +40,8 @@ template "/etc/ganymed/config.yml" do
   notifies :restart, "service[ganymed]"
 end
 
-cookbook_file "/etc/init.d/ganymed" do
-  source "ganymed.initd"
-  owner "root"
-  group "root"
-  mode "0755"
-end
-
 systemd_unit "ganymed.service"
 
 service "ganymed" do
   action [:enable, :start]
-end
-
-if tagged?("nagios-client")
-  nrpe_command "check_ganymed" do
-    command "/usr/lib/nagios/plugins/check_systemd ganymed.service /run/ganymed.pid ganymed"
-  end
-
-  nagios_service "GANYMED" do
-    check_command "check_nrpe!check_ganymed"
-    env [:testing, :development]
-  end
 end

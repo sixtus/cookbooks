@@ -63,13 +63,6 @@ template "/opt/splunk/bin/scripts/hipchat-alert.rb" do
   only_if { node[:hipchat] and node[:hipchat][:auth_token] }
 end
 
-cookbook_file "/etc/init.d/splunk" do
-  source "splunk.initd"
-  owner "root"
-  group "root"
-  mode "0755"
-end
-
 systemd_unit "splunk.service"
 
 service "splunk" do
@@ -77,14 +70,3 @@ service "splunk" do
 end
 
 include_recipe "splunk::systemd"
-
-if tagged?("nagios-client")
-  nrpe_command "check_splunkd" do
-    command "/usr/lib/nagios/plugins/check_pidfile /opt/splunk/var/run/splunk/splunkd.pid splunkd"
-  end
-
-  nagios_service "SPLUNKD" do
-    check_command "check_nrpe!check_splunkd"
-    env [:testing, :development]
-  end
-end

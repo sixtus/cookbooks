@@ -5,7 +5,6 @@ After=network.target
 [Service]
 User=postgres
 Group=postgres
-EnvironmentFile=/etc/conf.d/postgresql-%I
 ExecStart=/bin/sh -c "/usr/lib/postgresql-%I/bin/postgres -D /etc/postgresql-%I --data-directory=/var/lib/postgresql/%I/data"
 ExecReload=/bin/kill -HUP $MAINPID
 Restart=always

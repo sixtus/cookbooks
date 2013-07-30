@@ -1,0 +1,16 @@
+[Unit]
+Description=ZenDNS Unicorn Server
+After=network.target
+
+[Service]
+ExecStart=<%= @homedir %>/.rvm/bin/default_bundle exec unicorn -c <%= @homedir %>/current/config/unicorn.rb -E production config.ru
+ExecReload=/bin/kill -USR2 $MAINPID
+ExecStop=/bin/kill -QUIT $MAINPID
+User=zendns
+Group=zendns
+Restart=always
+WorkingDirectory=<%= @homedir %>/current
+SyslogIdentifier=zendns-unicorn
+
+[Install]
+WantedBy=multi-user.target

@@ -10,26 +10,31 @@ action :create do
     ruby_version nr.ruby_version
   end
 
-  deploy_branch homedir do
+  deploy_application user[:name] do
     repository nr.repository
     revision nr.revision
     user nr.user
 
-    action :force_deploy if nr.force
+    force nr.force
 
     symlinks nr.symlinks
     symlink_before_migrate nr.symlink_before_migrate
 
-    before_symlink do
+    before_migrate do
       rvm_shell "#{nr.user}-bundle-install" do
         code "bundle install --path #{homedir}/shared/bundle --quiet --deployment --without '#{[nr.bundle_without].flatten.join(' ')}'"
         cwd release_path
         user nr.user
       end
 
-      callback(:after_bundle, nr.after_bundle)
+      ruby_block "#{nr.user}-after-bundle" do
+        block do
+          callback(:after_bundle, nr.after_bundle)
+        end
+      end
     end
 
+    before_symlink nr.before_symlink
     before_restart nr.before_restart
   end
 end

@@ -1,0 +1,13 @@
+[Unit]
+Description=Dovecot IMAP/POP3 email server
+After=network.target
+
+[Service]
+ExecStartPre=/usr/sbin/dovecot -n
+ExecStart=/usr/sbin/dovecot -F
+ExecReload=/usr/sbin/dovecot -n
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

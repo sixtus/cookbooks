@@ -39,15 +39,6 @@ if tagged?("ganymed-client")
 end
 
 if tagged?("nagios-client")
-  nrpe_command "check_mongodb" do
-    command "/usr/lib/nagios/plugins/check_systemd mongodb.service /run/mongodb/mongodb.pid mongod"
-  end
-
-  nagios_service "MONGODB" do
-    check_command "check_nrpe!check_mongodb"
-    servicegroups "mongodb"
-  end
-
   { # name             command         warn crit check note
     :connect     => %w(connect         2    5    1     15),
     :connections => %w(connections     80   90   1     15),
@@ -68,10 +59,6 @@ if tagged?("nagios-client")
       check_interval p[3]
       notification_interval p[4]
       servicegroups "mongodb"
-    end
-
-    nagios_service_dependency service_name do
-      depends ["MONGODB"]
     end
   end
 

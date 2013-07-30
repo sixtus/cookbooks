@@ -37,8 +37,4 @@ if tagged?("nagios-client")
     servicegroups "postfix,openssl"
     env [:testing, :development]
   end
-
-  nagios_service_dependency "POSTFIX-TLS" do
-    depends %w(POSTFIX)
-  end
 end

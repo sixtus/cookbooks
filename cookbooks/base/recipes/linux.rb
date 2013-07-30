@@ -7,7 +7,6 @@ if root?
   include_recipe "base::resolv"
   include_recipe "base::sysctl"
   include_recipe "baselayout"
-  include_recipe "sysvinit"
   include_recipe "systemd"
 
   # load distro specific base recipe
@@ -54,7 +53,7 @@ if root?
     include_recipe "ntp"
   end
 
-  if !vserver_guest? and !vbox_guest?
+  if !vbox_guest?
     include_recipe "shorewall"
   end
 

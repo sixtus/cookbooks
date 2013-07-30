@@ -9,6 +9,7 @@ PIDFile=/run/nrpe.pid
 ExecStart=/usr/libexec/nrpe -c /etc/nagios/nrpe.cfg -d
 ExecReload=/bin/kill -HUP $MAINPID
 Restart=always
+OOMScoreAdjust=-800
 
 [Install]
 WantedBy=multi-user.target

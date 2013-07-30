@@ -10,6 +10,7 @@ ExecStart=/usr/sbin/nagios /etc/nagios/nagios.cfg
 ExecReload=/bin/kill -HUP $MAINPID
 ExecStopPost=/bin/rm -f /var/nagios/status.log /var/nagios/nagios.tmp /var/nagios/rw/nagios.cmd
 Restart=always
+OOMScoreAdjust=-800
 
 [Install]
 WantedBy=multi-user.target

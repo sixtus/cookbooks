@@ -1,11 +1,7 @@
 package "net-misc/memcached"
 
-template "/etc/conf.d/memcached" do
-  source "memcached.confd.erb"
-  owner "root"
-  group "root"
-  mode "0644"
-  notifies :restart, "service[memcached]"
+systemd_unit "memcached.service" do
+  template true
 end
 
 service "memcached" do

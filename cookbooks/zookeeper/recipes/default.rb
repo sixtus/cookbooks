@@ -57,15 +57,6 @@ when "gentoo"
 end
 
 if tagged?("nagios-client")
-  nrpe_command "check_zookeeper" do
-    command "/usr/lib/nagios/plugins/check_systemd zookeeper.service"
-  end
-
-  nagios_service "ZOOKEEPER" do
-    check_command "check_nrpe!check_zookeeper"
-    servicegroups "zookeeper"
-  end
-
   nagios_plugin "check_zookeeper" do
     source "check_zookeeper.rb"
   end

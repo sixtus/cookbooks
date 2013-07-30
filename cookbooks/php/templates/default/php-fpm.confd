@@ -1,3 +1,0 @@
-<% if node[:php][:fpm][:conf] %>
-PHP_FPM_CONF=<%= node[:php][:fpm][:conf] %>
-<% end %>
