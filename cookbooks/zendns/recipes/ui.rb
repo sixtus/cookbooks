@@ -32,7 +32,7 @@ deploy_rails_application "zendns" do
   repository "https://github.com/zenops/zendns.git"
   revision "master"
 
-  ruby_version "ruby-2.0.0-p247"
+  ruby_version "ruby-1.9.3-p448"
 
   worker_processes node[:zendns][:ui][:worker_processes]
   timeout node[:zendns][:ui][:timeout]
@@ -53,7 +53,7 @@ service "zendns-unicorn" do
 end
 
 ssl_certificate "/etc/ssl/nginx/zendns" do
-  cn node[:zendns][:ui][:host]
+  cn node[:zendns][:ui][:cn]
 end
 
 nginx_server "zendns" do
