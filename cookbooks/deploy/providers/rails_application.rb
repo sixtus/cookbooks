@@ -33,7 +33,21 @@ action :create do
       "config/unicorn.rb" => "config/unicorn.rb",
     }.merge(nr.symlink_before_migrate))
 
-    after_bundle nr.after_bundle
+    after_bundle do
+      rvm_shell "#{nr.user}-assets:precompile" do
+        code "bundle exec rake assets:precompile RAILS_ENV=production"
+        cwd release_path
+        user nr.user
+      end
+
+      rvm_shell "#{nr.user}-db:migrate" do
+        code "bundle exec rake db:migrate RAILS_ENV=production"
+        cwd release_path
+        user nr.user
+      end
+    end
+
+    before_symlink nr.before_symlink
     before_restart nr.before_restart
   end
 end

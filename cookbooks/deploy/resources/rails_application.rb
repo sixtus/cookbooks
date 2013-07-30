@@ -13,12 +13,12 @@ attribute :force, :kind_of => [TrueClass, FalseClass], :default => false
 attribute :worker_processes, kind_of: Fixnum, default: 4
 attribute :timeout, kind_of: Fixnum, default: 30
 
+def before_symlink(arg=nil, &block)
+  arg ||= block
+  set_or_return(:before_symlink, arg, :kind_of => [Proc, String])
+end
+
 def before_restart(arg=nil, &block)
   arg ||= block
   set_or_return(:before_restart, arg, :kind_of => [Proc, String])
-end
-
-def after_bundle(arg=nil, &block)
-  arg ||= block
-  set_or_return(:after_bundle, arg, :kind_of => [Proc, String])
 end
