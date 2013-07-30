@@ -7,3 +7,4 @@ actions :create, :delete
 
 attribute :template, kind_of: [TrueClass, String], default: nil
 attribute :variables, kind_of: Hash, default: {}
+attribute :cookbook, kind_of: String, default: nil

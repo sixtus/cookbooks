@@ -64,13 +64,3 @@ shorewall_masq "vpn" do
   interface node[:primary_interface]
   source "#{node[:openvpn][:network]}/#{cidr}"
 end
-
-if tagged?("nagios-client")
-  nrpe_command "check_openvpn" do
-    command "/usr/lib/nagios/plugins/check_systemd openvpn.service /run/openvpn.pid /usr/sbin/openvpn"
-  end
-
-  nagios_service "OPENVPN" do
-    check_command "check_nrpe!check_openvpn"
-  end
-end

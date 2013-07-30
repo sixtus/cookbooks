@@ -13,8 +13,6 @@ end
 systemd_unit "sshd.service"
 
 service "sshd" do
-  service_name "sshd"
-  service_name "ssh" if node[:platform] == "debian"
   action [:enable, :start]
 end
 

@@ -15,6 +15,7 @@ action :create do
 
     template path do
       source source
+      cookbook new_resource.cookbook if new_resource.cookbook
       owner "root"
       group "root"
       mode "0644"
@@ -24,6 +25,7 @@ action :create do
   else
     cookbook_file path do
       source new_resource.name
+      cookbook new_resource.cookbook if new_resource.cookbook
       owner "root"
       group "root"
       mode "0644"
@@ -35,7 +37,7 @@ end
 action :delete do
   path = "/usr/lib/systemd/system/#{new_resource.name}"
 
-  cookbook_file path do
+  file path do
     action :delete
     notifies :run, "execute[systemd-reload]", :immediately
   end

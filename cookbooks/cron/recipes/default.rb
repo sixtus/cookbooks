@@ -4,18 +4,6 @@ when "gentoo"
     package p
   end
 
-  %w(d hourly daily weekly monthly).each do |dir|
-    directory "/etc/cron.#{dir}" do
-      mode "0750"
-    end
-  end
-
-  template "/etc/conf.d/dcron" do
-    source "dcron.confd"
-    mode "0644"
-    notifies :restart, "service[dcron]"
-  end
-
 when "debian"
   apt_repository "balocco" do
     uri "http://apt.balocco.name"
@@ -31,10 +19,11 @@ when "debian"
 
   package "dcron"
 
-  template "/etc/default/dcron" do
-    source "dcron.defaults"
-    mode "0644"
-    notifies :restart, "service[dcron]"
+end
+
+%w(d hourly daily weekly monthly).each do |dir|
+  directory "/etc/cron.#{dir}" do
+    mode "0750"
   end
 end
 

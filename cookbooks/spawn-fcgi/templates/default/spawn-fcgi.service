@@ -1,0 +1,21 @@
+[Unit]
+Description=FastCGI server (<%= @name %>)
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/spawn-fcgi -n \
+	-u <%= @user %> \
+	-g <%= @group %> \
+	-s <%= @socket[:path] %> \
+	-U <%= @socket[:user] %> \
+	-G <%= @socket[:group] %> \
+	-M <%= @socket[:mode] %> \
+	-- \
+	/usr/bin/multiwatch \
+	-f <%= @children %> \
+	-- \
+	<%= @program %>
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

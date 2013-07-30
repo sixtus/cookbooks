@@ -49,7 +49,6 @@ php_extension "xcache"
 
 %w(
   /var/log/php-error.log
-  /etc/syslog-ng/conf.d/90-php.conf
 ).each do |f|
   file f do
     action :delete

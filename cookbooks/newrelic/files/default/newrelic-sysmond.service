@@ -1,0 +1,15 @@
+[Unit]
+Description=NewRelic System Monitor
+ConditionPathExists=/etc/newrelic/nrsysmond.cfg
+After=network.target
+
+[Service]
+Type=forking
+PIDFile=/run/newrelic/nrsysmond.pid
+ExecStart=/usr/sbin/nrsysmond -c /etc/newrelic/nrsysmond.cfg -p /run/newrelic/nrsysmond.pid
+User=newrelic
+Restart=always
+OOMScoreAdjust=-800
+
+[Install]
+WantedBy=multi-user.target

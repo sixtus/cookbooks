@@ -5,6 +5,7 @@ After=network.target
 [Service]
 ExecStart=/usr/sbin/nepald
 Restart=always
+OOMScoreAdjust=-900
 
 [Install]
 WantedBy=multi-user.target

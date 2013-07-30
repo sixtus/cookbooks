@@ -49,6 +49,9 @@ end
   end
 end
 
+systemd_unit "dovecot.service"
+
 service "dovecot" do
   action :enable
+  supports [:reload]
 end

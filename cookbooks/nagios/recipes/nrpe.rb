@@ -8,13 +8,6 @@ when "gentoo"
 
   package "net-analyzer/nagios-check_pidfile"
 
-  cookbook_file "/etc/init.d/nrpe" do
-    source "nrpe.initd"
-    owner "root"
-    group "root"
-    mode "0755"
-  end
-
 when "debian"
   package "nagios-nrpe-server"
 
@@ -51,7 +44,6 @@ end
 systemd_unit "nrpe.service"
 
 service "nrpe" do
-  service_name "nagios-nrpe-server" if node[:platform] == "debian"
   action [:enable, :start]
   supports [:reload]
 end

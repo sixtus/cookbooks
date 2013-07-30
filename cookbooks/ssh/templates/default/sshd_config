@@ -6,17 +6,6 @@ LogLevel ERROR
 
 # listen address and protocol version
 Port 22
-<% if node[:virtualization][:role] == "host" and node[:virtualization][:system] == "linux-vserver" and node[:virtualization][:guests] > 0 %>
-ListenAddress 127.0.0.1
-ListenAddress ::1
-ListenAddress <%= node[:bind_ipaddress] %>
-<% if node[:primary_ip6address] %>
-ListenAddress <%= node[:primary_ip6address] %>
-<% end %>
-<% if node[:local_ipaddress] %>
-ListenAddress <%= node[:local_ipaddress] %>
-<% end %>
-<% end %>
 Protocol 2
 
 # host keys

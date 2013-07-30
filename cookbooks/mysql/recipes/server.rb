@@ -26,13 +26,6 @@ when "gentoo"
       mode "0644"
     end
 
-    template "/etc/conf.d/mysql" do
-      source "mysql.confd"
-      owner "root"
-      group "root"
-      mode "0644"
-    end
-
     template "/etc/logrotate.d/mysql" do
       source "logrotate.conf"
       owner "root"
@@ -54,10 +47,6 @@ when "gentoo"
         mode "0640"
         action :delete if systemd_running?
       end
-    end
-
-    file "/etc/syslog-ng/conf.d/90-mysql.conf" do
-      action :delete
     end
 
     mysql_root_pass = get_password("mysql/root")
@@ -132,17 +121,6 @@ if tagged?("nagios-client")
     owner "root"
     group "root"
     mode "0644"
-  end
-
-  # simple process check
-  nrpe_command "check_mysql" do
-    command "/usr/lib/nagios/plugins/check_systemd mysql.service /run/mysqld/mysqld.pid /usr/sbin/mysqld"
-  end
-
-  nagios_service "MYSQL" do
-    check_command "check_nrpe!check_mysql"
-    notification_interval 15
-    servicegroups "mysql"
   end
 
   # MySQL user for check_mysql_health and others

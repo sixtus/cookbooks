@@ -35,14 +35,6 @@ execute "sa-update" do
   notifies :reload, "service[spamd]"
 end
 
-template "/etc/conf.d/spamd" do
-  source "spamd.confd.erb"
-  owner "root"
-  group "root"
-  mode "0644"
-  notifies :restart, "service[spamd]"
-end
-
 systemd_unit "spamd.service" do
   template "true"
 end

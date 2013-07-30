@@ -1,0 +1,14 @@
+[Unit]
+Description=GitLab Sidekiq
+After=network.target
+
+[Service]
+ExecStart=<%= @homedir %>/.rvm/bin/default_bundle exec sidekiq -q post_receive,mailer,system_hook,project_web_hook,gitlab_shell,common,default -e production
+User=git
+Group=git
+Restart=always
+WorkingDirectory=<%= @homedir %>/current
+SyslogIdentifier=gitlab-sidekiq
+
+[Install]
+WantedBy=multi-user.target

@@ -3,7 +3,6 @@ Description=MongoDB Server
 After=network.target
 
 [Service]
-User=mongodb
 ExecStart=/usr/bin/mongod \
 	--bind_ip <%= @bind_ip %> \
 	--port <%= @port %> \
@@ -11,8 +10,10 @@ ExecStart=/usr/bin/mongod \
 	--unixSocketPrefix /run/mongodb \
 	--syslog \
 	<%= @opts.join(' ') %>
+User=mongodb
 Restart=always
 SyslogIdentifier=mongodb
+OOMScoreAdjust=-990
 
 [Install]
 WantedBy=multi-user.target

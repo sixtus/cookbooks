@@ -16,29 +16,13 @@ template "/etc/ntp.conf" do
   notifies :restart, "service[ntpd]"
 end
 
-file "/etc/conf.d/ntpd" do
-  action :delete
-end
-
 systemd_unit "ntpd.service"
 
 service "ntpd" do
-  service_name "ntpd"
-  service_name "ntp" if node[:platform] == "debian"
   action [:enable, :start]
 end
 
 if tagged?("nagios-client")
-  nrpe_command "check_ntpd" do
-    command "/usr/lib/nagios/plugins/check_systemd ntpd.service /run/ntpd.pid"
-  end
-
-  nagios_service "NTPD" do
-    check_command "check_nrpe!check_ntpd"
-    servicegroups "system"
-    env [:testing, :development]
-  end
-
   nrpe_command "check_time" do
     command "/usr/lib/nagios/plugins/check_ntp_time -H #{node[:ntp][:server]} -w 5 -c 30"
   end

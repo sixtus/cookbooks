@@ -8,7 +8,6 @@ domainname=${fqdn#*.}
 
 echo "127.0.0.1 ${hostname}.${domainname} ${hostname} localhost" > /etc/hosts
 echo ${hostname} > /etc/hostname
-sed -i -e "s/^hostname.*/hostname=\"${hostname}\"/" /etc/conf.d/hostname
 hostname ${hostname}
 
 emerge -n net-misc/ntp

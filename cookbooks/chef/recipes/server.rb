@@ -158,14 +158,6 @@ service "chef-expander" do
   action [:start, :enable]
 end
 
-template "/etc/conf.d/chef-server-api" do
-  source "chef-server-api.confd"
-  owner "root"
-  group "root"
-  mode "0644"
-  notifies :restart, "service[chef-server-api]"
-end
-
 template "/etc/chef/server.rb" do
   source "server.rb"
   owner "chef"
@@ -309,24 +301,6 @@ if tagged?("nagios-client")
 
   nagios_service "CHEF-SERVER" do
     check_command "check_nrpe!check_chef_server"
-    servicegroups "chef"
-  end
-
-  nrpe_command "check_chef_solr" do
-    command "/usr/lib/nagios/plugins/check_systemd chef-solr.service /run/chef/solr.pid"
-  end
-
-  nagios_service "CHEF-SOLR" do
-    check_command "check_nrpe!check_chef_solr"
-    servicegroups "chef"
-  end
-
-  nrpe_command "check_chef_expander" do
-    command "/usr/lib/nagios/plugins/check_systemd chef-expander.service /run/chef/expander.pid"
-  end
-
-  nagios_service "CHEF-EXPANDER" do
-    check_command "check_nrpe!check_chef_expander"
     servicegroups "chef"
   end
 end

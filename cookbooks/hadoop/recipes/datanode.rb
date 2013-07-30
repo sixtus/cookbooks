@@ -7,14 +7,6 @@ service "hadoop@datanode" do
 end
 
 if tagged?("nagios-client")
-  nrpe_command "check_hadoop_datanode" do
-    command "/usr/lib/nagios/plugins/check_systemd hadoop@datanode /run/hadoop/datanode.pid"
-  end
-
-  nagios_service "HADOOP-DATANODE" do
-    check_command "check_nrpe!check_hadoop_datanode"
-  end
-
   {
     :datanode => [:DataNode, 75, 90],
   }.each do |name, params|

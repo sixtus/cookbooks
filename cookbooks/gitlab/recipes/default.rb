@@ -41,22 +41,19 @@ include_recipe "gitlab::shell"
   end
 end
 
-systemd_user_session "git"
+systemd_user_session "git" do
+  action :disable
+end
 
-unicorn = systemd_user_unit "unicorn.service" do
+systemd_unit "gitlab-unicorn.service" do
   template true
-  user "git"
-  action [:create, :enable]
-  supports [:reload]
   variables({
     homedir: homedir,
   })
 end
 
-sidekiq = systemd_user_unit "sidekiq.service" do
+systemd_unit "gitlab-sidekiq.service" do
   template true
-  user "git"
-  action [:create, :enable]
   variables({
     homedir: homedir,
   })
@@ -97,12 +94,17 @@ deploy_ruby_application "git" do
     end
   end
 
-  before_restart do
-    unicorn.run_action(:reload)
-    unicorn.run_action(:start)
-    sidekiq.run_action(:restart)
-    sidekiq.run_action(:start)
-  end
+  notifies :reload, "service[gitlab-unicorn]", :immediately
+  notifies :restart, "service[gitlab-sidekiq]", :immediately
+end
+
+service "gitlab-unicorn" do
+  action [:enable, :start]
+  supports [:reload]
+end
+
+service "gitlab-sidekiq" do
+  action [:enable, :start]
 end
 
 ## nginx proxy
@@ -118,16 +120,4 @@ end
 
 shorewall6_rule "gitlab" do
   destport "http,https"
-end
-
-## monitoring
-if tagged?("nagios-client")
-  nrpe_command "check_gitlab_unicorn" do
-    command "/usr/lib/nagios/plugins/check_pidfile #{homedir}/shared/pids/unicorn.pid"
-  end
-
-  nagios_service "GITLAB-UNICORN" do
-    check_command "check_nrpe!check_gitlab_unicorn"
-    servicegroups name
-  end
 end

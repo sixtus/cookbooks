@@ -5,6 +5,8 @@ execute "newrelic-license-key" do
   only_if { !!node[:newrelic][:license_key] }
 end
 
+systemd_unit "newrelic-sysmond.service"
+
 service "newrelic-sysmond" do
   action [:enable, :start]
 end

@@ -18,9 +18,6 @@ if root?
     use %w(static static-libs)
   end
 
-  # support openrc until machine is converted to systemd
-  include_recipe "openrc" unless systemd_running?
-
   # stupid #$%^&*
   link "/sbin/ip" do
     to "/bin/ip"
