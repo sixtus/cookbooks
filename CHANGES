@@ -1,3 +1,22 @@
+commit 7488f1c2e7fd8e0137a9eceb450c1beec630b8c1
+Merge: a8dc422 4b7423a
+Author: Benedikt Böhm <bb@xnull.de>
+Date:   Tue Jul 30 15:14:00 2013 +0200
+
+    Merge branch 'next'
+
+    This release remove support for the following cookbooks:
+
+     * gitolite
+     * openrc
+     * sysvinit
+     * vserver
+
+    New Features:
+
+     * improved deploy resource for ruby and rails
+     * ZenDNS is now deployed by chef instead of capistrano
+
 commit d9576011a70862a24b4f59155946a02cc4033e2a
 Merge: 995da8e b445e4e
 Author: Benedikt Böhm <bb@xnull.de>
