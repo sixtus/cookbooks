@@ -1,27 +1,25 @@
 #!/bin/bash
 
-if [[ $# -lt 1 ]]; then
-	echo "Usage: check_systemd <unit> [<pidfile>]"
-	echo
-	echo "Example: check_systemd sshd.service /run/sshd.pid"
-	exit -1
+if [[ -z $1 ]]; then
+	UNITS=$(systemctl list-units --full --no-legend | awk '{print $1}')
+else
+	UNITS=$1
 fi
 
-UNIT=$1
-shift
+result=0
 
-if [[ $(</proc/1/cmdline) =~ systemd ]]; then
-	systemctl -q is-active $UNIT &>/dev/null
+for unit in $UNITS; do
+	systemctl -q is-active -- $unit &>/dev/null
 	ret=$?
 
-	systemctl status $UNIT | sed 's/.*Active: //;tn;d;:n'
-
-	if [[ $ret -eq 0 ]]; then
-		exit 0
-	else
-		exit 2
+	if [[ $ret -ne 0 ]]; then
+		echo "${unit}: $(systemctl status $unit | sed 's/.*Active: //;tn;d;:n'), "
+		result=2
 	fi
+done
+
+if [[ $result -eq 0 ]]; then
+	echo "All services up and running"
 fi
 
-# fallback
-$(realpath $(dirname $0))/check_pidfile "$@"
+exit $result

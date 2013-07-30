@@ -36,7 +36,7 @@ execute "sa-update" do
 end
 
 systemd_unit "spamd.service" do
-  template "true"
+  template true
 end
 
 service "spamd" do

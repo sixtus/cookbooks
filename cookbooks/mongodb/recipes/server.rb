@@ -60,10 +60,6 @@ if tagged?("nagios-client")
       notification_interval p[4]
       servicegroups "mongodb"
     end
-
-    nagios_service_dependency service_name do
-      depends ["MONGODB"]
-    end
   end
 
   unless opts.any? { |o| o.match(/--replSet/) }

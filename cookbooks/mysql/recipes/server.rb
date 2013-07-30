@@ -172,10 +172,6 @@ if tagged?("nagios-client")
       servicegroups "mysql"
       enabled params[:enabled]
     end
-
-    nagios_service_dependency service_name do
-      depends %w(MYSQL)
-    end
   end
 
   nagios_service_dependency "MYSQL-SLAVELAG" do

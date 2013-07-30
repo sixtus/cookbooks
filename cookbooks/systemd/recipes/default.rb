@@ -129,17 +129,13 @@ if tagged?("nagios-client")
     command "NOPASSWD: /bin/env XDG_RUNTIME_DIR=/run/user/* systemctl --user status *"
   end
 
-  node[:systemd][:units].each do |unit, enabled|
-    name = unit.gsub(/\P{ASCII}/, '-').gsub(/\.service$/, '')
+  nrpe_command "check_systemd" do
+    command "/usr/lib/nagios/plugins/check_systemd"
+  end
 
-    nrpe_command "check_systemd-#{name}" do
-      command "/usr/lib/nagios/plugins/check_systemd #{unit}"
-    end
-
-    nagios_service "SYSTEMD-#{name.upcase}" do
-      check_command "check_nrpe!check_systemd-#{name}"
-      servicegroups "systemd"
-      env [:testing, :development]
-    end
+  nagios_service "SYSTEMD" do
+    check_command "check_nrpe!check_systemd"
+    servicegroups "systemd"
+    env [:testing, :development]
   end
 end
