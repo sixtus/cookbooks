@@ -27,7 +27,6 @@ include_recipe "gitlab::shell"
 %w(
   database.yml
   gitlab.yml
-  unicorn.rb
 ).each do |file|
   template "#{homedir}/shared/config/#{file}" do
     source file
@@ -59,16 +58,18 @@ systemd_unit "gitlab-sidekiq.service" do
   })
 end
 
-deploy_ruby_application "git" do
+deploy_rails_application "git" do
   repository "https://github.com/gitlabhq/gitlabhq.git"
   revision "5-0-stable"
 
   ruby_version "ruby-2.0.0-p0"
 
+  worker_processes node[:gitlab][:worker_processes]
+  timeout node[:gitlab][:timeout]
+
   symlink_before_migrate({
     "config/database.yml" => "config/database.yml",
     "config/gitlab.yml" => "config/gitlab.yml",
-    "config/unicorn.rb" => "config/unicorn.rb",
   })
 
   after_bundle do
