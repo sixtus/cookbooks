@@ -136,6 +136,6 @@ if tagged?("nagios-client")
   nagios_service "SYSTEMD" do
     check_command "check_nrpe!check_systemd"
     servicegroups "systemd"
-    env [:testing, :development]
+    env [:staging, :testing, :development]
   end
 end
