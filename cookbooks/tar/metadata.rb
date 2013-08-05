@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 description "tar"
 
 maintainer "Benedikt Böhm"
