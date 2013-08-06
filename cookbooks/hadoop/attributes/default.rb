@@ -11,3 +11,6 @@ default[:hadoop][:dfs][:name_dir] = "/var/lib/hadoop/name"
 default[:hadoop][:dfs][:data_dir] = "/var/lib/hadoop/data"
 
 default[:hadoop][:dfs][:permissions] = true
+
+default[:hadoop][:mapper][:tasks] = 4
+default[:hadoop][:reducer][:tasks] = 3
