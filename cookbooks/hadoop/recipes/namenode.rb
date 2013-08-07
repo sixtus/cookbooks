@@ -2,6 +2,13 @@ tag("hadoop-namenode")
 
 include_recipe "hadoop"
 
+execute "hadoop-namenode-format" do
+  command "/opt/hadoop/bin/hadoop namenode -format /var/lib/hadoop/name"
+  creates "/var/lib/hadoop/name"
+  user "hadoop"
+  group "hadoop"
+end
+
 service "hadoop@namenode" do
   action [:enable, :start]
 end
