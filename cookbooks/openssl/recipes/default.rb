@@ -17,8 +17,10 @@ template "/etc/ssl/openssl.cnf" do
 end
 
 if root?
-  ssl_certificate "/etc/ssl/certs/wildcard.#{node[:chef_domain]}" do
-    cn "wildcard.#{node[:chef_domain]}"
+  if !solo?
+    ssl_certificate "/etc/ssl/certs/wildcard.#{node[:chef_domain]}" do
+      cn "wildcard.#{node[:chef_domain]}"
+    end
   end
 
   ruby_block "cleanup-ca-certificates" do
