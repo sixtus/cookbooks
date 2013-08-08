@@ -26,10 +26,13 @@ end
 def search(default_query)
   ENV['QUERY'] = default_query if not ENV.key?('QUERY')
   nodes = Chef::Search::Query.new.search(:node, ENV['QUERY']).first.compact
-  nodes.sort_by { |n| n[:fqdn] }.each do |node|
-    next if node[:skip] and node[:skip][:rc] # TODO: does not belong here
-    puts(">>> #{node.name}")
-    yield node
+  nodes.sort_by { |n| n[:fqdn] }.select do |node|
+    next false if node[:skip] and node[:skip][:rc] # TODO: does not belong here
+    if block_given?
+      puts(">>> #{node.name}")
+      yield node
+    end
+    true
   end
 end
 
