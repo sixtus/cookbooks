@@ -96,7 +96,7 @@ if tagged?("nagios-client")
   end
 
   {
-    :connections => [750, 1000],
+    :connections => [2000, 3000],
     :watches => [50000, 100000],
     :latency => [1000, 2000],
     :requests => [20, 50],
