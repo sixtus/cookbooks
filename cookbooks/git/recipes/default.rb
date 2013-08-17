@@ -32,8 +32,8 @@ if solo? and not root?
   end
 
   remote_file "#{node[:homedir]}/bin/hub" do
-    source "http://defunkt.io/hub/standalone"
-    checksum "d1b6ced5c012d924d226bb14631fe58218ed0ad9561b181aff4c1a1d97996c29"
+    source "http://hub.github.com/standalone"
+    checksum "6094d00f1e10eb6713102b8766d6aef6b7fadf30b9ae2220851fa28e17d4017f"
     mode "0755"
   end
 
