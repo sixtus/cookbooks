@@ -23,7 +23,7 @@ when "gentoo"
     end
 
     portage_package_use "sys-apps/systemd" do
-      use %w(static-libs python)
+      use %w(python)
     end
 
     package "sys-apps/systemd"
