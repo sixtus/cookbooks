@@ -5,6 +5,12 @@ when "gentoo"
   package "dev-ruby/knife-dsl"
   package "dev-ruby/airbrake_handler"
 
+  if zentoo?
+    package "dev-ruby/madvertise-logging"
+  else
+    gem_package "madvertise-logging"
+  end
+
   directory "/etc/chef" do
     owner "chef"
     group "root"

@@ -17,7 +17,6 @@ if node[:platform] == "gentoo"
     dev-libs/libxslt
     dev-libs/libyaml
     dev-ruby/haml
-    dev-ruby/madvertise-logging
     dev-ruby/syslogger
     dev-util/strace
     mail-client/mailx
