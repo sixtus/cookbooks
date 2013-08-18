@@ -1,10 +1,7 @@
 case node[:platform]
 when "gentoo"
   package "dev-vcs/git"
-
-  if node[:portage][:repo] == "zentoo"
-    package "dev-vcs/git-extras"
-  end
+  package "dev-vcs/git-extras" if zentoo?
 
 when "debian"
   package "git"
