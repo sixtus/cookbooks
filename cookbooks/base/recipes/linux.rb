@@ -53,7 +53,7 @@ if root?
     include_recipe "ntp"
   end
 
-  if !vbox_guest?
+  if !vbox_guest? and !node[:skip][:shorewall]
     include_recipe "shorewall"
   end
 
