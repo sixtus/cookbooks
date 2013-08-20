@@ -28,6 +28,7 @@ if node[:platform] == "mac_os_x"
     pwgen
     readline
     sqlite
+    tree
     wget
   )
 end

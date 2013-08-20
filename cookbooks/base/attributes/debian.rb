@@ -2,12 +2,14 @@
 if node[:platform] == "debian"
   node.set[:packages] = %w(
     ack
+    acpitool
     apache2-utils
     atool
     autoconf
     automake
     bwm-ng
     colordiff
+    dmidecode
     dnsutils
     dos2unix
     ethtool
@@ -22,6 +24,8 @@ if node[:platform] == "debian"
     libxml2
     libxslt1.1
     libyaml-0-2
+    lm-sensors
+    lshw
     lsof
     mc
     mtr
@@ -38,6 +42,7 @@ if node[:platform] == "debian"
     tcptraceroute
     telnet
     traceroute
+    tree
     whois
     xz-utils
   )
