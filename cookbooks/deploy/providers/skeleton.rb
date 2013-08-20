@@ -40,7 +40,7 @@ action :create do
     end
   end
 
-  shared = %w(config log pids system) + new_resource.shared
+  shared = %w(cache config log pids system) + new_resource.shared
 
   shared.uniq.each do |d|
     directory "#{homedir}/shared/#{d}" do

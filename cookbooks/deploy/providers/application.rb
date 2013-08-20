@@ -14,8 +14,9 @@ action :create do
 
     action :force_deploy if nr.force
 
-    symlinks nr.symlinks
+    purge_before_symlink nr.purge_before_symlink
     symlink_before_migrate nr.symlink_before_migrate
+    symlinks nr.symlinks
 
     migrate true
     migration_command "/bin/true" # use callbacks for actual work

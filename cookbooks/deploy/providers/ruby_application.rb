@@ -19,8 +19,9 @@ action :create do
 
     force nr.force
 
-    symlinks nr.symlinks
+    purge_before_symlink nr.purge_before_symlink
     symlink_before_migrate nr.symlink_before_migrate
+    symlinks nr.symlinks
 
     before_migrate do
       rvm_shell "#{nr.user}-bundle-install" do
