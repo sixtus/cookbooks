@@ -36,7 +36,7 @@ class Chef
 
       def initialize(config={})
         @config = config
-        @config[:path] ||= "/var/lib/chef/last-run.stamp"
+        @config[:path] ||= "/run/chef-client.stamp"
         @config
       end
 

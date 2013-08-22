@@ -10,7 +10,12 @@ fi
 interval=$1
 shift
 
-last_run=$(stat -c %Y /var/lib/chef/last-run.stamp)
+if [[ ! -r /run/chef-client.stamp ]]; then
+	echo "/run/chef-client.stamp is missing"
+	exit 2
+fi
+
+last_run=$(stat -c %Y /run/chef-client.stamp)
 now=$(date +%s)
 
 let diff=$now-$last_run
