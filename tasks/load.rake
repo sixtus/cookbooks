@@ -73,7 +73,7 @@ namespace :load do
         cb[type.to_sym].map(&:with_indifferent_access)
       end.flatten
 
-      files.each do |file|
+      changed = files.select do |file|
         # ignore overridable user templates
         next if file[:path] =~ %r{^templates/default/user-}
         next if file[:path] =~ %r{metadata.json$}
@@ -81,8 +81,16 @@ namespace :load do
         path = File.join(cookbook_path, file[:path])
         checksum = Digest::MD5.hexdigest(File.read(path))
 
-        if checksum != file[:checksum]
-          raise "missing version bump for changes in #{path}"
+        checksum != file[:checksum]
+      end
+
+      if changed.any?
+        if ENV['FORCE']
+          printf "  + %-20.20s [%s] (forced)\n", cookbook, version
+          knife :cookbook_upload, [cookbook, '--force', '--freeze']
+          next
+        else
+          raise "missing version bump for changes in #{cookbook}: #{changed.map{|c| c[:path]}.inspect}"
         end
       end
 

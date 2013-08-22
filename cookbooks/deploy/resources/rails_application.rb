@@ -13,6 +13,11 @@ attribute :force, :kind_of => [TrueClass, FalseClass], :default => false
 attribute :worker_processes, kind_of: Fixnum, default: 4
 attribute :timeout, kind_of: Fixnum, default: 30
 
+def before_precompile(arg=nil, &block)
+  arg ||= block
+  set_or_return(:before_precompile, arg, :kind_of => [Proc, String])
+end
+
 def before_symlink(arg=nil, &block)
   arg ||= block
   set_or_return(:before_symlink, arg, :kind_of => [Proc, String])

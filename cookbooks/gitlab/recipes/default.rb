@@ -72,7 +72,7 @@ deploy_rails_application "git" do
     "config/gitlab.yml" => "config/gitlab.yml",
   })
 
-  after_bundle do
+  before_precompile do
     rvm_shell "gitlab-setup" do
       code "bundle exec rake gitlab:setup force=yes RAILS_ENV=production"
       cwd release_path
@@ -81,18 +81,6 @@ deploy_rails_application "git" do
     end
 
     file "#{homedir}/shared/.seeded"
-
-    rvm_shell "gitlab-migrate" do
-      code "bundle exec rake db:migrate RAILS_ENV=production"
-      cwd release_path
-      user "git"
-    end
-
-    rvm_shell "gitlab-assets" do
-      code "bundle exec rake assets:precompile RAILS_ENV=production"
-      cwd release_path
-      user "git"
-    end
   end
 
   notifies :reload, "service[gitlab-unicorn]", :immediately
