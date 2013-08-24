@@ -1,5 +1,5 @@
 portage_package_use "dev-db/mongodb" do
-  use %w(-v8)
+  use %w(v8)
 end
 
 package "dev-db/mongodb"
