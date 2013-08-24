@@ -48,7 +48,7 @@ if root?
     include_recipe "postfix::satelite" unless node[:skip][:postfix_satelite]
   end
 
-  unless node[:virtualization][:role] == "guest"
+  unless node[:virtualization][:guest]
     include_recipe "lxc"
     include_recipe "ntp"
   end

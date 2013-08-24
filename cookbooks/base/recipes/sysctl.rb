@@ -8,7 +8,7 @@ execute "sysctl-reload" do
   command "/usr/lib/systemd/systemd-sysctl" if systemd_running?
   action :nothing
   not_if do
-    node[:virtualization][:role] == "guest"
+    node[:virtualization][:guest]
   end
 end
 
