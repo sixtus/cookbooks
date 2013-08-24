@@ -23,7 +23,7 @@ if node[:platform] == "gentoo"
     net-analyzer/bwm-ng
     net-analyzer/iptraf-ng
     net-analyzer/mtr
-    net-analyzer/netcat
+    net-analyzer/netcat6
     net-analyzer/nmap
     net-analyzer/tcpdump
     net-analyzer/tcptraceroute
