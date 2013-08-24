@@ -158,7 +158,7 @@ module Gentoo
           eix,
           "--nocolor",
           "--pure-packages",
-          '--format "<category>/<name>\t<bestversion:VERSION>\t<installedversions:VERSION>\n"',
+          '--format "<category>/<name>\t<bestversion:PVERSION>\t<installedversions:PVERSION>\n"',
         ].join(" ")
 
         eix_stderr = nil
@@ -171,7 +171,7 @@ module Gentoo
             pn, candidate, current = line.split(/\t/)
             @@packages_cache[pn] = {
               :current_version => current.split(/\s/).last,
-              :candidate_version => candidate
+              :candidate_version => candidate,
             }
           end
         end
