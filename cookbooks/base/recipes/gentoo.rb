@@ -2,9 +2,6 @@ if root?
   include_recipe "portage"
   include_recipe "portage::porticron"
 
-  # basic keywords & use flags
-  portage_package_keywords "dev-ruby/haml"
-
   # cleanup old mess
   %w(
     dev-ruby-haml
