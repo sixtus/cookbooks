@@ -31,7 +31,7 @@ when "gentoo"
     node.default[:portage][:USE] += %w(systemd)
 
     # by default, boot into multi-user.target
-    service "multi-user.target" do
+    service "#{node[:systemd][:target]}.target" do
       action :enable
       provider Chef::Provider::Service::Systemd
     end
