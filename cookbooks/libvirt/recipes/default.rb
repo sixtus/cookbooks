@@ -1,3 +1,5 @@
+include_recipe "lxc"
+
 package "app-emulation/libvirt"
 
 cookbook_file "/etc/libvirt/libvirt.conf" do
