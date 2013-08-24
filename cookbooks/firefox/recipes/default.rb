@@ -16,6 +16,4 @@ portage_package_use "x11-libs/pango" do
   use %w(X)
 end
 
-portage_package_keywords "www-client/firefox"
-
 package "www-client/firefox"

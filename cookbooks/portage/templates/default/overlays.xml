@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<repositories version="1.0">
+    <repo priority="50" quality="stable" status="unofficial">
+        <name>zentoo</name>
+        <description>Zentoo Linux as overlay</description>
+        <homepage>http://github.com/zentoo/zentoo</homepage>
+        <owner>
+            <email>info@zentoo.org</email>
+        </owner>
+        <source type="git">git://github.com/zentoo/zentoo.git</source>
+    </repo>
+</repositories>

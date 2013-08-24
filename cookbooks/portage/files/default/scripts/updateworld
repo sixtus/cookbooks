@@ -38,6 +38,7 @@ latest_ruby
 
 # initial chef-client run
 if [[ -e /etc/chef/client.pem && -z $UPDATEWORLD_INITIAL_CHEF ]]; then
+	rm /etc/portage/package.*/chef-*
 	chef-client
 	echo
 	export UPDATEWORLD_INITIAL_CHEF=1
