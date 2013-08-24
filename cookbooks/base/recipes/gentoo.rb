@@ -7,6 +7,14 @@ if root?
 
   # cleanup old mess
   %w(
+    dev-ruby-haml
+  ).each do |f|
+    file "/etc/portage/package.keywords/chef-#{f}" do
+      action :delete
+    end
+  end
+
+  %w(
     dev-lang-python-3
     dev-lang-ruby-2
   ).each do |f|
