@@ -6,7 +6,7 @@ maintainer "Benedikt Böhm"
 maintainer_email "bb@xnull.de"
 license "Apache v2.0"
 
-version "5.3.1"
+version "5.3.2"
 
 supports "debian"
 supports "gentoo"
@@ -47,3 +47,4 @@ depends "syslog"
 depends "systemd"
 depends "tmux"
 depends "vim"
+depends "watchdog"

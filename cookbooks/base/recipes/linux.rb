@@ -66,6 +66,7 @@ if root?
     include_recipe "hwraid"
     include_recipe "mdadm"
     include_recipe "smart"
+    include_recipe "watchdog"
   end
 end
 

@@ -6,6 +6,7 @@ maintainer "Igor Susman"
 maintainer_email "igor.susman@madvertise.com"
 license "GPLv2"
 
-version "0.0.2"
+version "0.1.0"
 
+supports "debian"
 supports "gentoo"
