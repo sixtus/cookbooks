@@ -2,6 +2,14 @@ tag("hadoop-namenode")
 
 include_recipe "hadoop"
 
+if solo?
+  execute "hadoop-namenode-format" do
+    command "/opt/hadoop/bin/hadoop namenode -format"
+    user "hadoop"
+    group "hadoop"
+  end
+end
+
 service "hadoop@namenode" do
   action [:enable, :start]
 end

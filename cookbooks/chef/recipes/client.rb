@@ -4,6 +4,7 @@ when "gentoo"
   package "dev-ruby/activesupport"
   package "dev-ruby/knife-dsl"
   package "dev-ruby/airbrake_handler"
+  package "dev-ruby/madvertise-logging"
 
   directory "/etc/chef" do
     owner "chef"
@@ -26,6 +27,7 @@ when "gentoo"
 when "debian"
   gem_package "chef"
   gem_package "airbrake_handler"
+  gem_package "madvertise-logging"
 
   directory "/etc/chef" do
     owner "root"

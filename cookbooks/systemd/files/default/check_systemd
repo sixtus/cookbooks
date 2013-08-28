@@ -13,13 +13,15 @@ for unit in $UNITS; do
 	ret=$?
 
 	if [[ $ret -ne 0 ]]; then
-		echo "${unit}: $(systemctl status $unit | sed 's/.*Active: //;tn;d;:n'), "
+		echo -n "${unit}: $(systemctl status $unit | sed 's/.*Active: \(.*\) (.*\; \(.*\)/\1 \2/;tn;d;:n'), "
 		result=2
 	fi
 done
 
 if [[ $result -eq 0 ]]; then
 	echo "All services up and running"
+else
+	echo
 fi
 
 exit $result

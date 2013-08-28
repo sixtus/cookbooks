@@ -56,6 +56,12 @@ when "gentoo"
   end
 end
 
+cron "zk-log-clean" do
+  minute "0"
+  hour "3"
+  command "/opt/zookeeper/bin/zkCleanup.sh /var/lib/zookeeper/ -n 5"
+end
+
 if tagged?("nagios-client")
   nagios_plugin "check_zookeeper" do
     source "check_zookeeper.rb"
@@ -79,16 +85,18 @@ if tagged?("nagios-client")
     servicegroups "zookeeper"
   end
 
-  nrpe_command "check_zookeeper_followers" do
-    command "/usr/lib/nagios/plugins/check_zookeeper -m Followers -n #{nodes.map {|n| n[:fqdn]}.join(" -n ")}"
-  end
+  if zookeeper_nodes.count > 1
+    nrpe_command "check_zookeeper_followers" do
+      command "/usr/lib/nagios/plugins/check_zookeeper -m Followers -n #{nodes.map {|n| n[:fqdn]}.join(" -n ")}"
+    end
 
-  nagios_service "ZOOKEEPER-FOLLOWERS" do
-    check_command "check_nrpe!check_zookeeper_followers"
+    nagios_service "ZOOKEEPER-FOLLOWERS" do
+      check_command "check_nrpe!check_zookeeper_followers"
+    end
   end
 
   {
-    :connections => [750, 1000],
+    :connections => [2000, 3000],
     :watches => [50000, 100000],
     :latency => [1000, 2000],
     :requests => [20, 50],
@@ -103,13 +111,4 @@ if tagged?("nagios-client")
       servicegroups "zookeeper"
     end
   end
-end
-
-# Log cleaner cronjob:
-cron "zk-log-clean" do
-  minute "0"
-  hour "3"
-  day "*"
-  command "/opt/zookeeper/bin/zkCleanup.sh /var/lib/zookeeper/ -n 5"
-  action :create
 end

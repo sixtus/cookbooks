@@ -43,7 +43,7 @@ end
 end
 
 systemd_unit "shorewall6.service" do
-  template "shorewall.service"
+  template "shorewall6.service"
 end
 
 service "shorewall6" do

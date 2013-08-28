@@ -34,6 +34,12 @@ action :create do
     }.merge(nr.symlink_before_migrate))
 
     after_bundle do
+      ruby_block "#{nr.user}-before-precompile" do
+        block do
+          callback(:before_precompile, nr.before_precompile)
+        end
+      end
+
       rvm_shell "#{nr.user}-assets:precompile" do
         code "bundle exec rake assets:precompile RAILS_ENV=production"
         cwd release_path

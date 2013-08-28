@@ -1,5 +1,6 @@
-portage_package_keywords "=sys-apps/portage-2.2* **"
-portage_package_mask ">=app-portage/eix-0.28" # broken
+file "/etc/portage/package.mask/chef-app-portage-eix-0-28" do
+  action :delete
+end
 
 package "sys-apps/portage" do
   action :upgrade

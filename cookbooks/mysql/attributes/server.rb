@@ -18,7 +18,7 @@ default[:mysql][:server][:startup_timeout] = 900
 default[:mysql][:server][:startup_early_timeout] = 1000
 default[:mysql][:server][:stop_timeout] = 120
 default[:mysql][:server][:skip_networking] = false
-default[:mysql][:server][:bind_address] = "127.0.0.1"
+default[:mysql][:server][:bind_address] = "0.0.0.0"
 default[:mysql][:server][:skip_innodb] = false
 
 # Replication & Binary Log

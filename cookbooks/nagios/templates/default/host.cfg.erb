@@ -21,7 +21,7 @@ define host {
   next unless params[:host_name] == @host[:fqdn]
 
   envs = params.delete(:env) || []
-  envs |= ['production', 'staging']
+  envs |= ['production']
 %>
 
 # <%= service_description %> (<%= envs.join(", ") %>)

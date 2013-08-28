@@ -1,6 +1,6 @@
 # to make things faster, load data from search index into run_state
 if solo?
-  node.run_state[:nodes] = []
+  node.run_state[:nodes] = [node]
   node.run_state[:roles] = []
   node.run_state[:users] = []
 else

@@ -12,7 +12,6 @@ action :run do
     returns nr.returns if nr.returns
     timeout nr.timeout if nr.timeout
     umask nr.umask if nr.umask
-    action :nothing
   end
 
   nr.updated_by_last_action(s.updated_by_last_action?)

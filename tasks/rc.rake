@@ -39,6 +39,11 @@ namespace :rc do
     end
   end
 
+  desc "Open iTerm cluster SSH"
+  task :iterm do
+    system("i2cssh #{search("hostname:chef").map(&:name).join(' ')}")
+  end
+
   desc "Run custom script"
   task :script, :name do |t, args|
     script = File.join(TOPDIR, 'scripts', args.name)

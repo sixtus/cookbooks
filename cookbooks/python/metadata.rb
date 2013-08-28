@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 name              "python"
 maintainer        "Opscode, Inc."
 maintainer_email  "cookbooks@opscode.com"

@@ -25,10 +25,7 @@ if node[:primary_interface] == "lxc0"
 end
 
 include_recipe "shorewall::ipv4"
-
-if node[:ipv6_enabled]
-  include_recipe "shorewall::ipv6"
-end
+include_recipe "shorewall::ipv6"
 
 if tagged?("nagios-client")
   nagios_plugin "check_conntrack"

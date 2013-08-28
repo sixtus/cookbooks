@@ -14,9 +14,6 @@ end
 case node[:platform]
 when "gentoo"
   if root?
-    portage_package_keywords "~sys-apps/dbus-1.6.8"
-    portage_package_keywords "~sys-apps/systemd-200"
-
     portage_package_use "sys-apps/dbus" do
       if %x(qlist -ICe sys-apps/systemd).chomp == ""
         use %w(-systemd)
@@ -26,7 +23,7 @@ when "gentoo"
     end
 
     portage_package_use "sys-apps/systemd" do
-      use %w(static-libs python)
+      use %w(python)
     end
 
     package "sys-apps/systemd"
@@ -34,7 +31,7 @@ when "gentoo"
     node.default[:portage][:USE] += %w(systemd)
 
     # by default, boot into multi-user.target
-    service "multi-user.target" do
+    service "#{node[:systemd][:target]}.target" do
       action :enable
       provider Chef::Provider::Service::Systemd
     end
@@ -136,6 +133,6 @@ if tagged?("nagios-client")
   nagios_service "SYSTEMD" do
     check_command "check_nrpe!check_systemd"
     servicegroups "systemd"
-    env [:testing, :development]
+    env [:staging, :testing, :development]
   end
 end

@@ -8,7 +8,7 @@ when "gentoo"
   package "dev-db/maatkit"
   package "dev-db/mysqltuner"
   package "dev-db/mytop"
-  package "dev-db/xtrabackup-bin" if node[:portage][:repo] == "zentoo"
+  package "dev-db/xtrabackup-bin" if zentoo?
   package "dev-ruby/mysql-ruby"
 
   # configuration files
@@ -49,7 +49,11 @@ when "gentoo"
       end
     end
 
-    mysql_root_pass = get_password("mysql/root")
+    if solo?
+      mysql_root_pass = ""
+    else
+      mysql_root_pass = get_password("mysql/root")
+    end
 
     template "/usr/sbin/mysql_pkg_config" do
       source "mysql_pkg_config"

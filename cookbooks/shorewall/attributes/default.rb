@@ -1,3 +1,5 @@
+default[:skip][:shorewall] = false
+
 set_unless[:shorewall][:hosts] = {}
 set_unless[:shorewall6][:hosts] = {}
 set_unless[:shorewall][:interfaces] = {}

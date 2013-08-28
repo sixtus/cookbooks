@@ -11,5 +11,4 @@ if root?
 
   gem_package "haml"
   gem_package "syslogger"
-  gem_package "madvertise-logging"
 end

@@ -119,11 +119,10 @@ namespace :ssl do
     else
       sh("openssl ca -config #{SSL_CONFIG_FILE} -revoke #{SSL_CA_DIR}/newcerts/#{serial}.pem")
       sh("openssl ca -config #{SSL_CONFIG_FILE} -gencrl -out #{SSL_CERT_DIR}/ca.crl")
+      cn = args.cn.gsub("*", "wildcard")
+      sh("rm #{SSL_CERT_DIR}/#{cn}.{csr,crt,key}")
+      knife :cookbook_upload, ['openssl', '--force']
     end
-
-    cn = args.cn.gsub("*", "wildcard")
-    sh("rm #{SSL_CERT_DIR}/#{cn}.{csr,crt,key}")
-    knife :cookbook_upload, ['openssl', '--force']
   end
 
   desc "Renew expiring certificates"

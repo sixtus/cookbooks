@@ -1,5 +1,7 @@
 [Unit]
 Description=Chef Client Timer
+ConditionPathExists=/etc/chef/client.rb
+ConditionPathExists=!/run/lock/chef-client.lock
 
 [Timer]
 Unit=chef-client.service

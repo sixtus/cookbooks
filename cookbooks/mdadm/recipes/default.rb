@@ -1,9 +1,5 @@
 case node[:platform]
 when "gentoo"
-  portage_package_use "sys-fs/mdadm" do
-    use %w(static)
-  end
-
   package "sys-fs/mdadm"
 
 when "debian"
