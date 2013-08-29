@@ -49,7 +49,7 @@ if root?
   end
 
   unless node[:virtualization][:guest]
-    include_recipe "lxc"
+    include_recipe "libvirt"
     include_recipe "ntp"
   end
 
