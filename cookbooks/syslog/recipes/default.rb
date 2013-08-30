@@ -15,17 +15,12 @@ directory "/etc/syslog-ng/conf.d" do
   recursive true
 end
 
-indexer_nodes = node.run_state[:nodes].select do |n|
-  n[:tags].include?("splunk-indexer") rescue false
-end
-
 template "/etc/syslog-ng/syslog-ng.conf" do
   source "syslog-ng.conf"
   owner "root"
   group "root"
   mode "0640"
   notifies :restart, "service[syslog-ng]"
-  variables :indexer_nodes => indexer_nodes
 end
 
 systemd_unit "syslog-ng.service"
