@@ -1,27 +1,31 @@
 #!/bin/bash
 
-if [[ -z $1 ]]; then
-	UNITS=$(systemctl list-units --full --no-legend | awk '{print $1}')
+if [ -z "$1" ]; then
+	UNITS="$(systemctl list-units --full --no-legend | awk '{print $1}')"
 else
-	UNITS=$1
+	UNITS="$1"
 fi
 
-result=0
-
 for unit in $UNITS; do
-	systemctl -q is-active -- $unit &>/dev/null
-	ret=$?
-
-	if [[ $ret -ne 0 ]]; then
-		echo -n "${unit}: $(systemctl status $unit | sed 's/.*Active: \(.*\) (.*\; \(.*\)/\1 \2/;tn;d;:n'), "
-		result=2
+	if ! systemctl -q is-active -- "$unit"; then
+		dead_service+=( "$unit" )
 	fi
 done
 
-if [[ $result -eq 0 ]]; then
-	echo "All services up and running"
+if [ "${#dead_service[@]}" == "0" ]; then
+	echo "All services are ok"
+	exit 0
 else
-	echo
-fi
+	for x in "${dead_service[@]}"; do
+		if ! output="$(systemctl status "$x" | sed 's/.*Active: \(.*\) (.*\; \(.*\)/\1 \2/;tn;d;:n')"; then
+			output="is inactive"
+		fi
+		stat+=( "$x: $output" )
+	done
 
-exit $result
+	for x in "${stat[@]}"; do
+		echo -ne " \"$x\"" 
+	done
+
+	exit 2
+fi

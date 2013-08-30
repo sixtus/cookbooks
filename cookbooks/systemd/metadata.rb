@@ -6,7 +6,7 @@ maintainer "Benedikt Böhm"
 maintainer_email "benedikt.boehm@madvertise.com"
 license "Apache v2.0"
 
-version "4.0.6"
+version "4.0.9"
 
 supports "debian"
 supports "gentoo"
