@@ -10,14 +10,17 @@ else
 end
 
 # select basic infrastructure nodes from the index for easy access in recipes
-{
-  :chef => "chef",
-  :splunk => "splunk-indexer",
-  :nagios => "nagios",
-  :mx => "mx",
-}.each do |key, role|
-  node.run_state[key] = node.run_state[:nodes].select do |n|
-    n.role?(role)
+%w(
+  chef
+  splunk
+  splunk-master
+  splunk-search
+  splunk-peer
+  nagios
+  mx
+).each do |role|
+  node.run_state[role.to_sym] = node.run_state[:nodes].select do |n|
+    n[:roles] and n[:roles].include?(role)
   end
 end
 
@@ -33,7 +36,7 @@ else
 end
 
 # this is awful but needed to keep attribute precedence
-node.load_attributes
+node.load_attributes if node.respond_to?(:load_attributes)
 
 if solo?
   node.apply_expansion_attributes(node.expand!('disk'))

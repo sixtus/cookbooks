@@ -40,7 +40,7 @@ if root?
   end
 
   if node.run_state[:splunk].any?
-    include_recipe "splunk::forwarder" unless node.role?("splunk-indexer")
+    include_recipe "splunk::forwarder"
     include_recipe "ganymed"
   end
 
