@@ -1,6 +1,7 @@
 include_recipe "java"
 
 package "sys-cluster/hadoop"
+package "dev-lang/apache-pig-bin"
 
 %w(
   /var/lib/hadoop
