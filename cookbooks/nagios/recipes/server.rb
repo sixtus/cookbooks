@@ -12,6 +12,7 @@ include_recipe "nagios"
 include_recipe "nagios::livestatus"
 include_recipe "nagios::nrpe"
 include_recipe "nagios::nsca"
+include_recipe "nagios::splunk"
 
 directory "/var/nagios/rw" do
   owner "nagios"
@@ -95,7 +96,7 @@ hosts.each do |h|
   hostgroups[cluster] << h[:fqdn]
 
   # group per role (except base)
-  h[:roles] ||= []
+  h.default[:roles] ||= []
   h[:roles].each do |r|
     next if r == "base"
     hostgroups[r] ||= []

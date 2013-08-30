@@ -21,6 +21,11 @@ define command {
 }
 
 define command {
+  command_name check_host_none
+  command_line /bin/true
+}
+
+define command {
   command_name check_ping
   command_line $USER1$/check_ping -H $HOSTADDRESS$ -w $ARG1$ -c $ARG2$ -p 5
 }
@@ -44,4 +49,9 @@ define command {
 define command {
   command_name check_smtp
   command_line $USER1$/check_smtp -H $HOSTADDRESS$ -p $ARG1$ -t $ARG2$
+}
+
+define command {
+  command_name check_splunk
+  command_line $USER1$/check_splunk "$ARG1$"
 }
