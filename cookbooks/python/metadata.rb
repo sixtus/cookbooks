@@ -1,18 +1,12 @@
 # encoding: utf-8
 
-name              "python"
-maintainer        "Opscode, Inc."
-maintainer_email  "cookbooks@opscode.com"
-license           "Apache 2.0"
-description       "Installs Python, pip and virtualenv. Includes LWRPs for managing Python packages with `pip` and `virtualenv` isolated Python environments."
-version           "1.3.7"
+description "Python, pip and virtualenv"
 
-recipe "python", "Installs python, pip, and virtualenv"
-recipe "python::package", "Installs python using packages."
-recipe "python::source", "Installs python from source."
-recipe "python::pip", "Installs pip from source."
-recipe "python::virtualenv", "Installs virtualenv using the python_pip resource."
+maintainer "Benedikt Böhm"
+maintainer_email "bb@xnull.de"
+license "Apache v2.0"
 
-%w{ gentoo debian ubuntu centos redhat fedora freebsd smartos }.each do |os|
-  supports os
-end
+version "1.4.0"
+
+supports "debian"
+supports "gentoo"
