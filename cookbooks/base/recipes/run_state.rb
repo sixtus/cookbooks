@@ -14,8 +14,9 @@ end
   chef
   splunk
   splunk-master
-  splunk-search
   splunk-peer
+  splunk-search
+  splunk-server
   nagios
   mx
 ).each do |role|

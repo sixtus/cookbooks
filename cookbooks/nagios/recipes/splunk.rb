@@ -1,7 +1,7 @@
 package "dev-ruby/nokogiri"
 
 master = node.run_state[:"splunk-master"].first
-search = node.run_state[:"splunk-search"].first
+search = node.run_state[:"splunk-search"].first || node.run_state[:"splunk-server"].first
 
 template "/usr/lib/nagios/plugins/check_splunk" do
   source "check_splunk.rb"

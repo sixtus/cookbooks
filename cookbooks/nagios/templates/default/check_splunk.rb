@@ -4,11 +4,11 @@ require 'net/http'
 require 'nokogiri'
 require 'json'
 
-SEARCH_HOST = "<%= @search[:primary_ipaddress] %>"
+SEARCH_HOST = "<%= @search[:primary_ipaddress] rescue 'localhost' %>"
 SEARCH_PORT = 8089
 SEARCH_URI  = "https://#{SEARCH_HOST}:#{SEARCH_PORT}"
 SEARCH_USER = "admin"
-SEARCH_PASS = "<%= @master[:splunk][:pass4symmkey] %>"
+SEARCH_PASS = "<%= @master[:splunk][:pass4symmkey] rescue node[:splunk][:pass4symmkey] %>"
 
 begin
   http = Net::HTTP.new(SEARCH_HOST, SEARCH_PORT)
