@@ -8,5 +8,4 @@ git "/opt/splunk/etc/apps/HadoopConnect" do
   repository "https://github.com/zenops/splunk-HadoopConnect"
   reference "master"
   action :sync
-  notifies :restart, "service[splunk]"
 end
