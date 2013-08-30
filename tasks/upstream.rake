@@ -52,13 +52,16 @@ namespace :upstream do
       sh("git --no-pager log -1 #{commit}")
       puts
 
-      sh("git show -p #{commit}")
+      sh("git show -p #{commit} || :")
 
       answer = ask('Do you want to pick this commit? (y/n) ') do |q|
         q.validate = /^(y|n)$/
+        q.character = true
+        q.echo = false
       end
 
       next if answer != 'y'
+      puts
 
       %x(git cherry-pick #{commit})
 
