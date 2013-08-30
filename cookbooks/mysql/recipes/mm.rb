@@ -10,6 +10,6 @@ if node[:mysql][:server][:detailed_monitoring]
 end
 
 # reload attributes files to make the magic happen
-node.load_attribute_by_short_filename('server', 'mysql')
+node.load_attribute_by_short_filename('server', 'mysql') if node.respond_to?(:load_attribute_by_short_filename)
 
 include_recipe "mysql::server"

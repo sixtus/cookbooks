@@ -77,6 +77,7 @@ when "gentoo"
       owner "root"
       group "root"
       mode "0644"
+      not_if { File.symlink?("/etc/ifup") }
     end
 
     file "/etc/ifdown" do
