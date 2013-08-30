@@ -1,5 +1,7 @@
 include ChefUtils::Account
 
+use_inline_resources rescue nil
+
 action :create do
   nr = new_resource # rebind
   user = get_user(nr.user)

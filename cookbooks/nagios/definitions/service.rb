@@ -12,6 +12,5 @@ end
 
 define :nagios_service_dependency do
   name = params.delete(:name)
-  node.default[:nagios][:services][name][:dependencies] ||= []
-  node.default[:nagios][:services][name][:dependencies] |= params[:depends]
+  node.default[:nagios][:services][name][:dependencies] = node.default[:nagios][:services][name][:dependencies].to_a | params[:depends]
 end
