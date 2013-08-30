@@ -25,8 +25,9 @@ module KnifeSudo
 
       command = "/usr/bin/sudo -i /usr/bin/env LANG=en_US.UTF-8 #{name_args.join(' ')}"
 
-      knife_ssh = Chef::Knife::Ssh.new()
+      knife_ssh = Chef::Knife::Ssh.new
       knife_ssh.name_args = [config[:query], command]
+      knife_ssh.config[:manual] = false
       knife_ssh.run
     end
   end
