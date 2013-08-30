@@ -80,6 +80,13 @@ end
   end
 end
 
+forwarder = [
+  node.role?("splunk-master"),
+  node.role?("splunk-peer"),
+  node.role?("splunk-search"),
+  node.role?("splunk-server"),
+].none?
+
 # local/server.conf is overwritten by splunk on every restart and then
 # overwritten by every chef-client run, and again and again.
 # so we just overwrite the default/server.conf *sigh
@@ -89,7 +96,7 @@ template "/opt/splunk/etc/system/default/server.conf" do
   group "root"
   mode "0644"
   # only restart forwarders automatically
-  notifies :restart, "service[splunk]" unless node.role?("splunk-peer") or node.role?("splunk-search") or node.role?("splunk-master")
+  notifies :restart, "service[splunk]" if forwarder
   variables({
     pass4symmkey: pass4symmkey,
     master: master,

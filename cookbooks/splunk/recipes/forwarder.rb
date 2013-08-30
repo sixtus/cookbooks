@@ -1,4 +1,11 @@
-unless node.role?("splunk-peer") or node.role?("splunk-search") or node.role?("splunk-master")
+forwarder = [
+  node.role?("splunk-master"),
+  node.role?("splunk-peer"),
+  node.role?("splunk-search"),
+  node.role?("splunk-server"),
+].none?
+
+if forwarder
   case node[:platform]
   when "gentoo"
     package "net-analyzer/splunkforwarder"
