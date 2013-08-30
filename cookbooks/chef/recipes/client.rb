@@ -72,7 +72,11 @@ unless solo?
   timer_envs = %w(production staging)
 
   cron "chef-client" do
-    command "/usr/bin/ruby -E UTF-8 /usr/bin/chef-client -c /etc/chef/client.rb &>/dev/null"
+    if node[:platform] == "debian"
+      command "/usr/bin/ruby -E UTF-8 /usr/local/bin/chef-client -c /etc/chef/client.rb &>/dev/null"
+    else
+      command "/usr/bin/ruby -E UTF-8 /usr/bin/chef-client -c /etc/chef/client.rb &>/dev/null"
+    end
     minute IPAddr.new(node[:primary_ipaddress]).to_i % 60
     action :delete unless timer_envs.include?(node.chef_environment)
     action :delete if systemd_running?
