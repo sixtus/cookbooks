@@ -5,7 +5,7 @@ ConditionPathExists=!/run/lock/chef-client.lock
 
 [Timer]
 Unit=chef-client.service
-OnBootSec=3600
+OnBootSec=60
 OnUnitInactiveSec=3600
 
 [Install]
