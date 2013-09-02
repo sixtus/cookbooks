@@ -119,6 +119,11 @@ if [[ -d /usr/lib/udev ]]; then
 	fi
 fi
 
+# update bootloader if kernel image is available
+if [[ $(qlist -IC sys-kernel/zentoo-image) == "sys-kernel/zentoo-image" ]]; then
+	emerge --config zentoo-image
+fi
+
 # update config files and run chef-client/chef-solo
 if [[ -e /etc/chef/client.pem ]]; then
 	yes | etc-update --automode -5
