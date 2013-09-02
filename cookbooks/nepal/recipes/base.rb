@@ -174,3 +174,7 @@ template "/etc/logrotate.d/nepal-customers" do
   group "root"
   mode "0644"
 end
+
+duply_backup "nepal-srv" do
+  source "/srv"
+end

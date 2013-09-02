@@ -22,3 +22,11 @@ end
 service "pure-ftpd" do
   action [:enable, :start]
 end
+
+shorewall_rule "ftp" do
+  proto "-"
+end
+
+shorewall6_rule "ftp" do
+  proto "-"
+end
