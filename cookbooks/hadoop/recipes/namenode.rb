@@ -7,6 +7,7 @@ if solo?
     command "/opt/hadoop/bin/hadoop namenode -format"
     user "hadoop"
     group "hadoop"
+    creates "/var/lib/hadoop/name/image/fsimage"
   end
 end
 
