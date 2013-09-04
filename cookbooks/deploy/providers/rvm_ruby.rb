@@ -22,8 +22,6 @@ action :create do
   end
 
   paths = [
-    "#{homedir}/.rvm/rubies",
-    "#{homedir}/.rvm/gems",
     "#{homedir}/shared/bundle",
   ]
 
