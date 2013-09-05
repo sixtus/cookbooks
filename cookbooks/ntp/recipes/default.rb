@@ -22,6 +22,12 @@ service "ntpd" do
   action [:enable, :start]
 end
 
+if tagged?("ganymed-client")
+  ganymed_collector "ntp" do
+    source "ntp.rb"
+  end
+end
+
 if tagged?("nagios-client")
   nrpe_command "check_time" do
     command "/usr/lib/nagios/plugins/check_ntp_time -H #{node[:ntp][:server]} -w 5 -c 30"
