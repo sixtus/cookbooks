@@ -39,6 +39,22 @@ namespace :rc do
     end
   end
 
+  desc "Reboot machines and wait until they are up"
+  task :reboot do
+    search("default_query:does_not_exist") do |node|
+      system("ssh -t #{node.name} '/usr/bin/sudo -i reboot'")
+      wait_with_ping(node.name, false)
+      wait_with_ping(node.name, true)
+      loop do
+        system("sudo /usr/lib/nagios/plugins/check_ssh #{node.name}")
+        break if $?.exitstatus == 0
+        sleep 5
+      end
+      puts "Sleeping 5 minutes to slow down reboot loop"
+      sleep 5*60
+    end
+  end
+
   desc "Open iTerm cluster SSH"
   task :iterm do
     system("i2cssh #{search("hostname:chef").map(&:name).join(' ')}")

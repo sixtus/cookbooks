@@ -29,7 +29,7 @@ def search(default_query)
   nodes.sort_by { |n| n[:fqdn] }.select do |node|
     next false if node[:skip] and node[:skip][:rc] # TODO: does not belong here
     if block_given?
-      puts(">>> #{node.name}")
+      puts("\e[32m>>> #{node.name}\e[39m")
       yield node
     end
     true
