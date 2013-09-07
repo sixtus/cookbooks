@@ -5,12 +5,9 @@ namespace :rc do
   desc "Update gentoo packages"
   task :updateworld do
     search("platform:gentoo") do |node|
-      env = if ENV.include?('DONT_ASK')
-              "/usr/bin/env UPDATEWORLD_DONT_ASK=1"
-            else
-              ""
-            end
+      env = "/usr/bin/env UPDATEWORLD_DONT_ASK=1" if ENV['DONT_ASK']
       system("ssh -t #{node.name} '/usr/bin/sudo -i #{env} /usr/local/sbin/updateworld'")
+      reboot_wait(node.name) if ENV['REBOOT']
     end
   end
 
@@ -42,14 +39,7 @@ namespace :rc do
   desc "Reboot machines and wait until they are up"
   task :reboot do
     search("default_query:does_not_exist") do |node|
-      system("ssh -t #{node.name} '/usr/bin/sudo -i reboot'")
-      wait_with_ping(node.name, false)
-      wait_with_ping(node.name, true)
-      loop do
-        system("sudo /usr/lib/nagios/plugins/check_ssh #{node.name}")
-        break if $?.exitstatus == 0
-        sleep 5
-      end
+      reboot_wait(node.name)
       puts "Sleeping 5 minutes to slow down reboot loop"
       sleep 5*60
     end
