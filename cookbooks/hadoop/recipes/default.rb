@@ -38,7 +38,6 @@ end.first
 %w(
   core-site.xml
   hadoop-env.sh
-  hadoop-metrics2.properties
   hdfs-site.xml
   log4j.properties
   mapred-site.xml
@@ -52,6 +51,10 @@ end.first
     variables :job_tracker => job_tracker,
               :name_node => name_node
   end
+end
+
+file "/opt/hadoop/conf/hadoop-metrics2.properties" do
+  action :delete
 end
 
 template "/opt/hadoop/conf/topology.sh" do
@@ -95,20 +98,4 @@ nagios_plugin "check_hdfs" do
   source "check_hdfs.rb"
 end
 
-if tagged?("splunk-forwarder")
-  include_recipe "splunk::hadoop-ops"
-
-  directory "/opt/splunk/etc/apps/Splunk_TA_hadoopops/local" do
-    owner "root"
-    group "root"
-    mode "0755"
-  end
-
-  template "/opt/splunk/etc/apps/Splunk_TA_hadoopops/local/inputs.conf" do
-    source "splunk/inputs.conf"
-    owner "root"
-    group "root"
-    mode "0644"
-    notifies :restart, "service[splunk]"
-  end
-end
+include_recipe "splunk::hadoop-ops"

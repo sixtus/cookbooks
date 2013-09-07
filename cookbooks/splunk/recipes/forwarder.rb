@@ -1,11 +1,4 @@
-forwarder = [
-  node.role?("splunk-master"),
-  node.role?("splunk-peer"),
-  node.role?("splunk-search"),
-  node.role?("splunk-server"),
-].none?
-
-if forwarder
+if splunk_forwarder?
   case node[:platform]
   when "gentoo"
     package "net-analyzer/splunkforwarder"
