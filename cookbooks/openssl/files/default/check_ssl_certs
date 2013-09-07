@@ -4,7 +4,7 @@ expired = []
 exitstatus = 0
 
 Dir["/etc/ssl/ca/*.crt"].each do |crt|
-  out = %x(/usr/lib/nagios/plugins/check_ssl_cert -n -c #{crt})
+  out = %x(/usr/lib/nagios/plugins/check_ssl_cert -n -x 10 -c #{crt})
   exitstatus = $?.exitstatus if $?.exitstatus > exitstatus
 
   if $?.exitstatus != 0
