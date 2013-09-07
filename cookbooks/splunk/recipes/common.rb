@@ -23,8 +23,7 @@ peers = node.run_state[:nodes].select do |n|
 end
 
 # misuse the pass4symmkey as admin password
-salt = SecureRandom.hex(8)
-admin_password = pass4symmkey.crypt("$1$#{salt}$")
+admin_password = pass4symmkey.crypt("$1$159c1407ab01798d$")
 
 splunk_users = Proc.new do |u|
   (u[:tags]) and
