@@ -25,6 +25,6 @@ gh.repos.list(org: org).sort_by { |r| r[:name] }.each do |repo|
     end
   else
     puts ">>> Cloning #{org}/#{repo[:name]}"
-    sh("git clone #{repo[:ssh_url]}")
+    sh("git clone #{repo[:clone_url]}")
   end
 end
