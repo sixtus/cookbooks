@@ -107,6 +107,21 @@ when "gentoo"
       grant_option true
     end
 
+    if root? and solo? # for vagrant
+      mysql_user "root" do
+        password mysql_root_pass
+        force_password true
+        host "%"
+      end
+
+      mysql_grant "root" do
+        database "*"
+        user "root"
+        user_host "%"
+        grant_option true
+      end
+    end
+
     mysql_database "test" do
       owner "root"
     end
