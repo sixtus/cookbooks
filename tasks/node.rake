@@ -1,11 +1,40 @@
-require 'socket'
+require 'resolv'
 
 namespace :node do
 
   task :checkdns, :fqdn, :ipaddress do |t, args|
-    ip = Addrinfo.getaddrinfo(args.fqdn, nil)[0].ip_address
+    ip = Resolv.getaddress(args.fqdn)
     if ip != args.ipaddress
       raise "IP #{args.ipaddress} does not match resolved address #{ip} for FQDN #{args.fqdn}"
+    end
+  end
+
+  task :zendns, :fqdn, :ipaddress do |t, args|
+    fqdn = args.fqdn
+    ip = args.ipaddress
+
+    domain = ZenDNS.domains.select do |d|
+      fqdn =~ /\.#{d['name']}\Z/
+    end.sort_by do |d|
+      d['name'].length
+    end.last
+
+    hostname = fqdn.sub(/\.#{domain['name']}\Z/, '')
+
+    records = ZenDNS.records(domain['_id']).select do |r|
+      r['name'] == hostname
+    end
+
+    if records.empty?
+      ZenDNS.create_record(domain['_id'], {
+        name: hostname,
+        type: 'A',
+        priority: '0',
+        content: ip,
+      })
+    else
+      good = records.any? { |r| r['content'] == ip }
+      raise "ZenDNS records do not match for #{fqdn}/#{ip}" unless good
     end
   end
 
@@ -48,6 +77,7 @@ namespace :node do
     args.with_defaults(:profile => 'generic-two-disk-md')
 
     # sanity check
+    Rake::Task['node:zendns'].invoke(args.fqdn, args.ipaddress)
     Rake::Task['node:checkdns'].invoke(args.fqdn, args.ipaddress)
 
     # quick start

@@ -1,5 +1,4 @@
-def reboot_wait(fqdn)
-  system("ssh -t #{fqdn} '/usr/bin/sudo -i systemctl reboot'")
+def wait_for_ssh(fqdn)
   wait_with_ping(fqdn, false)
   wait_with_ping(fqdn, true)
   loop do
@@ -8,4 +7,9 @@ def reboot_wait(fqdn)
     sleep 5
   end
   system("ssh -t #{fqdn} '/usr/bin/sudo -i uname -a'")
+end
+
+def reboot_wait(fqdn)
+  system("ssh -t #{fqdn} '/usr/bin/sudo -i systemctl reboot'")
+  wait_for_ssh(fqdn)
 end
