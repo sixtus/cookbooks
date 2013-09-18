@@ -41,9 +41,6 @@ namespace :ssl do
       sh("openssl ca -config #{SSL_CONFIG_FILE} -gencrl -out #{SSL_CERT_DIR}/ca.crl")
     end
 
-    chef_domain = URI.parse(Chef::Config[:chef_server_url]).host.
-      split(".")[1..-1].join(".")
-
     if chef_domain != ""
       ENV['BATCH'] = "1"
       args = Rake::TaskArguments.new([:cn], ["*.#{chef_domain}"])

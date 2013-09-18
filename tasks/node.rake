@@ -26,6 +26,7 @@ namespace :node do
     end
 
     if records.empty?
+      puts "Creating DNS record in ZenDNS (#{fqdn} -> #{ip})"
       ZenDNS.create_record(domain['_id'], {
         name: hostname,
         type: 'A',
@@ -76,7 +77,9 @@ namespace :node do
   task :quickstart, :fqdn, :ipaddress, :profile do |t, args|
     args.with_defaults(:profile => 'generic-two-disk-md')
 
-    # sanity check
+    # create DNS/rDNS records
+    name = args.fqdn.sub(/\.#{chef_domain}$/, '')
+    hetzner_server_name_rdns(args.ipaddress, name, args.fqdn)
     Rake::Task['node:zendns'].invoke(args.fqdn, args.ipaddress)
     Rake::Task['node:checkdns'].invoke(args.fqdn, args.ipaddress)
 

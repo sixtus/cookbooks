@@ -1,11 +1,5 @@
 # remote commands for maintenance
 
-require 'hetzner-api'
-
-def hetzner
-  @hetzner ||= Hetzner::API.new(HETZNER_API_USERNAME, HETZNER_API_PASSWORD)
-end
-
 namespace :hetzner do
 
   desc "reset machine via Hetzner Robot"
@@ -27,17 +21,7 @@ namespace :hetzner do
         puts "IP #{node[:primary_ipaddress]} does not match resolved address #{ip} for FQDN #{fqdn}"
       end
 
-      server = hetzner.server?(ip)
-
-      if server['error']
-        puts "not a hetzner machine!"
-        next
-      end
-
-      puts "Setting server name for #{ip} to #{name}"
-      hetzner.server!(ip, server_name: name)
-      puts "Setting reverse DNS for #{ip} to #{fqdn}"
-      hetzner.rdns!(ip, fqdn)
+      hetzner_server_name_rdns(ip, name, fqdn)
     end
   end
 
