@@ -23,10 +23,10 @@ service "pure-ftpd" do
   action [:enable, :start]
 end
 
-shorewall_rule "ftp" do
-  proto "-"
+shorewall_rule "pure-ftpd" do
+  destport "21,32768:61000"
 end
 
-shorewall6_rule "ftp" do
-  proto "-"
+shorewall6_rule "pure-ftpd" do
+  destport "21,32768:61000"
 end
