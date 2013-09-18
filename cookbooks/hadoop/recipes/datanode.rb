@@ -8,7 +8,7 @@ end
 
 if tagged?("nagios-client")
   {
-    :datanode => [:DataNode, 75, 90],
+    :datanode => [:DataNode, 85, 95],
   }.each do |name, params|
     name = name.to_s
 
