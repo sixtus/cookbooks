@@ -7,7 +7,7 @@ Vagrant.configure("2") do |config|
     base.vm.box = "zentoo-base"
     base.vm.box_url = "http://www.zentoo.org/downloads/amd64/base-current.box"
     base.vm.hostname = "base.zenops.ws"
-    config.vm.provision :chef_solo do |chef|
+    base.vm.provision :chef_solo do |chef|
       chef.cookbooks_path = "cookbooks"
       chef.add_recipe "base"
       chef.binary_env = "LANG=en_US.UTF-8"
