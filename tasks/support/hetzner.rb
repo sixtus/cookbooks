@@ -5,6 +5,8 @@ def hetzner
 end
 
 def hetzner_server_name_rdns(ip, name, fqdn)
+  return unless const_defined?(ZENDNS_API_URL)
+
   server = hetzner.server?(ip)
 
   if server['error']

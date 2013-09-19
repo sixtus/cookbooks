@@ -9,36 +9,6 @@ namespace :node do
     end
   end
 
-  task :zendns, :fqdn, :ipaddress do |t, args|
-    fqdn = args.fqdn
-    ip = args.ipaddress
-
-    domain = ZenDNS.domains.select do |d|
-      fqdn =~ /\.#{d['name']}\Z/
-    end.sort_by do |d|
-      d['name'].length
-    end.last
-
-    hostname = fqdn.sub(/\.#{domain['name']}\Z/, '')
-
-    records = ZenDNS.records(domain['_id']).select do |r|
-      r['name'] == hostname
-    end
-
-    if records.empty?
-      puts "Creating DNS record in ZenDNS (#{fqdn} -> #{ip})"
-      ZenDNS.create_record(domain['_id'], {
-        name: hostname,
-        type: 'A',
-        priority: '0',
-        content: ip,
-      })
-    else
-      good = records.any? { |r| r['content'] == ip }
-      raise "ZenDNS records do not match for #{fqdn}/#{ip}" unless good
-    end
-  end
-
   desc "Create a new node with SSL certificates"
   task :create => [ :pull ]
   task :create, :fqdn, :ipaddress do |t, args|
@@ -83,7 +53,7 @@ namespace :node do
     # create DNS/rDNS records
     name = args.fqdn.sub(/\.#{chef_domain}$/, '')
     hetzner_server_name_rdns(args.ipaddress, name, args.fqdn)
-    Rake::Task['node:zendns'].invoke(args.fqdn, args.ipaddress)
+    zendns_add_record(args.fqdn, args.ipaddress)
     Rake::Task['node:checkdns'].invoke(args.fqdn, args.ipaddress)
 
     # quick start
