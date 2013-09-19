@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-description "Manage OS X user defaults settings"
+description "Mac OS X defaults and applications"
 
 maintainer "Benedikt Böhm"
 maintainer_email "bb@xnull.de"
