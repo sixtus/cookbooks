@@ -3,8 +3,10 @@ require 'httparty'
 class ZenDNS
   include HTTParty
 
-  base_uri ZENDNS_API_URL
-  default_params auth_token: ZENDNS_API_TOKEN, format: :json
+  if const_defined?(:ZENDNS_API_URL)
+    base_uri ZENDNS_API_URL
+    default_params auth_token: ZENDNS_API_TOKEN, format: :json
+  end
 
   def self.domains
     JSON.parse(get("/domains"))
@@ -23,7 +25,7 @@ class ZenDNS
 end
 
 def zendns_add_record(fqdn, ip)
-  return unless const_defined?(ZENDNS_API_URL)
+  return unless const_defined?(:ZENDNS_API_URL)
 
   domain = ZenDNS.domains.select do |d|
     fqdn =~ /\.#{d['name']}\Z/
