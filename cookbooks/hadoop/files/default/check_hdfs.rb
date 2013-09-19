@@ -54,39 +54,17 @@ module DfsCapacity
 end
 
 module DfsBlocks
-  def bean
-    "Hadoop:service=NameNode,name=FSNamesystemMetrics"
-  end
-
-  def warning(m)
-    m[:UnderReplicatedBlocks] > threshold(:warning).to_i
+  def measure
+    out = %x(/opt/hadoop/bin/hadoop dfsadmin -report | head -n8 | tail -n-3 | awk -F: '{print $2}')
+    out.split.map(&:to_i)
   end
 
   def critical(m)
-    m[:UnderReplicatedBlocks] > threshold(:critical).to_i or
-    [m[:MissingBlocks], m[:CorruptBlocks]].map(&:to_i).max > 0
+    m.max > 0
   end
 
   def to_s(m)
-    "TotalBlocks: #{m[:BlocksTotal]}, MissingBlocks: #{m[:MissingBlocks]}, CorruptBlocks: #{m[:CorruptBlocks]}, UnderReplicatedBlocks: #{m[:UnderReplicatedBlocks]}"
-  end
-end
-
-module RpcQueue
-  def bean
-    "Hadoop:service=NameNode,name=RpcActivityForPort9000"
-  end
-
-  def warning(m)
-    m[:RpcQueueTime_avg_time] > threshold(:warning).to_f
-  end
-
-  def critical(m)
-    m[:RpcQueueTime_avg_time] > threshold(:critical).to_f
-  end
-
-  def to_s(m)
-    "QueueTime: #{m[:RpcQueueTime_avg_time]}, ProcessingTime: #{m[:RpcProcessingTime_avg_time]}"
+    "MissingBlocks: #{m[2]}, CorruptBlocks: #{m[1]}, UnderReplicatedBlocks: #{m[0]}"
   end
 end
 
