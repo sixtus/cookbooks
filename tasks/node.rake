@@ -71,6 +71,9 @@ namespace :node do
     ENV['DISTRO'] ||= "gentoo"
     Rake::Task['node:create'].invoke(args.fqdn, args.ipaddress)
     sh("knife bootstrap #{args.fqdn} --distro #{ENV['DISTRO']} -P tux")
+    env = "/usr/bin/env UPDATEWORLD_DONT_ASK=1"
+    system("ssh -t #{args.fqdn} '/usr/bin/sudo -i #{env} /usr/local/sbin/updateworld'")
+    reboot_wait(node.name)
   end
 
   desc "Quickstart & Bootstrap the specified node"
