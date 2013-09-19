@@ -120,7 +120,6 @@ install_gentoo()
     file=$(basename $image)
     dir=${file/.tar*}
 
-    mkdir -p /var/lock/subsys/
     (
         flock -x 200
         if [ $? -ne 0 ]; then
@@ -145,7 +144,7 @@ install_gentoo()
 
         return 0
 
-        ) 200>/var/lock/subsys/lxc-gentoo
+        ) 200>/run/lock/lxc-gentoo
 
     return $?
 }
@@ -215,7 +214,7 @@ clean()
         rm --preserve-root --one-file-system -rf $cache && echo "Done." || exit 1
         exit 0
 
-    ) 200>/var/lock/subsys/lxc-gentoo
+    ) 200>/run/lock/lxc-gentoo
 }
 
 usage()
