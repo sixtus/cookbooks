@@ -7,7 +7,7 @@ else
 fi
 
 for unit in $UNITS; do
-	if [[ $unit == "chef-client.service" ]]; then
+	if [ "$unit" == "chef-client.service" ]; then
 		continue
 	fi
 	if ! systemctl -q is-active -- "$unit"; then
@@ -20,7 +20,8 @@ if [ "${#dead_service[@]}" == "0" ]; then
 	exit 0
 else
 	for x in "${dead_service[@]}"; do
-		if ! output="$(systemctl status "$x" | sed 's/.*Active: \(.*\) (.*\; \(.*\)/\1 \2/;tn;d;:n')"; then
+		output="$(systemctl status "$x" | sed 's/.*Active: \(.*\) (.*\; \(.*\)/\1 \2/;tn;d;:n')"
+		if [ $(echo "$output"x | sed 's/ //g') == "x" ]; then
 			output="is inactive"
 		fi
 		stat+=( "$x: $output" )
