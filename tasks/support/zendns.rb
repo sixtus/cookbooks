@@ -25,7 +25,7 @@ class ZenDNS
 end
 
 def zendns_add_record(fqdn, ip)
-  return unless const_defined?(:ZENDNS_API_URL)
+  return unless ::Module.const_defined?(:ZENDNS_API_URL)
 
   domain = ZenDNS.domains.select do |d|
     fqdn =~ /\.#{d['name']}\Z/

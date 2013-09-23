@@ -5,7 +5,7 @@ def hetzner
 end
 
 def hetzner_server_name_rdns(ip, name, fqdn)
-  return unless const_defined?(:HETZNER_API_USERNAME)
+  return unless ::Module.const_defined?(:HETZNER_API_USERNAME)
 
   server = hetzner.server?(ip)
 
