@@ -1,15 +1,18 @@
 include_recipe "lxc"
 
-package "app-emulation/libvirt"
+case node[:platform]
+when "gentoo"
+  package "app-emulation/libvirt"
 
-cookbook_file "/etc/libvirt/libvirt.conf" do
-  source "libvirt.conf"
-  owner "root"
-  group "root"
-  mode "0644"
-  notifies :restart, "service[libvirtd]"
-end
+  cookbook_file "/etc/libvirt/libvirt.conf" do
+    source "libvirt.conf"
+    owner "root"
+    group "root"
+    mode "0644"
+    notifies :restart, "service[libvirtd]"
+  end
 
-service "libvirtd" do
-  action [:enable, :start]
+  service "libvirtd" do
+    action [:enable, :start]
+  end
 end
