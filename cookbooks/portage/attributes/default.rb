@@ -18,7 +18,7 @@ default[:portage][:ACCEPT_KEYWORDS] = nil
 
 # advanced features
 default[:portage][:FEATURES] = []
-default[:portage][:OPTS] = []
+default[:portage][:OPTS] = %w(--usepkg --getbinpkg)
 default[:portage][:MAKEOPTS] = "-j1"
 
 # language support
