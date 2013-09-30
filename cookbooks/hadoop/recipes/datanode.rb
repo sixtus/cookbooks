@@ -4,6 +4,7 @@ include_recipe "hadoop"
 
 service "hadoop@datanode" do
   action [:enable, :start]
+  subscribes :restart, 'template[/opt/hadoop/conf/hdfs-site.xml]'
 end
 
 if tagged?("nagios-client")
