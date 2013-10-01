@@ -40,6 +40,12 @@ when "gentoo"
       mode "0755"
     end
 
+    directory "/run/mysqld" do
+      owner "mysql"
+      group "mysql"
+      mode "0755"
+    end
+
     %w(mysql.err mysql.log mysqld.err slow-queries.log).each do |l|
       file "/var/log/mysql/#{l}" do
         owner "mysql"
