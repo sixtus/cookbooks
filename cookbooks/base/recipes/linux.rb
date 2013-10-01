@@ -119,7 +119,11 @@ if tagged?("nagios-client")
     nagios_plugin "check_mem"
 
     nrpe_command "check_mem" do
-      command "/usr/lib/nagios/plugins/check_mem -C -u -w 80 -c 95"
+      if node[:memory][:total].to_i > 32*1024*1024
+        command "/usr/lib/nagios/plugins/check_mem -C -u -w 95 -c 99"
+      else
+        command "/usr/lib/nagios/plugins/check_mem -C -u -w 80 -c 95"
+      end
     end
 
     nagios_service "MEMORY" do
