@@ -98,6 +98,11 @@ when "gentoo"
       provider Chef::Provider::Service::Systemd
     end
 
+    # modules
+    service "systemd-modules-load.service" do
+      action :nothing # just a callback
+    end
+
     # user session support
     systemd_unit "systemd-stop-user-sessions.service"
     systemd_unit "user-session@.service" do
