@@ -1,24 +1,28 @@
-portage_package_use "dev-db/mongodb" do
-  use %w(v8)
-end
+case node[:platform]
+when "gentoo"
+  package "dev-db/mongodb"
+  package "dev-python/pymongo"
+  package "dev-ruby/mongo"
 
-package "dev-db/mongodb"
-package "dev-python/pymongo"
-package "dev-ruby/mongo"
+  if root?
+    file "/etc/logrotate.d/mongodb" do
+      action :delete
+    end
 
-file "/etc/logrotate.d/mongodb" do
-  action :delete
-end
+    nagios_plugin "check_mongodb"
 
-if tagged?("nagios-client")
-  nagios_plugin "check_mongodb"
-end
+    systemd_tmpfiles "mongodb"
 
-systemd_tmpfiles "mongodb"
-
-node[:mongos][:instances].each do |cluster, params|
-  mongodb_mongos cluster do
-    bind_ip params[:bind_ip]
-    port params[:port]
+    node[:mongos][:instances].each do |cluster, params|
+      mongodb_mongos cluster do
+        bind_ip params[:bind_ip]
+        port params[:port]
+      end
+    end
   end
+
+when "mac_os_x"
+  package "mongodb"
+  pip_package "pymongo"
+  gem_package "mongo"
 end
