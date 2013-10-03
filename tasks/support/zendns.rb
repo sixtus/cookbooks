@@ -1,9 +1,13 @@
-require 'httparty'
+begin
+  require 'httparty'
+rescue LoadError
+  $stderr.puts "HTTParty cannot be loaded. Skipping some rake tasks ..."
+end
 
 class ZenDNS
-  include HTTParty
+  include HTTParty if ::Module.const_defined?(:HTTParty)
 
-  if const_defined?(:ZENDNS_API_URL)
+  if ::Module.const_defined?(:ZENDNS_API_URL)
     base_uri ZENDNS_API_URL
     default_params auth_token: ZENDNS_API_TOKEN, format: :json
   end

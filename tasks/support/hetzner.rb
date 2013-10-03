@@ -1,4 +1,8 @@
-require 'hetzner-api'
+begin
+  require 'hetzner-api'
+rescue LoadError
+  $stderr.puts "Hetzner API cannot be loaded. Skipping some rake tasks ..."
+end
 
 def hetzner
   @hetzner ||= Hetzner::API.new(HETZNER_API_USERNAME, HETZNER_API_PASSWORD)
