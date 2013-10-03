@@ -68,6 +68,10 @@ if root?
     include_recipe "smart"
     include_recipe "watchdog"
   end
+
+  if root?
+    include_recipe "duply"
+  end
 end
 
 if tagged?("nagios-client")
