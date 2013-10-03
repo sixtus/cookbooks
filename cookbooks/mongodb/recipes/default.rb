@@ -23,6 +23,4 @@ when "gentoo"
 
 when "mac_os_x"
   package "mongodb"
-  python_pip "pymongo"
-  gem_package "mongo"
 end
