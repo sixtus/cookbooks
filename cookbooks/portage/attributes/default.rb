@@ -31,10 +31,10 @@ if node[:platform] == "gentoo"
   if node[:portage][:repo] =~ /^zentoo/
     default[:portage][:profile] = "#{set[:portage][:portdir]}/profiles/default/linux/#{node[:portage][:arch]}/11.0"
 
-    default[:portage][:SYNC] = "rsync://rsync.zentoo.org/zentoo-portage"
+    default[:portage][:SYNC] = "rsync://mirror.zenops.net/zentoo-portage"
     default[:portage][:BINHOST] = "http://chef.zenops.net/${ARCH}/"
     default[:portage][:MIRRORS] = %w(
-    http://www.zentoo.org
+    http://mirror.zenops.net/zentoo
     http://ftp.spline.de/pub/gentoo
     )
   elsif node[:portage][:repo] == "gentoo"

@@ -19,6 +19,7 @@ end
 systemd_unit "ntpd.service"
 
 service "ntpd" do
+  service_name "ntp" if debian?
   action [:enable, :start]
 end
 

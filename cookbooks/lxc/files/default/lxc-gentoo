@@ -1,12 +1,6 @@
 #!/bin/bash
 
-SUITE=${SUITE:-stable}
-
-if [[ ${SUITE} == "next" ]]; then
-    MIRROR=${MIRROR:-http://next.zentoo.org/downloads}
-else
-    MIRROR=${MIRROR:-http://www.zentoo.org/downloads}
-fi
+MIRROR=${MIRROR:-http://mirror.zenops.net/zentoo}
 
 ARCH=$(portageq envvar ARCH)
 

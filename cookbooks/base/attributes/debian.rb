@@ -20,7 +20,6 @@ if node[:platform] == "debian"
     keychain
     less
     libffi5
-    libicu44
     libxml2
     libxslt1.1
     libyaml-0-2
