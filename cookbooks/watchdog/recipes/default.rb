@@ -9,6 +9,8 @@ when "gentoo"
     mode "0644"
   end
 
+  systemd_unit "watchdog.service"
+
   service "watchdog" do
     action [:enable, :start]
   end
