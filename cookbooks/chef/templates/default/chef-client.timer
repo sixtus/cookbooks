@@ -5,8 +5,7 @@ ConditionPathExists=!/run/lock/chef-client.lock
 
 [Timer]
 Unit=chef-client.service
-OnBootSec=60
-OnUnitInactiveSec=3600
+OnCalendar=*:<%= @minute %>
 
 [Install]
 WantedBy=multi-user.target

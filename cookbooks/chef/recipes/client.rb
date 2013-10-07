@@ -71,19 +71,37 @@ unless solo?
 
   timer_envs = %w(production staging)
 
+  nodes = node.run_state[:nodes].select do |n|
+    n[:cluster][:name] == node[:cluster][:name]
+  end.sort_by do |n|
+    n[:fqdn]
+  end.map do |n|
+    n[:fqdn]
+  end
+
+  minutes = nodes.each_with_index.map do |_, idx|
+    (idx * (60.0 / nodes.length)).to_i
+  end
+
+  index = nodes.index(node[:fqdn])
+  minute = minutes[index]
+
   cron "chef-client" do
     if node[:platform] == "debian"
       command "/usr/bin/ruby -E UTF-8 /usr/local/bin/chef-client -c /etc/chef/client.rb &>/dev/null"
     else
       command "/usr/bin/ruby -E UTF-8 /usr/bin/chef-client -c /etc/chef/client.rb &>/dev/null"
     end
-    minute IPAddr.new(node[:primary_ipaddress]).to_i % 60
+    minute minute
     action :delete unless timer_envs.include?(node.chef_environment)
     action :delete if systemd_running?
   end
 
   systemd_unit "chef-client.service"
-  systemd_unit "chef-client.timer"
+  systemd_unit "chef-client.timer" do
+    template true
+    variables minute: minute
+  end
 
   service "chef-client.timer" do
     action [:enable, :start]
