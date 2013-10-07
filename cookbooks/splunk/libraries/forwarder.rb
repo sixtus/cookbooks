@@ -1,6 +1,6 @@
 module SplunkHelpers
   def splunk_forwarder?
-    [
+    node.run_state[:splunk].any? && [
       node.role?("splunk-master"),
       node.role?("splunk-peer"),
       node.role?("splunk-search"),
