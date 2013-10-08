@@ -25,7 +25,7 @@ default_attributes({
     },
     :net => {
       :core => {
-        :somaxconn => 262144,
+        :somaxconn => 65535,
         :netdev_max_backlog => 65536,
         #:rmem_max => 16777216,
         #:wmem_max => 16777216,
