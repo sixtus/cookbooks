@@ -72,6 +72,7 @@ unless solo?
   timer_envs = %w(production staging)
 
   nodes = node.run_state[:nodes].select do |n|
+    n[:fqdn] and
     n[:cluster][:name] == node[:cluster][:name]
   end.sort_by do |n|
     n[:fqdn]
