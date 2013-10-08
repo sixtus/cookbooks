@@ -60,7 +60,7 @@ module DfsBlocks
   end
 
   def critical(m)
-    m.max > 0
+    [m[0] > 0, m[1] > 1, m[2] > 0].any?
   end
 
   def to_s(m)
