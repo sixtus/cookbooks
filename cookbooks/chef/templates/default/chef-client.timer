@@ -5,6 +5,7 @@ ConditionPathExists=!/run/lock/chef-client.lock
 
 [Timer]
 Unit=chef-client.service
+OnBoot=60
 OnCalendar=*:<%= @minute %>
 
 [Install]
