@@ -20,4 +20,6 @@ exec 2> >(logger -i -p "${LOG_FACILITY}.error" -t "${PROGRAM}")
   lftp -c "open backup; mkdir $(hostname -f)/mongodb" &>/dev/null
   lftp -c "open backup; put -O $(hostname -f)/mongodb <%= node[:mongodb][:backup][:dir] %>/mongodump_full_${DATE}.tar.gz"
 
+  rm -rf ${tmpdir}
+
 ) 9>/run/lock/${PROGRAM}.lock
