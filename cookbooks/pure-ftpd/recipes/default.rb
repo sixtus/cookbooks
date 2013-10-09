@@ -15,8 +15,11 @@ execute "pure-pw-mkdb" do
   not_if { FileUtils.uptodate?("/etc/pureftpd.pdb", %w(/etc/pureftpd.passwd)) }
 end
 
+passive_port_range = "#{65535 - (node[:pureftpd][:connections].to_i * 2) + 1}:65535"
+
 systemd_unit "pure-ftpd.service" do
   template true
+  variables passive_port_range: passive_port_range
 end
 
 service "pure-ftpd" do
@@ -24,9 +27,9 @@ service "pure-ftpd" do
 end
 
 shorewall_rule "pure-ftpd" do
-  destport "21,32768:61000"
+  destport "21,#{passive_port_range}"
 end
 
 shorewall6_rule "pure-ftpd" do
-  destport "21,32768:61000"
+  destport "21,#{passive_port_range}"
 end

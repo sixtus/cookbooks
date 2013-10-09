@@ -4,6 +4,7 @@ After=network.target
 
 [Service]
 ExecStart=/usr/sbin/pure-ftpd -S 21 \
+	-p <%= @passive_port_range %> \
 	-c <%= node[:pureftpd][:connections] %> \
 	-C <%= node[:pureftpd][:ip_connections] %> \
 	-k 90% \
