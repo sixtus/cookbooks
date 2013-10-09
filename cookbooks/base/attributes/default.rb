@@ -50,7 +50,7 @@ default[:locales] = [
 
 # nameservers and search domain
 default[:resolv][:search] = []
-default[:resolv][:nameservers] = %w(8.8.8.8 8.8.4.4)
+default[:resolv][:nameservers] = %w(4.2.2.2 8.8.8.8)
 default[:resolv][:hosts] = []
 default[:resolv][:aliases] = []
 
