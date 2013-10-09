@@ -19,7 +19,8 @@ else
 end
 
 peers = node.run_state[:nodes].select do |n|
-  n.role?("splunk-peer")
+  n.role?("splunk-peer") or
+  n.role?("splunk-server")
 end
 
 # misuse the pass4symmkey as admin password
