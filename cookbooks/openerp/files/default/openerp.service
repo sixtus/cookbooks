@@ -1,0 +1,12 @@
+[Unit]
+Description=OpenERP
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/openerp-server -c /etc/openerp/openerp.cfg
+Restart=always
+User=openerp
+Group=openerp
+
+[Install]
+WantedBy=multi-user.target

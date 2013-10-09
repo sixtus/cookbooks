@@ -77,6 +77,7 @@ when "gentoo"
       owner "root"
       group "root"
       mode "0644"
+      not_if { File.symlink?("/etc/ifup") }
     end
 
     file "/etc/ifdown" do
@@ -95,6 +96,11 @@ when "gentoo"
     service "sshd.service" do
       action :enable
       provider Chef::Provider::Service::Systemd
+    end
+
+    # modules
+    service "systemd-modules-load.service" do
+      action :nothing # just a callback
     end
 
     # user session support
@@ -134,5 +140,6 @@ if tagged?("nagios-client")
     check_command "check_nrpe!check_systemd"
     servicegroups "systemd"
     env [:staging, :testing, :development]
+    register systemd_running? ? "1" : "0"
   end
 end

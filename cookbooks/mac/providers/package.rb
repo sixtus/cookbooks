@@ -66,5 +66,6 @@ private
 
 def installed?
   ::File.directory?("#{new_resource.destination}/#{new_resource.app}.app") ||
+  ::File.directory?("#{new_resource.destination}/#{new_resource.app}/") ||
     system("pkgutil --pkgs=#{new_resource.package_id}")
 end

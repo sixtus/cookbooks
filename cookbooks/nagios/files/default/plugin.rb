@@ -77,8 +77,8 @@ module Nagios
       exit Nagios.const_get("EXIT_#{@status}")
     end
 
-    def exit_exception(exc_info)
-      puts "Exception: #{exc_info}"
+    def exit_exception(exc)
+      puts "Exception: #{exc} (#{exc.backtrace})"
       exit Nagios::EXIT_CRITICAL
     end
 

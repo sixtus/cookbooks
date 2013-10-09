@@ -1,6 +1,7 @@
 include_recipe "java"
 
 package "dev-util/jenkins-bin"
+package "app-text/sloccount"
 
 execute "jenkins-ssh-key" do
   command "ssh-keygen -f /var/lib/jenkins/.ssh/id_rsa -N '' -C jenkins@#{node[:fqdn]}"
@@ -16,6 +17,8 @@ service "jenkins" do
   action [:enable, :start]
 end
 
-package "app-text/sloccount"
+nginx_server "ci" do
+  template "nginx.conf"
+end
 
 include_recipe "jenkins::extras"

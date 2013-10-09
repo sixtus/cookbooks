@@ -1,26 +1,22 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-Vagrant.configure("2") do |config|
-
-  config.vm.define :base do |base|
-    base.vm.box = "zentoo-base"
-    base.vm.box_url = "http://www.zentoo.org/downloads/amd64/base-current.box"
-    base.vm.hostname = "base.zenops.ws"
-    config.vm.provision :chef_solo do |chef|
-      chef.cookbooks_path = "cookbooks"
-      chef.add_recipe "base"
-      chef.binary_env = "LANG=en_US.UTF-8"
-    end
+def setup_chef_solo(config)
+  config.vm.provision :chef_solo do |chef|
+    chef.binary_env = "LANG=en_US.UTF-8"
+    chef.cookbooks_path = ["cookbooks", "site-cookbooks"]
+    chef.data_bags_path = "databags"
+    chef.roles_path = "roles"
+    yield chef if block_given?
   end
-
-  config.vm.define :chef do |chef|
-    chef.vm.box = "zentoo-chef-server"
-    chef.vm.box_url = "http://www.zentoo.org/downloads/amd64/chef-server-current.box"
-    chef.vm.hostname = "chef.zenops.ws"
-    chef.vm.network :private_network, ip: "10.42.9.2"
-    chef.vm.synced_folder ".", "/vagrant", disabled: true
-    chef.vm.provision :shell, path: "scripts/vagrant/bootstrap-server.sh"
-  end
-
 end
+
+def setup_vrde(config, port)
+  config.vm.provider "virtualbox" do |vb|
+    vb.customize ["modifyvm", :id, "--vrde", "on"]
+    vb.customize ["modifyvm", :id, "--vrdeport", port.to_s]
+    vb.customize ["modifyvm", :id, "--vrdeauthtype", "external"]
+  end
+end
+
+Dir[File.dirname(__FILE__) + '/vagrant/machines/*.rb'].each { |file| require file }

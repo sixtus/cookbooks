@@ -1,9 +1,9 @@
-require 'socket'
+require 'resolv'
 
 namespace :node do
 
   task :checkdns, :fqdn, :ipaddress do |t, args|
-    ip = Addrinfo.getaddrinfo(args.fqdn, nil)[0].ip_address
+    ip = Resolv.getaddress(args.fqdn)
     if ip != args.ipaddress
       raise "IP #{args.ipaddress} does not match resolved address #{ip} for FQDN #{args.fqdn}"
     end
@@ -41,13 +41,19 @@ namespace :node do
     ENV['DISTRO'] ||= "gentoo"
     Rake::Task['node:create'].invoke(args.fqdn, args.ipaddress)
     sh("knife bootstrap #{args.fqdn} --distro #{ENV['DISTRO']} -P tux")
+    env = "/usr/bin/env UPDATEWORLD_DONT_ASK=1"
+    system("ssh -t #{args.fqdn} '/usr/bin/sudo -i #{env} /usr/local/sbin/updateworld'")
+    reboot_wait(args.fqdn)
   end
 
   desc "Quickstart & Bootstrap the specified node"
   task :quickstart, :fqdn, :ipaddress, :profile do |t, args|
     args.with_defaults(:profile => 'generic-two-disk-md')
 
-    # sanity check
+    # create DNS/rDNS records
+    name = args.fqdn.sub(/\.#{chef_domain}$/, '')
+    hetzner_server_name_rdns(args.ipaddress, name, args.fqdn)
+    zendns_add_record(args.fqdn, args.ipaddress)
     Rake::Task['node:checkdns'].invoke(args.fqdn, args.ipaddress)
 
     # quick start

@@ -1,5 +1,7 @@
 include ChefUtils::Account
 
+use_inline_resources rescue nil
+
 action :create do
   nr = new_resource # rebind
   user = get_user(nr.user)
@@ -17,8 +19,9 @@ action :create do
 
     force nr.force
 
-    symlinks nr.symlinks
+    purge_before_symlink nr.purge_before_symlink
     symlink_before_migrate nr.symlink_before_migrate
+    symlinks nr.symlinks
 
     before_migrate do
       rvm_shell "#{nr.user}-bundle-install" do

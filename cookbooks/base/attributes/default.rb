@@ -50,7 +50,7 @@ default[:locales] = [
 
 # nameservers and search domain
 default[:resolv][:search] = []
-default[:resolv][:nameservers] = %w(8.8.8.8 8.8.4.4)
+default[:resolv][:nameservers] = %w(4.2.2.2 8.8.8.8)
 default[:resolv][:hosts] = []
 default[:resolv][:aliases] = []
 
@@ -94,8 +94,10 @@ default[:sysctl][:net][:netfilter][:nf_conntrack_tcp_timeout_established] = 4320
 
 # virtualization foo
 default[:virtualization][:role] = "host"
-%x(systemd-detect-virt -q)
-default[:virtualization][:guest] = $?.exitstatus == 0
+unless node[:platform] == "debian" || node[:platform] == "mac_os_x"
+  %x(systemd-detect-virt -q)
+  default[:virtualization][:guest] = $?.exitstatus == 0
+end
 default[:skip][:hardware] = node[:virtualization][:guest]
 
 # provide sane default values in case ohai didn't find them

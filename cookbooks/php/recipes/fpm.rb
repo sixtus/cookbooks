@@ -32,7 +32,10 @@ template "/etc/php/fpm-php#{node[:php][:slot]}/php-fpm.conf" do
 end
 
 systemd_tmpfiles "php-fpm"
-systemd_unit "php-fpm.service"
+
+systemd_unit "php-fpm.service" do
+  template true
+end
 
 service "php-fpm" do
   action [:enable, :start]

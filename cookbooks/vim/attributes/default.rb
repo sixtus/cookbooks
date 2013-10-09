@@ -1,3 +1,5 @@
+include_attribute "base"
+
 default[:vim][:rcfile] = case node[:platform]
                          when "mac_os_x"
                            "#{node[:homedir]}/.vimrc"

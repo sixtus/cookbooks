@@ -6,6 +6,7 @@ attribute :repository, :kind_of => String, :required => true
 attribute :revision, :kind_of => String, :required => true
 attribute :rvm_version, :kind_of => String
 attribute :ruby_version, :kind_of => String, :required => true
+attribute :purge_before_symlink, :kind_of => Array, :default => []
 attribute :symlink_before_migrate, :kind_of => Hash, :default => {}
 attribute :symlinks, :kind_of => Hash, :default => {}
 attribute :bundle_without, :kind_of => [Array, String], :default => %w(development test)

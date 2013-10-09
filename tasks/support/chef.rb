@@ -29,11 +29,15 @@ def search(default_query)
   nodes.sort_by { |n| n[:fqdn] }.select do |node|
     next false if node[:skip] and node[:skip][:rc] # TODO: does not belong here
     if block_given?
-      puts(">>> #{node.name}")
+      puts("\e[32m>>> #{node.name}\e[39m")
       yield node
     end
     true
   end
+end
+
+def chef_domain
+  URI.parse(Chef::Config[:chef_server_url]).host.split(".")[1..-1].join(".")
 end
 
 # overwrite knife from knife-dsl

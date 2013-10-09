@@ -41,6 +41,11 @@ directory node[:portage][:distdir] do
   group "portage"
 end
 
+# remove legacy paths
+file "/etc/make.conf" do
+  action :delete
+end
+
 file "/etc/make.profile" do
   action :delete
 end
@@ -51,8 +56,10 @@ end
 
 include_recipe "portage::layman"
 
-file "/etc/make.conf" do
-  action :delete
+directory node[:portage][:confdir] do
+  owner "root"
+  group "root"
+  mode "0755"
 end
 
 template node[:portage][:make_conf] do
@@ -62,13 +69,6 @@ template node[:portage][:make_conf] do
   source "make.conf"
   cookbook "portage"
   backup 0
-end
-
-directory node[:portage][:confdir] do
-  owner "root"
-  group "root"
-  mode "0755"
-  not_if { File.directory?(node[:portage][:confdir]) }
 end
 
 %w(keywords mask unmask use).each do |type|
@@ -100,6 +100,24 @@ end
 
 cookbook_file "#{node[:portage][:confdir]}/bashrc" do
   source "bashrc"
+  owner "root"
+  group "root"
+  mode "0644"
+end
+
+file "#{node[:portage][:confdir]}/repos.conf" do
+  action :delete
+  only_if { File.file?("#{node[:portage][:confdir]}/repos.conf") }
+end
+
+directory "#{node[:portage][:confdir]}/repos.conf" do
+  action :delete
+  recursive true
+  only_if { File.directory?("#{node[:portage][:confdir]}/repos.conf") }
+end
+
+template "/usr/share/portage/config/repos.conf" do
+  source "repos.conf"
   owner "root"
   group "root"
   mode "0644"

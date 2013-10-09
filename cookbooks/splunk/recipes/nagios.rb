@@ -8,7 +8,6 @@ git "/opt/splunk/etc/apps/SplunkForNagios" do
   repository "https://github.com/zenops/splunk-for-nagios"
   reference "master"
   action :sync
-  notifies :restart, "service[splunk]"
 end
 
 master = node.run_state[:nodes].select do |n|

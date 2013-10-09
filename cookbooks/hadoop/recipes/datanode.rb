@@ -4,11 +4,12 @@ include_recipe "hadoop"
 
 service "hadoop@datanode" do
   action [:enable, :start]
+  subscribes :restart, 'template[/opt/hadoop/conf/hdfs-site.xml]'
 end
 
 if tagged?("nagios-client")
   {
-    :datanode => [:DataNode, 75, 90],
+    :datanode => [:DataNode, 85, 95],
   }.each do |name, params|
     name = name.to_s
 

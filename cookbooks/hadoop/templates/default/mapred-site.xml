@@ -81,21 +81,9 @@
     <value>true</value>
   </property>
 
-  <!-- the whole map/reduce job will output compressed data -->
-  <property>
-    <name>mapred.output.compress</name>
-    <value>true</value>
-  </property>
-
-  <!-- codec - gzip sounds reasonable (TODO: snappy?) -->
   <property>
     <name>mapred.output.compression.type</name>
     <value>BLOCK</value>
-    <description>If the job outputs are to compressed as SequenceFiles, how should
-      they be compressed? Should be one of NONE, RECORD or BLOCK.
-      Cloudera's Distribution for Hadoop switches this default to BLOCK
-      for better performance.
-    </description>
   </property>
   <property>
     <name>mapred.output.compression.codec</name>

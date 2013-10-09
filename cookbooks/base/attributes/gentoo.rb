@@ -11,6 +11,7 @@ if node[:platform] == "gentoo"
     app-misc/mc
     app-shells/bash-completion
     app-text/dos2unix
+    app-text/tree
     dev-libs/icu
     dev-libs/libffi
     dev-libs/libxml2
@@ -33,12 +34,16 @@ if node[:platform] == "gentoo"
     net-misc/telnet-bsd
     net-misc/whois
     sys-apps/ack
+    sys-apps/dmidecode
     sys-apps/ethtool
     sys-apps/hdparm
     sys-apps/iproute2
     sys-apps/less
+    sys-apps/lm_sensors
+    sys-apps/lshw
     sys-apps/pciutils
     sys-fs/ncdu
+    sys-power/acpitool
     sys-process/iotop
     sys-process/lsof
   )

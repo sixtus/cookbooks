@@ -5,7 +5,7 @@ After=network.target
 [Service]
 Type=forking
 PIDFile=/run/php-fpm.pid
-ExecStart=/usr/lib/php5.3/bin/php-fpm -g /run/php-fpm.pid -y /etc/php/fpm-php5.3/php-fpm.conf
+ExecStart=/usr/lib/php<%= node[:php][:slot] %>/bin/php-fpm -g /run/php-fpm.pid -y /etc/php/fpm-php<%= node[:php][:slot] %>/php-fpm.conf
 Restart=always
 
 [Install]

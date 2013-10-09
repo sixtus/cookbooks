@@ -6,10 +6,11 @@ maintainer "Benedikt Böhm"
 maintainer_email "bb@xnull.de"
 license "Apache v2.0"
 
-version "1.2.1"
+version "1.3.0"
 
 supports "gentoo"
 
 depends "cron"
 depends "nagios"
 depends "nginx"
+depends "virtualbox"

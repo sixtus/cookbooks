@@ -32,6 +32,12 @@ template "/etc/openerp/openerp.cfg" do
             :db_password => db_password
 end
 
+systemd_unit "openerp.service"
+
 service "openerp" do
   action [:enable, :start]
+end
+
+shorewall_rule "openerp" do
+  destport "8069"
 end

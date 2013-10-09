@@ -7,11 +7,13 @@ if solo?
     command "/opt/hadoop/bin/hadoop namenode -format"
     user "hadoop"
     group "hadoop"
+    creates "/var/lib/hadoop/name/image/fsimage"
   end
 end
 
 service "hadoop@namenode" do
   action [:enable, :start]
+  subscribes :restart, 'template[/opt/hadoop/conf/hdfs-site.xml]'
 end
 
 ## Hadoop Balancer cronjob:
@@ -29,7 +31,6 @@ if tagged?("nagios-client")
     :state => [:Dfs, nil, nil],
     :capacity => [:DfsCapacity, 75, 90],
     :blocks => [:DfsBlocks, 50, 100],
-    :queue => [:RpcQueue, 0.25, 0.5],
   }.each do |name, params|
     name = name.to_s
 

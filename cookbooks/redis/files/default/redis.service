@@ -7,6 +7,7 @@ User=redis
 Group=redis
 ExecStart=/usr/sbin/redis-server /etc/redis.conf
 Restart=always
+OOMScoreAdjust=-990
 
 [Install]
 WantedBy=multi-user.target

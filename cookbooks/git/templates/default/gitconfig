@@ -38,9 +38,11 @@
 [hub]
 	protocol = https
 <% end %>
-<% if node[:platform] == "mac_os_x" %>
 [credential]
+<% if node[:platform] == "mac_os_x" %>
 	helper = osxkeychain
+<% else %>
+	helper = cache --timeout 28800
 <% end %>
 <% if solo? and not root? %>
 [include]

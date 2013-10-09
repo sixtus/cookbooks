@@ -2,7 +2,7 @@
 Description=Chef Client
 ConditionPathExists=/etc/chef/client.rb
 ConditionPathExists=!/run/lock/chef-client.lock
-After=network.target
+After=network.target ntpd.service
 
 [Service]
 ExecStart=/usr/bin/ruby19 -E UTF-8 /usr/bin/chef-client -c /etc/chef/client.rb

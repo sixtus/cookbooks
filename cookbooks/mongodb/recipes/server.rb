@@ -1,33 +1,38 @@
-include_recipe "mongodb"
-
 tag("mongodb")
 tag("mongodb-#{node[:mongodb][:cluster]}")
 
-opts = %w(--journal --rest --quiet)
+include_recipe "mongodb"
 
-opts << "--oplogSize #{node[:mongodb][:oplog][:size]}" if node[:mongodb][:oplog][:size]
-opts << "--slowms #{node[:mongodb][:slowms]}"
+case node[:platform]
+when "gentoo"
+  if root?
+    opts = %w(--journal --rest --quiet)
 
-opts << "--shardsvr" if node[:mongodb][:shardsvr]
-opts << "--replSet #{node[:mongodb][:replication][:set]}" if node[:mongodb][:replication][:set]
+    opts << "--oplogSize #{node[:mongodb][:oplog][:size]}" if node[:mongodb][:oplog][:size]
+    opts << "--slowms #{node[:mongodb][:slowms]}"
 
-directory node[:mongodb][:dbpath] do
-  owner "mongodb"
-  group "root"
-  mode "0755"
-end
+    opts << "--shardsvr" if node[:mongodb][:shardsvr]
+    opts << "--replSet #{node[:mongodb][:replication][:set]}" if node[:mongodb][:replication][:set]
 
-systemd_unit "mongodb.service" do
-  template true
-  variables :bind_ip => node[:mongodb][:bind_ip],
-            :port => node[:mongodb][:port],
-            :dbpath => node[:mongodb][:dbpath],
-            :nfiles => node[:mongodb][:nfiles],
-            :opts => opts
-end
+    directory node[:mongodb][:dbpath] do
+      owner "mongodb"
+      group "root"
+      mode "0755"
+    end
 
-service "mongodb" do
-  action [:enable, :start]
+    systemd_unit "mongodb.service" do
+      template true
+      variables :bind_ip => node[:mongodb][:bind_ip],
+                :port => node[:mongodb][:port],
+                :dbpath => node[:mongodb][:dbpath],
+                :nfiles => node[:mongodb][:nfiles],
+                :opts => opts
+    end
+
+    service "mongodb" do
+      action [:enable, :start]
+    end
+  end
 end
 
 if tagged?("ganymed-client")

@@ -40,6 +40,12 @@ when "gentoo"
       mode "0755"
     end
 
+    directory "/run/mysqld" do
+      owner "mysql"
+      group "mysql"
+      mode "0755"
+    end
+
     %w(mysql.err mysql.log mysqld.err slow-queries.log).each do |l|
       file "/var/log/mysql/#{l}" do
         owner "mysql"
@@ -50,7 +56,7 @@ when "gentoo"
     end
 
     if solo?
-      mysql_root_pass = ""
+      mysql_root_pass = "root"
     else
       mysql_root_pass = get_password("mysql/root")
     end
@@ -94,6 +100,36 @@ when "gentoo"
 
     service "mysql" do
       action [:enable, :start]
+    end
+
+    mysql_user "root" do
+      password mysql_root_pass
+      force_password true
+    end
+
+    mysql_grant "root" do
+      database "*"
+      user "root"
+      grant_option true
+    end
+
+    if root? and solo? # for vagrant
+      mysql_user "root" do
+        password mysql_root_pass
+        force_password true
+        host "%"
+      end
+
+      mysql_grant "root" do
+        database "*"
+        user "root"
+        user_host "%"
+        grant_option true
+      end
+    end
+
+    mysql_database "test" do
+      owner "root"
     end
   end
 

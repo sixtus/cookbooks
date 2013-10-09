@@ -24,7 +24,7 @@ execute "eselect php set cli php#{node[:php][:slot]}" do
 end
 
 # reload attributes files to make the magic happen
-node.load_attribute_by_short_filename('default', 'php')
+node.load_attribute_by_short_filename('default', 'php') if node.respond_to?(:load_attribute_by_short_filename)
 
 [
   node[:php][:tmp_dir],

@@ -1,0 +1,10 @@
+[Unit]
+Description=Watchdog Daemon
+After=syslog.target
+
+[Service]
+ExecStart=/usr/sbin/watchdog -F
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

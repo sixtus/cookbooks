@@ -19,7 +19,14 @@ end
 systemd_unit "ntpd.service"
 
 service "ntpd" do
+  service_name "ntp" if debian?
   action [:enable, :start]
+end
+
+if tagged?("ganymed-client")
+  ganymed_collector "ntp" do
+    source "ntp.rb"
+  end
 end
 
 if tagged?("nagios-client")

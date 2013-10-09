@@ -40,7 +40,7 @@ if root?
   end
 
   if node.run_state[:splunk].any?
-    include_recipe "splunk::forwarder" unless node.role?("splunk-indexer")
+    include_recipe "splunk::forwarder"
     include_recipe "ganymed"
   end
 
@@ -49,7 +49,7 @@ if root?
   end
 
   unless node[:virtualization][:guest]
-    include_recipe "lxc"
+    include_recipe "libvirt"
     include_recipe "ntp"
   end
 
@@ -66,6 +66,11 @@ if root?
     include_recipe "hwraid"
     include_recipe "mdadm"
     include_recipe "smart"
+    include_recipe "watchdog"
+  end
+
+  if root?
+    include_recipe "duply"
   end
 end
 
@@ -114,7 +119,11 @@ if tagged?("nagios-client")
     nagios_plugin "check_mem"
 
     nrpe_command "check_mem" do
-      command "/usr/lib/nagios/plugins/check_mem -C -u -w 80 -c 95"
+      if node[:memory][:total].to_i > 32*1024*1024
+        command "/usr/lib/nagios/plugins/check_mem -C -u -w 95 -c 99"
+      else
+        command "/usr/lib/nagios/plugins/check_mem -C -u -w 80 -c 95"
+      end
     end
 
     nagios_service "MEMORY" do

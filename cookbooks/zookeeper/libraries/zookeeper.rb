@@ -15,6 +15,12 @@ module ZookeeperHelpers
       n[:fqdn]
     end
   end
+
+  def zookeeper_url
+    zookeeper_node_names.map do |fqdn|
+      "#{fqdn}:2181"
+    end.join(',')
+  end
 end
 
 include ZookeeperHelpers

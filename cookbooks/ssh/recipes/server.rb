@@ -13,6 +13,7 @@ end
 systemd_unit "sshd.service"
 
 service "sshd" do
+  service_name "ssh" if debian?
   action [:enable, :start]
 end
 

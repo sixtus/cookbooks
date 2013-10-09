@@ -175,6 +175,9 @@ serve() {
 # Igor's sanity helper:
 alias vi="vim"
 
+# replace reboot by shutdown -r now:
+alias reboot="shutdown -r now"
+
 <% if solo? and not root? %>
 # unset RUBYOPT here for rvm compat
 unset RUBYOPT
