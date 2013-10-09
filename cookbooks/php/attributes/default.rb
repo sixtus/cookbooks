@@ -31,16 +31,16 @@ default[:php][:session][:use_only_cookies] = "1"
 default[:php][:upload][:max_filesize] = "2M"
 default[:php][:upload][:tmp_dir] = "#{node[:php][:tmp_dir]}/uploads"
 
-# create default fpm pool
-default[:php][:fpm][:conf] = nil
-default[:php][:fpm][:pools][:default] = {}
-
 # slot support on gentoo
 if node[:platform] == "gentoo"
   default[:php][:slot] = "5.3"
   default[:php][:install_path] = "/usr/lib/php#{node[:php][:slot]}"
   default[:php][:php_config] = "#{node[:php][:install_path]}/bin/php-config"
 end
+
+# create default fpm pool
+default[:php][:fpm][:conf] = "/etc/php/fpm-php#{node[:php][:slot]}/php-fpm.conf"
+default[:php][:fpm][:pools][:default] = {}
 
 # infer extension dir
 default[:php][:extension_dir] = %x(#{node[:php][:php_config]} --extension-dir).chomp rescue "/does/not/exist"
