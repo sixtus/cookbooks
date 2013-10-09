@@ -85,7 +85,7 @@ unless solo?
   end
 
   index = nodes.index(node[:fqdn])
-  minute = minutes[index]
+  minute = minutes[index] rescue 0
 
   cron "chef-client" do
     if node[:platform] == "debian"
