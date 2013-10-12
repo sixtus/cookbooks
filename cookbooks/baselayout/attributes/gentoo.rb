@@ -1,4 +1,4 @@
-if node[:platform] == "gentoo"
+if gentoo?
   default[:baselayout][:groups] = {
     :root => {
       :gid => 0,

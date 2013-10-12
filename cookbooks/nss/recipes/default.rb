@@ -5,8 +5,7 @@ template "/etc/nsswitch.conf" do
   mode "0644"
 end
 
-case node[:platform]
-when "gentoo"
+if gentoo?
   template "/etc/pam.d/system-auth" do
     source "system-auth.pamd"
     owner "root"
@@ -21,7 +20,7 @@ when "gentoo"
     mode "0644"
   end
 
-when "debian"
+elsif debian_based?
   # do not touch debians pam for now
 end
 

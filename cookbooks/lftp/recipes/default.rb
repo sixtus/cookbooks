@@ -1,13 +1,9 @@
-case node[:platform]
-when "gentoo"
+if gentoo?
   package "net-ftp/lftp"
-
-when "debian"
+elsif debian_based?
   package "lftp"
-
-when "mac_os_x"
+elsif mac_os_x?
   package "lftp"
-
 end
 
 directory "#{node[:homedir]}/.lftp" do

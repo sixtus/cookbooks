@@ -1,15 +1,11 @@
-case node[:platform]
-when "gentoo"
+if gentoo?
   package "dev-vcs/git"
   package "dev-vcs/git-extras" if zentoo?
-
-when "debian"
+elsif debian_based?
   package "git"
-
-when "mac_os_x"
+elsif mac_os_x?
   package "git"
   package "git-extras"
-
 end
 
 template node[:git][:rcfile] do

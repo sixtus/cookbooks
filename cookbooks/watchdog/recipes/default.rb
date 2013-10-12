@@ -1,5 +1,4 @@
-case node[:platform]
-when "gentoo"
+if gentoo?
   package "sys-apps/watchdog"
 
   cookbook_file "/etc/watchdog.conf" do
@@ -15,7 +14,7 @@ when "gentoo"
     action [:enable, :start]
   end
 
-when "debian"
+elsif debian_based?
   # Currently blocked by amc!?
   #package "watchdog"
 end

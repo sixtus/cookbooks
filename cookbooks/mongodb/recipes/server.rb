@@ -3,8 +3,7 @@ tag("mongodb-#{node[:mongodb][:cluster]}")
 
 include_recipe "mongodb"
 
-case node[:platform]
-when "gentoo"
+if gentoo?
   if root?
     opts = %w(--journal --rest --quiet)
 

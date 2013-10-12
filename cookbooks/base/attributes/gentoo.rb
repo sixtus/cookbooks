@@ -1,5 +1,5 @@
 # base packages
-if node[:platform] == "gentoo"
+if gentoo?
   node.set[:packages] = %w(
     app-admin/apache-tools
     app-admin/pwgen

@@ -1,5 +1,4 @@
-case node[:platform]
-when "gentoo"
+if gentoo?
   package "dev-db/mongodb"
   package "dev-python/pymongo"
   package "dev-ruby/mongo"
@@ -21,6 +20,6 @@ when "gentoo"
     end
   end
 
-when "mac_os_x"
+elsif mac_os_x?
   package "mongodb"
 end

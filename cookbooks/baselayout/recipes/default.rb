@@ -55,3 +55,24 @@ end
 link "/etc/mtab" do
   to "/proc/self/mounts"
 end
+
+# /run compatibility (both directions)
+link "/run" do
+  to "/var/run"
+  not_if { File.directory?("/run") }
+end
+
+link "/run/lock" do
+  to "/var/lock"
+  not_if { File.directory?("/run/lock") }
+end
+
+link "/var/run" do
+  to "/run"
+  only_if { File.directory?("/run") }
+end
+
+link "/var/lock" do
+  to "/run/lock"
+  only_if { File.directory?("/run/lock") }
+end

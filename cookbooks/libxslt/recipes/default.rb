@@ -1,8 +1,5 @@
-case node[:platform]
-when /gentoo/
+if gentoo?
   package "dev-libs/libxslt"
-
-when /mac_os_x/
+elsif mac_os_x?
   package "libxslt"
-
 end

@@ -1,5 +1,5 @@
 # base packages
-if node[:platform] == "mac_os_x"
+if mac_os_x?
   node.set[:packages] = %w(
     ack
     apple-gcc42

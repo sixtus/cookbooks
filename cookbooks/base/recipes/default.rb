@@ -7,8 +7,8 @@ directory node[:script_path] do
 end
 
 # load platform recipes
-include_recipe "base::linux" if node[:os] == "linux"
-include_recipe "base::mac_os_x" if node[:platform] == "mac_os_x"
+include_recipe "base::linux" if linux?
+include_recipe "base::mac_os_x" if mac_os_x?
 
 # load common recipes
 include_recipe "bash"

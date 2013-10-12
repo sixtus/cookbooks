@@ -1,13 +1,11 @@
 tag("ganymed-client")
 
-case node[:platform]
-when "gentoo"
+if gentoo?
   package "net-analyzer/ganymed" do
     action :upgrade
     notifies :restart, 'service[ganymed]'
   end
-
-when "debian"
+elsif debian_based?
   gem_package "ganymed" do
     action :upgrade
     notifies :restart, 'service[ganymed]'

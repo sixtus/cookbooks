@@ -11,7 +11,7 @@ fi
 _BASHRC_DIR="${_BASHRC_DIR:-<%= node[:bash][:rcdir] %>}"
 
 # make sure all important paths are in PATH
-<% if node[:platform] == "mac_os_x" %>
+<% if mac_os_x? %>
 export PATH="${PATH}:~/bin:$(brew --prefix coreutils)/libexec/gnubin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 alias find="$(brew --prefix)/bin/gfind"
 <% else %>

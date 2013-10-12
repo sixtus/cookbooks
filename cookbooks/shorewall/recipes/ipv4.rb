@@ -1,8 +1,7 @@
-case node[:platform]
-when "gentoo"
+if gentoo?
   package "net-firewall/shorewall"
 
-when "debian"
+elsif debian_based?
   package "shorewall"
 
 end
@@ -45,7 +44,7 @@ end
   end
 end
 
-if node[:platform] == "debian"
+if debian_based?
   file "/etc/default/shorewall" do
     content "startup=1\n"
     owner "root"

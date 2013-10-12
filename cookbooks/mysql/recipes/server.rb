@@ -2,8 +2,7 @@ tag("mysql-server")
 
 include_recipe "mysql"
 
-case node[:platform]
-when "gentoo"
+if gentoo?
   package "dev-db/innotop"
   package "dev-db/maatkit"
   package "dev-db/mysqltuner"
@@ -133,7 +132,7 @@ when "gentoo"
     end
   end
 
-when "mac_os_x"
+elsif mac_os_x?
   template "/usr/local/etc/my.cnf" do
     source "my.cnf"
     mode "0644"

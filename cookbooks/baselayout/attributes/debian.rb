@@ -1,4 +1,4 @@
-if node[:platform] == "debian"
+if debian_based?
   default[:baselayout][:groups] = {
     :root => {
       :gid => 0,

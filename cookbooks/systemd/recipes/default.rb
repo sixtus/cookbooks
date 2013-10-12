@@ -11,8 +11,7 @@ execute "systemd-tmpfiles" do
   only_if { systemd_running? }
 end
 
-case node[:platform]
-when "gentoo"
+if gentoo?
   if root?
     portage_package_use "sys-apps/dbus" do
       if %x(qlist -ICe sys-apps/systemd).chomp == ""

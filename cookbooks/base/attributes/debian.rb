@@ -1,5 +1,5 @@
 # base packages
-if node[:platform] == "debian"
+if debian_based?
   node.set[:packages] = %w(
     ack
     acpitool
@@ -19,7 +19,6 @@ if node[:platform] == "debian"
     iproute
     keychain
     less
-    libffi5
     libxml2
     libxslt1.1
     libyaml-0-2
@@ -44,5 +43,17 @@ if node[:platform] == "debian"
     tree
     whois
     xz-utils
+  )
+end
+
+if debian?
+  node.set[:packages] += %w(
+    libffi5
+  )
+end
+
+if ubuntu?
+  node.set[:packages] += %w(
+    libffi6
   )
 end

@@ -1,10 +1,7 @@
-case node[:platform]
-when "gentoo"
+if gentoo?
   package "app-misc/beanstalkd"
-
-when "mac_os_x"
+elsif mac_os_x?
   package "beanstalk"
-
 end
 
 systemd_unit "beanstalkd.service"

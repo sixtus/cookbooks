@@ -25,7 +25,7 @@ default[:portage][:MAKEOPTS] = "-j1"
 default[:portage][:LINGUAS] = %w(en)
 
 # repo settings
-if node[:platform] == "gentoo"
+if gentoo?
   set[:portage][:repo] = File.read("/usr/portage/profiles/repo_name").chomp
 
   if node[:portage][:repo] =~ /^zentoo/

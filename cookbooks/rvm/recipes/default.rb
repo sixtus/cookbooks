@@ -1,7 +1,6 @@
 if root?
   # install rvm api gem during chef compile phase
-  case node[:platform]
-  when "gentoo"
+  if gentoo?
     pkg = package "dev-ruby/rvm" do
       action :nothing
     end

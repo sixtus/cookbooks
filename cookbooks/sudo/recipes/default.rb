@@ -1,8 +1,7 @@
-case node[:platform]
-when "gentoo"
+if gentoo?
   package "app-admin/sudo"
 
-when "debian"
+elsif debian_based?
   package "sudo"
 
 end

@@ -1,9 +1,8 @@
 if splunk_forwarder?
-  case node[:platform]
-  when "gentoo"
+  if gentoo?
     package "net-analyzer/splunkforwarder"
 
-  when "debian"
+  elsif debian_based?
     remote_file "/tmp/splunkforwarder-5.0.2-149561-linux-2.6-amd64.deb" do
       source "http://www.splunk.com/page/download_track?file=5.0.2/universalforwarder/linux/splunkforwarder-5.0.2-149561-linux-2.6-amd64.deb&ac=get_splunk_download&wget=true&name=wget&typed=releases"
       mode "0644"

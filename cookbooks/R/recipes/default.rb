@@ -1,5 +1,4 @@
-case node[:platform]
-when "gentoo"
+if gentoo?
   portage_package_use "sys-libs/zlib" do
     use %w(minizip)
   end
@@ -9,8 +8,8 @@ when "gentoo"
   end
 
   package "dev-lang/R"
+end
 
-when "mac_os_x"
+if mac_os_x?
   package "r"
-
 end

@@ -1,8 +1,7 @@
-case node[:platform]
-when "gentoo"
+if gentoo?
   package "app-admin/syslog-ng"
 
-when "debian"
+elsif debian_based?
   package "rsyslog" do
     action :remove
   end

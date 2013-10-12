@@ -1,10 +1,9 @@
-case node[:platform]
-when "gentoo"
+if gentoo?
   package "net-analyzer/nrpe" do
     action :upgrade
   end
 
-when "debian"
+elsif debian_based?
   package "nagios-nrpe-server"
 
   git "/usr/local/src/check_pidfile" do

@@ -2,8 +2,7 @@ tag("zookeeper")
 
 include_recipe "java"
 
-case node[:platform]
-when "gentoo"
+if gentoo?
   package "sys-cluster/zookeeper"
 
   template "/opt/zookeeper/bin/zkServer.sh" do
@@ -11,17 +10,17 @@ when "gentoo"
     owner "root"
     group "root"
     mode "0755"
-    notifies :restart, "service[zookeeper]" unless node[:platform] == "mac_os_x"
+    notifies :restart, "service[zookeeper]" unless mac_os_x?
   end
 
-when "mac_os_x"
+elsif mac_os_x?
   package "zookeeper"
 end
 
 template "#{node[:zookeeper][:confdir]}/log4j.properties" do
   source "log4j.properties"
   mode "0644"
-  notifies :restart, "service[zookeeper]" unless node[:platform] == "mac_os_x"
+  notifies :restart, "service[zookeeper]" unless mac_os_x?
 end
 
 nodes = zookeeper_nodes
@@ -33,7 +32,7 @@ end.to_i + 1
 template "#{node[:zookeeper][:confdir]}/zoo.cfg" do
   source "zoo.cfg"
   mode "0644"
-  notifies :restart, "service[zookeeper]" unless node[:platform] == "mac_os_x"
+  notifies :restart, "service[zookeeper]" unless mac_os_x?
   variables :nodes => node.zookeeper_node_names
 end
 
@@ -44,11 +43,10 @@ end
 file "#{node[:zookeeper][:datadir]}/myid" do
   content "#{myid}\n"
   mode "0644"
-  notifies :restart, "service[zookeeper]" unless node[:platform] == "mac_os_x"
+  notifies :restart, "service[zookeeper]" unless mac_os_x?
 end
 
-case node[:platform]
-when "gentoo"
+if gentoo?
   systemd_unit "zookeeper.service"
 
   service "zookeeper" do
