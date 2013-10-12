@@ -4,6 +4,9 @@ driver_config:
   customize:
     memory: 1024
     cpuexecutioncap: 100
+    vrde: 'on'
+    vrdeport: 5999
+    vrdeauthtype: 'external'
 
 platforms:
 - name: zentoo
