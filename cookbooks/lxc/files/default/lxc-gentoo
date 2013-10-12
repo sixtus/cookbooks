@@ -5,7 +5,7 @@ MIRROR=${MIRROR:-http://mirror.zenops.net/zentoo}
 ARCH=$(portageq envvar ARCH)
 
 # defaults
-image=$MIRROR/$ARCH/base-current.tar.bz2
+image=$MIRROR/$ARCH/zentoo-amd64-base.tar.bz2
 ipaddress=169.254.169.254
 gateway=$(ip addr show dev lxc0 scope global | grep inet | awk '{print $2}' | awk -F/ '{print $1}')
 
@@ -78,7 +78,7 @@ download_image()
     dir=${file/.tar*}
 
     mkdir -p $cache
-    wget -nv -O $cache/$file $image
+    wget --no-check-certificate -nv -O $cache/$file $image
 
     mkdir -p $cache/$dir
     tar --numeric-owner -xpf $cache/$file -C $cache/$dir

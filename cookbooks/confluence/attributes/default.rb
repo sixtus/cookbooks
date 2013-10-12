@@ -1,1 +1,1 @@
-default[:confluence][:download_url] = "http://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-5.2.5.tar.gz"
+default[:confluence][:download_url] = "http://downloads.atlassian.com/software/confluence/downloads/atlassian-confluence-5.3.tar.gz"
