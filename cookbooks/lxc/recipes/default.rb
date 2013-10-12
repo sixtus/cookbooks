@@ -1,11 +1,8 @@
-case node[:platform]
-when "gentoo"
+if gentoo?
   package "app-emulation/lxc"
   package "net-misc/bridge-utils"
-
-when "debian"
+elsif debian_based?
   package "lxc"
-
 end
 
 directory "/usr/share/lxc" do

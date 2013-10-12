@@ -1,5 +1,4 @@
-case node[:platform]
-when "gentoo"
+if gentoo?
   portage_package_use "mail-mta/postfix" do
     use node[:postfix][:use_flags].sort.uniq
   end
@@ -20,7 +19,7 @@ when "gentoo"
     shell "/sbin/nologin"
   end
 
-when "debian"
+elsif debian_based?
   package "postfix"
 
   user "postfix" do

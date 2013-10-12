@@ -1,5 +1,4 @@
-case node[:platform]
-when "gentoo"
+if gentoo?
   template "/etc/env.d/99splunk" do
     source "99splunk"
     owner "root"
@@ -100,7 +99,7 @@ end
 execute "splunk-enable-boot" do
   command "/opt/splunk/bin/splunk enable boot-start --no-prompt --answer-yes --accept-license"
   creates "/etc/init.d/splunk"
-  only_if { node[:platform] == "debian" }
+  only_if { debian_based? }
 end
 
 systemd_unit "splunk.service" do

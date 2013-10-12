@@ -1,14 +1,12 @@
 include_attribute "base"
 
-default[:ssh][:config] = case node[:platform]
-                         when "mac_os_x"
+default[:ssh][:config] = if mac_os_x?
                            "#{node[:homedir]}/.ssh/config"
                          else
                            root? ? "/etc/ssh/ssh_config" : "#{node[:homedir]}/.ssh/config"
                          end
 
-default[:ssh][:hostsfile] = case node[:platform]
-                            when "mac_os_x"
+default[:ssh][:hostsfile] = if mac_os_x?
                               "#{node[:homedir]}/.ssh/known_hosts"
                             else
                               root? ? "/etc/ssh/ssh_known_hosts" : "#{node[:homedir]}/.ssh/known_hosts"

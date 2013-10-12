@@ -1,15 +1,11 @@
-case node[:platform]
-when "gentoo"
+if gentoo?
   package "app-shells/bash"
-
-when "debian"
+elsif debian_based?
   package "bash"
   package "bash-completion"
-
-when "mac_os_x"
+elsif mac_os_x?
   package "bash"
   package "bash-completion"
-
 end
 
 directory node[:bash][:rcdir] do
@@ -38,6 +34,14 @@ if root?
     owner "root"
     group "root"
     mode "0644"
+  end
+
+  file "/root/.bashrc" do
+    action :delete
+  end
+
+  file "/root/.profile" do
+    action :delete
   end
 end
 
@@ -90,5 +94,5 @@ end
 
 execute "env-update" do
   action :nothing
-  only_if { node[:platform] == "gentoo" }
+  only_if { gentoo? }
 end

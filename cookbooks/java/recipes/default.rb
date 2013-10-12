@@ -1,7 +1,6 @@
 tag("java")
 
-case node[:platform]
-when "gentoo"
+if gentoo?
   case node[:java][:vm]
   when /^oracle-jdk-bin-/
     package "dev-java/oracle-jdk-bin" do

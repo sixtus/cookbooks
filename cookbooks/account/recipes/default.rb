@@ -19,10 +19,9 @@ end
 
 hostmaster_groups = %w(adm cron)
 
-case node[:platform]
-when "gentoo"
+if gentoo?
   hostmaster_groups += %w(portage wheel systemd-journal)
-when "debian"
+elsif debian?
   hostmaster_groups += %w(sudo)
 end
 

@@ -1,10 +1,9 @@
-case node[:platform]
-when "gentoo"
+if gentoo?
   package "net-misc/ntp" do
     notifies :restart, "service[ntpd]"
   end
 
-when "debian"
+elsif debian_based?
   package "ntp"
 end
 
@@ -19,7 +18,7 @@ end
 systemd_unit "ntpd.service"
 
 service "ntpd" do
-  service_name "ntp" if debian?
+  service_name "ntp" if debian_based?
   action [:enable, :start]
 end
 

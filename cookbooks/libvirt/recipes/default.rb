@@ -1,7 +1,6 @@
 include_recipe "lxc"
 
-case node[:platform]
-when "gentoo"
+if gentoo?
   package "app-emulation/libvirt"
 
   cookbook_file "/etc/libvirt/libvirt.conf" do

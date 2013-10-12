@@ -1,9 +1,8 @@
-case node[:platform]
-when "gentoo"
+if gentoo?
   package "dev-libs/openssl"
   package "app-misc/ca-certificates"
 
-when "debian"
+elsif debian_based?
   package "openssl"
   package "ca-certificates"
 

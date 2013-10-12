@@ -1,8 +1,6 @@
-case node[:platform]
-when "gentoo"
+if gentoo?
   package "sys-process/htop"
-
-when "mac_os_x"
+elsif mac_os_x?
   package "htop-osx"
 end
 

@@ -94,7 +94,7 @@ default[:sysctl][:net][:netfilter][:nf_conntrack_tcp_timeout_established] = 4320
 
 # virtualization foo
 default[:virtualization][:role] = "host"
-unless node[:platform] == "debian" || node[:platform] == "mac_os_x"
+if gentoo?
   %x(systemd-detect-virt -q)
   default[:virtualization][:guest] = $?.exitstatus == 0
 end

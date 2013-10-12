@@ -1,7 +1,6 @@
-case node[:platform]
-when /gentoo/
+if gentoo?
   package "net-libs/nodejs"
 
-when /mac_os_x/
+elsif mac_os_x?
   package "node"
 end

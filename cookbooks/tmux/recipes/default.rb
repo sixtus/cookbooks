@@ -1,11 +1,10 @@
-case node[:platform]
-when "gentoo"
+if gentoo?
   package "app-misc/tmux"
 
-when "debian"
+elsif debian_based?
   package "tmux"
 
-when "mac_os_x"
+elsif mac_os_x?
   package "tmux"
 
 end

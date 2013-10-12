@@ -1,5 +1,4 @@
-case node[:platform]
-when "gentoo"
+if gentoo?
   portage_package_use "app-editors/vim" do
     use %w(python ruby)
   end
@@ -7,7 +6,11 @@ when "gentoo"
   package "app-editors/vim"
   package "dev-util/ctags"
 
-when "mac_os_x"
+elsif debian_based?
+  package "vim"
+  package "exuberant-ctags"
+
+elsif mac_os_x?
   package "macvim" do
     action :upgrade
     notifies :create, "ruby_block[macvim-to-app]", :immediately

@@ -1,8 +1,7 @@
-case node[:platform]
-when "gentoo"
+if gentoo?
   package "sys-fs/mdadm"
 
-when "debian"
+elsif debian_based?
   package "mdadm"
 end
 

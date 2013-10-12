@@ -1,5 +1,4 @@
-case node[:platform]
-when "gentoo"
+if gentoo?
   portage_package_use "x11-base/xorg-server" do
     use %w(-xorg minimal xvfb)
   end

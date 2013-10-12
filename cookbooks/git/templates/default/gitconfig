@@ -39,7 +39,7 @@
 	protocol = https
 <% end %>
 [credential]
-<% if node[:platform] == "mac_os_x" %>
+<% if mac_os_x? %>
 	helper = osxkeychain
 <% else %>
 	helper = cache --timeout 28800

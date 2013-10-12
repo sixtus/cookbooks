@@ -1,7 +1,6 @@
 # no inception
 if !vbox_guest?
-  case node[:platform]
-  when "gentoo"
+  if gentoo?
     package "app-emulation/virtualbox"
     package "app-emulation/virtualbox-modules"
     package "app-emulation/vagrant"
@@ -20,7 +19,7 @@ if !vbox_guest?
       end
     end
 
-  when "mac_os_x"
+  elsif mac_os_x?
     mac_package "VirtualBox" do
       source "http://download.virtualbox.org/virtualbox/4.2.18/VirtualBox-4.2.18-88780-OSX.dmg"
       type "pkg"

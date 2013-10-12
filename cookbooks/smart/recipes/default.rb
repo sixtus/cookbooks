@@ -1,8 +1,7 @@
-case node[:platform]
-when "gentoo"
+if gentoo?
   package "sys-apps/smartmontools"
 
-when "debian"
+elsif debian_based?
   package "smartmontools"
 end
 
@@ -27,13 +26,13 @@ if node[:smart][:devices].any?
   if node[:smart][:devices].empty?
     service "smartd" do
       service_name "smartd"
-      service_name "smartmontools" if node[:platform] == "debian"
+      service_name "smartmontools" if debian_based?
       action [:disable, :stop]
     end
   else
     service "smartd" do
       service_name "smartd"
-      service_name "smartmontools" if node[:platform] == "debian"
+      service_name "smartmontools" if debian_based?
       action [:enable, :start]
     end
   end

@@ -1,9 +1,7 @@
-case node[:platform]
-when "gentoo"
+if gentoo?
   package "net-ftp/ncftp"
   package "app-backup/duply"
-
-when "debian"
+elsif debian_based?
   package "ncftp"
   package "duply"
 end

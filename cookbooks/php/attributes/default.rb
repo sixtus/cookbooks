@@ -32,7 +32,7 @@ default[:php][:upload][:max_filesize] = "2M"
 default[:php][:upload][:tmp_dir] = "#{node[:php][:tmp_dir]}/uploads"
 
 # slot support on gentoo
-if node[:platform] == "gentoo"
+if gentoo?
   default[:php][:slot] = "5.3"
   default[:php][:install_path] = "/usr/lib/php#{node[:php][:slot]}"
   default[:php][:php_config] = "#{node[:php][:install_path]}/bin/php-config"

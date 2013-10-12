@@ -1,10 +1,8 @@
-case node[:platform]
-when "gentoo"
+if gentoo?
   %w(sys-process/dcron dev-util/lockrun).each do |p|
     package p
   end
-
-when "debian"
+elsif debian?
   apt_repository "balocco" do
     uri "http://apt.balocco.name"
     distribution node[:lsb][:codename]
@@ -18,7 +16,6 @@ when "debian"
   end
 
   package "dcron"
-
 end
 
 %w(d hourly daily weekly monthly).each do |dir|
@@ -38,6 +35,7 @@ systemd_tmpfiles "dcron"
 systemd_unit "dcron.service"
 
 service "dcron" do
+  service_name "cron" if ubuntu?
   action [:enable, :start]
 end
 

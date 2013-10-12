@@ -1,12 +1,11 @@
-case node[:platform]
-when "gentoo"
+if gentoo?
   package "net-misc/openssh"
 
-when "debian"
+elsif debian_based?
   package "openssh-client"
   package "openssh-server"
 
-when "mac_os_x"
+elsif ma_os_x?
   package "ssh-copy-id"
 
 end

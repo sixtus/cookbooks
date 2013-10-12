@@ -1,6 +1,5 @@
-case node[:platform]
-when "gentoo"
+if gentoo?
   package "dev-python/pip"
-when "debian", "ubuntu"
+elsif debian_based?
   package "python-pip"
 end

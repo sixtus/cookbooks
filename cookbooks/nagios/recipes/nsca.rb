@@ -1,7 +1,6 @@
 is_master = tagged?("nagios-master")
 
-case node[:platform]
-when "gentoo"
+if gentoo?
   portage_package_use "net-analyzer/nsca" do
     use %w(minimal) unless is_master
   end
@@ -10,7 +9,7 @@ when "gentoo"
     action :upgrade
   end
 
-when "debian"
+elsif debian_based?
   package "nsca"
 end
 

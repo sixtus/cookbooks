@@ -1,5 +1,4 @@
-case node[:platform]
-when "gentoo"
+if gentoo?
   package "app-admin/chef"
   package "dev-ruby/activesupport"
   package "dev-ruby/knife-dsl"
@@ -23,8 +22,7 @@ when "gentoo"
     group "root"
     mode "0750"
   end
-
-when "debian"
+elsif debian_based?
   gem_package "chef"
   gem_package "airbrake_handler"
   gem_package "madvertise-logging"
@@ -52,7 +50,6 @@ when "debian"
     group "root"
     mode "0750"
   end
-
 end
 
 unless solo?
@@ -88,7 +85,7 @@ unless solo?
   minute = minutes[index] rescue 0
 
   cron "chef-client" do
-    if node[:platform] == "debian"
+    if debian_based?
       command "/usr/bin/ruby -E UTF-8 /usr/local/bin/chef-client -c /etc/chef/client.rb &>/dev/null"
     else
       command "/usr/bin/ruby -E UTF-8 /usr/bin/chef-client -c /etc/chef/client.rb &>/dev/null"

@@ -1,8 +1,7 @@
-case node[:platform]
-when "gentoo"
+if gentoo?
   package "net-firewall/shorewall6"
 
-when "debian"
+elsif debian_based?
   package "shorewall6"
 end
 
