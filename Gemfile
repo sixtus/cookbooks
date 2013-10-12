@@ -12,4 +12,9 @@ gem 'hetzner-api'
 gem 'highline'
 gem 'httparty'
 gem 'knife-dsl', :github => 'zenops/knife-dsl'
-gem 'showoff'
+gem 'mixlib-shellout', :github => 'zenops/mixlib-shellout'
+
+group :testing do
+  gem 'kitchen-vagrant'
+  gem 'test-kitchen', :github => 'zenops/test-kitchen'
+end

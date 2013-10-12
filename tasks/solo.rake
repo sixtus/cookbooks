@@ -3,7 +3,7 @@ require "highline/import"
 def run_solo
   scfg = File.join(TOPDIR, "config", "solo.rb")
   puts ">>> Starting Chef Bootstrap ..."
-  sh("chef-solo -c #{scfg} -j #{ENV['SOLO_CONFIG']}")
+  sh("chef-solo --force-logger -c #{scfg} -j #{ENV['SOLO_CONFIG']}")
 end
 
 namespace :solo do
