@@ -1,4 +1,11 @@
 GIT
+  remote: git://github.com/zenops/kitchen-vagrant.git
+  revision: 1510888e2c33294d21449d90655a2f30593b422e
+  specs:
+    kitchen-vagrant (0.11.2.dev)
+      test-kitchen (~> 1.0.0.beta.3)
+
+GIT
   remote: git://github.com/zenops/knife-dsl.git
   revision: b225849a8c70601d806bedd77659882a8bfa4bd9
   specs:
@@ -76,8 +83,6 @@ GEM
     i18n (0.6.5)
     ipaddress (0.8.0)
     json (1.7.7)
-    kitchen-vagrant (0.11.1)
-      test-kitchen (~> 1.0.0.beta.3)
     method_source (0.8.2)
     mime-types (1.25)
     minitest (4.7.5)
@@ -140,7 +145,7 @@ DEPENDENCIES
   hetzner-api
   highline
   httparty
-  kitchen-vagrant
+  kitchen-vagrant!
   knife-dsl!
   mixlib-shellout!
   rake

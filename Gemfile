@@ -15,6 +15,6 @@ gem 'knife-dsl', :github => 'zenops/knife-dsl'
 gem 'mixlib-shellout', :github => 'zenops/mixlib-shellout'
 
 group :testing do
-  gem 'kitchen-vagrant'
+  gem 'kitchen-vagrant', :github => 'zenops/kitchen-vagrant'
   gem 'test-kitchen', :github => 'zenops/test-kitchen'
 end
