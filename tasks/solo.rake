@@ -1,14 +1,8 @@
 require "highline/import"
 
-def run_solo
-  scfg = File.join(TOPDIR, "config", "solo.rb")
-  puts ">>> Starting Chef Bootstrap ..."
-  sh("chef-solo --force-logger -c #{scfg} -j #{ENV['SOLO_CONFIG']}")
-end
-
 namespace :solo do
 
-  task :create_solo_config do
+  task :config do
     ENV['SOLO_USER'] = %x(whoami).chomp
     ENV['SOLO_FQDN'] = %x(hostname -f).chomp
 
@@ -34,35 +28,11 @@ namespace :solo do
     end
   end
 
-  task :mac_os_x => :create_solo_config do
-    raise "running as root is not supported on mac os" if ENV['SOLO_USER'] == "root"
-
-    run_solo
-
-    current_shell = %x(dscl . -read /Users/#{ENV['SOLO_USER']} | grep '^UserShell:' | awk '{print $2}').chomp
-    new_shell = "/usr/local/bin/bash"
-
-    if File.exist?(new_shell) and current_shell != new_shell
-      sh("sudo chsh -s #{new_shell} #{ENV['SOLO_USER']}")
-    end
-  end
-
-  task :debian => :create_solo_config do
-    run_solo
-  end
-
-  task :gentoo => :create_solo_config do
-    run_solo
-  end
-
 end
 
 desc "Bootstrap local node with chef-solo"
-task :solo do
-  ohai = Ohai::System.new
-  ohai.require_plugin("os")
-  ohai.require_plugin("platform")
-  Rake::Task["solo:#{ohai[:platform]}"].invoke
+task :solo => "solo:config" do
+  sh("scripts/solo")
 end
 
 task :han do

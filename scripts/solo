@@ -1,0 +1,52 @@
+#!/bin/bash
+
+set -e
+
+cd $(realpath $(dirname $0)/../)
+
+# use user supplied config if it exists
+if [[ $USER == "root" ]]; then
+	config_name=$(hostname -f)
+else
+	config_name=$(whoami)
+fi
+
+if [[ ! -f config/solo/${config_name}.json ]]; then
+	config_name=base
+fi
+
+# mac sanity check
+if [[ -d /Applications ]]; then
+	if [[ ${config_name} == "root" ]]; then
+		echo "running as root is not supported on mac os"
+		exit 1
+	fi
+
+	# select the correct xcode version
+	sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
+fi
+
+# install chef if it is missing
+if ! type -P chef-solo >/dev/null; then
+	if [[ -f /etc/gentoo-release ]]; then
+		sudo emerge app-admin/chef
+	else
+		curl -L https://www.opscode.com/chef/install.sh | sudo bash
+	fi
+fi
+
+chef-solo -c config/solo.rb -j config/solo/${config_name}.json
+
+# use shell from homebrew on mac
+if type -P dscl >/dev/null; then
+	current_shell=$(dscl . -read /Users/${config_name} | grep '^UserShell:' | awk '{print $2}')
+	new_shell= "/usr/local/bin/bash"
+
+	if [[ -x ${new_shell} && ${current_shell} != ${new_shell} ]]; then
+		sudo chsh -s ${new_shell} ${config_name}
+	fi
+fi
+
+# open iTerm
+#curl -s -L https://raw.github.com/altercation/solarized/master/iterm2-colors-solarized/Solarized%20Dark.itermcolors > '/Applications/iTerm.app/Solarized Dark.itermcolors'
+#open '/Applications/iTerm.app/Solarized Dark.itermcolors'
