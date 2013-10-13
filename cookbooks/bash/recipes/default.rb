@@ -1,8 +1,10 @@
 if gentoo?
   package "app-shells/bash"
+
 elsif debian_based?
   package "bash"
   package "bash-completion"
+
 elsif mac_os_x?
   package "bash"
   package "bash-completion"
@@ -36,16 +38,34 @@ if root?
     mode "0644"
   end
 
-  file "/root/.bashrc" do
-    action :delete
+  # always use global bashrc for root
+  %w(.bashrc .bash_profile .profile .bash_logout).each do |f|
+    file "#{node[:homedir]}/#{f}" do
+      action :delete
+    end
   end
 
-  file "/root/.profile" do
+  # most distributions use /etc/bash.bashrc and /etc/bash.bash_logout but we
+  # follow the gentoo way of putting these in /etc/bash, so we symlink these
+  # for compatibility
+  file "/etc/bash.bashrc" do
     action :delete
+    not_if { File.symlink?("/etc/bash.bashrc") }
   end
-end
 
-if solo? and not root?
+  link "/etc/bash.bashrc" do
+    to "#{node[:bash][:rcdir]}/bashrc"
+  end
+
+  file "/etc/bash.bash_logout" do
+    action :delete
+    not_if { File.symlink?("/etc/bash.bash_logout") }
+  end
+
+  link "/etc/bash.bash_logout" do
+    to "#{node[:bash][:rcdir]}/bash_logout"
+  end
+else
   %w(.bashrc .bash_profile .profile).each do |f|
     link "#{node[:homedir]}/#{f}" do
       to "#{node[:bash][:rcdir]}/bashrc"
@@ -64,16 +84,12 @@ if solo? and not root?
 end
 
 # various color fixes for solarized
-dir_colors = root? ? "/etc/DIR_COLORS" : "#{node[:homedir]}/.dir_colors"
-
-cookbook_file dir_colors do
+cookbook_file node[:bash][:dircolors] do
   source "dircolors.ansi-universal"
   mode "0644"
 end
 
-colordiffrc = root? ? "/etc/colordiffrc" : "#{node[:homedir]}/.colordiffrc"
-
-cookbook_file colordiffrc do
+cookbook_file node[:bash][:colordiffrc] do
   source "colordiffrc"
   mode "0644"
 end
