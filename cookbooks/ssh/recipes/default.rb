@@ -5,7 +5,7 @@ elsif debian_based?
   package "openssh-client"
   package "openssh-server"
 
-elsif ma_os_x?
+elsif mac_os_x?
   package "ssh-copy-id"
 
 end
