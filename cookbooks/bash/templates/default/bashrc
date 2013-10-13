@@ -178,11 +178,6 @@ alias vi="vim"
 # replace reboot by shutdown -r now:
 alias reboot="shutdown -r now"
 
-<% if solo? and not root? %>
-# unset RUBYOPT here for rvm compat
-unset RUBYOPT
-<% end %>
-
 # load local bashrc if it exists
 if [[ -e ${HOME}/.bashrc.local ]]; then
 	source ${HOME}/.bashrc.local
