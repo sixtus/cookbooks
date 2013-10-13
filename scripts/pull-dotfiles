@@ -1,5 +1,0 @@
-#!/bin/bash
-
-cd ~/.dotfiles
-git co .
-git pull
