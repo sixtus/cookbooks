@@ -18,7 +18,7 @@ cookbook_file node[:git][:exfile] do
   mode "0644"
 end
 
-if solo? and not root?
+if !root?
   cookbook_file "#{node[:homedir]}/bin/update-github-org" do
     source "update-github-org"
     mode "0755"

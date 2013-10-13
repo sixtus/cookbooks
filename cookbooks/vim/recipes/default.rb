@@ -53,19 +53,10 @@ end
 template "#{node[:vim][:rcdir]}/cleanup_bundle" do
   source "cleanup_bundle.sh"
   mode "0755"
-  variables :bundles => solo? ? node[:vim][:plugins].keys.map(&:to_s) : [:solarized, :powerline]
+  variables :bundles => root? ? [:solarized, :powerline] : node[:vim][:plugins].keys.map(&:to_s)
 end
 
-if solo?
-  node[:vim][:plugins].each do |name, repo|
-    next unless repo
-    git "#{node[:vim][:rcdir]}/bundle/#{name}" do
-      repository repo
-      reference "master"
-      action :sync
-    end
-  end
-else
+if root?
   remote_directory "#{node[:vim][:rcdir]}/bundle/solarized" do
     source "solarized"
     owner "root"
@@ -87,13 +78,22 @@ else
     action :delete
     recursive true
   end
+else
+  node[:vim][:plugins].each do |name, repo|
+    next unless repo
+    git "#{node[:vim][:rcdir]}/bundle/#{name}" do
+      repository repo
+      reference "master"
+      action :sync
+    end
+  end
 end
 
 execute "vim-cleanup-bundles" do
   command "#{node[:vim][:rcdir]}/cleanup_bundle"
 end
 
-if solo? and not root?
+if !root?
   overridable_template "#{node[:homedir]}/.vimrc.local" do
     source "vimrc.local"
     namespace :user

@@ -24,26 +24,20 @@ if root?
   end
 end
 
-if solo? and not root?
-  directory File.dirname(node[:ssh][:config]) do
-    mode "0700"
-  end
-else
-  directory File.dirname(node[:ssh][:config]) do
-    mode "0755"
-  end
+directory File.dirname(node[:ssh][:config]) do
+  mode(root? ? "0755" : "0700")
 end
 
-if solo? and not root?
+if root?
+  template node[:ssh][:config] do
+    source "ssh_config"
+    mode "0644"
+  end
+else
   overridable_template node[:ssh][:config] do
     source "ssh_config"
     mode "0600"
     namespace :user
     instance node[:current_user]
-  end
-else
-  template node[:ssh][:config] do
-    source "ssh_config"
-    mode "0644"
   end
 end

@@ -112,7 +112,7 @@ if gentoo?
       grant_option true
     end
 
-    if root? and solo? # for vagrant
+    if solo? # for vagrant
       mysql_user "root" do
         password mysql_root_pass
         force_password true

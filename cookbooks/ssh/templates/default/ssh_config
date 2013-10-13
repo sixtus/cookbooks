@@ -1,7 +1,7 @@
 # This is the ssh client configuration file.  See
 # ssh_config(5) for more information.
 
-<% if solo? and not root? %>
+<% if !root? %>
 ForwardAgent yes
 ForwardX11Trusted yes
 <% end %>
