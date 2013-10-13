@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: git://github.com/zenops/test-kitchen.git
-  revision: 2137a485cecfb281e2dbc29bdd126de6231145bd
+  revision: 182cdb363a67bb9612e39af15c9b6627a2af570b
   specs:
     test-kitchen (1.0.0.dev)
       celluloid (~> 0.15)
@@ -55,7 +55,7 @@ GEM
       yajl-ruby (~> 1.1)
     coderay (1.0.9)
     erubis (2.7.0)
-    foodcritic (3.0.2)
+    foodcritic (3.0.3)
       erubis
       gherkin (~> 2.11.7)
       nokogiri (~> 1.5.4)
@@ -114,6 +114,7 @@ GEM
     rest-client (1.6.7)
       mime-types (>= 1.16)
     ruby-nuggets (0.9.5)
+    rvm (1.11.3.8)
     safe_yaml (0.9.7)
     slop (3.4.6)
     systemu (2.5.2)
@@ -144,4 +145,5 @@ DEPENDENCIES
   knife-dsl!
   mixlib-shellout!
   rake
+  rvm
   test-kitchen!

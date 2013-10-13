@@ -13,6 +13,7 @@ gem 'highline'
 gem 'httparty'
 gem 'knife-dsl', :github => 'zenops/knife-dsl'
 gem 'mixlib-shellout', :github => 'zenops/mixlib-shellout'
+gem 'rvm'
 
 group :testing do
   gem 'kitchen-vagrant'
