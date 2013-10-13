@@ -92,12 +92,6 @@ end
   end
 end
 
-directory "#{node[:portage][:confdir]}/preserve-libs.d" do
-  owner "root"
-  group "root"
-  mode "0755"
-end
-
 cookbook_file "#{node[:portage][:confdir]}/bashrc" do
   source "bashrc"
   owner "root"
