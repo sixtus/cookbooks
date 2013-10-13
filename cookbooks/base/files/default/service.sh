@@ -1,3 +1,5 @@
+#!/bin/bash
+
 _systemd_running() {
 	[[ $(</proc/1/cmdline) =~ systemd ]]
 }
@@ -12,10 +14,15 @@ _sc() {
 
 _service() {
 	if _systemd_running; then
-		_sc $1 $2
+		_sc $2 $1
 	else
-		/etc/init.d/$2 $1
+		rc-service $1 $2
 	fi
 }
+
+if [[ $# -ne 2 ]]; then
+	echo "Usage: service <name> <action>"
+	exit 1
+fi
 
 _service "$@"

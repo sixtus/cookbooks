@@ -17,7 +17,11 @@ if root?
     package pkg
   end
 
-  cookbook_file "/usr/local/bin/service" do
+  file "/usr/local/bin/service" do
+    action :delete
+  end
+
+  cookbook_file "/sbin/service" do
     source "service.sh"
     owner "root"
     group "root"
