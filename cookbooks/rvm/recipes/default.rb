@@ -17,4 +17,6 @@ require 'rvm'
 create_rvm_shell_chef_wrapper
 create_rvm_chef_user_environment
 
-rvm_instance node[:current_user]
+if !root?
+  rvm_instance node[:current_user]
+end
