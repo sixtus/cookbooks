@@ -26,6 +26,8 @@ if root?
     owner "root"
     group "root"
     mode "0755"
+    manage_symlink_source false
+    force_unlink true
   end
 
   include_recipe "lib_users"
