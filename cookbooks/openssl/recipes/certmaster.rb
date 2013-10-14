@@ -2,6 +2,7 @@ include_recipe "openssl"
 
 remote_directory "/etc/ssl/ca" do
   source "certificates"
+  cookbook "certificates"
   files_owner "root"
   files_group "root"
   files_mode "0444"

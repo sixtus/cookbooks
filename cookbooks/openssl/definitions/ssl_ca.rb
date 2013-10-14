@@ -7,7 +7,7 @@ define :ssl_ca, :symlink => false, :owner => "root", :group => "root", :mode => 
       group params[:group]
       mode params[:mode]
       source "certificates/ca.#{t}"
-      cookbook "openssl"
+      cookbook "certificates"
     end
   end
 

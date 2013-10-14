@@ -23,7 +23,6 @@ UPSTREAM_BRANCH="zenops/next"
 
 # cookbooks that should always be uploaded
 FORCED_COOKBOOKS = %w(
-  openssl
   shorewall
 )
 
@@ -64,7 +63,7 @@ DOC_BUILD_DIR = File.expand_path(File.join(TOPDIR, "cookbooks", "chef", "files",
 
 # Directories needed by the SSL tasks
 SSL_CA_DIR = File.expand_path(File.join(TOPDIR, "ca"))
-SSL_CERT_DIR = File.expand_path(File.join(TOPDIR, "cookbooks/openssl/files/default/certificates"))
+SSL_CERT_DIR = File.expand_path(File.join(TOPDIR, "site-cookbooks/certificates/files/default/certificates"))
 
 # OpenSSL config file
 SSL_CONFIG_FILE = File.expand_path(File.join(TOPDIR, "config", "openssl.cnf"))
