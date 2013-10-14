@@ -17,6 +17,6 @@ end
 systemd_unit "pkgsync.timer"
 systemd_unit "pkgsync.service"
 
-service "pkgsync" do
+service "pkgsync.timer" do
   action [:enable, :start]
 end
