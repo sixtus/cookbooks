@@ -35,7 +35,7 @@ namespace :upstream do
   desc "Show changes to upstream"
   task :changes, :branch do |t, args|
     args.with_defaults(branch: UPSTREAM_BRANCH)
-    sh("git diff --diff-filter=DMTUXB #{args.branch} HEAD")
+    sh("git diff #{args.branch} config cookbooks documentation environments roles scripts tasks vagrant Gemfile* Rakefile Vagrantfile README.rst")
   end
 
   desc "Interactively pick changes from HEAD into next"
