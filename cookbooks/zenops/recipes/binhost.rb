@@ -1,12 +1,12 @@
-tag("portage-binhost")
-
 clients = node.run_state[:nodes].select do |n|
-  n[:primary_ipaddress]
+  n[:primary_ipaddress] and
+  n[:platform] == "gentoo" and
+  n[:portage][:repo] == "zentoo"
 end.map do |n|
   n[:primary_ipaddress]
 end
 
-directory "/var/cache/portage/packages" do
+directory "/var/cache/mirror/zentoo/packages" do
   owner "root"
   group "root"
   mode "0755"
@@ -20,10 +20,9 @@ template "/usr/sbin/pkgsync" do
   variables :clients => clients
 end
 
-cron_hourly "pkgsync" do
-  command "/usr/sbin/pkgsync"
-end
+systemd_unit "pkgsync.timer"
+systemd_unit "pkgsync.service"
 
-nginx_server "binhost" do
-  template "binhost.nginx.conf"
+service "pkgsync" do
+  action [:enable, :start]
 end

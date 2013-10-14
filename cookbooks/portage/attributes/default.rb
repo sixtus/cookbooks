@@ -18,7 +18,7 @@ default[:portage][:ACCEPT_KEYWORDS] = nil
 
 # advanced features
 default[:portage][:FEATURES] = []
-default[:portage][:OPTS] = %w(--usepkg --getbinpkg)
+default[:portage][:OPTS] = %w(--usepkg=y --getbinpkg=y)
 default[:portage][:MAKEOPTS] = "-j1"
 
 # language support
@@ -32,7 +32,7 @@ if gentoo?
     default[:portage][:profile] = "#{set[:portage][:portdir]}/profiles/default/linux/#{node[:portage][:arch]}/11.0"
 
     default[:portage][:SYNC] = "rsync://mirror.zenops.net/zentoo-portage"
-    default[:portage][:BINHOST] = "http://chef.zenops.net/${ARCH}/"
+    default[:portage][:BINHOST] = "http://mirror.zenops.net/zentoo/${ARCH}/packages"
     default[:portage][:MIRRORS] = %w(
     http://mirror.zenops.net/zentoo
     http://ftp.spline.de/pub/gentoo

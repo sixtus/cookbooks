@@ -19,6 +19,7 @@ end
   splunk-server
   nagios
   mx
+  zenops-mirror
 ).each do |role|
   node.run_state[role.to_sym] = node.run_state[:nodes].select do |n|
     n[:roles] and n[:roles].include?(role)
