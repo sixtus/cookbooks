@@ -21,13 +21,16 @@ if root?
     action :delete
   end
 
+  file "/sbin/service" do
+    action :delete
+    only_if { File.symlink?("/sbin/service") }
+  end
+
   cookbook_file "/sbin/service" do
     source "service.sh"
     owner "root"
     group "root"
     mode "0755"
-    manage_symlink_source false
-    force_unlink true
   end
 
   include_recipe "lib_users"
