@@ -9,12 +9,4 @@ Vagrant.configure('2') do |config|
     end
   end
 
-  config.vm.define "zentoo-next" do |base|
-    base.vm.box = "zentoo-amd64-base"
-    base.vm.box_url = "http://mirror.zenops.net/zentoo-next/amd64/zentoo-next-amd64-base.box"
-    setup_network(base, 5003)
-    setup_chef_solo(base) do |chef|
-      chef.add_role("base")
-    end
-  end
 end
