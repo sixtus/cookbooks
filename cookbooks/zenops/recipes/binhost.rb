@@ -6,12 +6,6 @@ end.map do |n|
   n[:primary_ipaddress]
 end
 
-directory "/var/cache/mirror/zentoo/packages" do
-  owner "root"
-  group "root"
-  mode "0755"
-end
-
 template "/usr/sbin/pkgsync" do
   source "pkgsync.sh"
   owner "root"
