@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: git://github.com/zenops/test-kitchen.git
-  revision: 423f47f38ec9449374eb9064d4540803ba6ad75a
+  revision: cce3e9410e436e00737fc6ad1197e65edf3ed4d6
   specs:
     test-kitchen (1.0.0.dev)
       celluloid (~> 0.15)
