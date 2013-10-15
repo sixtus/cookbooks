@@ -11,10 +11,11 @@ def setup_chef_solo(config)
   end
 end
 
-def setup_vrde(config, port)
+def setup_network(config, id)
+  config.vm.network "private_network", ip: "192.168.#{id/100}.#{id%100}"
   config.vm.provider "virtualbox" do |vb|
     vb.customize ["modifyvm", :id, "--vrde", "on"]
-    vb.customize ["modifyvm", :id, "--vrdeport", port.to_s]
+    vb.customize ["modifyvm", :id, "--vrdeport", id.to_s]
     vb.customize ["modifyvm", :id, "--vrdeauthtype", "external"]
   end
 end

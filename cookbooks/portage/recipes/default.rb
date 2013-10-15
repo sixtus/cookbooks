@@ -92,12 +92,6 @@ end
   end
 end
 
-directory "#{node[:portage][:confdir]}/preserve-libs.d" do
-  owner "root"
-  group "root"
-  mode "0755"
-end
-
 cookbook_file "#{node[:portage][:confdir]}/bashrc" do
   source "bashrc"
   owner "root"
@@ -186,9 +180,7 @@ end
   end
 end
 
-binhosts = node.run_state[:nodes].select do |n|
-  n[:tags].include?("portage-binhost") and n[:primary_ipaddress] rescue false
-end.map do |n|
+binhosts = node.run_state[:'zenops-mirror'].map do |n|
   n[:primary_ipaddress]
 end
 

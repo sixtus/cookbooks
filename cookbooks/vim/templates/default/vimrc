@@ -187,11 +187,7 @@ augroup filetype_settings
 	au FileType python set ts=4 sw=4 tw=79 et
 augroup END
 
-<% if root? and not solo? %>
-let g:Powerline_cache_enabled = 0
-<% end %>
-
-<% if solo? and not root? %>
+<% if !root? %>
 " load custom vimrc
 source <%= node[:homedir] %>/.vimrc.local
 <% end %>

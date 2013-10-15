@@ -61,3 +61,5 @@ for sh in /etc/profile.d/*.sh ; do
 	[ -r "$sh" ] && . "$sh"
 done
 unset sh
+
+# vim: set ft=sh:

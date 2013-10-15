@@ -14,7 +14,7 @@ template node[:tmux][:configfile] do
   mode "0644"
 end
 
-if solo? and not root?
+if !root?
   overridable_template "#{node[:homedir]}/.tmux.conf.local" do
     source "tmux.conf.local"
     namespace :user

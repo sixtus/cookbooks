@@ -17,7 +17,16 @@ if root?
     package pkg
   end
 
-  cookbook_file "/usr/local/bin/service" do
+  file "/usr/local/bin/service" do
+    action :delete
+  end
+
+  file "/sbin/service" do
+    action :delete
+    only_if { File.symlink?("/sbin/service") }
+  end
+
+  cookbook_file "/sbin/service" do
     source "service.sh"
     owner "root"
     group "root"

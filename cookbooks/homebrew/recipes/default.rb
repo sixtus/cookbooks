@@ -1,3 +1,8 @@
+bash "install homebrew" do
+  code "curl -fsSL https://raw.github.com/mxcl/homebrew/go | ruby"
+  not_if { File.exist?("/usr/local/bin/brew") }
+end
+
 execute "set homebrew origin" do
   command "git remote set-url origin #{node[:homebrew][:repo]}"
   cwd "/usr/local/"

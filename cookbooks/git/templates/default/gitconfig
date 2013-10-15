@@ -44,7 +44,7 @@
 <% else %>
 	helper = cache --timeout 28800
 <% end %>
-<% if solo? and not root? %>
+<% if !root? %>
 [include]
 	path = <%= node[:homedir] %>/.gitconfig.local
 <% end %>

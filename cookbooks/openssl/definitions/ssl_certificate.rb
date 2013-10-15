@@ -8,7 +8,7 @@ define :ssl_certificate, :cn => "localhost", :owner => "root", :group => "root",
       group params[:group]
       mode params[:mode]
       source "certificates/#{params[:cn]}.#{t}"
-      cookbook "openssl"
+      cookbook "certificates"
     end
   end
 end

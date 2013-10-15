@@ -7,6 +7,7 @@ module Gentoo
       # * action == :create || action == :delete
       # * conf_type =~ /\A(use|keywords|mask|unmask)\Z/
       def manage_package_conf(action, conf_type, name, package = nil, flags = nil)
+        return unless root?
         conf_file = package_conf_file(conf_type, name)
         case action
         when :create

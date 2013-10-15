@@ -112,7 +112,7 @@ if root?
   default[:script_path] = "/usr/local/bin"
 else
   default[:homedir] = node[:etc][:passwd][node[:current_user]][:dir]
-  default[:current_email] = "#{node[:current_user]}@localhost"
-  default[:current_name] = node[:current_user]
+  default[:current_email] = "#{node[:current_user]}@#{node[:fqdn]}"
+  default[:current_name] = node[:etc][:passwd][node[:current_user]][:gecos]
   default[:script_path] = "#{node[:homedir]}/bin"
 end

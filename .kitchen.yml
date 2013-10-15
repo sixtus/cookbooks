@@ -10,20 +10,26 @@ platforms:
   driver_config:
     box: zentoo-amd64-base
     box_url: http://mirror.zenops.net/zentoo/amd64/zentoo-amd64-base.box
-- name: zentoo-next
-  driver_config:
-    box: zentoo-next-amd64-base
-    box_url: http://mirror.zenops.net/zentoo-next/amd64/zentoo-next-amd64-base.box
-- name: debian-7.1.0
+- name: debian-71
   driver_config:
     box: debian-7.1.0-amd64-base
     box_url: http://mirror.zenops.net/debian/amd64/debian-7.1.0-amd64-base.box
-- name: ubuntu-12.04.3
+- name: ubuntu-1204
   driver_config:
     box: ubuntu-12.04.3-amd64-base
     box_url: http://mirror.zenops.net/ubuntu/amd64/ubuntu-12.04.3-amd64-base.box
+- name: mac-os-x-108
+  driver_config:
+    box: mac_os_x-10.8.5+chef
 
 suites:
 - name: base
   run_list:
   - role[base]
+  excludes:
+    - mac-os-x-108
+- name: workstation
+  run_list:
+  - role[workstation]
+  driver_config:
+    sudo: false
