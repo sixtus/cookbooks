@@ -96,14 +96,12 @@ unless solo?
   end
 
   systemd_unit "chef-client.service"
-  systemd_unit "chef-client.timer" do
-    template true
-    variables minute: minute
-  end
 
-  service "chef-client.timer" do
-    action [:enable, :start]
-    only_if { systemd_running? }
+  systemd_timer "chef-client" do
+    schedule [
+      "OnBoot=60",
+      "OnCalendar=*:#{minute}",
+    ]
   end
 
   # chef-client.service has a condition on this lock

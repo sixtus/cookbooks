@@ -14,9 +14,8 @@ template "/usr/sbin/pkgsync" do
   variables :clients => clients
 end
 
-systemd_unit "pkgsync.timer"
 systemd_unit "pkgsync.service"
 
-service "pkgsync.timer" do
-  action [:enable, :start]
+systemd_timer "pkgsync" do
+  schedule "OnCalendar=*:25"
 end

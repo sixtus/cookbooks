@@ -1,0 +1,11 @@
+[Unit]
+Description=Timer for <%= @service %>
+
+[Timer]
+Unit=<%= @service %>.service
+<% [@schedule].flatten.each do |schedule| %>
+<%= schedule %>
+<% end %>
+
+[Install]
+WantedBy=multi-user.target
