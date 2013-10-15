@@ -138,9 +138,9 @@ namespace :ssl do
     end
 
     ENV['BATCH'] = old_batch
-    knife :cookbook_upload, ["openssl", "--force"]
+    knife :cookbook_upload, ["certificates"]
 
-    sh("git add -A ca/ cookbooks/openssl/ || :")
+    sh("git add -A ca/ site-cookbooks/certificates || :")
     sh("git commit -q -m 'renew certificates' || :")
   end
 
