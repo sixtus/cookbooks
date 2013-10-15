@@ -74,10 +74,6 @@ namespace :upstream do
     end
   end
 
-  desc "Generate a changelog using merges of branch next"
-  task :changelog do
-    sh("git log -p --merges ee4d56e7d38ecf72e4ca7a9f02b83ee741b5c696..HEAD | sed -e 's/^[ \t]*$//g' > CHANGES")
-  end
 end
 
 task :uc => 'upstream:changes'
