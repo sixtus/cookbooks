@@ -18,9 +18,6 @@ SSL_ORGANIZATIONAL_UNIT_NAME = "Operations"
 # The SSL contact email address
 SSL_EMAIL_ADDRESS = "hostmaster@example.com"
 
-# The upstream branch to track
-UPSTREAM_BRANCH="zenops/master"
-
 # cookbooks that should always be uploaded
 FORCED_COOKBOOKS = %w(
   shorewall
