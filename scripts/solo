@@ -2,7 +2,7 @@
 
 set -e
 
-cd $(realpath $(dirname $0)/../)
+cd $(perl -e 'use Cwd "abs_path";print abs_path(shift)' $0/../../)
 
 # use user supplied config if it exists
 if [[ $USER == "root" ]]; then
