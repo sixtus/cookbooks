@@ -34,7 +34,19 @@ namespace :upstream do
 
   desc "Show changes to upstream"
   task :changes, :branch do |t, args|
-    sh("git diff upstream -- config cookbooks documentation environments roles scripts tasks vagrant Gemfile* Rakefile Vagrantfile README.rst")
+    excludes = [
+      'ca/*',
+      'config/hetzner.rb',
+      'config/solo/*',
+      'config/zendns.rb',
+      'databags/*',
+      'nodes/*',
+      'site-cookbooks/*',
+      'templates/default/user-*',
+    ].map do |pat|
+      "-x '*/#{pat}'"
+    end.join(' ')
+    sh("git diff upstream | filterdiff --clean #{excludes} | colordiff | less -R")
   end
 
   desc "Interactively pick changes from HEAD into upstream"
