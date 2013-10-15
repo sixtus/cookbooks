@@ -10,6 +10,16 @@ elsif debian_based?
   execute "sudo -H gem install rvm" do
     action :nothing
   end.run_action(:run)
+elsif mac_os_x?
+  # need to install into omnibus if available. otherwise mac users will use
+  # bundled gems.
+  execute "sudo -H /opt/chef/embedded/bin/gem install rvm -v 1.11.3.8" do
+    action :nothing
+    only_if do
+      File.exist?("/opt/chef/embedded/bin/gem") and
+      !File.exist?("/opt/chef/embedded/lib/ruby/gems/1.9.1/gems/rvm-1.11.3.8")
+    end
+  end.run_action(:run)
 else
   chef_gem 'rvm' do
     action :install
