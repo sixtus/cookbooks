@@ -7,6 +7,12 @@ if gentoo?
   end
 end
 
+directory "/usr/lib/ruby/site_ruby" do
+  owner "root"
+  group "root"
+  mode "0755"
+end
+
 cookbook_file "/usr/lib/ruby/site_ruby/nagios.rb" do
   source "nagios.rb"
   owner "root"
