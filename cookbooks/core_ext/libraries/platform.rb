@@ -1,4 +1,16 @@
 module PlatformHelpers
+  def production?
+    node.chef_environment == "production"
+  end
+
+  def staging?
+    node.chef_environment == "staging"
+  end
+
+  def development?
+    node.chef_environment == "development"
+  end
+
   def vagrant?
     node.chef_environment == "vagrant"
   end
