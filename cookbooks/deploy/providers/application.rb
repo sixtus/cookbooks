@@ -5,11 +5,19 @@ use_inline_resources rescue nil
 action :create do
   nr = new_resource # rebind
   user = get_user(nr.user)
-  homedir = user[:dir]
+  path = user[:dir]
+  revision = nr.revision || node.chef_environment
 
-  deploy_branch homedir do
+  # simple support for vagrant specific branches
+  if vagrant?
+    revision = "vagrant/#{node[:hostname]}"
+    remote = %x(git ls-remote --heads #{nr.repository} #{revision}).chomp
+    revision = "production" if remote.empty?
+  end
+
+  deploy_branch path do
     repository nr.repository
-    revision nr.revision
+    revision revision
     user nr.user
 
     action :force_deploy if nr.force

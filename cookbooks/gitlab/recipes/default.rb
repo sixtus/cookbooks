@@ -67,6 +67,8 @@ deploy_rails_application "git" do
   worker_processes node[:gitlab][:worker_processes]
   timeout node[:gitlab][:timeout]
 
+  migrate true
+
   symlink_before_migrate({
     "config/database.yml" => "config/database.yml",
     "config/gitlab.yml" => "config/gitlab.yml",

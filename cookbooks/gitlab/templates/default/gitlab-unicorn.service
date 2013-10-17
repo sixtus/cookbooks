@@ -10,7 +10,7 @@ User=git
 Group=git
 Restart=always
 WorkingDirectory=<%= @homedir %>/current
-SyslogIdentifier=unicorn
+SyslogIdentifier=gitlab-unicorn
 
 [Install]
 WantedBy=multi-user.target

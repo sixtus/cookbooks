@@ -37,6 +37,8 @@ deploy_rails_application "zendns" do
   worker_processes node[:zendns][:ui][:worker_processes]
   timeout node[:zendns][:ui][:timeout]
 
+  migrate true
+
   symlink_before_migrate({
     # shared => current
     "config/devise.rb" => "config/initializers/devise.rb",

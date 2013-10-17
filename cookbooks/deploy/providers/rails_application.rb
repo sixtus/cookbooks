@@ -53,6 +53,7 @@ action :create do
         code "bundle exec rake db:migrate RAILS_ENV=production"
         cwd release_path
         user nr.user
+        only_if { nr.migrate }
       end
     end
 
