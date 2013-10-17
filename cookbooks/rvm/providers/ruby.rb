@@ -20,7 +20,7 @@ action :install do
     Chef::Log.info("Building rvm_ruby[#{@rubie}], this could take awhile...")
     install_start = Time.now
 
-    if @rvm_env.install(@rubie, :rvm_by_path => true)
+    if @rvm_env.install(@rubie, :rvm_by_path => true, :'verify-downloads' => 2)
       Chef::Log.info("Installation of rvm_ruby[#{@rubie}] was successful.")
       @rvm_env.use(@rubie)
       update_installed_rubies
