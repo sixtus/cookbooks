@@ -11,7 +11,7 @@ action :create do
   # simple support for vagrant specific branches
   if vagrant?
     revision = "vagrant/#{node[:hostname]}"
-    remote = %x(git ls-remote --heads #{nr.repository} #{revision}).chomp
+    remote = %x(sudo -H -u #{nr.user} git ls-remote --heads #{nr.repository} #{revision}).chomp
     revision = "production" if remote.empty?
   end
 

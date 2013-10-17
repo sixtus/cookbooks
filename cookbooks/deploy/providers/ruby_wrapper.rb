@@ -3,7 +3,7 @@ include ChefUtils::Account
 action :create do
   nr = new_resource # rebind
   user = get_user(nr.user)
-  homedir = user[:dir]
+  path = user[:dir]
 
   environment = nr.environment.map do |k, v|
     "export #{k}=#{v}"
@@ -17,10 +17,10 @@ action :create do
 #!/bin/bash
 
 export LANG=en_US.UTF-8
-export HOME=#{homedir}
+export HOME=#{path}
 unset RUBYOPT
 
-source #{homedir}/.rvm/scripts/rvm
+source #{path}/.rvm/scripts/rvm
 
 export JAVAC="/etc/java-config-2/current-system-vm/bin/javac"
 export JAVA_HOME="/etc/java-config-2/current-system-vm"

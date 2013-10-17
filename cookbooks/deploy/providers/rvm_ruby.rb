@@ -3,7 +3,7 @@ include ChefUtils::Account
 action :create do
   nr = new_resource # rebind
   user = nr.name
-  homedir = get_user(user)[:homedir]
+  path = get_user(user)[:path]
 
   rvm_instance user do
     version nr.rvm_version if nr.rvm_version
@@ -22,7 +22,7 @@ action :create do
   end
 
   paths = [
-    "#{homedir}/shared/bundle",
+    "#{path}/shared/bundle",
   ]
 
   portage_preserve_libs user do

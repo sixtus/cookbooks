@@ -13,14 +13,14 @@ timeout <%= @timeout %>
 
 # Help ensure your application will always spawn in the symlinked
 # "current" directory that Capistrano sets up.
-working_directory "<%= @homedir %>/current"
+working_directory "<%= @path %>/current"
 
 # Location of the pidfile. Should not be changed unless you
 # know what you are doing.
-pid "<%= @homedir %>/shared/pids/unicorn.pid"
+pid "<%= @path %>/shared/pids/unicorn.pid"
 
 # listen on Unix domain socket and let nginx proxy
-listen "<%= @homedir %>/shared/pids/unicorn.sock"
+listen "<%= @path %>/shared/pids/unicorn.sock"
 
 # combine REE with "preload_app true" for memory savings
 # http://rubyenterpriseedition.com/faq.html#adapt_apps_for_cow
@@ -34,7 +34,7 @@ end
 # upgraded via USR2. otherwise the symlink will be expanded and old Gemfiles
 # may be used after upgrade.
 before_exec do |server|
-  ENV["BUNDLE_GEMFILE"] = "<%= @homedir %>/current/Gemfile"
+  ENV["BUNDLE_GEMFILE"] = "<%= @path %>/current/Gemfile"
 end
 
 before_fork do |server, worker|
@@ -49,7 +49,7 @@ before_fork do |server, worker|
   # thundering herd (especially in the "preload_app false" case)
   # when doing a transparent upgrade.  The last worker spawned
   # will then kill off the old master process with a SIGQUIT.
-  old_pid = "<%= @homedir %>/shared/pids/unicorn.pid.oldbin"
+  old_pid = "<%= @path %>/shared/pids/unicorn.pid.oldbin"
   if old_pid != server.pid
     begin
       sig = (worker.nr + 1) >= server.worker_processes ? :QUIT : :TTOU

@@ -14,6 +14,7 @@ attribute :force, kind_of: [TrueClass, FalseClass], default: false
 attribute :migrate, kind_of: [TrueClass, FalseClass], default: false
 attribute :worker_processes, kind_of: Fixnum, default: 4
 attribute :timeout, kind_of: Fixnum, default: 30
+attribute :rails_env, kind_of: String, default: nil
 
 def before_precompile(arg=nil, &block)
   arg ||= block

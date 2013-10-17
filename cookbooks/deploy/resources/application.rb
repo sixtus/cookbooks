@@ -15,7 +15,7 @@ end
 
 def before_migrate(arg=nil, &block)
   arg ||= block
-  set_or_return(:before_restart, arg, kind_of: [Proc, String])
+  set_or_return(:before_migrate, arg, kind_of: [Proc, String])
 end
 
 def before_symlink(arg=nil, &block)
