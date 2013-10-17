@@ -59,16 +59,6 @@ end
 # /run compatibility (both directions)
 new_run = File.directory?("/run") and not File.symlink?("/run")
 
-link "/run" do
-  to "/var/run"
-  not_if { File.symlink?("/var/run") }
-end
-
-link "/run/lock" do
-  to "/var/lock"
-  not_if { File.symlink?("/var/lock") }
-end
-
 link "/var/run" do
   to "/run"
   not_if { File.symlink?("/run") }
@@ -77,4 +67,14 @@ end
 link "/var/lock" do
   to "/run/lock"
   not_if { File.symlink?("/run/lock") }
+end
+
+link "/run" do
+  to "/var/run"
+  not_if { File.symlink?("/var/run") }
+end
+
+link "/run/lock" do
+  to "/var/lock"
+  not_if { File.symlink?("/var/lock") }
 end
