@@ -1,6 +1,12 @@
 # portage
 package "app-portage/gentoolkit-dev"
 
+directory "/var/cache/mirror/zentoo" do
+  owner "root"
+  group "root"
+  mode "0755"
+end
+
 git "/var/cache/mirror/zentoo/portage" do
   repository "https://github.com/zentoo/zentoo"
   enable_submodules true
