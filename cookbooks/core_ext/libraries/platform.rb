@@ -1,4 +1,8 @@
 module PlatformHelpers
+  def vagrant?
+    node.chef_environment == "vagrant"
+  end
+
   def linux?
     node[:os] == "linux"
   end
