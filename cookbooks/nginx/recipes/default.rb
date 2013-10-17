@@ -68,11 +68,13 @@ service "nginx" do
   action [:enable, :start]
 end
 
-ssl_certificate "/etc/ssl/nginx/nginx" do
-  cn node[:fqdn]
-  owner "nginx"
-  group "nginx"
-  notifies :restart, "service[nginx]"
+if !solo?
+  ssl_certificate "/etc/ssl/nginx/nginx" do
+    cn node[:fqdn]
+    owner "nginx"
+    group "nginx"
+    notifies :restart, "service[nginx]"
+  end
 end
 
 %w(csr pem).each do |f|
