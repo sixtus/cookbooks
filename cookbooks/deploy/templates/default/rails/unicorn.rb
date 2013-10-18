@@ -19,6 +19,11 @@ working_directory "<%= @path %>/current"
 # know what you are doing.
 pid "<%= @path %>/shared/pids/unicorn.pid"
 
+# In production we want clean logging
+logger(Logger.new($stderr).tap do |log|
+  log.formatter = proc { |severity, datetime, progname, msg| "#{msg.to_s}\n" }
+end)
+
 # listen on Unix domain socket and let nginx proxy
 listen "<%= @path %>/shared/pids/unicorn.sock"
 
