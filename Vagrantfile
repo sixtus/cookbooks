@@ -10,9 +10,14 @@ def setup(config, id, name)
     chef.cookbooks_path = ["cookbooks", "site-cookbooks"]
     chef.data_bags_path = "databags"
     chef.environments_path = "environments"
-    chef.environment = "vagrant"
+    chef.environment = "staging"
     chef.roles_path = "roles"
     yield chef if block_given?
+    chef.json = chef.json.merge({
+      cluster: {
+        name: "vagrant",
+      },
+    })
   end
   config.vm.provider "virtualbox" do |vb|
     vb.gui = false
