@@ -13,7 +13,7 @@ end
 namespace :load do
 
   desc "Upload all entities"
-  task :all => [ :cookbooks, :nodes, :roles, :environments, :databags ]
+  task :all => [ :cookbooks, :nodes, :roles, :databags ]
 
   desc "Upload all cookbooks"
   task :cookbooks do
