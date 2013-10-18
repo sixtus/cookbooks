@@ -3,7 +3,7 @@ include ChefUtils::Account
 action :create do
   nr = new_resource # rebind
   user = nr.name
-  path = get_user(user)[:path]
+  path = get_user(user)[:dir]
 
   rvm_instance user do
     version nr.rvm_version if nr.rvm_version
