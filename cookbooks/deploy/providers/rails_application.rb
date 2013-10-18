@@ -6,11 +6,7 @@ action :create do
   nr = new_resource # rebind
   user = get_user(nr.user)
   path = user[:dir]
-  rails_env = nr.rails_env
-
-  if rails_env.nil?
-    rails_env = vagrant? ? "staging" : node.chef_environment
-  end
+  rails_env = nr.rails_env || node.chef_environment
 
   template "#{path}/shared/config/unicorn.rb" do
     source "rails/unicorn.rb"
