@@ -40,7 +40,9 @@ if root?
   include_recipe "ssh::server"
   include_recipe "postfix"
   include_recipe "cron"
-  include_recipe "syslog"
+
+  # we just need this for forwarding
+  include_recipe "syslog" unless solo?
 
   # these are only usefull in non-solo mode and only if the specified role
   # has been deployed on another node (see above)
