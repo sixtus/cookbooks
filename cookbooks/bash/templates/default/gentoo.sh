@@ -15,7 +15,7 @@ sc() {
 }
 
 jf() {
-	journalctl -f -n${1:-20}
+	journalctl --full -f -n 50 "$@"
 }
 
 # init script helpers
