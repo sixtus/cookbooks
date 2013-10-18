@@ -16,11 +16,34 @@ node.set[:shorewall6][:zones] = {}
 
 include_recipe "shorewall::rules"
 
-# LXC support
-if node[:primary_interface] == "lxc0"
-  shorewall_lxc_bridge "lxc" do
-    interface node[:primary_interface]
-    bridged node[:primary_interface_bridged]
+# detect bridge
+if node[:primary_interface_bridged]
+  shorewall_interface "br" do
+    interface "#{node[:primary_interface]}:#{node[:primary_interface_bridged]}"
+  end
+
+  shorewall_zone "br:net" do
+    type "bport"
+  end
+
+  shorewall_policy "br" do
+    source "br"
+    dest "all"
+    policy "ACCEPT"
+  end
+
+  shorewall6_interface "br" do
+    interface "#{node[:primary_interface]}:#{node[:primary_interface_bridged]}"
+  end
+
+  shorewall6_zone "br:net" do
+    type "bport"
+  end
+
+  shorewall6_policy "br" do
+    source "br"
+    dest "all"
+    policy "ACCEPT"
   end
 end
 
