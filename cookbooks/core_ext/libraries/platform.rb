@@ -12,7 +12,7 @@ module PlatformHelpers
   end
 
   def vagrant?
-    node.chef_environment == "vagrant"
+    node[:cluster][:name] == "vagrant"
   end
 
   def linux?
