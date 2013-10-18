@@ -3,8 +3,8 @@ include ChefUtils::Account
 action :create do
   nr = new_resource # rebind
   user = get_user(nr.user)
-  path = nr.path || user[:dir]
-  port = nr.port
+  path = nr.path || nr.homedir || user[:dir]
+  port = nr.port.to_i
 
   nginx_server "unicorn-#{nr.name}" do
     template "unicorn.conf"
