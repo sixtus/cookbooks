@@ -27,14 +27,6 @@ end
 
 systemd_unit "hadoop@.service"
 
-name_node = node.run_state[:nodes].select do |n|
-  n[:tags] && n[:tags].include?("hadoop-namenode")
-end.first
-
-job_tracker = node.run_state[:nodes].select do |n|
-  n[:tags] && n[:tags].include?("hadoop-jobtracker")
-end.first
-
 %w(
   core-site.xml
   hadoop-env.sh
@@ -48,8 +40,8 @@ end.first
     owner "root"
     group "root"
     mode "0644"
-    variables :job_tracker => job_tracker,
-              :name_node => name_node
+    variables :job_tracker => hadoop_jobtracker,
+              :name_node => hadoop_namenode
   end
 end
 
@@ -64,20 +56,11 @@ template "/opt/hadoop/conf/topology.sh" do
   mode "0554"
 end
 
-datanodes = node.run_state[:nodes].select do |n|
-  n[:tags] and n[:tags].include?("hadoop-datanode")
-end
-
-topology = datanodes.map do |n|
-  "#{node[:ipaddress]} #{node[:hadoop][:rack_id] || '/default/rack'}"
-end.join("\n") + "\n"
-
-file "/opt/hadoop/conf/topology.data" do
-  action :create
+template "/opt/hadoop/conf/topology.data" do
+  source "topology.data"
   owner "root"
   group "hadoop"
   mode "0644"
-  content topology
 end
 
 directory node[:hadoop][:tmp_dir] do

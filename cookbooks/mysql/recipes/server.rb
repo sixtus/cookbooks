@@ -1,5 +1,3 @@
-tag("mysql-server")
-
 include_recipe "mysql"
 
 if gentoo?
@@ -135,7 +133,7 @@ elsif mac_os_x?
 end
 
 # nagios service checks
-if tagged?("nagios-client")
+if nagios_client?
 
   # simple helper class for custom nagios checks
   cookbook_file "/usr/lib/ruby/site_ruby/nagios/plugin/mysql.rb" do

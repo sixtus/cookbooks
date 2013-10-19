@@ -6,8 +6,8 @@ from string import join
 DEFAULT_RACK = '/default/rack';
 
 RACK_MAP = {
-<% @hadoop_nodes.each do |n| %>
-  '<%= n[:fqdn] %>': '<%= n[:hadoop][:rack_id] %>',
+<% hadoop_topology.each do |n, rack_id| %>
+  '<%= n[:fqdn] %>': '<%= rack_id %>',
 <% end %>
 }
 

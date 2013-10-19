@@ -1,5 +1,3 @@
-tag("hadoop-datanode")
-
 include_recipe "hadoop"
 
 service "hadoop@datanode" do
@@ -7,7 +5,7 @@ service "hadoop@datanode" do
   subscribes :restart, 'template[/opt/hadoop/conf/hdfs-site.xml]'
 end
 
-if tagged?("nagios-client")
+if nagios_client?
   {
     :datanode => [:DataNode, 85, 95],
   }.each do |name, params|

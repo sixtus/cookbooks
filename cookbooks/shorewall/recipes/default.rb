@@ -36,7 +36,7 @@ end
 include_recipe "shorewall::ipv4"
 include_recipe "shorewall::ipv6"
 
-if tagged?("nagios-client")
+if nagios_client?
   nagios_plugin "check_conntrack"
 
   nrpe_command "check_conntrack" do

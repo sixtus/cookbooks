@@ -115,7 +115,7 @@ if gentoo?
   end
 end
 
-if tagged?("nagios-client")
+if nagios_client?
   nagios_plugin "check_systemd"
   nagios_plugin "check_systemd_user"
 

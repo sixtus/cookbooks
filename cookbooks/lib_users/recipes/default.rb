@@ -5,7 +5,7 @@ cookbook_file "/usr/bin/lib_users" do
   mode "0755"
 end
 
-if tagged?("nagios-client")
+if nagios_client?
   sudo_rule "nagios-lib_users" do
     user "nagios"
     runas "root"

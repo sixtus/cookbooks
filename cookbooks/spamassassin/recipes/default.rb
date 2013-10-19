@@ -44,7 +44,7 @@ service "spamd" do
   supports [:reload]
 end
 
-if tagged?("nagios-client")
+if nagios_client?
   nrpe_command "check_spamd" do
     command "/usr/bin/sa-check_spamd -H localhost -t 10 -w 5 -c 10"
   end

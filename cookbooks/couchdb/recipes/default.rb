@@ -29,7 +29,7 @@ service "couchdb" do
   action [:enable, :start]
 end
 
-if tagged?("nagios-client")
+if nagios_client?
   nrpe_command "check_couchdb" do
     command "/usr/lib/nagios/plugins/check_http -H localhost -p 5984 -s couchdb"
   end

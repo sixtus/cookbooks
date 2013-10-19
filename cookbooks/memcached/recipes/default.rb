@@ -8,7 +8,7 @@ service "memcached" do
   action [:enable, :start]
 end
 
-if tagged?("nagios-client")
+if nagios_client?
   package "dev-perl/Nagios-Plugins-Memcached"
 
   nrpe_command "check_memcached" do

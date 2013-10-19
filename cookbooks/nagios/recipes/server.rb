@@ -1,5 +1,3 @@
-tag("nagios-master")
-
 include_recipe "nginx::php"
 
 portage_package_use "net-analyzer/nagios-plugins" do
@@ -48,13 +46,11 @@ end.map do |c|
   c[:id]
 end
 
-hosts = node.run_state[:nodes].select do |n|
-  n[:tags].include?("nagios-client") rescue false
-end
+hosts = nagios_client_nodes
 
 # super ugly virtual host support for nagios
 def add_services_for_vhost(vhost)
-  node.run_state[:nodes].each do |n|
+  nagios_client_nodes.each do |n|
     next if !n[:nagios] or !n[:nagios][:services]
     n[:nagios][:services].each do |name, params|
       vhost.default[:nagios][:services][name] = params if params[:host_name] == vhost[:fqdn]

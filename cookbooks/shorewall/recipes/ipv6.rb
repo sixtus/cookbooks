@@ -51,7 +51,7 @@ end
 
 splunk_input "monitor:///var/log/shorewall6-init.log"
 
-if tagged?("nagios-client")
+if nagios_client?
   sudo_rule "nagios-shorewall6" do
     user "nagios"
     runas "root"

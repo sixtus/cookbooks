@@ -13,7 +13,7 @@ remote_directory "/etc/ssl/ca" do
   mode "0755"
 end
 
-if tagged?("nagios-client")
+if nagios_client?
   nagios_plugin "check_ssl_cert"
   nagios_plugin "check_ssl_certs"
 

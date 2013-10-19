@@ -68,12 +68,7 @@ unless solo?
 
   timer_envs = %w(production staging)
 
-  nodes = node.run_state[:nodes].select do |n|
-    n[:fqdn] and
-    n[:cluster][:name] == node[:cluster][:name]
-  end.sort_by do |n|
-    n[:fqdn]
-  end.map do |n|
+  nodes = chef_client_nodes.map do |n|
     n[:fqdn]
   end
 
@@ -130,7 +125,7 @@ unless solo?
   end
 end
 
-if tagged?("nagios-client")
+if nagios_client?
   nagios_plugin "check_chef_client"
 
   nrpe_command "check_chef_client" do

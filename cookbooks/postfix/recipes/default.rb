@@ -124,7 +124,7 @@ execute "newaliases" do
   not_if do FileUtils.uptodate?("/etc/mail/aliases.db", %w(/etc/mail/aliases)) end
 end
 
-if tagged?("nagios-client")
+if nagios_client?
   nrpe_command "check_smtp" do
     command "/usr/lib/nagios/plugins/check_smtp -H localhost -t 3"
   end

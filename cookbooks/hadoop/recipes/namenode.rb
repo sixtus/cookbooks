@@ -1,5 +1,3 @@
-tag("hadoop-namenode")
-
 include_recipe "hadoop"
 
 if solo?
@@ -25,7 +23,7 @@ cron "hadoop_balancer" do
   action :create
 end
 
-if tagged?("nagios-client")
+if nagios_client?
   {
     :nodes => [:NameNode, nil, nil],
     :state => [:Dfs, nil, nil],

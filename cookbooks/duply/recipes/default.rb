@@ -18,7 +18,7 @@ end
   end
 end
 
-if tagged?("nagios-client")
+if nagios_client?
   nagios_plugin "check_duplybackup"
 end
 
@@ -56,7 +56,7 @@ node[:backup][:configs].each do |name, params|
 
   splunk_input "monitor:///var/log/duply/#{name}/*.log"
 
-  if tagged?("nagios-client")
+  if nagios_client?
     nrpe_command "check_duplybackup_#{name}" do
       command "/usr/lib/nagios/plugins/check_duplybackup #{name}"
     end

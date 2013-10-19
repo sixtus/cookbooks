@@ -36,7 +36,7 @@ shorewall_rule "zendns-udp" do
   proto "udp"
 end
 
-if tagged?('ganymed-client')
+if ganymed?
   ganymed_collector 'zendns' do
     source 'zendns.rb'
   end

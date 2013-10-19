@@ -5,6 +5,7 @@ run_list(%w(
   recipe[rvm]
   recipe[java]
   recipe[xvfb]
+  recipe[firefox]
   recipe[virtualbox]
   recipe[imagemagick]
 ))

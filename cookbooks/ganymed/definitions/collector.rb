@@ -1,5 +1,5 @@
 define :ganymed_collector do
-  next unless tagged?('ganymed-client')
+  next unless ganymed?
   include_recipe "ganymed"
 
   if variables = params[:variables]

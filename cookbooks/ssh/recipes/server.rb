@@ -22,7 +22,7 @@ execute "root-ssh-key" do
   creates "/root/.ssh/id_rsa"
 end
 
-if tagged?("nagios-client")
+if nagios_client?
   nagios_service "SSH" do
     check_command "check_ssh!22"
     servicegroups "system"

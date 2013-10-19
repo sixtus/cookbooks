@@ -1,6 +1,6 @@
 package "sys-block/asm"
 
-if tagged?("nagios-client")
+if nagios_client?
   sudo_rule "nagios-arcconf" do
     user "nagios"
     runas "root"

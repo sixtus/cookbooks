@@ -1,5 +1,3 @@
-tag("chef-server")
-
 include_recipe "chef::client"
 include_recipe "couchdb"
 include_recipe "java"
@@ -294,7 +292,7 @@ end
 end
 
 # nagios service checks
-if tagged?("nagios-client")
+if nagios_client?
   nrpe_command "check_chef_server" do
     command "/usr/lib/nagios/plugins/check_http -H chef.#{node[:chef_domain]} -S -s 'This is the Chef API Server.'"
   end

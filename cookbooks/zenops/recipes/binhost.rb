@@ -1,9 +1,15 @@
-clients = node.run_state[:nodes].select do |n|
-  n[:primary_ipaddress] and
-  n[:platform] == "gentoo" and
-  n[:portage][:repo] == "zentoo"
-end.map do |n|
-  n[:primary_ipaddress]
+include_recipe "zenops::mirror-zentoo"
+
+directory "/var/cache/mirror/zentoo/amd64" do
+  owner "root"
+  group "root"
+  mode "0755"
+end
+
+directory "/var/cache/mirror/zentoo/amd64/packages" do
+  owner "root"
+  group "root"
+  mode "0755"
 end
 
 template "/usr/sbin/pkgsync" do
@@ -11,7 +17,7 @@ template "/usr/sbin/pkgsync" do
   owner "root"
   group "root"
   mode "0755"
-  variables :clients => clients
+  variables :clients => pkgsync_client_nodes.map { |n| n[:primary_ipaddress] }
 end
 
 systemd_unit "pkgsync.service"

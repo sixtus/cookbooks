@@ -6,11 +6,9 @@ action :create do
   nagname = svcname.upcase.gsub(/\./, '-')
 
   # retrieve configdbs from index
-  configdb = node.run_state[:nodes].select do |n|
-    n[:tags] and n[:tags].include?("mongoc-#{name}")
-  end.map do |n|
+  configdb = mongo_configdb_nodes(name).map do |n|
     "#{n[:fqdn]}:#{n[:mongoc][:port]}"
-  end.sort
+  end
 
   systemd_unit "#{svcname}.service" do
     template "mongos.service"

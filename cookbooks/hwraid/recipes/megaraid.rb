@@ -1,6 +1,6 @@
 package "sys-block/megacli"
 
-if tagged?("nagios-client")
+if nagios_client?
   sudo_rule "nagios-megacli" do
     user "nagios"
     runas "root"

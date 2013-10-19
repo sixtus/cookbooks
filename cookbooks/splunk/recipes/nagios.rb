@@ -10,11 +10,6 @@ git "/opt/splunk/etc/apps/SplunkForNagios" do
   action :sync
 end
 
-master = node.run_state[:nodes].select do |n|
-  n[:tags] and
-  n[:tags].include?("nagios-master")
-end.first
-
 %w(
   livehostsupstatus.py
   livehostsdownstatus.py
@@ -33,6 +28,6 @@ end.first
     owner "root"
     group "root"
     mode "0755"
-    variables :master => master
+    variables :master => nagios_node
   end
 end

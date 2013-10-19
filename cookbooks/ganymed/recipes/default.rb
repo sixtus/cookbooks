@@ -1,5 +1,3 @@
-tag("ganymed-client")
-
 if gentoo?
   package "net-analyzer/ganymed" do
     action :upgrade

@@ -1,5 +1,3 @@
-tag("hadoop-tasktracker")
-
 include_recipe "hadoop"
 
 service "hadoop@tasktracker" do

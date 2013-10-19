@@ -6,7 +6,7 @@ define :nagios_plugin,
 
   # this should already be handled in recipes,
   # but we do it here again for good measure
-  next unless tagged?("nagios-client")
+  next unless nagios_client?
 
   include_recipe "nagios::nrpe"
 

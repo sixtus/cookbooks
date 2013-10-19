@@ -180,14 +180,10 @@ end
   end
 end
 
-binhosts = node.run_state[:'zenops-mirror'].map do |n|
-  n[:primary_ipaddress]
-end
-
-unless binhosts.empty?
+if zenops_mirror_node
   rsync_module "portage-packages" do
     path "/usr/portage/packages"
-    hosts_allow binhosts.join(" ")
+    hosts_allow zenops_mirror_node[:primary_ipaddress]
     uid "nobody"
     gid "nobody"
   end

@@ -46,6 +46,6 @@ postconf "Restrictions for public SMTP servers" do
 end
 
 # nagios service checks
-if tagged?("nagios-client")
+if nagios_client?
   node.default[:nagios][:services]["SMTP"][:check_command] = "check_smtp!25!3"
 end

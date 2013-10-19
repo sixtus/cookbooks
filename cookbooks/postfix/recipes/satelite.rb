@@ -16,7 +16,7 @@ postconf "relay all mail via relayhost" do
       :smtpd_recipient_restrictions => smtpd_recipient_restrictions.join(", ")
 end
 
-if tagged?("nagios-client")
+if nagios_client?
   nrpe_command "check_postfix_satelite" do
     command "/usr/lib/nagios/plugins/check_smtp -H #{node[:postfix][:relayhost]} -t 60 -C 'MAIL FROM: <root@#{node[:fqdn]}>' -R '250 2.1.0 Ok' -C 'RCPT TO: <unhollow@gmail.com>' -R '250 2.1.5 Ok'"
   end

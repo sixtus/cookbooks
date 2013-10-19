@@ -37,7 +37,7 @@ if node[:smart][:devices].any?
     end
   end
 
-  if tagged?("nagios-client")
+  if nagios_client?
     nagios_plugin "check_smart"
 
     sudo_rule "nagios-smartctl" do

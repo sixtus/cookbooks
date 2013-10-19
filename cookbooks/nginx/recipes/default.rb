@@ -118,7 +118,7 @@ nginx_server "status" do
   template "status.conf"
 end
 
-if tagged?("ganymed-client")
+if ganymed?
   ganymed_collector "nginx" do
     source "nginx.rb"
   end

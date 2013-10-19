@@ -44,17 +44,11 @@ else
     action :sync
   end
 
-  hadoop_nodes = node.run_state[:nodes].select do |n|
-    n[:hadoop] and
-    n[:hadoop][:rack_id]
-  end
-
   template "/opt/splunk/etc/apps/SA-HadoopOps/bin/topology.py" do
     source "apps/SA-HadoopOps/topology.py"
     owner "root"
     group "root"
     mode "0755"
-    variables :hadoop_nodes => hadoop_nodes
   end
 
   git "/opt/splunk/etc/apps/splunk_for_hadoopops" do

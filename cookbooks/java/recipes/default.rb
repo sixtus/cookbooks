@@ -1,5 +1,3 @@
-tag("java")
-
 if gentoo?
   case node[:java][:vm]
   when /^oracle-jdk-bin-/

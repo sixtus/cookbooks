@@ -44,13 +44,11 @@ if root?
   # we just need this for forwarding
   include_recipe "syslog" unless solo?
 
-  # these are only usefull in non-solo mode and only if the specified role
-  # has been deployed on another node (see above)
-  if node.run_state[:chef].any?
+  if !solo?
     include_recipe "chef::client"
   end
 
-  if node.run_state[:splunk].any?
+  if splunk_nodes.any?
     include_recipe "splunk::forwarder"
     include_recipe "ganymed"
   end
@@ -85,7 +83,7 @@ if root?
   end
 end
 
-if tagged?("nagios-client")
+if nagios_client?
   include_recipe "nagios::client"
 
   nagios_service "PING" do

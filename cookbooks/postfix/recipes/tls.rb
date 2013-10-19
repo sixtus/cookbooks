@@ -26,7 +26,7 @@ postconf "TLS encryption" do
       :smtpd_tls_session_cache_timeout => "3600s"
 end
 
-if tagged?("nagios-client")
+if nagios_client?
   nrpe_command "check_postfix_tls" do
     command "/usr/lib/nagios/plugins/check_ssl_server -H localhost -n #{node[:fqdn]} -P smtp -p 25 -r /etc/ssl/postfix/ca.crt -w 21 -c 7"
   end

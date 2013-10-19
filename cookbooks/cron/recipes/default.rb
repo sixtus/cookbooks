@@ -74,7 +74,7 @@ cron "run-crons" do
   command "/usr/bin/test -x /usr/sbin/run-crons && /usr/sbin/run-crons"
 end
 
-if tagged?("nagios-client")
+if nagios_client?
   cron "heartbeat" do
     command "/usr/bin/touch /tmp/.check_cron"
     minute "0"

@@ -1,6 +1,3 @@
-tag("mongoc")
-tag("mongoc-#{node[:mongodb][:cluster]}")
-
 opts = %w(--journal --rest --quiet --configsvr)
 
 directory node[:mongoc][:dbpath] do
@@ -23,7 +20,7 @@ service "mongoc" do
   action [:enable, :start]
 end
 
-if tagged?("ganymed-client")
+if ganymed?
   ganymed_collector "mongoc" do
     source "mongodb.rb"
     variables :name => "mongoc",
@@ -31,7 +28,7 @@ if tagged?("ganymed-client")
   end
 end
 
-if tagged?("nagios-client")
+if nagios_client?
   { # name             command         warn crit check note
     :connect     => %w(connect         2    5    1     15),
     :connections => %w(connections     80   90   1     15),

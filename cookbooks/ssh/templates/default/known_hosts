@@ -1,4 +1,4 @@
-<% @nodes.each do |n| %>
+<% node.run_state[:nodes].each do |n| %>
 <% %w(dsa rsa).each do |t| %>
 <%
 localstr = ""

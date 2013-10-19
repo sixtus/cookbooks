@@ -8,18 +8,11 @@ if gentoo?
   end
 end
 
-master = node.run_state[:"splunk-master"].first
-
-if master.nil? or master[:fqdn] == node[:fqdn]
+if splunk_master_node.nil? or splunk_master_node[:fqdn] == node[:fqdn]
   pass4symmkey = get_password("splunk/pass4symmkey")
   node.set[:splunk][:pass4symmkey] = pass4symmkey
 else
-  pass4symmkey = master[:splunk][:pass4symmkey]
-end
-
-peers = node.run_state[:nodes].select do |n|
-  n.role?("splunk-peer") or
-  n.role?("splunk-server")
+  pass4symmkey = splunk_master_node[:splunk][:pass4symmkey]
 end
 
 # misuse the pass4symmkey as admin password
@@ -73,8 +66,8 @@ end
     notifies :restart, "service[splunk]" unless node.role?("splunk")
     variables({
       pass4symmkey: pass4symmkey,
-      master: master,
-      peers: peers,
+      master: splunk_master_node,
+      peers: splunk_peer_nodes,
     })
   end
 end
@@ -91,8 +84,8 @@ template "/opt/splunk/etc/system/default/server.conf" do
   notifies :restart, "service[splunk]" if splunk_forwarder?
   variables({
     pass4symmkey: pass4symmkey,
-    master: master,
-    peers: peers,
+    master: splunk_master_node,
+    peers: splunk_peer_nodes,
   })
 end
 

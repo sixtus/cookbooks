@@ -1,6 +1,3 @@
-tag("mongodb")
-tag("mongodb-#{node[:mongodb][:cluster]}")
-
 include_recipe "mongodb"
 
 if gentoo?
@@ -34,7 +31,7 @@ if gentoo?
   end
 end
 
-if tagged?("ganymed-client")
+if ganymed?
   ganymed_collector "mongodb" do
     source "mongodb.rb"
     variables :name => "mongodb",
@@ -42,7 +39,7 @@ if tagged?("ganymed-client")
   end
 end
 
-if tagged?("nagios-client")
+if nagios_client?
   { # name             command         warn crit check note
     :connect     => %w(connect         2    5    1     15),
     :connections => %w(connections     80   90   1     15),

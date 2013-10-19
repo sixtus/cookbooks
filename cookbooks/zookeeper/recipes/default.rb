@@ -1,5 +1,3 @@
-tag("zookeeper")
-
 include_recipe "java"
 
 if gentoo?
@@ -23,17 +21,16 @@ template "#{node[:zookeeper][:confdir]}/log4j.properties" do
   notifies :restart, "service[zookeeper]" unless mac_os_x?
 end
 
-nodes = zookeeper_nodes
+include_recipe "base::run_state"
 
-myid = nodes.index do |n|
+myid = zookeeper_nodes.index do |n|
   n[:fqdn] == node[:fqdn]
-end.to_i + 1
+end + 1
 
 template "#{node[:zookeeper][:confdir]}/zoo.cfg" do
   source "zoo.cfg"
   mode "0644"
   notifies :restart, "service[zookeeper]" unless mac_os_x?
-  variables :nodes => node.zookeeper_node_names
 end
 
 directory node[:zookeeper][:datadir] do
@@ -60,7 +57,7 @@ cron "zk-log-clean" do
   command "/opt/zookeeper/bin/zkCleanup.sh /var/lib/zookeeper/ -n 5"
 end
 
-if tagged?("nagios-client")
+if nagios_client?
   nagios_plugin "check_zookeeper" do
     source "check_zookeeper.rb"
   end
@@ -85,7 +82,7 @@ if tagged?("nagios-client")
 
   if zookeeper_nodes.count > 1
     nrpe_command "check_zookeeper_followers" do
-      command "/usr/lib/nagios/plugins/check_zookeeper -m Followers -n #{nodes.map {|n| n[:fqdn]}.join(" -n ")}"
+      command "/usr/lib/nagios/plugins/check_zookeeper -m Followers -n #{zookeeper_nodes.map {|n| n[:fqdn]}.join(" -n ")}"
     end
 
     nagios_service "ZOOKEEPER-FOLLOWERS" do

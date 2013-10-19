@@ -11,16 +11,11 @@ elsif mac_os_x?
 end
 
 if root?
-  nodes = node.run_state[:nodes].select do |n|
-    n[:keys] and n[:keys][:ssh]
-  end
-
   template node[:ssh][:hostsfile] do
     source "known_hosts"
     owner "root"
     group "root"
     mode "0644"
-    variables :nodes => nodes
   end
 end
 

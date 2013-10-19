@@ -109,7 +109,7 @@ file "/var/log/apache2/error_log" do
 end
 
 # nagios service checks
-if tagged?("nagios-client")
+if nagios_client?
   package "dev-perl/libwww-perl"
 
   nagios_plugin "check_apache2"

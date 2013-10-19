@@ -11,7 +11,7 @@ service "beanstalkd" do
 end
 
 # nagios
-if tagged?("nagios-client")
+if nagios_client?
   package "dev-python/beanstalkc"
 
   nagios_plugin "check_beanstalkd"
@@ -30,7 +30,7 @@ if tagged?("nagios-client")
 end
 
 # ganymed
-if tagged?('ganymed-client')
+if ganymed?
   package 'dev-ruby/beanstalk-client'
 
   ganymed_collector 'beanstalk' do

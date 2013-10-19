@@ -45,6 +45,6 @@ if root?
   end
 end
 
-if tagged?("nagios-client")
+if nagios_client?
   nagios_plugin "check_ssl_server"
 end
