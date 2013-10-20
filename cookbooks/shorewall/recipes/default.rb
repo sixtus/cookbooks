@@ -31,20 +31,6 @@ if node[:primary_interface_bridged]
     dest "all"
     policy "ACCEPT"
   end
-
-  shorewall6_interface "br" do
-    interface "#{node[:primary_interface]}:#{node[:primary_interface_bridged]}"
-  end
-
-  shorewall6_zone "br:net" do
-    type "bport"
-  end
-
-  shorewall6_policy "br" do
-    source "br"
-    dest "all"
-    policy "ACCEPT"
-  end
 end
 
 include_recipe "shorewall::ipv4"
