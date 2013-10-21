@@ -6,14 +6,14 @@ if solo?
 else
   node.run_state[:roles] = search(:role)
   node.run_state[:users] = search(:users)
-  node.run_state[:nodes] = search(:node, "primary_ipaddress:[* TO *]").sort_by do |n|
+  node.run_state[:nodes] = search(:node, "primary_ipaddress:[* TO *] AND fqdn:[* TO *]").sort_by do |n|
     n[:fqdn]
   end
 end
 
 # filter nodes that belong to the same cluster as the current node
 node.run_state[:cluster_nodes] = node.run_state[:nodes].select do |n|
-  n[:cluster][:name] == node[:cluster][:name]
+  n[:cluster][:name] == node[:cluster][:name] rescue false
 end
 
 # select basic infrastructure nodes from the index for easy access in recipes

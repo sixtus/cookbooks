@@ -18,7 +18,7 @@ namespace :node do
     # create SSL cert
     ENV['BATCH'] = "1"
     Rake::Task['ssl:do_cert'].invoke(fqdn)
-    knife :cookbook_upload, ['openssl', '--force']
+    knife :cookbook_upload, ['certificates', '--force']
 
     b = binding()
     erb = Erubis::Eruby.new(File.read(File.join(TEMPLATES_DIR, 'node.rb')))
