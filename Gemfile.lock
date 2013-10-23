@@ -35,6 +35,7 @@ GEM
       tzinfo (~> 0.3.37)
     atomic (1.1.14)
     awesome_print (1.2.0)
+    bond (0.4.3)
     brice (0.2.8)
       ruby-nuggets (>= 0.5.2)
     celluloid (0.15.2)
@@ -113,6 +114,8 @@ GEM
     rake (10.1.0)
     rest-client (1.6.7)
       mime-types (>= 1.16)
+    ripl (0.7.0)
+      bond (~> 0.4.2)
     ruby-nuggets (0.9.5)
     rvm (1.11.3.8)
     safe_yaml (0.9.7)
@@ -145,5 +148,6 @@ DEPENDENCIES
   knife-dsl!
   mixlib-shellout!
   rake
+  ripl
   rvm
   test-kitchen!

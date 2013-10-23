@@ -13,6 +13,7 @@ gem 'highline'
 gem 'httparty'
 gem 'knife-dsl', :github => 'zenops/knife-dsl'
 gem 'mixlib-shellout', :github => 'zenops/mixlib-shellout'
+gem 'ripl'
 gem 'rvm'
 
 group :testing do

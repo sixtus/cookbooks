@@ -47,8 +47,9 @@ namespace :node do
   end
 
   desc "Quickstart & Bootstrap the specified node"
-  task :quickstart, :fqdn, :ipaddress, :profile do |t, args|
+  task :quickstart, :fqdn, :ipaddress, :password, :profile do |t, args|
     args.with_defaults(:profile => 'generic-two-disk-md')
+    raise "missing parameters!" unless args.fqdn && args.ipaddress && args.password
 
     # create DNS/rDNS records
     name = args.fqdn.sub(/\.#{chef_domain}$/, '')
@@ -64,7 +65,7 @@ namespace :node do
     tmpfile.write(erb.result(b))
     tmpfile.rewind
 
-    sh(%{cat #{tmpfile.path} | ssh -l root -o "StrictHostKeyChecking no" -o "UserKnownHostsFile /dev/null" -o "GlobalKnownHostsFile /dev/null" #{args.ipaddress} "bash -s"})
+    sh(%{cat #{tmpfile.path} | sshpass -p #{args.password} ssh -l root -o "StrictHostKeyChecking no" -o "UserKnownHostsFile /dev/null" -o "GlobalKnownHostsFile /dev/null" #{args.ipaddress} "bash -s"})
 
     tmpfile.unlink
 
