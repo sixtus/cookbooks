@@ -41,7 +41,8 @@ namespace :hetzner do
       password = res.parsed_response["rescue"]["password"]
       puts "rescue password is #{password.inspect}"
       hetzner.reset!(node[:primary_ipaddress], :hw)
-      wait_for_ssh(node[:fqdn])
+      wait_for_ssh(node[:fqdn], false)
+      Rake::Task['node:quickstart'].reenable
       Rake::Task['node:quickstart'].invoke(node[:fqdn], node[:primary_ipaddress], password, args.profile)
     end
   end

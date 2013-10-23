@@ -94,6 +94,7 @@ namespace :server do
     end
 
     knife :cookbook_upload, ["--all", "--force"]
+    Rake::Task['load:all'].reenable
     Rake::Task['load:all'].invoke
 
     # run final chef-client

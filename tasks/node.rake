@@ -13,10 +13,12 @@ namespace :node do
   task :create => [ :pull ]
   task :create, :fqdn, :ipaddress do |t, args|
     fqdn, ipaddress = args.fqdn, args.ipaddress
+    Rake::Task['node:checkdns'].reenable
     Rake::Task['node:checkdns'].invoke(fqdn, ipaddress)
 
     # create SSL cert
     ENV['BATCH'] = "1"
+    Rake::Task['ssl:do_cert'].reenable
     Rake::Task['ssl:do_cert'].invoke(fqdn)
     knife :cookbook_upload, ['certificates', '--force']
 
@@ -33,12 +35,14 @@ namespace :node do
     end
 
     # upload to chef server
+    Rake::Task['load:node'].reenable
     Rake::Task['load:node'].invoke(fqdn)
   end
 
   desc "Bootstrap the specified node"
   task :bootstrap, :fqdn, :ipaddress do |t, args|
     ENV['DISTRO'] ||= "gentoo"
+    Rake::Task['node:create'].reenable
     Rake::Task['node:create'].invoke(args.fqdn, args.ipaddress)
     sh("knife bootstrap #{args.fqdn} --distro #{ENV['DISTRO']} -P tux")
     env = "/usr/bin/env UPDATEWORLD_DONT_ASK=1"
@@ -55,6 +59,7 @@ namespace :node do
     name = args.fqdn.sub(/\.#{chef_domain}$/, '')
     hetzner_server_name_rdns(args.ipaddress, name, args.fqdn)
     zendns_add_record(args.fqdn, args.ipaddress)
+    Rake::Task['node:checkdns'].reenable
     Rake::Task['node:checkdns'].invoke(args.fqdn, args.ipaddress)
 
     # quick start
@@ -74,6 +79,7 @@ namespace :node do
     wait_with_ping(args.ipaddress, true)
 
     # run normal bootstrap
+    Rake::Task['node:bootstrap'].reenable
     Rake::Task['node:bootstrap'].invoke(args.fqdn, args.ipaddress)
   end
 
@@ -85,6 +91,7 @@ namespace :node do
     ENV['BATCH'] = "1"
 
     begin
+      Rake::Task['ssl:revoke'].reenable
       Rake::Task['ssl:revoke'].invoke(fqdn)
     rescue
       # do nothing
