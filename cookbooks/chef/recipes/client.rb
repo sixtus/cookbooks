@@ -67,7 +67,7 @@ unless solo?
   end
 
   minutes = nodes.each_with_index.map do |_, idx|
-    (idx * (30.0 / nodes.length)).to_i
+    (idx * (60.0 / nodes.length)).to_i
   end
 
   index = nodes.index(node[:fqdn])
@@ -85,7 +85,7 @@ unless solo?
   systemd_timer "chef-client" do
     schedule [
       "OnBoot=60",
-      "OnCalendar=*:#{minute}/2",
+      "OnCalendar=*:#{minute}",
     ]
   end
 
