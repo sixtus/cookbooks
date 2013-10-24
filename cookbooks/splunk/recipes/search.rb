@@ -26,14 +26,6 @@ template "/opt/splunk/etc/apps/search/default/savedsearches.conf" do
   mode "0644"
 end
 
-template "/opt/splunk/bin/scripts/hipchat-alert.rb" do
-  source "hipchat-alert.rb"
-  owner "root"
-  group "root"
-  mode "0750"
-  only_if { node[:hipchat] and node[:hipchat][:auth_token] }
-end
-
 ## splunk apps
 include_recipe "splunk::syslog"
 include_recipe "splunk::metriks"
