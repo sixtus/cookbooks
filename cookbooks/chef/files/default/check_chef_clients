@@ -1,0 +1,15 @@
+#!/bin/bash
+
+result=$(
+sudo knife status -H "chef_environment:production OR chef_environment:staging" | \
+	perl -pe 's|(.*?)\s+ago, (.*?),.*|\2: \1 ago, |g' | \
+	paste -sd ""
+)
+
+if [[ $result == "" ]]; then
+	echo "All nodes are up to date"
+	exit 0
+fi
+
+echo $result
+exit 2

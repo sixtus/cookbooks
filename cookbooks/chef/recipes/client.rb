@@ -1,9 +1,5 @@
 if gentoo?
   package "app-admin/chef"
-  package "dev-ruby/activesupport"
-  package "dev-ruby/knife-dsl"
-  package "dev-ruby/airbrake_handler"
-  package "dev-ruby/madvertise-logging"
 
   directory "/etc/chef" do
     owner "chef"
@@ -24,8 +20,6 @@ if gentoo?
   end
 elsif debian_based?
   gem_package "chef"
-  gem_package "airbrake_handler"
-  gem_package "madvertise-logging"
 
   directory "/etc/chef" do
     owner "root"
@@ -73,18 +67,14 @@ unless solo?
   end
 
   minutes = nodes.each_with_index.map do |_, idx|
-    (idx * (60.0 / nodes.length)).to_i
+    (idx * (30.0 / nodes.length)).to_i
   end
 
   index = nodes.index(node[:fqdn])
   minute = minutes[index] rescue 0
 
   cron "chef-client" do
-    if debian_based?
-      command "/usr/bin/ruby -E UTF-8 /usr/local/bin/chef-client -c /etc/chef/client.rb &>/dev/null"
-    else
-      command "/usr/bin/ruby -E UTF-8 /usr/bin/chef-client -c /etc/chef/client.rb &>/dev/null"
-    end
+    command "/usr/bin/ruby -E UTF-8 #{node[:chef][:binary]} -c /etc/chef/client.rb &>/dev/null"
     minute minute
     action :delete unless timer_envs.include?(node.chef_environment)
     action :delete if systemd_running?
@@ -95,7 +85,7 @@ unless solo?
   systemd_timer "chef-client" do
     schedule [
       "OnBoot=60",
-      "OnCalendar=*:#{minute}",
+      "OnCalendar=*:#{minute}/2",
     ]
   end
 
@@ -122,18 +112,5 @@ unless solo?
 
   link "/etc/chef/cache" do
     to "/var/lib/chef/cache"
-  end
-end
-
-if nagios_client?
-  nagios_plugin "check_chef_client"
-
-  nrpe_command "check_chef_client" do
-    command "/usr/lib/nagios/plugins/check_chef_client 60"
-  end
-
-  nagios_service "CHEF-CLIENT" do
-    check_command "check_nrpe!check_chef_client"
-    servicegroups "chef"
   end
 end
