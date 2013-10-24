@@ -54,10 +54,20 @@ service "confluence" do
   action [:enable, :start]
 end
 
+include_recipe "nginx"
+
 ssl_certificate "/etc/ssl/nginx/confluence" do
   cn node[:confluence][:certificate]
 end
 
 nginx_server "confluence" do
   template "nginx.conf"
+end
+
+shorewall_rule "confluence" do
+  destport "http,https"
+end
+
+shorewall6_rule "confluence" do
+  destport "http,https"
 end
