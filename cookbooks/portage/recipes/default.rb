@@ -117,16 +117,13 @@ template "/usr/share/portage/config/repos.conf" do
   mode "0644"
 end
 
-cookbook_file "/etc/logrotate.d/portage" do
-  source "portage.logrotate"
-  mode "0644"
-  backup 0
-end
-
-cookbook_file "/etc/logrotate.d/elog-save-summary" do
-  source "elog-save-summary.logrotate"
-  mode "0644"
-  backup 0
+%w(
+  /etc/logrotate.d/portage
+  /etc/logrotate.d/elog-save-summary
+).each do |f|
+  file f do
+    action :delete
+  end
 end
 
 cookbook_file "/etc/dispatch-conf.conf" do
