@@ -60,25 +60,15 @@ end
   end
 end
 
-systemd_tmpfiles "nginx"
-
-systemd_unit "nginx.service"
-
-service "nginx" do
-  action [:enable, :start]
-end
-
-if !solo?
-  ssl_certificate "/etc/ssl/nginx/nginx" do
-    cn node[:fqdn]
-    owner "nginx"
-    group "nginx"
-    notifies :restart, "service[nginx]"
-  end
-end
-
-%w(csr pem).each do |f|
-  file "/etc/ssl/nginx/nginx.#{f}" do
+# remove old cruft
+%w(
+  /etc/nginx/modules/log.conf
+  /etc/logrotate.d/nginx
+  /etc/ssl/nginx/nginx.key
+  /etc/ssl/nginx/nginx.crt
+  /etc/ssl/nginx/nginx.csr
+).each do |f|
+  file f do
     action :delete
   end
 end
@@ -91,34 +81,20 @@ template "/etc/nginx/nginx.conf" do
   notifies :restart, "service[nginx]"
 end
 
-nginx_module "log" do
-  template "log.conf"
-end
+include_recipe "nginx::fastcgi"
 
-cookbook_file "/etc/logrotate.d/nginx" do
-  source "logrotate.conf"
-  owner "root"
-  group "root"
-  mode "0644"
-end
+systemd_tmpfiles "nginx"
+systemd_unit "nginx.service"
 
-nginx_module "fastcgi" do
-  template "fastcgi.conf"
-end
-
-link "/etc/nginx/fastcgi.conf" do
-  to "/etc/nginx/modules/fastcgi.conf"
-end
-
-link "/etc/nginx/fastcgi_params" do
-  to "/etc/nginx/modules/fastcgi.conf"
-end
-
-nginx_server "status" do
-  template "status.conf"
+service "nginx" do
+  action [:enable, :start]
 end
 
 if ganymed?
+  nginx_server "status" do
+    template "status.conf"
+  end
+
   ganymed_collector "nginx" do
     source "nginx.rb"
   end
