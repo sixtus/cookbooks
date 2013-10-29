@@ -30,3 +30,14 @@ def hetzner_server_name_rdns(ip, name, fqdn)
   puts "Setting reverse DNS for #{ip} to #{fqdn}"
   hetzner.rdns!(ip, fqdn)
 end
+
+def hetzner_enable_rescue_wait(ip)
+  hetzner.disable_rescue!(ip)
+  res = hetzner.enable_rescue!(ip, 'linux', '64')
+  puts res.inspect
+  password = res.parsed_response["rescue"]["password"]
+  puts "rescue password is #{password.inspect}"
+  hetzner.reset!(ip, :hw)
+  wait_for_ssh(ip, false)
+  password
+end

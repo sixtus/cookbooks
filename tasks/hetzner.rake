@@ -33,15 +33,19 @@ namespace :hetzner do
     end
   end
 
+  desc "enable rescue and login"
+  task :rescue, :fqdn do |t, args|
+    search("fqdn:#{args.fqdn}") do |node|
+      password = hetzner_enable_rescue_wait(node[:primary_ipaddress])
+      system(%{sshpass -p #{password} ssh -l root -o "StrictHostKeyChecking no" -o "UserKnownHostsFile /dev/null" -o "GlobalKnownHostsFile /dev/null" #{args.fqdn}})
+    end
+  end
+
   desc "enable rescue and rebootstrap"
   task :reinstall, :fqdn, :profile do |t, args|
     args.with_defaults(:profile => 'generic-two-disk-md')
     search("fqdn:#{args.fqdn}") do |node|
-      res = hetzner.enable_rescue!(node[:primary_ipaddress], 'linux', '64')
-      password = res.parsed_response["rescue"]["password"]
-      puts "rescue password is #{password.inspect}"
-      hetzner.reset!(node[:primary_ipaddress], :hw)
-      wait_for_ssh(node[:fqdn], false)
+      password = hetzner_enable_rescue_wait(node[:primary_ipaddress])
       Rake::Task['node:quickstart'].reenable
       Rake::Task['node:quickstart'].invoke(node[:fqdn], node[:primary_ipaddress], password, args.profile)
     end
