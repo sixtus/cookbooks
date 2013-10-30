@@ -234,19 +234,3 @@ end
 nagios_service "NAGIOS" do
   check_command "check_nrpe!check_nagios"
 end
-
-# splunk integration
-splunk_input "monitor:///var/nagios/nagios.log" do
-  sourcetype "nagios"
-  index "nagios"
-end
-
-splunk_input "monitor:///var/nagios/host-perfdata" do
-  sourcetype "nagioshostperf"
-  index "nagios"
-end
-
-splunk_input "monitor:///var/nagios/service-perfdata" do
-  sourcetype "nagiosserviceperf"
-  index "nagios"
-end

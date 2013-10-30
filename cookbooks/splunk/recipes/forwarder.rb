@@ -19,5 +19,20 @@ if splunk_forwarder?
     end
   end
 
+  directory "/opt/splunk/etc/apps/metriks/" do
+    action :delete
+    recursive true
+  end
+
+  directory "/opt/splunk/var/lib/splunk/metriks" do
+    action :delete
+    recursive true
+  end
+
+  file "/opt/splunk/var/lib/splunk/metriks.dat" do
+    action :delete
+  end
+
   include_recipe "splunk::common"
+  include_recipe "splunk::unix"
 end
