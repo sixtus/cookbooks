@@ -14,5 +14,6 @@ include_recipe "splunk"
 end
 
 include_recipe "splunk::syslog"
+include_recipe "splunk::nagios"
 include_recipe "splunk::unix"
 include_recipe "splunk::hadoop-ops"

@@ -28,6 +28,7 @@ end
 
 ## splunk apps
 include_recipe "splunk::syslog"
+include_recipe "splunk::nagios"
 include_recipe "splunk::unix"
 include_recipe "splunk::dbconnect"
 include_recipe "splunk::hadoop-ops"
