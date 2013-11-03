@@ -60,6 +60,13 @@ unless solo?
     mode "0644"
   end
 
+  template "/etc/chef/knife.rb" do
+    source "client.rb"
+    owner "root"
+    group "root"
+    mode "0644"
+  end
+
   timer_envs = %w(production staging)
 
   nodes = chef_client_nodes.map do |n|
