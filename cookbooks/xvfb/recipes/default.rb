@@ -8,4 +8,6 @@ if gentoo?
   end
 
   package "x11-base/xorg-server"
+elsif debian_based?
+  package "xvfb"
 end

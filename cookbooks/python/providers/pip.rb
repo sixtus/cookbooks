@@ -152,7 +152,7 @@ end
 def pip_cmd(subcommand, version='')
   options = { :timeout => new_resource.timeout, :user => new_resource.user, :group => new_resource.group }
   options[:environment] = { 'HOME' => ::File.expand_path("~#{new_resource.user}") } if new_resource.user
-  shell_out!("#{which_pip(new_resource)} #{subcommand} #{new_resource.options} #{new_resource.package_name}#{version}", options)
+  shell_out!("/usr/bin/sudo -H #{which_pip(new_resource)} #{subcommand} #{new_resource.options} #{new_resource.package_name}#{version}", options)
 end
 
 # TODO remove when provider is moved into Chef core
