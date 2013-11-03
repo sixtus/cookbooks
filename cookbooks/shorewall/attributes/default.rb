@@ -29,8 +29,6 @@ end
 case link.size
 when 0
   default[:primary_interface_bridged] = false
-when 1
-  default[:primary_interface_bridged] = link.first
 else
-  raise "failed to identify bridged interface" unless node[:primary_interface_bridged]
+  default[:primary_interface_bridged] = link.first
 end
