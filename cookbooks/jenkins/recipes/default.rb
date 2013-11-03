@@ -17,8 +17,20 @@ service "jenkins" do
   action [:enable, :start]
 end
 
-nginx_server "ci" do
+include_recipe "nginx"
+
+ssl_certificate "/etc/ssl/nginx/jenkins" do
+  cn node[:jenkins][:certificate]
+end
+
+nginx_server "jenkins" do
   template "nginx.conf"
 end
 
-include_recipe "jenkins::extras"
+shorewall_rule "jenkins" do
+  destport "http,https"
+end
+
+shorewall6_rule "jenkins" do
+  destport "http,https"
+end
