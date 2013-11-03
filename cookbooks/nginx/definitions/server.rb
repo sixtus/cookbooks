@@ -8,7 +8,7 @@ define :nginx_server, :action => :create do
     group "root"
     mode "0644"
     variables :params => params
-    notifies :restart, resources(:service => "nginx")
+    notifies :restart, "service[nginx]"
     cookbook params[:cookbook] if params[:cookbook]
   end
 end

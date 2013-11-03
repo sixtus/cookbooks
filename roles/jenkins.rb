@@ -7,6 +7,10 @@ run_list(%w(
 ))
 
 override_attributes({
+  jenkins: {
+    server_name: "ci.zenops.net",
+  },
+
   mysql: {
     server: {
       binlog_format: 'row',

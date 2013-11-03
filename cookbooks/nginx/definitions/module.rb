@@ -10,6 +10,6 @@ define :nginx_module, :action => :create, :template => nil, :auto => true do
     group "root"
     mode "0644"
     variables :params => params
-    notifies :reload, resources(:service => "nginx")
+    notifies :reload, "service[nginx]"
   end
 end
