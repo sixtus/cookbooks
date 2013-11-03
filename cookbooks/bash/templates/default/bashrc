@@ -2,7 +2,19 @@
 
 # load rvm even if not interactive
 if [[ -r "${HOME}/.rvm/scripts/rvm" ]]; then
+	export rvm_silence_path_mismatch_check_flag=1
 	source "${HOME}/.rvm/scripts/rvm"
+fi
+
+# also load virtualenv
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+export PIP_VIRTUALENV_BASE=$WORKON_HOME
+export PIP_RESPECT_VIRTUALENV=true
+
+if [[ -r /usr/bin/virtualenvwrapper.sh ]]; then
+	source /usr/bin/virtualenvwrapper.sh
+elif [[ -r /usr/local/bin/virtualenvwrapper.sh ]]; then
+	source /usr/local/bin/virtualenvwrapper.sh
 fi
 
 # everything else is for interactive shells only
