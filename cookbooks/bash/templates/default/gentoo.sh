@@ -101,24 +101,39 @@ usedesc() {
 }
 
 mklnx() {
+	set -e
+
+	kernel_version=$(make kernelversion)
 	tmpdir=$(mktemp -d)
 
-	KV=$(make kernelversion)
-
+	# build kernel
 	make "$@"
+	mkdir ${tmpdir}/boot
+	cp .config ${tmpdir}/boot/config-${kernel_version}
+	cp arch/x86/boot/bzImage ${tmpdir}/boot/kernel-${kernel_version}
+
+	# build modules
 	make INSTALL_MOD_PATH=${tmpdir} modules_install
 
-	mkdir ${tmpdir}/boot
-	cp .config ${tmpdir}/boot/config-${KV}
-	cp arch/x86/boot/bzImage ${tmpdir}/boot/kernel-${KV}
+	# install virtualbox modules
+	ROOT=${tmpdir} KERNEL_DIR=$(realpath $PWD) \
+		emerge --getbinpkg=n --usepkg=n --nodeps \
+		app-emulation/virtualbox-modules
 
-	dracut --force ${tmpdir}/boot/initramfs-${KV}.img
+	# generate initramfs
+	emerge dracut -u
+	dracut --force ${tmpdir}/boot/initramfs-${kernel_version}.img
 
+	# cleanup and install to /
+	rm -rf ${tmpdir}/{etc,tmp,usr,var}
 	rsync -rltgoDK ${tmpdir}/ /
 
-	tar cvf linux-${KV}.tar -C ${tmpdir} .
-	xz linux-${KV}.tar
+	# create image
+	tar cvf linux-${kernel_version}.tar -C ${tmpdir} .
+	xz linux-${kernel_version}.tar
 	rm -rf ${tmpdir}
 
-	echo "Image is at $(realpath linux-${KV}.tar.xz)"
+	echo "Image is at $(realpath linux-${kernel_version}.tar.xz)"
+
+	set +e
 }
