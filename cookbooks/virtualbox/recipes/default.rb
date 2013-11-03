@@ -2,7 +2,6 @@
 if !vbox_guest?
   if gentoo?
     package "app-emulation/virtualbox"
-    package "app-emulation/virtualbox-modules"
     package "app-emulation/vagrant"
 
     if root?
@@ -21,12 +20,12 @@ if !vbox_guest?
 
   elsif mac_os_x?
     mac_package "VirtualBox" do
-      source "http://download.virtualbox.org/virtualbox/4.2.18/VirtualBox-4.2.18-88780-OSX.dmg"
+      source "http://download.virtualbox.org/virtualbox/4.3.2/VirtualBox-4.3.2-90405-OSX.dmg"
       type "pkg"
     end
 
     mac_package "Vagrant" do
-      source "http://files.vagrantup.com/packages/7ec0ee1d00a916f80b109a298bab08e391945243/Vagrant-1.2.7.dmg"
+      source "http://files.vagrantup.com/packages/a40522f5fabccb9ddabad03d836e120ff5d14093/Vagrant-1.3.5.dmg"
       type "pkg"
     end
   end
