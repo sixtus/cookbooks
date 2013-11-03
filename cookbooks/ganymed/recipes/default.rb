@@ -27,7 +27,6 @@ template "/etc/ganymed/config.yml" do
   owner "root"
   group "root"
   mode "0644"
-  notifies :restart, "service[ganymed]"
 end
 
 if systemd_running?
@@ -35,5 +34,6 @@ if systemd_running?
 
   service "ganymed" do
     action [:enable, :start]
+    subscribes :restart, "template[/etc/ganymed/config.yml]"
   end
 end
