@@ -7,7 +7,6 @@ module Gentoo
       # * action == :create || action == :delete
       # * conf_type =~ /\A(use|keywords|mask|unmask)\Z/
       def manage_package_conf(action, conf_type, name, package = nil, flags = nil)
-        return unless root?
         conf_file = package_conf_file(conf_type, name)
         case action
         when :create
@@ -26,8 +25,8 @@ module Gentoo
         conf_dir = "/etc/portage/package.#{conf_type}"
 
         unless ::File.directory?(conf_dir)
-          ::FileUtils.rm_rf(conf_dir)
-          ::FileUtils.mkdir_p(conf_dir)
+          Chef::Mixin::Command.run_command_with_systems_locale(:command => "/usr/bin/sudo -H /bin/rm -rf #{conf_dir}")
+          Chef::Mixin::Command.run_command_with_systems_locale(:command => "/usr/bin/sudo -H /bin/mkdir -p #{conf_dir}")
         end
 
         package_atom = name.strip.split(/\s+/).first
@@ -55,25 +54,13 @@ module Gentoo
 
       def create_package_conf_file(conf_file, content)
         return nil if ::File.exists?(conf_file) && same_content?(conf_file, content)
-
-        if Process.euid == 0
-          ::File.open(conf_file, "w") { |f| f << content + "\n" }
-          Chef::Log.info("Created #{conf_file} \"#{content}\".")
-        else
-          Chef::Log.warn("skipping #{conf_file} in non-root mode")
-        end
+        Chef::Mixin::Command.run_command_with_systems_locale(:command => "echo -e '#{content}' | /usr/bin/sudo -H /usr/bin/tee #{conf_file}")
         true
       end
 
       def delete_package_conf_file(conf_file)
         return nil unless ::File.exists?(conf_file)
-
-        if Process.euid == 0
-          ::File.delete(conf_file)
-          Chef::Log.info("Deleted #{conf_file}")
-        else
-          Chef::Log.warn("skipping #{conf_file} in non-root mode")
-        end
+        Chef::Mixin::Command.run_command_with_systems_locale(:command => "/usr/bin/sudo -H /bin/rm -rf #{conf_file}")
         true
       end
     end
@@ -98,9 +85,8 @@ module Gentoo
         end
 
         if emerge?(action)
-          sudo_prefix = Process.euid == 0 ? "" : "/usr/bin/sudo -H "
           Chef::Mixin::Command.run_command_with_systems_locale(
-            :command => "#{sudo_prefix}/usr/bin/emerge --color=n --nospinner --quiet #{@new_resource.options} #{package_info[:package_atom]}"
+            :command => "/usr/bin/sudo -H /usr/bin/emerge --color=n --nospinner --quiet #{@new_resource.options} #{package_info[:package_atom]}"
           )
         end
       end
