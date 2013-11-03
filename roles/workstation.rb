@@ -8,4 +8,5 @@ run_list(%w(
   recipe[firefox]
   recipe[virtualbox]
   recipe[imagemagick]
+  recipe[zenops::workstation]
 ))
