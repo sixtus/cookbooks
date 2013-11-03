@@ -1,13 +1,7 @@
 if gentoo?
-  package "net-analyzer/ganymed" do
-    action :upgrade
-    notifies :restart, 'service[ganymed]'
-  end
+  package "net-analyzer/ganymed"
 elsif debian_based?
-  gem_package "ganymed" do
-    action :upgrade
-    notifies :restart, 'service[ganymed]'
-  end
+  gem_package "ganymed"
 end
 
 directory "/usr/lib/ganymed" do
