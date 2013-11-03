@@ -12,7 +12,7 @@ else
 fi
 
 if [[ ! -f config/solo/${config_name}.json ]]; then
-	config_name=base
+	config_name=workstation
 fi
 
 # mac sanity check
@@ -23,7 +23,7 @@ if [[ -d /Applications ]]; then
 	fi
 
 	# select the correct xcode version
-	sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
+	sudo "xcode-select" -switch /Applications/Xcode.app/Contents/Developer
 fi
 
 # install chef if it is missing
@@ -37,16 +37,23 @@ fi
 
 chef-solo -c config/solo.rb -j config/solo/${config_name}.json
 
-# use shell from homebrew on mac
-if type -P dscl >/dev/null; then
+if [[ -d /Applications ]]; then
+	# use shell from homebrew on mac
 	current_shell=$(dscl . -read /Users/${config_name} | grep '^UserShell:' | awk '{print $2}')
-	new_shell= "/usr/local/bin/bash"
+	new_shell="/usr/local/bin/bash"
 
 	if [[ -x ${new_shell} && ${current_shell} != ${new_shell} ]]; then
 		sudo chsh -s ${new_shell} ${config_name}
 	fi
-fi
 
-# open iTerm
-#curl -s -L https://raw.github.com/altercation/solarized/master/iterm2-colors-solarized/Solarized%20Dark.itermcolors > '/Applications/iTerm.app/Solarized Dark.itermcolors'
-#open '/Applications/iTerm.app/Solarized Dark.itermcolors'
+	# import iterm colorschemes
+	if [[ ! -e "/Applications/iTerm.app/Solarized Dark.itermcolors" ]]; then
+		curl -s -L https://raw.github.com/altercation/solarized/master/iterm2-colors-solarized/Solarized%20Dark.itermcolors > '/Applications/iTerm.app/Solarized Dark.itermcolors'
+		open '/Applications/iTerm.app/Solarized Dark.itermcolors'
+	fi
+
+	if [[ ! -e "/Applications/iTerm.app/Solarized Light.itermcolors" ]]; then
+		curl -s -L https://raw.github.com/altercation/solarized/master/iterm2-colors-solarized/Solarized%20Light.itermcolors > '/Applications/iTerm.app/Solarized Light.itermcolors'
+		open '/Applications/iTerm.app/Solarized Light.itermcolors'
+	fi
+fi
