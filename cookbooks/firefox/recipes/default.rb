@@ -22,7 +22,7 @@ elsif debian?
   package "iceweasel"
 elsif ubuntu?
   package "firefox"
-elsif mac?
+elsif mac_os_x?
   mac_package "Firefox" do
     source "http://download-installer.cdn.mozilla.net/pub/mozilla.org/firefox/releases/25.0/mac/en-US/Firefox%2025.0.dmg"
   end

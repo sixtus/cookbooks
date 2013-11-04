@@ -1,7 +1,7 @@
 if platform?("mac_os_x")
   mac_package "Install Spotify" do
     source "http://download.spotify.com/SpotifyInstaller.zip"
-    zip true
+    type "zip_app"
     not_if { File.exist?("/Applications/Spotify.app") }
   end
 

@@ -1,13 +1,12 @@
 def load_current_resource
-  @dmgpkg = Chef::Resource::MacPackage.new(new_resource.name)
-  @dmgpkg.app(new_resource.app)
+  @macpkg = Chef::Resource::MacPackage.new(new_resource.name)
+  @macpkg.app(new_resource.app)
   Chef::Log.debug("Checking for application #{new_resource.app}")
-  @dmgpkg.installed(installed?)
+  @macpkg.installed(installed?)
 end
 
 action :install do
-  unless @dmgpkg.installed
-
+  unless @macpkg.installed
     volumes_dir = new_resource.volumes_dir ? new_resource.volumes_dir : new_resource.app
     dmg_name = new_resource.dmg_name ? new_resource.dmg_name : new_resource.app
     file_ext = new_resource.zip ? "zip" : "dmg"
@@ -20,16 +19,17 @@ action :install do
 
     directory Chef::Config[:file_cache_path]
 
-    remote_file "#{dmg_file} - #{@dmgpkg.name}" do
+    remote_file "#{dmg_file} - #{@macpkg.name}" do
       path dmg_file
       source new_resource.source
       checksum new_resource.checksum if new_resource.checksum
       only_if { new_resource.source }
     end
 
-    if new_resource.zip
+    case new_resource.type
+    when /^zip_/
       execute "unzip -q '#{dmg_file}' -d '#{mnt_path}'"
-    else
+    when /^dmg_/
       passphrase_cmd = new_resource.dmg_passphrase ? "-passphrase #{new_resource.dmg_passphrase}" : ""
       ruby_block "attach #{dmg_file}" do
         block do
@@ -43,20 +43,23 @@ action :install do
     end
 
     case new_resource.type
-    when "app"
+    when /_app$/
       execute "cp -R '#{mnt_path}/#{new_resource.app}.app' '#{new_resource.destination}'"
 
       file "#{new_resource.destination}/#{new_resource.app}.app/Contents/MacOS/#{new_resource.app}" do
         mode 0755
         ignore_failure true
       end
-    when "mpkg", "pkg"
-      execute "sudo installer -pkg '#{mnt_path}/#{new_resource.app}.#{new_resource.type}' -target /"
+    when /_(m?pkg)$/
+      execute "sudo installer -pkg '#{mnt_path}/#{new_resource.app}.#{$1}' -target /"
+    else
+      raise "invalid mac_package type"
     end
 
-    if new_resource.zip
+    case new_resource.type
+    when /^zip_/
       execute "rm -rf '#{mnt_path}'"
-    else
+    when /^dmg_/
       execute "hdiutil detach '#{mnt_path}'"
     end
   end

@@ -18,7 +18,7 @@ if platform?("mac_os_x")
   end
 
   mac_package "XQuartz" do
-    type "pkg"
+    type "dmg_pkg"
     package_id "org.macosforge.xquartz.pkg"
     source "http://xquartz.macosforge.org/downloads/SL/XQuartz-2.7.4.dmg"
     volumes_dir "XQuartz-2.7.4"
