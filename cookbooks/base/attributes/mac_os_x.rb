@@ -13,7 +13,6 @@ if mac_os_x?
     gnu-sed
     gnu-tar
     icu4c
-    keychain
     libffi
     libksba
     libtool
