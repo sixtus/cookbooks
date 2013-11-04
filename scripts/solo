@@ -27,9 +27,19 @@ done &
 
 # mac sanity check
 if [[ -d /Applications ]]; then
+	echo ">>> Detected Mac OS X ..."
+
 	if [[ ${config_name} == "root" ]]; then
-		echo "running as root is not supported on mac os"
+		echo "!!! running as root is not supported on Mac OS"
 		exit 1
+	fi
+
+	if [[ ! -e ~/.storerc ]]; then
+		echo ">>> Please enter you App Store credentials:"
+		read -p 'Apple ID: ' apple_id
+		read -s -p 'Apple Password: ' apple_password
+		echo "${apple_id} ${apple_password}" > ~/.storerc
+		chmod 0400 ~/.storerc
 	fi
 
 	# select the correct xcode version
