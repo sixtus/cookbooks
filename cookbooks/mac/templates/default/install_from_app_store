@@ -1,0 +1,131 @@
+#!/bin/bash
+
+set -e
+
+app_url="${1/https:/macappstore:}"
+
+open "$app_url"
+sleep 2
+
+osascript <<'APPLESCRIPT'
+  on run argv
+    set appleId to "<%= node[:apple_id] %>"
+    set applePassword to "<%= node[:apple_password] %>"
+
+    tell application "System Events"
+      tell window "App Store" of process "App Store"
+        set loaded to false
+        repeat until loaded = true
+          try
+            # There's really no less brittle way I can find to navigate the UI.
+            # Along with the Accessibility Inspector, "UI elements" is your friend:
+            # i.e. "tell scroll area 1 to UI elements"
+            # http://n8henrie.com/2013/03/a-strategy-for-ui-scripting-in-applescript/
+            set installButtonContainer to group 1 of group 1 of UI element 1 of scroll area 1 of group 1 of group 1
+            set installButton to button 1 of installButtonContainer
+
+            set loaded to true
+          on error
+            delay 1
+          end try
+        end repeat
+
+        set isMatch to "0" = (do shell script "[[ \"" & description of installButton & "\" =~ ^Installed ]]; printf $?")
+
+        if isMatch then
+          tell application "App Store" to quit
+          return # It claims to be installed.
+        end if
+
+        set isMatch to "0" = (do shell script "[[ \"" & description of installButton & "\" =~ ^Install,.*Free$ ]]; printf $?")
+
+        if not isMatch then
+          # will only install free apps
+          error "Can't find install button or app needs to be purchased."
+        end if
+
+        # Petrov: Sir! The reason for having two keys is so that no one man may...
+        click installButton
+
+        # Give it a moment.
+        delay 2
+
+        # Regrab the reference, since they may have replaced it
+        set installButton to button 1 of installButtonContainer
+
+        # Do we need to confirm?
+        set isMatch to "0" = (do shell script "[[ \"" & description of installButton & "\" =~ ^Confirm,.*Free$ ]]; printf $?")
+
+        if isMatch then
+          # Ramius: May what, Doctor?
+          click installButton
+
+          # Give it a moment.
+          delay 2
+
+          # Regrab the reference, since they may have replaced it
+          set installButton to button 1 of installButtonContainer
+        end if
+
+        # Do we need to authenticate?
+        # If so, we will be looking at a modal pop-down dialog for credentials.
+        set needToAuthenticate to false
+        try
+          # We should now be looking at a modal pop-down dialog for credentials.
+          set appleIdBox       to text field 2 of sheet 1
+          set applePasswordBox to text field 1 of sheet 1
+          set signInButton     to button 1     of sheet 1
+
+          set needToAuthenticate to true
+        on error
+          # We may not be prompted for creds at all
+        end try
+
+        if needToAuthenticate = true then
+          # Petrov: Arm the missiles, Captain.
+          set value of appleIdBox       to appleId
+          set value of applePasswordBox to applePassword
+
+          # Give it a moment.
+          delay 1
+
+          # Ramius: Mmm, thank you for your concern Doctor.
+          click signInButton
+
+          # Give it a moment.
+          delay 10
+
+          # Regrab the reference
+          set installButton to button 1 of installButtonContainer
+        end if
+
+        # Busy wait..
+        set installing to "0" = (do shell script "[[ \"" & description of installButton & "\" =~ ^Installing, ]]; printf $?")
+        repeat until installing = false
+          try
+            set installing to "0" = (do shell script "[[ \"" & description of installButton & "\" =~ ^Installing, ]]; printf $?")
+          on error
+            delay 5
+          end try
+          set installButton to button 1 of installButtonContainer
+        end repeat
+
+        delay 10
+
+        set isMatch to "0" = (do shell script "[[ \"" & description of installButton & "\" =~ ^Install,.*Free$ ]]; printf $?")
+
+        if isMatch then
+          error "Install paused or cancelled"
+        end if
+
+        set isMatch to "0" = (do shell script "[[ \"" & description of installButton & "\" =~ ^Installed, ]]; printf $?")
+
+        if not isMatch then
+          error "Unknown error during installation"
+        end if
+      end tell
+    end tell
+
+    tell application "App Store" to quit
+  end run
+APPLESCRIPT

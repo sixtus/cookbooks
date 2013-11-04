@@ -9,9 +9,9 @@ action :install do
   unless @macpkg.installed
     volumes_dir = new_resource.volumes_dir ? new_resource.volumes_dir : new_resource.app
     dmg_name = new_resource.dmg_name ? new_resource.dmg_name : new_resource.app
-    file_ext = new_resource.zip ? "zip" : "dmg"
+    file_ext = new_resource.type =~ /^zip_/ ? "zip" : "dmg"
     dmg_file = "#{Chef::Config[:file_cache_path]}/#{dmg_name}.#{file_ext}"
-    mnt_path = if new_resource.zip
+    mnt_path = if new_resource.type =~ /^zip_/
                  "#{Chef::Config[:file_cache_path]}/#{dmg_name}"
                else
                  "/Volumes/#{volumes_dir}"
@@ -19,11 +19,12 @@ action :install do
 
     directory Chef::Config[:file_cache_path]
 
-    remote_file "#{dmg_file} - #{@macpkg.name}" do
-      path dmg_file
-      source new_resource.source
-      checksum new_resource.checksum if new_resource.checksum
-      only_if { new_resource.source }
+    if new_resource.source
+      remote_file "#{dmg_file} - #{@macpkg.name}" do
+        path dmg_file
+        source new_resource.source
+        checksum new_resource.checksum if new_resource.checksum
+      end
     end
 
     case new_resource.type
@@ -43,6 +44,8 @@ action :install do
     end
 
     case new_resource.type
+    when /^store$/
+      execute "/usr/local/bin/install_from_app_store '#{new_resource.store_url}'"
     when /_app$/
       execute "cp -R '#{mnt_path}/#{new_resource.app}.app' '#{new_resource.destination}'"
 

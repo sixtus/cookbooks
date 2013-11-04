@@ -1,6 +1,7 @@
 actions :install
 
 attribute :app, :kind_of => String, :name_attribute => true
+attribute :store_url, :kind_of => String, :default => nil
 attribute :source, :kind_of => String, :default => nil
 attribute :destination, :kind_of => String, :default => "/Applications"
 attribute :checksum, :kind_of => String, :default => nil

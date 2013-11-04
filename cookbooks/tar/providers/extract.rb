@@ -7,20 +7,9 @@ action :extract do
     source r.name
     path local_archive
     backup false
-    action :nothing
     group r.group
     owner r.user
-    mode r.mode
-  end
-
-  http_request "HEAD #{r.name}" do
-    message ""
-    url r.name
-    action :head
-    if ::File.exists?(local_archive)
-      headers "If-Modified-Since" => ::File.mtime(local_archive).httpdate
-    end
-    notifies :create, "remote_file[#{basename}]", :immediately
+    mode "0644"
   end
 
   execute "extract #{basename}" do

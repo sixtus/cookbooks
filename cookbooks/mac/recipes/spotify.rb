@@ -1,4 +1,4 @@
-if platform?("mac_os_x")
+if mac_os_x?
   mac_package "Install Spotify" do
     source "http://download.spotify.com/SpotifyInstaller.zip"
     type "zip_app"
