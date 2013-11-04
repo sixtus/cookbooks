@@ -91,7 +91,7 @@ unless solo?
 
   systemd_timer "chef-client" do
     schedule [
-      "OnBoot=60",
+      "OnBootSec=60",
       "OnCalendar=*:#{minute}",
     ]
   end
