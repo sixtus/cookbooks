@@ -1,6 +1,6 @@
 if platform?("mac_os_x")
   mac_package "iTerm" do
-    source "http://iterm2.googlecode.com/files/iTerm2-1_0_0_20120203.zip"
+    source "http://www.iterm2.com/downloads/stable/iTerm2_v1_0_0.zip"
     zip true
   end
 
