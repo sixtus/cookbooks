@@ -82,6 +82,6 @@ fi
 
 # kill the sudo refresh loop
 kill %1
-wait
+wait &>/dev/null
 
 echo ">>> All done. Happy hacking!"
