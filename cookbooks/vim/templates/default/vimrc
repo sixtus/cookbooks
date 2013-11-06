@@ -192,4 +192,8 @@ augroup END
 source <%= node[:homedir] %>/.vimrc.local
 <% end %>
 
+<% if root? and not solo? %>
+let g:Powerline_cache_enabled = 0
+<% end %>
+
 " vim: set sw=4 ts=4 tw=72
