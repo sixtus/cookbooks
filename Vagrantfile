@@ -7,6 +7,7 @@ def define(name, id)
       _chef = nil
       user = (ENV["USER"] || ENV["USERNAME"]).downcase.tr(" ", "-")
       base.vm.hostname = "#{user}.#{name}.vagrantup.com"
+      base.vm.network "private_network", ip: "10.99.#{id/100}.#{id%100}/16"
       if File.exist?("vagrant/provision/#{name}.sh")
         base.vm.provision :shell, path: "vagrant/provision/#{name}.sh"
       end

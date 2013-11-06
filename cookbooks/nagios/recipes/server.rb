@@ -11,6 +11,7 @@ include_recipe "nagios::livestatus"
 include_recipe "nagios::nrpe"
 include_recipe "nagios::nsca"
 include_recipe "nagios::splunk"
+include_recipe "nagios::calendar"
 
 directory "/var/nagios/rw" do
   owner "nagios"
@@ -195,6 +196,7 @@ spawn_fcgi "nagios" do
     :group => "nginx",
   })
 end
+
 
 nginx_server "nagios" do
   template "nginx.conf"

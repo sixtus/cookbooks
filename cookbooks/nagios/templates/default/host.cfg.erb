@@ -21,6 +21,7 @@ define host {
 @host.default[:nagios] ||= {}
 @host.default[:nagios][:services] ||= {}
 @host[:nagios][:services].sort.each do |service_description, params|
+  params = Hash[params].symbolize_keys!
   params[:enabled] = true if params[:enabled] == nil
 
   next unless params.delete(:enabled)
