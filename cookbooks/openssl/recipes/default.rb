@@ -15,8 +15,12 @@ template "/etc/ssl/openssl.cnf" do
   mode "0644"
 end
 
+directory "/usr/local/share/ca-certificates"
+
 if root?
   if !solo?
+    ssl_ca "/usr/local/share/ca-certificates/chef-ca"
+
     ssl_certificate "/etc/ssl/certs/wildcard.#{node[:chef_domain]}" do
       cn "wildcard.#{node[:chef_domain]}"
     end
@@ -44,6 +48,8 @@ if root?
     end
   end
 end
+
+execute "update-ca-certificates"
 
 if nagios_client?
   nagios_plugin "check_ssl_server"
