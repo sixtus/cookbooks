@@ -17,13 +17,9 @@ fi
 
 echo ">>> Using configuration at config/solo/${config_name}.json"
 
-# sudo refresh loop
+# disable sudo password
 echo ">>> Using sudo ... please enter your password if needed"
-sudo -v
-while true; do
-	sudo -v
-	sleep 30
-done &
+sudo sed -i -e 's/%admin.*/%admin ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers
 
 # mac sanity check
 if [[ -d /Applications ]]; then
@@ -80,8 +76,7 @@ if [[ -d /Applications ]]; then
 	fi
 fi
 
-# kill the sudo refresh loop
-kill %1
-wait &>/dev/null
+# enable sudo password
+sudo sed -i -e 's/%admin.*/%admin ALL=(ALL) ALL/' /etc/sudoers
 
 echo ">>> All done. Happy hacking!"
