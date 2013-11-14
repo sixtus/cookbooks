@@ -13,7 +13,7 @@ end
 
 git "#{homedir}/gitlab-shell" do
   repository "https://github.com/gitlabhq/gitlab-shell.git"
-  reference "v1.7.4"
+  reference "v1.7.8"
 end
 
 template "#{homedir}/gitlab-shell/hooks/update" do
