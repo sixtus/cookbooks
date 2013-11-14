@@ -12,3 +12,10 @@ repos_path: "<%= @homedir %>/repositories"
 
 # File used as authorized_keys for gitlab user
 auth_file: "<%= @homedir %>/.ssh/authorized_keys"
+
+# Redis settings used for pushing commit notices to gitlab
+redis:
+  bin: /usr/bin/redis-cli
+  host: 127.0.0.1
+  port: 6379
+  namespace: resque:gitlab

@@ -40,6 +40,12 @@ include_recipe "gitlab::shell"
   end
 end
 
+directory "#{homedir}/shared/uploads" do
+  owner "git"
+  group "git"
+  mode "0750"
+end
+
 systemd_user_session "git" do
   action :disable
 end
@@ -60,9 +66,9 @@ end
 
 deploy_rails_application "git" do
   repository "https://github.com/gitlabhq/gitlabhq.git"
-  revision "5-0-stable"
+  revision "6-2-stable"
 
-  ruby_version "ruby-2.0.0-p0"
+  ruby_version "ruby-2.0.0-p247"
 
   worker_processes node[:gitlab][:worker_processes]
   timeout node[:gitlab][:timeout]
@@ -70,6 +76,7 @@ deploy_rails_application "git" do
   migrate true
 
   symlink_before_migrate({
+    "uploads" => "public/uploads",
     "config/database.yml" => "config/database.yml",
     "config/gitlab.yml" => "config/gitlab.yml",
   })

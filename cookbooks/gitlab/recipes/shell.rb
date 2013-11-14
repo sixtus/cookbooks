@@ -13,7 +13,14 @@ end
 
 git "#{homedir}/gitlab-shell" do
   repository "https://github.com/gitlabhq/gitlab-shell.git"
-  reference "v1.2.0"
+  reference "v1.7.4"
+end
+
+template "#{homedir}/gitlab-shell/hooks/update" do
+  source "update"
+  owner "git"
+  group "root"
+  mode "0755"
 end
 
 template "#{homedir}/gitlab-shell/config.yml" do
