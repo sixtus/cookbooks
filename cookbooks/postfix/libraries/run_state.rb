@@ -4,6 +4,12 @@ module PostfixRunStateHelpers
       n[:primary_ipaddress]
     end + node[:postfix][:mynetworks]
   end
+
+  def postfix_relayhost
+    node.run_state[:nodes].select do |n|
+      n.role?("mx")
+    end.first
+  end
 end
 
 include PostfixRunStateHelpers
