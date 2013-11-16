@@ -10,7 +10,7 @@ module ZookeeperRunStateHelpers
 
   def zookeeper_url(ensemble = nil)
     zookeeper_nodes(ensemble).map do |n|
-      "#{n[:fqdn]}:2181"
+      "#{n[:primary_ipaddress]}:2181"
     end.join(',')
   end
 end
