@@ -1,6 +1,4 @@
 # portage
-package "app-portage/gentoolkit-dev"
-
 directory "/var/cache/mirror/zentoo" do
   owner "root"
   group "root"
