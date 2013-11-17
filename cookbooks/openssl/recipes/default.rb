@@ -15,6 +15,7 @@ template "/etc/ssl/openssl.cnf" do
   mode "0644"
 end
 
+directory "/usr/local/share"
 directory "/usr/local/share/ca-certificates"
 
 if root?
