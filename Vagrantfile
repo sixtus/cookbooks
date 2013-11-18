@@ -7,7 +7,7 @@ def define(name, id)
       _chef = nil
       user = (ENV["USER"] || ENV["USERNAME"]).downcase.tr(" ", "-")
       base.vm.hostname = "#{user}.#{name}.vagrantup.com"
-      base.vm.network "private_network", ip: "10.99.#{id/100}.#{id%100}/16"
+      base.vm.network "private_network", ip: "10.10.#{id/100}.#{id%100}/16"
       if File.exist?("vagrant/provision/#{name}.sh")
         base.vm.provision :shell, path: "vagrant/provision/#{name}.sh"
       end
@@ -28,6 +28,10 @@ def define(name, id)
       end
       yield base.vm, _chef if block_given?
       _chef.json = _chef.json.merge({
+        # vagrant has 10.0.2.15 on eth0 as a NAT device which cannot be
+        # reached from the host, so we add a private network and hard-code the
+        # primary_ipaddress here
+        primary_ipaddress: "10.10.#{id/100}.#{id%100}",
         cluster: {
           name: "vagrant",
         },
