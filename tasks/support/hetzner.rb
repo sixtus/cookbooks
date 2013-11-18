@@ -34,7 +34,6 @@ end
 def hetzner_enable_rescue_wait(ip)
   hetzner.disable_rescue!(ip)
   res = hetzner.enable_rescue!(ip, 'linux', '64')
-  puts res.inspect
   password = res.parsed_response["rescue"]["password"]
   puts "rescue password is #{password.inspect}"
   hetzner.reset!(ip, :hw)
