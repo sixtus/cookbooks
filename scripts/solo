@@ -4,15 +4,19 @@ set -e
 
 cd $(perl -e 'use Cwd "abs_path";print abs_path(shift)' $0/../../)
 
-# use user supplied config if it exists
-if [[ $USER == "root" ]]; then
-	config_name=$(hostname -f)
-else
-	config_name=$(whoami)
-fi
+config_name=$1
 
-if [[ ! -f config/solo/${config_name}.json ]]; then
-	config_name=workstation
+if [[ -z ${config_name} ]]; then
+	# use user supplied config if it exists
+	if [[ $USER == "root" ]]; then
+		config_name=$(hostname -f)
+	else
+		config_name=$(whoami)
+	fi
+
+	if [[ ! -f config/solo/${config_name}.json ]]; then
+		config_name=workstation
+	fi
 fi
 
 echo ">>> Using configuration at config/solo/${config_name}.json"
@@ -40,6 +44,10 @@ if [[ -d /Applications ]]; then
 
 	# select the correct xcode version
 	sudo "xcode-select" -switch /Applications/Xcode.app/Contents/Developer
+fi
+
+if [[ -e /etc/debian_version ]]; then
+	apt-get install -y curl whois
 fi
 
 # install chef if it is missing

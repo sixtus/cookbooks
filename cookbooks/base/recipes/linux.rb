@@ -41,8 +41,7 @@ if root?
   include_recipe "postfix"
   include_recipe "cron"
 
-  # we just need this for forwarding
-  include_recipe "syslog" unless solo?
+  include_recipe "syslog"
 
   if !solo?
     include_recipe "chef::client"
@@ -50,10 +49,13 @@ if root?
 
   if splunk_nodes.any?
     include_recipe "splunk::forwarder"
+  end
+
+  if ganymed?
     include_recipe "ganymed"
   end
 
-  if node.run_state[:mx].any?
+  if !solo?
     include_recipe "postfix::satelite" unless node[:skip][:postfix_satelite]
   end
 

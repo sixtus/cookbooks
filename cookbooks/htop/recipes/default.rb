@@ -1,5 +1,7 @@
 if gentoo?
   package "sys-process/htop"
+elsif debian_based?
+  package "htop"
 elsif mac_os_x?
   package "htop-osx"
 end

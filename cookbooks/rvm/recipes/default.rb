@@ -7,9 +7,9 @@ if gentoo?
     action :nothing
   end.run_action(:upgrade)
 elsif debian_based?
-  execute "sudo -H gem install rvm" do
+  chef_gem "rvm" do
     action :nothing
-  end.run_action(:run)
+  end.run_action(:upgrade)
 elsif mac_os_x?
   # need to install into omnibus if available. otherwise mac users will use
   # bundled gems.

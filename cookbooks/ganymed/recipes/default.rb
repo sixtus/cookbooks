@@ -1,13 +1,6 @@
-if gentoo?
-  package "net-analyzer/ganymed" do
-    action :upgrade
-    notifies :restart, 'service[ganymed]'
-  end
-elsif debian_based?
-  gem_package "ganymed" do
-    action :upgrade
-    notifies :restart, 'service[ganymed]'
-  end
+package "net-analyzer/ganymed" do
+  action :upgrade
+  notifies :restart, 'service[ganymed]'
 end
 
 directory "/usr/lib/ganymed" do
@@ -36,16 +29,7 @@ template "/etc/ganymed/config.yml" do
   notifies :restart, "service[ganymed]"
 end
 
-if systemd_running?
-  systemd_unit "ganymed.service"
-else
-  cookbook_file "/etc/init.d/ganymed" do
-    source "ganymed.initd"
-    owner "root"
-    group "root"
-    mode "0755"
-  end
-end
+systemd_unit "ganymed.service"
 
 service "ganymed" do
   action [:enable, :start]

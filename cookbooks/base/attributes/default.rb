@@ -1,44 +1,12 @@
-# this nodes chef environment
-default[:classification] = :normal
-
 # make the primary IP address overridable
 default[:primary_ipaddress] = node[:ipaddress] || "127.0.0.1"
 default[:primary_ip6address] = nil
 
-# ec2 support
-if node[:ec2] and node[:ec2][:local_ipv4]
-  default[:bind_ipaddress] = node[:ec2][:local_ipv4]
-else
-  default[:bind_ipaddress] = node[:primary_ipaddress]
-end
-
 # cluster support
+default[:chef_domain] = node[:domain]
 default[:cluster][:name] = "default"
 
-# detect network interfaces
-node[:network][:interfaces].each do |name, int|
-  next unless int[:addresses]
-  if int[:addresses].keys.include?(node[:primary_ipaddress])
-    set[:primary_interface] = name
-    break
-  end
-end
-
-# legacy support for local networks
-default[:local_ipaddress] = nil
-
-if node[:local_ipaddress]
-  node[:network][:interfaces].each do |name, int|
-    next unless int[:addresses]
-    if int[:addresses].keys.include?(node[:local_ipaddress])
-      set[:local_interface] = name
-      break
-    end
-  end
-end
-
-# this is automatically inferred from the Chef servers domain by default but
-# may be overridden on a per-role or per-node basis
+# contacts
 default[:contacts][:hostmaster] = "hostmaster@#{node[:chef_domain]}"
 
 # localization/i18n
@@ -68,8 +36,8 @@ default[:sysctl][:vm][:overcommit_ratio] = 95
 default[:sysctl][:vm][:overcommit_memory] = 0
 
 # shared memory sizes
-default_unless[:sysctl][:kernel][:shmall] = 2*1024*1024 #pages
-default_unless[:sysctl][:kernel][:shmmax] = 32*1024*1024 #bytes
+default_unless[:sysctl][:kernel][:shmall] = 4194304 # 2^22 = 4M
+default_unless[:sysctl][:kernel][:shmmax] = 17179869184 # 2^34 = 16G
 default_unless[:sysctl][:kernel][:shmmni] = 4096
 
 # open files/sockets
@@ -120,4 +88,33 @@ else
   default[:current_email] = "#{node[:current_user]}@#{node[:fqdn]}"
   default[:current_name] = node[:etc][:passwd][node[:current_user]][:gecos]
   default[:script_path] = "#{node[:homedir]}/bin"
+end
+
+# ec2 support
+if node[:ec2] and node[:ec2][:local_ipv4]
+  default[:bind_ipaddress] = node[:ec2][:local_ipv4]
+else
+  default[:bind_ipaddress] = node[:primary_ipaddress]
+end
+
+# detect network interfaces
+node[:network][:interfaces].each do |name, int|
+  next unless int[:addresses]
+  if int[:addresses].keys.include?(node[:primary_ipaddress])
+    set[:primary_interface] = name
+    break
+  end
+end
+
+# legacy support for local networks
+default[:local_ipaddress] = nil
+
+if node[:local_ipaddress]
+  node[:network][:interfaces].each do |name, int|
+    next unless int[:addresses]
+    if int[:addresses].keys.include?(node[:local_ipaddress])
+      set[:local_interface] = name
+      break
+    end
+  end
 end

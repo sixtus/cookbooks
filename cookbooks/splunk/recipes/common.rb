@@ -18,10 +18,12 @@ end
 # misuse the pass4symmkey as admin password
 admin_password = pass4symmkey.crypt("$1$159c1407ab01798d$")
 
-splunk_users = Proc.new do |u|
+splunk_users = node.run_state[:users].select do |u|
   (u[:tags]) and
   (u[:tags].include?("hostmaster") or u[:tags].include?("splunk")) and
   (u[:password1] and u[:password1] != '!')
+end.sort_by do |u|
+  u[:id]
 end
 
 template "/opt/splunk/etc/passwd" do
@@ -30,7 +32,7 @@ template "/opt/splunk/etc/passwd" do
   group "root"
   mode "0644"
   variables({
-    splunk_users: node.run_state[:users].select(&splunk_users),
+    splunk_users: splunk_users,
     admin_password: admin_password,
   })
 end

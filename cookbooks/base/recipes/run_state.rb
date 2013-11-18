@@ -15,33 +15,3 @@ end
 node.run_state[:cluster_nodes] = node.run_state[:nodes].select do |n|
   n[:cluster][:name] == node[:cluster][:name] rescue false
 end
-
-# select basic infrastructure nodes from the index for easy access in recipes
-%w(
-  chef
-  mx
-).each do |role|
-  node.run_state[role.to_sym] = node.run_state[:nodes].select do |n|
-    n[:roles] and n[:roles].include?(role)
-  end
-end
-
-# need this for bootstrapping the chef server
-if node.role?("chef")
-  node.run_state[:chef] = [node]
-end
-
-if node.run_state[:chef].any?
-  node.set[:chef_domain] = node.run_state[:chef].first[:domain]
-else
-  node.set[:chef_domain] = node[:domain]
-end
-
-# this is awful but needed to keep attribute precedence
-node.load_attributes if node.respond_to?(:load_attributes)
-
-if solo?
-  node.apply_expansion_attributes(node.expand!('disk'))
-else
-  node.apply_expansion_attributes(node.expand!('server'))
-end

@@ -1,6 +1,6 @@
 module GanymedRunStateHelpers
   def ganymed?
-    root? # for now we always deploy ganymed in root mode
+    root? && gentoo?
   end
 end
 

@@ -7,6 +7,7 @@ if debian_based?
     atool
     autoconf
     automake
+    build-essential
     bwm-ng
     colordiff
     dmidecode
