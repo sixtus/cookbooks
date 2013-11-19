@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rake'
 
-gem 'chef', '~> 11.6'
+gem 'chef', '~> 11'
 
 gem 'activesupport'
 gem 'awesome_print'
