@@ -1,7 +1,8 @@
 #!/bin/bash
 
 result=$(
-sudo knife status -H "chef_environment:production OR chef_environment:staging" | \
+sudo knife status -H "ipaddress:[* TO *] AND (chef_environment:production OR chef_environment:staging)" | \
+	grep -v '^1 hour' | \
 	perl -pe 's|(.*?)\s+ago, (.*?),.*|\2: \1 ago, |g' | \
 	paste -sd ""
 )
