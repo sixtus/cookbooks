@@ -17,8 +17,6 @@ if gentoo?
     dev-libs/libxml2
     dev-libs/libxslt
     dev-libs/libyaml
-    dev-ruby/haml
-    dev-ruby/syslogger
     dev-util/strace
     mail-client/mailx
     net-analyzer/bwm-ng
