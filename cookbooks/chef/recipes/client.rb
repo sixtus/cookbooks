@@ -28,6 +28,12 @@ template "/etc/chef/knife.rb" do
   mode "0644"
 end
 
+directory "/root/.chef"
+
+link "/root/.chef/knife.rb" do
+  to "/etc/chef/knife.rb"
+end
+
 directory "/var/log/chef" do
   owner "root"
   group "root"
