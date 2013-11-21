@@ -188,8 +188,8 @@ serve() {
 # Igor's sanity helper:
 alias vi="vim"
 
-# replace reboot by shutdown -r now:
-alias reboot="shutdown -r now"
+# replace reboot by systemctl reboot
+alias reboot="systemctl reboot"
 
 # load local bashrc if it exists
 if [[ -e ${HOME}/.bashrc.local ]]; then
