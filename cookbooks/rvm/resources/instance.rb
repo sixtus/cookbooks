@@ -1,6 +1,6 @@
 actions :create, :delete
 
-attribute :version, :kind_of => String, :default => "1.23.12"
+attribute :version, :kind_of => String, :default => "1.24.4"
 
 def initialize(name, run_context=nil)
   super
