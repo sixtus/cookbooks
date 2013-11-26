@@ -2,59 +2,58 @@ include_recipe "java"
 
 if gentoo?
   package "sys-cluster/zookeeper"
-
-  template "/opt/zookeeper/bin/zkServer.sh" do
-    source "zkServer.sh"
-    owner "root"
-    group "root"
-    mode "0755"
-    notifies :restart, "service[zookeeper]" unless mac_os_x?
-  end
-
 elsif mac_os_x?
   package "zookeeper"
 end
 
-template "#{node[:zookeeper][:confdir]}/log4j.properties" do
-  source "log4j.properties"
-  mode "0644"
-  notifies :restart, "service[zookeeper]" unless mac_os_x?
-end
+if root? or mac_os_x?
+  template "#{node[:zookeeper][:bindir]}/zkServer.sh" do
+    source "zkServer.sh"
+    owner "root"
+    group "root"
+    mode "0755"
+    notifies :restart, "service[zookeeper]"
+  end
 
-include_recipe "base::run_state"
+  template "#{node[:zookeeper][:confdir]}/log4j.properties" do
+    source "log4j.properties"
+    mode "0644"
+    notifies :restart, "service[zookeeper]"
+  end
 
-myid = zookeeper_nodes.index do |n|
-  n[:fqdn] == node[:fqdn]
-end + 1
+  include_recipe "base::run_state"
 
-template "#{node[:zookeeper][:confdir]}/zoo.cfg" do
-  source "zoo.cfg"
-  mode "0644"
-  notifies :restart, "service[zookeeper]" unless mac_os_x?
-end
+  myid = zookeeper_nodes.index do |n|
+    n[:fqdn] == node[:fqdn]
+  end.to_i + 1
 
-directory node[:zookeeper][:datadir] do
-  recursive true
-end
+  template "#{node[:zookeeper][:confdir]}/zoo.cfg" do
+    source "zoo.cfg"
+    mode "0644"
+    notifies :restart, "service[zookeeper]"
+  end
 
-file "#{node[:zookeeper][:datadir]}/myid" do
-  content "#{myid}\n"
-  mode "0644"
-  notifies :restart, "service[zookeeper]" unless mac_os_x?
-end
+  directory node[:zookeeper][:datadir] do
+    recursive true
+  end
 
-if gentoo?
+  file "#{node[:zookeeper][:datadir]}/myid" do
+    content "#{myid}\n"
+    mode "0644"
+    notifies :restart, "service[zookeeper]"
+  end
+
   systemd_unit "zookeeper.service"
 
   service "zookeeper" do
     action [:enable, :start]
   end
-end
 
-cron "zk-log-clean" do
-  minute "0"
-  hour "3"
-  command "/opt/zookeeper/bin/zkCleanup.sh /var/lib/zookeeper/ -n 5"
+  cron "zk-log-clean" do
+    minute "0"
+    hour "3"
+    command "/opt/zookeeper/bin/zkCleanup.sh /var/lib/zookeeper/ -n 5"
+  end
 end
 
 if nagios_client?
