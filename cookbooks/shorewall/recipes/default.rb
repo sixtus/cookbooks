@@ -14,8 +14,6 @@ node.set[:shorewall6][:tunnels] = {}
 node.set[:shorewall][:zones] = {}
 node.set[:shorewall6][:zones] = {}
 
-include_recipe "shorewall::rules"
-
 # detect bridge
 if node[:primary_interface_bridged]
   shorewall_interface "br" do
