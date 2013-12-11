@@ -20,13 +20,17 @@ endif
 " global settings
 "-----------------------------------------------------------------------
 
-" load bundles
-source <%= node[:vim][:rcdir] %>/autoload/pathogen.vim
-call pathogen#infect("<%= node[:vim][:rcdir] %>/bundle")
-call pathogen#helptags()
-
 " don't be compatible with vi
 set nocompatible
+
+<% if !root? %>
+" load neobundle
+if has('vim_starting')
+	set runtimepath+=~/.vim/bundle/neobundle.vim/
+endif
+call neobundle#rc(expand('~/.vim/bundle/'))
+NeoBundleFetch 'Shougo/neobundle.vim'
+<% end %>
 
 " fast redrawing
 set ttyfast
@@ -147,32 +151,8 @@ endif
 " final commands
 "-----------------------------------------------------------------------
 
-" some basic commands
-augroup basics
-	au!
-
-	" turn of previous search results
-	au VimEnter * nohls
-
-	" always do a full syntax refresh
-	au BufEnter * syntax sync fromstart
-
-	" cd to buffer directory
-	au BufEnter * execute ":silent! lcd " . expand("%:p:h")
-augroup END
-
-" restore cursor without mkview overhead (and bugs)
-function! ResCur()
-	if line("'\"") <= line("$")
-		normal! g`"
-		return 1
-	endif
-endfunction
-
-augroup resCur
-	au!
-	au BufWinEnter * call ResCur()
-augroup END
+" turn of previous search results
+au VimEnter * nohls
 
 " file type specific settings
 augroup filetype_settings

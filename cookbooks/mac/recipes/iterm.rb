@@ -9,8 +9,8 @@ if mac_os_x?
     action :nothing
   end
 
-  remote_file "#{node[:homedir]}/Library/Fonts/Menlo-Powerline.otf" do
-    source "https://gist.github.com/raw/1595572/417a3fa36e35ca91d6d23ac961071094c26e5fad/Menlo-Powerline.otf"
+  cookbook_file "#{node[:homedir]}/Library/Fonts/Menlo-Powerline.otf" do
+    source "Menlo+Regular+for+Powerline.otf"
     notifies :run, "execute[fc-cache-menlo-powerline]"
   end
 

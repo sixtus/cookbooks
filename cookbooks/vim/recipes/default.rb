@@ -28,8 +28,7 @@ elsif mac_os_x?
   end
 
   file "/usr/local/bin/vim" do
-    content "#!/bin/sh\nexec /Applications/MacVim.app/Contents/MacOS/Vim \"$@\""
-    mode "0755"
+    action :delete
   end
 end
 
@@ -37,63 +36,33 @@ directory node[:vim][:rcdir] do
   mode "0755"
 end
 
-directory "#{node[:vim][:rcdir]}/autoload" do
-  mode "0755"
+file "#{node[:vim][:rcdir]}/autoload/pathogen.vim" do
+  action :delete
 end
 
-cookbook_file "#{node[:vim][:rcdir]}/autoload/pathogen.vim" do
-  source "pathogen.vim"
-  mode "0644"
-end
-
-directory "#{node[:vim][:rcdir]}/bundle" do
-  mode "0755"
-end
-
-template "#{node[:vim][:rcdir]}/cleanup_bundle" do
-  source "cleanup_bundle.sh"
-  mode "0755"
-  variables :bundles => root? ? [:solarized, :powerline] : node[:vim][:plugins].keys.map(&:to_s)
+file "#{node[:vim][:rcdir]}/cleanup_bundle" do
+  action :delete
 end
 
 if root?
-  remote_directory "#{node[:vim][:rcdir]}/bundle/solarized" do
-    source "solarized"
+  cookbook_file "#{node[:vim][:rcdir]}/colors/solarized.vim" do
+    source "solarized.vim"
     owner "root"
     group "root"
+    mode "0644"
   end
 
-  directory "#{node[:vim][:rcdir]}/bundle/solarized/.git" do
-    action :delete
-    recursive true
-  end
-
-  remote_directory "#{node[:vim][:rcdir]}/bundle/powerline" do
-    source "powerline"
-    owner "root"
-    group "root"
-  end
-
-  directory "#{node[:vim][:rcdir]}/bundle/powerline/.git" do
+  directory "#{node[:vim][:rcdir]}/bundle" do
     action :delete
     recursive true
   end
 else
-  node[:vim][:plugins].each do |name, repo|
-    next unless repo
-    git "#{node[:vim][:rcdir]}/bundle/#{name}" do
-      repository repo
-      reference "master"
-      action :sync
-    end
+  git "#{node[:vim][:rcdir]}/bundle/neobundle.vim" do
+    repository "https://github.com/Shougo/neobundle.vim"
+    reference "master"
+    action :checkout
   end
-end
 
-execute "vim-cleanup-bundles" do
-  command "#{node[:vim][:rcdir]}/cleanup_bundle"
-end
-
-if !root?
   overridable_template "#{node[:homedir]}/.vimrc.local" do
     source "vimrc.local"
     namespace :user
