@@ -13,5 +13,5 @@ package "dev-util/packer"
 sudo_rule "jenkins-packer" do
   user "jenkins"
   runas "ALL"
-  command "NOPASSWD: /usr/bin/packer build template.json"
+  command "NOPASSWD: /usr/bin/packer build -force template.json"
 end
