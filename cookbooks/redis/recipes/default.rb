@@ -1,4 +1,8 @@
-package "dev-db/redis"
+if gentoo?
+  package "dev-db/redis"
+elsif mac_os_x?
+  package "redis"
+end
 
 if root?
   template "/etc/redis.conf" do
