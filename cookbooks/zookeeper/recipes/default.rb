@@ -9,8 +9,6 @@ end
 if root? or mac_os_x?
   template "#{node[:zookeeper][:bindir]}/zkServer.sh" do
     source "zkServer.sh"
-    owner "root"
-    group "root"
     mode "0755"
     notifies :restart, "service[zookeeper]"
   end
@@ -47,12 +45,14 @@ if root? or mac_os_x?
 
   service "zookeeper" do
     action [:enable, :start]
+    only_if { root? }
   end
 
   cron "zk-log-clean" do
     minute "0"
     hour "3"
     command "/opt/zookeeper/bin/zkCleanup.sh /var/lib/zookeeper/ -n 5"
+    only_if { root? }
   end
 end
 

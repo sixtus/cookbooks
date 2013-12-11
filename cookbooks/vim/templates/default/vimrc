@@ -91,11 +91,6 @@ set noexpandtab
 " fold automatically on markers
 set foldmethod=marker
 
-" load nice colors
-set t_Co=256
-set background=dark
-colorscheme solarized
-
 " enable syntax highlighting
 if has("syntax")
 	syntax on
@@ -172,8 +167,9 @@ augroup END
 source <%= node[:homedir] %>/.vimrc.local
 <% end %>
 
-<% if root? and not solo? %>
-let g:Powerline_cache_enabled = 0
-<% end %>
+" load nice colors
+set t_Co=256
+set background=dark
+colorscheme solarized
 
 " vim: set sw=4 ts=4 tw=72

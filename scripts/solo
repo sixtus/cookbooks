@@ -60,6 +60,11 @@ if ! type -P chef-solo >/dev/null; then
 	fi
 fi
 
+if [[ -e ~/.rvm/scripts/rvm ]]; then
+	source ~/.rvm/scripts/rvm
+	rvm use system
+fi
+
 echo ">>> Running chef-solo ..."
 chef-solo -c config/solo.rb -j config/solo/${config_name}.json
 

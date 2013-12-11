@@ -15,5 +15,5 @@ end
 git "/usr/local" do
   repository node[:homebrew][:repo]
   reference "master"
-  action :sync
+  action :checkout
 end
