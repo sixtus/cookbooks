@@ -6,10 +6,10 @@ maintainer "Benedikt Böhm"
 maintainer_email "bb@xnull.de"
 license "Apache v2.0"
 
-version "3.4.3"
+version "3.4.4"
 
 supports "debian"
 supports "gentoo"
 supports "mac_os_x"
 
-depends "overridable", "~> 1.0.0"
+depends "overridable"

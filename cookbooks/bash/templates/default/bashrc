@@ -60,6 +60,7 @@ if hash less; then
 	export LESS="-R --ignore-case --long-prompt"
 fi
 
+<% if !mac_os_x? %>
 # keychain for ssh
 if [[ $USER != root ]]; then
 	if hash keychain; then
@@ -71,6 +72,7 @@ if [[ $USER != root ]]; then
 		fi
 	fi
 fi
+<% end %>
 
 
 ########################
