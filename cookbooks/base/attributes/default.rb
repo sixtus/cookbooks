@@ -4,7 +4,15 @@ default[:primary_ip6address] = nil
 
 # cluster support
 default[:chef_domain] = node[:domain]
-default[:cluster][:name] = "default"
+default[:cluster][:name] = node[:fqdn]
+
+if match = node[:hostname].match(/(.+?)(\d+)$/)
+  default[:cluster][:host][:group] = match[1]
+  default[:cluster][:host][:id] = match[2].to_i
+else
+  default[:cluster][:host][:group] = node[:hostname]
+  default[:cluster][:host][:id] = 1
+end
 
 # contacts
 default[:contacts][:hostmaster] = "hostmaster@#{node[:chef_domain]}"
