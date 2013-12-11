@@ -22,6 +22,8 @@ if gentoo?
     action :remove
   end
 
+  package "dev-java/maven-bin"
+
   if root?
     execute "ensure #{node[:java][:vm]} is the system vm" do
       command "eselect java-vm set system #{node[:java][:vm]}"
@@ -47,4 +49,6 @@ if gentoo?
       not_if { %x(eselect --brief java-vm show user).strip == node[:java][:vm] }
     end
   end
+elsif mac_os_x?
+  package "maven"
 end
