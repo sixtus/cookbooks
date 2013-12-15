@@ -19,8 +19,6 @@ if root? or mac_os_x?
     notifies :restart, "service[zookeeper]"
   end
 
-  include_recipe "base::run_state"
-
   myid = zookeeper_nodes.index do |n|
     n[:fqdn] == node[:fqdn]
   end.to_i + 1
