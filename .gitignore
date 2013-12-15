@@ -1,9 +1,10 @@
 *~
-.vagrant
 .chef/checksums
 .chef/client.pem
 .chef/knife.rb
-.rake_test_cache
-config/openssl.cnf
-.kitchen/
 .kitchen.local.yml
+.kitchen/
+.rake_test_cache
+.vagrant
+config/openssl.cnf
+foodcritic.log
