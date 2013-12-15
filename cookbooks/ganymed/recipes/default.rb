@@ -1,24 +1,18 @@
 package "net-analyzer/ganymed" do
   action :upgrade
-  notifies :restart, 'service[ganymed]'
+  notifies :restart, "service[ganymed]"
 end
 
-directory "/usr/lib/ganymed" do
-  owner "root"
-  group "root"
-  mode "0755"
-end
-
-directory "/usr/lib/ganymed/collectors" do
-  owner "root"
-  group "root"
-  mode "0755"
-end
-
-directory "/etc/ganymed" do
-  owner "root"
-  group "root"
-  mode "0755"
+%w(
+  /etc/ganymed
+  /usr/lib/ganymed
+  /usr/lib/ganymed/collectors
+).each do |dir|
+  directory dir do
+    owner "root"
+    group "root"
+    mode "0755"
+  end
 end
 
 template "/etc/ganymed/config.yml" do
