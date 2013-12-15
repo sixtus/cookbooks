@@ -1,6 +1,5 @@
 if root?
   include_recipe "portage"
-  include_recipe "portage::porticron"
 
   # cleanup old mess
   %w(

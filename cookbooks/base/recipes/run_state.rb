@@ -1,5 +1,5 @@
 # to make things faster, load data from search index into run_state
-if solo?
+if Chef::Config[:solo]
   node.run_state[:roles] = []
   node.run_state[:users] = []
   node.run_state[:nodes] = [node]
