@@ -8,7 +8,6 @@ begin
   require File.expand_path('config/zendns', TOPDIR)
   [ZENDNS_API_URL, ZENDNS_API_TOKEN]
 rescue LoadError, Exception
-  $stderr.puts "ZenDNS credentials cannot be loaded. Skipping some rake tasks ..."
 end
 
 class ZenDNS

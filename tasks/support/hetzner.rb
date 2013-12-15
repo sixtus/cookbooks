@@ -8,7 +8,6 @@ begin
   require File.expand_path('config/hetzner', TOPDIR)
   [HETZNER_API_USERNAME, HETZNER_API_PASSWORD]
 rescue LoadError, Exception
-  $stderr.puts "Hetzner credentials cannot be loaded. Skipping some rake tasks ..."
 end
 
 def hetzner

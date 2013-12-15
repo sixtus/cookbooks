@@ -79,8 +79,8 @@ action :create do
   # don't create an authorized keys file if authorized_keys is nil.
   # if it's empty -- i.e. [] -- then we would create an empty
   # authorized keys but with nil, the file is not created.
-  if nr.authorized_keys or nr.authorized_keys_for
-    authorized_keys = authorized_keys_for([nr.authorized_keys_for].flatten.compact)
+  if nr.authorized_keys || nr.authorized_keys_for
+    authorized_keys = authorized_keys_for(nr.authorized_keys_for)
     authorized_keys += [nr.authorized_keys].flatten.compact
 
     file "#{home}/.ssh/authorized_keys" do
@@ -106,5 +106,17 @@ action :delete do
   user nr.login do
     action :remove
   end
+end
 
+def authorized_keys_for(users)
+  users = [users].flatten.compact.map do |u|
+    u.to_sym
+  end
+  node.run_state[:users].select do |u|
+    users.include?(u[:id].to_sym) &&
+      u[:authorized_keys] &&
+      !u[:authorized_keys].empty?
+  end.map do |u|
+    u[:authorized_keys]
+  end.flatten
 end
