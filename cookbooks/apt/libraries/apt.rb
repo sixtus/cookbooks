@@ -24,7 +24,7 @@ class Chef
         end
 
         def remove_package(name, version)
-          package_name = "#{name}"
+          package_name = name
           run_command_with_systems_locale(
             :command => "#{sudo_prefix}apt-get -q -y#{expand_options(@new_resource.options)} remove #{package_name}",
             :environment => {
