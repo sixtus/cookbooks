@@ -16,5 +16,5 @@ gem 'rvm'
 
 group :testing do
   gem 'kitchen-vagrant'
-  gem 'test-kitchen', github: 'zenops/test-kitchen'
+  gem 'test-kitchen'
 end

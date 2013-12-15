@@ -8,8 +8,8 @@ if gentoo?
   end
 
   package "dev-lang/R"
-end
-
-if mac_os_x?
+elsif mac_os_x?
   package "r"
+else
+  raise "platform not supported"
 end
