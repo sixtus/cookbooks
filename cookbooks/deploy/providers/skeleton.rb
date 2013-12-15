@@ -18,7 +18,7 @@ action :create do
 
   group user
 
-  account user do
+  account_skeleton user do
     comment user
     home homedir
     home_mode "0755"

@@ -4,19 +4,6 @@ directory "/home" do
   mode "0755"
 end
 
-# create hostmaster accounts
-query = Proc.new do |u|
-  if u[:tags] and u[:tags].include?("hostmaster")
-    true
-  elsif u[:nodes]
-    u[:nodes][node[:fqdn]] and
-    u[:nodes][node[:fqdn]][:tags] and
-    u[:nodes][node[:fqdn]][:tags].include?("hostmaster")
-  else
-    false
-  end
-end
-
 hostmaster_groups = %w(adm cron)
 
 if gentoo?
@@ -25,24 +12,27 @@ elsif debian?
   hostmaster_groups += %w(sudo)
 end
 
-accounts_from_databag "hostmasters" do
-  groups hostmaster_groups
-  query query
-end
+# create accounts from databags
+node.run_state[:users].select do |user|
+  if user[:tags] && user[:tags].include?("hostmaster")
+    true
+  elsif user[:nodes] && user[:nodes][node[:fqdn]]
+    true
+  elsif user[:tags] && !(node[:account][:tags] & user[:tags]).empty?
+    true
+  else
+    false
+  end
+end.each do |user|
+  tags = [user[:tags]]
+  tags += user[:nodes][node[:fqdn]] if user[:nodes]
+  tags.flatten!.compact!
 
-# create node specific accounts
-query = Proc.new do |u|
-  u[:nodes] and u[:nodes][node[:fqdn]]
-end
-
-accounts_from_databag "node-specific" do
-  query query
-end
-
-query = Proc.new do |u|
-  u[:tags] and not (node[:account][:tags] & u[:tags]).empty?
-end
-
-accounts_from_databag "node-tags" do
-  query query
+  account_skeleton user[:id] do
+    user.keys.each do |key, value|
+      next if [:id, :name].include?(key.to_sym)
+      send(key.to_sym, value) if value
+    end
+    groups hostmaster_groups if tags.include?("hostmaster")
+  end
 end

@@ -27,6 +27,7 @@ def define(name, id)
         vb.customize ["modifyvm", :id, "--vrdeauthtype", "external"]
       end
       yield base.vm, _chef if block_given?
+      _chef.add_recipe('virtualbox::guest')
       _chef.json = _chef.json.merge({
         # vagrant has 10.0.2.15 on eth0 as a NAT device which cannot be
         # reached from the host, so we add a private network and hard-code the
