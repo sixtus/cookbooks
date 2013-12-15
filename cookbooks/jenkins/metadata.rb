@@ -9,3 +9,9 @@ license "Apache v2.0"
 version "4.1.0"
 
 supports "gentoo"
+
+depends "java"
+depends "nginx"
+depends "systemd"
+depends "openssl"
+depends "shorewall"
