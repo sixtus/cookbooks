@@ -25,7 +25,7 @@ node.run_state[:users].select do |user|
   end
 end.each do |user|
   tags = [user[:tags]]
-  tags += user[:nodes][node[:fqdn]] if user[:nodes]
+  tags += user[:nodes][node[:fqdn]].to_a if user[:nodes]
   tags.flatten!.compact!
 
   account_skeleton user[:id] do
