@@ -46,6 +46,12 @@ end
   end
 end
 
+directory "/home" do
+  owner "root"
+  group "root"
+  mode "0755"
+end
+
 # we don't want no motd
 file "/etc/motd" do
   action :delete
@@ -57,8 +63,6 @@ link "/etc/mtab" do
 end
 
 # /run compatibility (both directions)
-new_run = File.directory?("/run") and not File.symlink?("/run")
-
 link "/var/run" do
   to "/run"
   not_if { File.symlink?("/run") }

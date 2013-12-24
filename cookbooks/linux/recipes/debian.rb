@@ -1,3 +1,1 @@
-if root?
-  include_recipe "apt"
-end
+include_recipe "apt"
