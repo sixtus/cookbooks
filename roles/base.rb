@@ -14,7 +14,6 @@ run_list(%w(
   recipe[postfix]
   recipe[python]
   recipe[ssh::server]
-  recipe[ssh]
   recipe[sudo]
   recipe[syslog]
   recipe[tmux]
