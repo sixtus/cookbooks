@@ -1,3 +1,5 @@
+execute "chflags nohidden #{node[:homedir]}/Library"
+
 mac_userdefaults "do not warn while changing file extensions" do
   domain "com.apple.finder"
   key "FXEnableExtensionChangeWarning"
