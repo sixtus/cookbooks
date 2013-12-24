@@ -10,7 +10,7 @@ if root?
   include_recipe "systemd"
 
   # load distro specific base recipe
-  include_recipe "base::#{node[:platform]}"
+  include_recipe "linux::#{node[:platform]}"
 
   # install base packages
   node[:packages].each do |pkg|

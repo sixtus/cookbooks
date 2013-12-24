@@ -1,4 +1,20 @@
-include_recipe "base::run_state"
+# to make things faster, load data from search index into run_state
+if Chef::Config[:solo]
+  node.run_state[:roles] = []
+  node.run_state[:users] = []
+  node.run_state[:nodes] = [node]
+else
+  node.run_state[:roles] = search(:role)
+  node.run_state[:users] = search(:users)
+  node.run_state[:nodes] = search(:node, "primary_ipaddress:[* TO *] AND fqdn:[* TO *]").sort_by do |n|
+    n[:fqdn]
+  end
+end
+
+# filter nodes that belong to the same cluster as the current node
+node.run_state[:cluster_nodes] = node.run_state[:nodes].select do |n|
+  n[:cluster][:name] == node[:cluster][:name] rescue false
+end
 
 # create script path
 directory node[:script_path] do
@@ -7,5 +23,10 @@ directory node[:script_path] do
 end
 
 # load platform recipes
-include_recipe "base::linux" if linux?
-include_recipe "base::mac_os_x" if mac_os_x?
+if linux?
+  include_recipe "linux"
+elsif mac_os_x?
+  include_recipe "mac"
+else
+  raise "cookbook base does not support platform #{node[:platform]}"
+end
