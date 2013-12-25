@@ -27,8 +27,6 @@ node[:baselayout][:users].each do |name, params|
   end
 end
 
-# special case: for chef-solo runs we don't touch roots password, since we
-# don't have any other user databags that could have sudo
 user "root" do
   uid 0
   gid 0

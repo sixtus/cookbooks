@@ -124,7 +124,7 @@ if [[ $(qlist -IC sys-kernel/zentoo-image) == "sys-kernel/zentoo-image" ]]; then
 	emerge --config zentoo-image
 fi
 
-# update config files and run chef-client/chef-solo
+# update config files and run chef
 if [[ -e /etc/chef/client.pem ]]; then
 	yes | etc-update --automode -5
 	chef-client --force-logger
