@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 description "LWRPs for managing htpasswd files"
 
 maintainer "Benedikt Böhm"

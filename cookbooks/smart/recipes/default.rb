@@ -14,28 +14,12 @@ if node[:smart][:devices].any?
     mode "0755"
   end
 
-  template "/etc/smartd.conf" do
-    source "smartd.conf.erb"
-    owner "root"
-    group "root"
-    mode "0644"
-    notifies :restart, "service[smartd]"
-  end
-
   systemd_unit "smartd.service"
 
-  if node[:smart][:devices].empty?
-    service "smartd" do
-      service_name "smartd"
-      service_name "smartmontools" if debian_based?
-      action [:disable, :stop]
-    end
-  else
-    service "smartd" do
-      service_name "smartd"
-      service_name "smartmontools" if debian_based?
-      action [:enable, :start]
-    end
+  service "smartd" do
+    service_name "smartd"
+    service_name "smartmontools" if debian_based?
+    action [:disable, :stop]
   end
 
   if nagios_client?
@@ -48,6 +32,8 @@ if node[:smart][:devices].any?
     end
 
     node[:smart][:devices].each do |d|
+      next unless File.exist?(d)
+
       devname = d.sub("/dev/", "")
 
       nrpe_command "check_smart_#{devname}" do

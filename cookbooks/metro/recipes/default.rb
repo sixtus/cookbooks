@@ -7,7 +7,7 @@ package "sys-fs/squashfs-tools"
 
 git "/usr/local/metro" do
   repository node[:metro][:repository]
-  action :checkout
+  action :sync
 end
 
 # setup boto credentials
