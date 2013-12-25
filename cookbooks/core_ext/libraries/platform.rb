@@ -15,11 +15,6 @@ module PlatformHelpers
     node.chef_environment == "testing"
   end
 
-
-  def vagrant?
-    node[:cluster][:name] == "vagrant"
-  end
-
   def linux?
     node[:os] == "linux"
   end

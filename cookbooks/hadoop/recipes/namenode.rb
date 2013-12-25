@@ -1,6 +1,6 @@
 include_recipe "hadoop"
 
-if solo?
+if vagrant?
   execute "hadoop-namenode-format" do
     command "/opt/hadoop/bin/hadoop namenode -format"
     user "hadoop"

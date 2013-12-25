@@ -19,7 +19,7 @@ directory "/usr/local/share"
 directory "/usr/local/share/ca-certificates"
 
 if root?
-  if !solo?
+  if node[:chef_domain]
     ssl_ca "/usr/local/share/ca-certificates/chef-ca"
 
     ssl_certificate "/etc/ssl/certs/wildcard.#{node[:chef_domain]}" do

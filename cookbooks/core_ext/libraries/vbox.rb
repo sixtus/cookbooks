@@ -2,6 +2,10 @@ module VboxHelpers
   def vbox_guest?
     node[:virtualization][:system] == "vbox" and node[:virtualization][:role] == "guest"
   end
+
+  def vagrant?
+    vbox_guest? && node[:cluster][:name] == "vagrant"
+  end
 end
 
 include VboxHelpers
