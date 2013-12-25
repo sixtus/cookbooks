@@ -3,7 +3,6 @@ action :create do
 
   # multiplex service
   svcname = "mongos-#{name}"
-  nagname = svcname.upcase.gsub(/\./, '-')
 
   # retrieve configdbs from index
   configdb = mongo_configdb_nodes(name).map do |n|
@@ -13,10 +12,12 @@ action :create do
   systemd_unit "#{svcname}.service" do
     template "mongos.service"
     notifies :restart, "service[#{svcname}]"
-    variables :bind_ip => new_resource.bind_ip,
-              :port => new_resource.port,
-              :configdb => configdb,
-              :svcname => svcname
+    variables({
+      bind_ip: new_resource.bind_ip,
+      port: new_resource.port,
+      configdb: configdb,
+      svcname: svcname,
+    })
   end
 
   service svcname do

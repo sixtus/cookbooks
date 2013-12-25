@@ -14,9 +14,9 @@ module ChefUtils
       password_ok = false
       select_query =
         "SELECT `Password`, PASSWORD('#{mysql_dbh.quote(password)}') " +
-          "FROM `mysql`.`user` WHERE " +
-          "`User` = '#{mysql_dbh.quote(user.name)}' AND " +
-          "`Host` = '#{mysql_dbh.quote(user.host)}'"
+        "FROM `mysql`.`user` WHERE " +
+        "`User` = '#{mysql_dbh.quote(user.name)}' AND " +
+        "`Host` = '#{mysql_dbh.quote(user.host)}'"
       Chef::Log.debug("MySQL query: #{select_query}")
       mysql_dbh.query(select_query).each { |row| password_ok = row[0] == row[1] }
       unless password_ok
@@ -73,17 +73,17 @@ module ChefUtils
       handle = mysql_user_handle(grant, :grant)
       @@grants[handle] = nil
       db_escaped = grant.database == "*" ? "*" : "`#{mysql_dbh.quote(grant.database)}`"
-      privilege_query = if action == :delete
+      if action == :delete
         privileges += ["GRANT OPTION"] if grant.grant_option
         Chef::Log.info("Revoking #{privileges.join(", ")} privileges on MySQL database \"#{grant.database}\" from #{grant.user}@#{grant.user_host}.")
-        "REVOKE #{privileges.join(", ")} ON #{db_escaped}.* FROM #{handle}"
+        privilege_query = "REVOKE #{privileges.join(", ")} ON #{db_escaped}.* FROM #{handle}"
       else
         if grant.grant_option
           Chef::Log.info("Granting #{privileges.join(", ")} privileges on MySQL database \"#{grant.database}\" to #{grant.user}@#{grant.user_host} WITH GRANT OPTION.")
-          "GRANT #{privileges.join(", ")} ON #{db_escaped}.* TO #{handle} WITH GRANT OPTION"
+          privilege_query = "GRANT #{privileges.join(", ")} ON #{db_escaped}.* TO #{handle} WITH GRANT OPTION"
         else
           Chef::Log.info("Granting #{privileges.join(", ")} privileges on MySQL database \"#{grant.database}\" to #{grant.user}@#{grant.user_host}.")
-          "GRANT #{privileges.join(", ")} ON #{db_escaped}.* TO #{handle}"
+          privilege_query = "GRANT #{privileges.join(", ")} ON #{db_escaped}.* TO #{handle}"
         end
       end
       Chef::Log.debug("MySQL query: #{privilege_query}")

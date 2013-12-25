@@ -78,11 +78,13 @@ end
 ipv6_str = node[:primary_ip6address] ? ", ipv6" : ""
 
 postconf "base" do
-  set :myhostname => node[:fqdn],
-      :mydomain => node[:domain],
-      :mynetworks_style => "host",
-      :inet_protocols => "ipv4#{ipv6_str}",
-      :message_size_limit => node[:postfix][:message_size_limit].to_i * 1024 * 1024
+  set({
+    myhostname: node[:fqdn],
+    mydomain: node[:domain],
+    mynetworks_style: "host",
+    inet_protocols: "ipv4#{ipv6_str}",
+    message_size_limit: node[:postfix][:message_size_limit].to_i * 1024 * 1024,
+  })
 end
 
 postmaster "smtp" do
@@ -99,7 +101,7 @@ postmaster "smtps" do
 end
 
 # global recipient blacklist
-blacklist = (node[:postfix][:recipient] || {}).map {|k,v| "#{k} #{v}"}.join("\n")
+blacklist = (node[:postfix][:recipient] || {}).map { |k, v| "#{k} #{v}" }.join("\n")
 
 file "/etc/postfix/recipient" do
   content blacklist

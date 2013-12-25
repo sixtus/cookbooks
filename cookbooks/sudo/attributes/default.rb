@@ -1,7 +1,8 @@
-default[:sudo][:nopasswd] = "true"
+default[:sudo][:nopasswd] = true
 default[:sudo][:rules] = {}
-default[:sudo][:group] = if debian_based?
-                           "sudo"
-                         elsif gentoo?
-                           "wheel"
-                         end
+
+if debian_based?
+  default[:sudo][:group] = "sudo"
+elsif gentoo?
+  default[:sudo][:group] = "wheel"
+end

@@ -10,11 +10,11 @@ action :create do
     akf = node[:deploy][:deployers] if akf.nil? or akf.empty?
   end
 
-  homedir = if new_resource.homedir == nil
-              node[:etc][:passwd][user][:dir] rescue "/var/app/#{user}"
-            else
-              new_resource.homedir
-            end
+  if new_resource.homedir == nil
+    homedir = get_user(user)[:dir] || "/var/app/#{user}"
+  else
+    homedir = new_resource.homedir
+  end
 
   group user
 

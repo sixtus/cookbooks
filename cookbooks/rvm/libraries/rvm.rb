@@ -94,7 +94,7 @@ module ChefUtils
     # @param [Hash] the options to query a gemset with
     # @option opts [String] :ruby the Ruby the query within
     # @option opts [String] :gemset the gemset to look for
-    def gemset_exists?(opts={})
+    def gemset_exists?(opts = {})
       return false if opts[:ruby].nil? || opts[:gemset].nil?
       return false unless ruby_installed?(opts[:ruby])
       installed_gemsets(opts[:ruby]).include?(opts[:gemset])

@@ -11,6 +11,8 @@ smtpd_recipient_restrictions = %w(
 )
 
 postconf "relay-only restrictions" do
-  set :smtpd_client_restrictions => "permit_mynetworks, reject",
-      :smtpd_recipient_restrictions => smtpd_recipient_restrictions.join(", ")
+  set({
+    smtpd_client_restrictions: "permit_mynetworks, reject",
+    smtpd_recipient_restrictions: smtpd_recipient_restrictions.join(", "),
+  })
 end

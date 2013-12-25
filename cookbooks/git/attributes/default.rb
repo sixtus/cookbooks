@@ -5,14 +5,10 @@ default[:git][:name] = node[:current_name]
 
 default[:git][:github][:user] = nil
 
-default[:git][:rcfile] = if mac_os_x?
-                           "#{node[:homedir]}/.gitconfig"
-                         else
-                           root? ? "/etc/gitconfig" : "#{node[:homedir]}/.gitconfig"
-                         end
-
-default[:git][:exfile] = if mac_os_x?
-                           "#{node[:homedir]}/.gitignore"
-                         else
-                           root? ? "/etc/gitignore" : "#{node[:homedir]}/.gitignore"
-                         end
+if mac_os_x?
+  default[:git][:rcfile] = "#{node[:homedir]}/.gitconfig"
+  default[:git][:exfile] = "#{node[:homedir]}/.gitignore"
+else
+  default[:git][:rcfile] = root? ? "/etc/gitconfig" : "#{node[:homedir]}/.gitconfig"
+  default[:git][:exfile] = root? ? "/etc/gitignore" : "#{node[:homedir]}/.gitignore"
+end

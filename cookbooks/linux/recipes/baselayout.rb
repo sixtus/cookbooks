@@ -10,11 +10,11 @@ node[:baselayout][:groups].each do |name, params|
 end
 
 node[:baselayout][:users].each do |name, params|
-  comment = if params[:comment]
-              params[:comment]
-            else
-              name
-            end
+  if params[:comment]
+    comment = params[:comment]
+  else
+    comment = name
+  end
 
   user "#{name}-#{rrand}" do
     username name

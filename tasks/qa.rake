@@ -1,11 +1,11 @@
 desc "Run QA tools for given cookbook"
 task :qa, :cookbook do |t, args|
-  if File.directory?("cookbooks/#{args.cookbook}")
+  if args.cookbook.nil? || args.cookbook.empty?
+    path = "."
+  elsif File.directory?("cookbooks/#{args.cookbook}")
     path = "cookbooks/#{args.cookbook}"
   elsif File.directory?("site-cookbooks/#{args.cookbook}")
     path = "site-cookbooks/#{args.cookbook}"
-  else
-    path = "."
   end
   files = Dir["#{path}/**/*.rb"].reject do |path|
     path =~ /\/(files|templates)\//

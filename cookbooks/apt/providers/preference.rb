@@ -19,15 +19,17 @@
 
 # Build preferences.d file contents
 def build_pref(package_name, pin, pin_priority)
-  preference_content = "Package: #{package_name}\nPin: #{pin}\nPin-Priority: #{pin_priority}\n"
+  "Package: #{package_name}\nPin: #{pin}\nPin-Priority: #{pin_priority}\n"
 end
 
 action :add do
   new_resource.updated_by_last_action(false)
 
-  preference = build_pref(new_resource.glob || new_resource.package_name,
-                          new_resource.pin,
-                          new_resource.pin_priority)
+  preference = build_pref(
+    new_resource.glob || new_resource.package_name,
+    new_resource.pin,
+    new_resource.pin_priority
+  )
 
   preference_dir = directory "/etc/apt/preferences.d" do
     owner "root"

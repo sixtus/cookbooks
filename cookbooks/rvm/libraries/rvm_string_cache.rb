@@ -56,8 +56,7 @@ module ChefUtils
       protected
 
       def self.canonical_ruby_string(str, user)
-        Chef::Log.debug("Fetching canonical RVM string for: #{str} " +
-                        "(#{user || 'system'})")
+        Chef::Log.debug("Fetching canonical RVM string for: #{str} (#{user || 'system'})")
 
         user_dir = Etc.getpwnam(user).dir
 
@@ -68,13 +67,11 @@ module ChefUtils
         stdin.close
 
         result = stdout.read.split('\n').first.chomp
-        if result =~ /^-/   # if the result has a leading dash, value is bogus
-          Chef::Log.warn("Could not determine canonical RVM string for: #{str} " +
-                         "(#{user || 'system'})")
+        if result =~ /^-/ # if the result has a leading dash, value is bogus
+          Chef::Log.warn("Could not determine canonical RVM string for: #{str} (#{user || 'system'})")
           nil
         else
-          Chef::Log.debug("Canonical RVM string is: #{str} => #{result} " +
-                          "(#{user || 'system'})")
+          Chef::Log.debug("Canonical RVM string is: #{str} => #{result} (#{user || 'system'})")
           result
         end
       end

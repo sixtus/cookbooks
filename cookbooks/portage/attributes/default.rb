@@ -1,5 +1,5 @@
 # paths & directories
-set[:portage][:arch] = %x(portageq envvar ARCH).chomp rescue nil
+set[:portage][:arch] = %x(portageq envvar ARCH 2>/dev/null || :).chomp
 set[:portage][:make_conf] = "/etc/portage/make.conf"
 set[:portage][:confdir] = "/etc/portage"
 set[:portage][:portdir] = "/usr/portage"

@@ -2,14 +2,14 @@ define :php_extension, :template => nil, :active => true do
   include_recipe "php::base"
 
   node[:php][:sapi].each do |sapi|
-    service = case sapi
-              when "fpm"
-                "php-fpm"
-              when "apache2"
-                "apache2"
-              else
-                nil
-              end
+    case sapi
+    when "fpm"
+      service = "php-fpm"
+    when "apache2"
+      service = "apache2"
+    else
+      service = nil
+    end
 
     params[:template] ||= params[:name] + ".ini"
 

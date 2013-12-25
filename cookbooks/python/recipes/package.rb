@@ -1,12 +1,10 @@
-python_pkgs = value_for_platform_family(
-  "gentoo" => ["dev-lang/python"],
-  "debian" => ["python","python-dev"],
-  "ubuntu" => ["python","python-dev"],
-  "mac_os_x" => ["python"]
-)
-
-python_pkgs.each do |pkg|
-  package pkg do
-    action :install
-  end
+if gentoo?
+  package "dev-lang/python"
+elsif debian_based?
+  package "python"
+  package "python-dev"
+elsif mac_os_x?
+  package "python"
+else
+  raise "python cookbook does not support platform #{node[:platform]}"
 end

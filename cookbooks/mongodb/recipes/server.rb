@@ -18,11 +18,13 @@ if gentoo?
 
     systemd_unit "mongodb.service" do
       template true
-      variables :bind_ip => node[:mongodb][:bind_ip],
-                :port => node[:mongodb][:port],
-                :dbpath => node[:mongodb][:dbpath],
-                :nfiles => node[:mongodb][:nfiles],
-                :opts => opts
+      variables({
+        bind_ip: node[:mongodb][:bind_ip],
+        port: node[:mongodb][:port],
+        dbpath: node[:mongodb][:dbpath],
+        nfiles: node[:mongodb][:nfiles],
+        opts: opts,
+      })
     end
 
     service "mongodb" do
@@ -34,8 +36,10 @@ end
 if ganymed?
   ganymed_collector "mongodb" do
     source "mongodb.rb"
-    variables :name => "mongodb",
-              :port => node[:mongodb][:port]
+    variables({
+      name: "mongodb",
+      port: node[:mongodb][:port],
+    })
   end
 end
 
@@ -47,9 +51,9 @@ if nagios_client?
     :repl_lag    => %w(replication_lag 60   900  60    180),
     :repl_state  => %w(replset_state   0    0    1     15),
   }.each do |name, p|
-      name = name.to_s
-      command_name = "check_mongodb_#{name}"
-      service_name = "MONGODB-#{name.upcase.gsub(/_/, '-')}"
+    name = name.to_s
+    command_name = "check_mongodb_#{name}"
+    service_name = "MONGODB-#{name.upcase.gsub(/_/, '-')}"
 
     nrpe_command command_name do
       command "/usr/lib/nagios/plugins/check_mongodb -H localhost -P #{node[:mongodb][:port]} -A #{p[0]} -W #{p[1]} -C #{p[2]}"

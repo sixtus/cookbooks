@@ -63,7 +63,7 @@ minutes = nodes.each_with_index.map do |_, idx|
 end
 
 index = nodes.index(node[:fqdn])
-minute = minutes[index] rescue 0
+minute = minutes.get(index, 0)
 
 cron "chef-client" do
   command "/usr/bin/ruby -E UTF-8 #{node[:chef][:binary]} -c /etc/chef/client.rb &>/dev/null"

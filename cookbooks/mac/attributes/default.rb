@@ -1,5 +1,8 @@
-default[:apple_id] = File.read("#{homedir}/.storerc").split.first rescue nil
-default[:apple_password] = File.read("#{homedir}/.storerc").split.last rescue nil
+if File.exist?("#{node[:homedir]}/.storerc")
+  storerc = File.read("#{node[:homedir]}/.storerc").split
+  default[:apple_id] = storerc.first
+  default[:apple_password] = storerc.last
+end
 
 default[:mac][:packages] = %w(
   ack

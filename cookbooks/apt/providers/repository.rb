@@ -107,11 +107,13 @@ action :add do
     end
 
     # build repo file
-    repository = build_repo(new_resource.uri,
-                            new_resource.distribution,
-                            new_resource.components,
-                            new_resource.arch,
-                            new_resource.deb_src)
+    repository = build_repo(
+      new_resource.uri,
+      new_resource.distribution,
+      new_resource.components,
+      new_resource.arch,
+      new_resource.deb_src
+    )
 
     @repo_file = file "/etc/apt/sources.list.d/#{new_resource.name}.list" do
       owner "root"

@@ -79,7 +79,7 @@ if nagios_client?
 
   if zookeeper_nodes.count > 1
     nrpe_command "check_zookeeper_followers" do
-      command "/usr/lib/nagios/plugins/check_zookeeper -m Followers -n #{zookeeper_nodes.map {|n| n[:fqdn]}.join(" -n ")}"
+      command "/usr/lib/nagios/plugins/check_zookeeper -m Followers -n #{zookeeper_nodes.map { |n| n[:fqdn] }.join(" -n ")}"
     end
 
     nagios_service "ZOOKEEPER-FOLLOWERS" do

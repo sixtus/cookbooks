@@ -28,8 +28,10 @@ template "/etc/openerp/openerp.cfg" do
   group "root"
   mode "0755"
   notifies :restart, "service[openerp]"
-  variables :admin_password => admin_password,
-            :db_password => db_password
+  variables({
+    admin_password: admin_password,
+    db_password: db_password,
+  })
 end
 
 systemd_unit "openerp.service"

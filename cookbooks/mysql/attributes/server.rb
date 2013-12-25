@@ -115,11 +115,7 @@ default[:mysql][:server][:detailed_monitoring] = false
   :slavesql => %w(slave-sql-running     0    0    1     15   0),
   :slavelag => %w(slave-lag             60   120  5     60   0),
 }.each do |name, p|
-  enabled = if node[:mysql][:server][:detailed_monitoring]
-              true
-            else
-              p[5].to_i.zero?
-            end
+  enabled = node[:mysql][:server][:detailed_monitoring] || p[5].to_i.zero?
 
   default[:mysql][:server][:nagios][name] = {
     :command => p[0],

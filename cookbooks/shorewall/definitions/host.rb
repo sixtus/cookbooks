@@ -1,4 +1,3 @@
-define :shorewall_host,
-  :options => "-" do
+define :shorewall_host, options: "-" do
   node.set[:shorewall][:hosts][params[:name]] = params
 end

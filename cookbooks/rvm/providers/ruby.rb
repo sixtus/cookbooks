@@ -87,53 +87,53 @@ def install_ruby_dependencies(rubie)
   case rubie
   when /^ruby-/, /^ree-/, /^rbx-/, /^kiji/
     case node['platform']
-      when "debian","ubuntu"
-        pkgs += %w{
-          autoconf
-          automake
-          bison
-          build-essential
-          libc6-dev
-          libreadline6
-          libreadline6-dev
-          libsqlite3-dev
-          libssl-dev
-          libtool
-          libxml2-dev
-          libxslt-dev
-          libyaml-dev
-          ncurses-dev
-          openssl
-          sqlite3
-          ssl-cert
-          zlib1g
-          zlib1g-dev
-        }
-      when "gentoo"
-        pkgs += %w{
-          app-shells/bash
-          dev-db/sqlite
-          dev-libs/libxslt
-          dev-libs/libyaml
-          dev-libs/openssl
-          dev-vcs/git
-          net-misc/curl
-          sys-devel/autoconf
-          sys-devel/automake
-          sys-devel/bison
-          sys-devel/gcc
-          sys-devel/libtool
-          sys-devel/m4
-          sys-devel/patch
-          sys-libs/readline
-          sys-libs/zlib
-          virtual/libiconv
-        }
+    when "debian", "ubuntu"
+      pkgs += %w{
+        autoconf
+        automake
+        bison
+        build-essential
+        libc6-dev
+        libreadline6
+        libreadline6-dev
+        libsqlite3-dev
+        libssl-dev
+        libtool
+        libxml2-dev
+        libxslt-dev
+        libyaml-dev
+        ncurses-dev
+        openssl
+        sqlite3
+        ssl-cert
+        zlib1g
+        zlib1g-dev
+      }
+    when "gentoo"
+      pkgs += %w{
+        app-shells/bash
+        dev-db/sqlite
+        dev-libs/libxslt
+        dev-libs/libyaml
+        dev-libs/openssl
+        dev-vcs/git
+        net-misc/curl
+        sys-devel/autoconf
+        sys-devel/automake
+        sys-devel/bison
+        sys-devel/gcc
+        sys-devel/libtool
+        sys-devel/m4
+        sys-devel/patch
+        sys-libs/readline
+        sys-libs/zlib
+        virtual/libiconv
+      }
     end
 
   when /^jruby/
     case node['platform']
-    when "debian","ubuntu"
+    when "debian", "ubuntu"
       pkgs += %w{
         g++
         ant

@@ -1,16 +1,12 @@
 include_attribute "base"
 
-default[:ssh][:config] = if mac_os_x?
-                           "#{node[:homedir]}/.ssh/config"
-                         else
-                           root? ? "/etc/ssh/ssh_config" : "#{node[:homedir]}/.ssh/config"
-                         end
-
-default[:ssh][:hostsfile] = if mac_os_x?
-                              "#{node[:homedir]}/.ssh/known_hosts"
-                            else
-                              root? ? "/etc/ssh/ssh_known_hosts" : "#{node[:homedir]}/.ssh/known_hosts"
-                            end
+if root?
+  default[:ssh][:config] = "/etc/ssh/ssh_config"
+  default[:ssh][:hostsfile] = "/etc/ssh/ssh_known_hosts"
+else
+  default[:ssh][:config] = "#{node[:homedir]}/.ssh/config"
+  default[:ssh][:hostsfile] = "#{node[:homedir]}/.ssh/known_hosts"
+end
 
 default[:ssh][:additional_host_keys] = []
 

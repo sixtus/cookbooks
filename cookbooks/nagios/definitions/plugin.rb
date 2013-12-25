@@ -1,9 +1,4 @@
-define :nagios_plugin,
-  :action => :create,
-  :source => nil,
-  :content => nil,
-  :cookbook => nil do
-
+define :nagios_plugin, action: :create, source: nil, content: nil, cookbook: nil do
   # this should already be handled in recipes,
   # but we do it here again for good measure
   next unless nagios_client?

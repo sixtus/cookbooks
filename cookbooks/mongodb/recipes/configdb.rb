@@ -9,11 +9,13 @@ end
 systemd_unit "mongoc.service" do
   template true
   notifies :restart, "service[mongoc]"
-  variables :bind_ip => node[:mongoc][:bind_ip],
-            :port => node[:mongoc][:port],
-            :dbpath => node[:mongoc][:dbpath],
-            :nfiles => node[:mongoc][:nfiles],
-            :opts => opts
+  variables({
+    bind_ip: node[:mongoc][:bind_ip],
+    port: node[:mongoc][:port],
+    dbpath: node[:mongoc][:dbpath],
+    nfiles: node[:mongoc][:nfiles],
+    opts: opts,
+  })
 end
 
 service "mongoc" do
@@ -23,8 +25,10 @@ end
 if ganymed?
   ganymed_collector "mongoc" do
     source "mongodb.rb"
-    variables :name => "mongoc",
-              :port => node[:mongoc][:port]
+    variables({
+      name: "mongoc",
+      port: node[:mongoc][:port],
+    })
   end
 end
 
@@ -34,9 +38,9 @@ if nagios_client?
     :connections => %w(connections     80   90   1     15),
     :lock        => %w(lock            75   90   60    180),
   }.each do |name, p|
-      name = name.to_s
-      command_name = "check_mongoc_#{name}"
-      service_name = "MONGOC-#{name.upcase.gsub(/_/, '-')}"
+    name = name.to_s
+    command_name = "check_mongoc_#{name}"
+    service_name = "MONGOC-#{name.upcase.gsub(/_/, '-')}"
 
     nrpe_command command_name do
       command "/usr/lib/nagios/plugins/check_mongodb -H localhost -P #{node[:mongoc][:port]} -A #{p[0]} -W #{p[1]} -C #{p[2]}"

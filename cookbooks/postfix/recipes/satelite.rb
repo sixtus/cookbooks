@@ -11,10 +11,12 @@ unless node[:skip][:postfix_satelite]
   )
 
   postconf "relay all mail via relayhost" do
-    set :relayhost => postfix_relayhost[:primary_ipaddress],
-        :mydestination => "",
-        :inet_interfaces => "loopback-only",
-        :smtpd_recipient_restrictions => smtpd_recipient_restrictions.join(", ")
+    set({
+      relayhost: postfix_relayhost[:primary_ipaddress],
+      mydestination: "",
+      inet_interfaces: "loopback-only",
+      smtpd_recipient_restrictions: smtpd_recipient_restrictions.join(", "),
+    })
   end
 
   if nagios_client?

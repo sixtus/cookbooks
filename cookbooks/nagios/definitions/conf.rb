@@ -1,15 +1,6 @@
-define :nagios_conf,
-  :variables => {},
-  :subdir => true,
-  :action => :create,
-  :mode => "0644" do
+define :nagios_conf, variables: {}, subdir: true, action: :create, mode: "0644" do
 
-  subdir = if params[:subdir]
-             "objects/"
-           else
-             ""
-           end
-
+  subdir = params[:subdir] ? "objects/" : ""
   params[:template] ||= "#{params[:name]}.cfg.erb"
 
   template "/etc/nagios/#{subdir}#{params[:name]}.cfg" do

@@ -11,11 +11,11 @@ action :install do
     dmg_name = new_resource.dmg_name ? new_resource.dmg_name : new_resource.app
     file_ext = new_resource.type =~ /^zip_/ ? "zip" : "dmg"
     dmg_file = "#{Chef::Config[:file_cache_path]}/#{dmg_name}.#{file_ext}"
-    mnt_path = if new_resource.type =~ /^zip_/
-                 "#{Chef::Config[:file_cache_path]}/#{dmg_name}"
-               else
-                 "/Volumes/#{volumes_dir}"
-               end
+    if new_resource.type =~ /^zip_/
+      mnt_path = "#{Chef::Config[:file_cache_path]}/#{dmg_name}"
+    else
+      mnt_path = "/Volumes/#{volumes_dir}"
+    end
 
     directory Chef::Config[:file_cache_path]
 
@@ -72,6 +72,6 @@ private
 
 def installed?
   ::File.directory?("#{new_resource.destination}/#{new_resource.app}.app") ||
-  ::File.directory?("#{new_resource.destination}/#{new_resource.app}/") ||
+    ::File.directory?("#{new_resource.destination}/#{new_resource.app}/") ||
     system("pkgutil --pkgs=#{new_resource.package_id}")
 end

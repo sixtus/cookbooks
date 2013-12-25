@@ -9,7 +9,7 @@ def load_current_resource
   if new_resource.binary.nil?
     @binaries = new_resource.binaries || []
   else
-    @binaries = [ new_resource.binary ] || []
+    @binaries = [new_resource.binary] || []
   end
 end
 

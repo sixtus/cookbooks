@@ -36,7 +36,7 @@ module Gentoo
 
       # Normalizes package conf content
       def normalize_package_conf_content(name, flags = nil)
-        [ name, normalize_flags(flags) ].join(' ')
+        [name, normalize_flags(flags)].join(' ')
       end
 
       # Normalizes String / Arrays
@@ -130,11 +130,11 @@ module Gentoo
 
         # We need to update the eix database if it's older than the current portage
         # tree or the eix binary.
-        cache_file = if File.directory?("/var/cache/eix")
-                       "/var/cache/eix/portage.eix"
-                     else
-                       "/var/cache/eix"
-                     end
+        if File.directory?("/var/cache/eix")
+          cache_file = "/var/cache/eix/portage.eix"
+        else
+          cache_file = "/var/cache/eix"
+        end
 
         unless ::FileUtils.uptodate?(cache_file, [eix, "/usr/portage/metadata/timestamp"])
           Chef::Log.debug("eix database outdated, calling `#{eix_update}`.")

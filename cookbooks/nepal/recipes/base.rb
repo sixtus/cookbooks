@@ -91,8 +91,10 @@ template "/srv/system/panel/settings.py" do
   mode "0640"
   notifies :restart, "service[nepald]"
   notifies :reload, "service[apache2]"
-  variables :database_password => mysql_password,
-            :secret_key => secret_key
+  variables({
+    database_password: mysql_password,
+    secret_key: secret_key,
+  })
 end
 
 execute "nepal-syncdb" do
@@ -122,7 +124,7 @@ template "/srv/system/htdocs/mysqladmin/config.inc.php" do
   owner "root"
   group "root"
   mode "0644"
-  variables :secret_key => secret_key
+  variables secret_key: secret_key
 end
 
 # roundcube
@@ -156,7 +158,7 @@ template "/srv/system/htdocs/webmail/config/main.inc.php" do
   owner "root"
   group "root"
   mode "0644"
-  variables :secret_key => secret_key
+  variables secret_key: secret_key
 end
 
 template "/srv/system/htdocs/webmail/config/db.inc.php" do
@@ -164,7 +166,7 @@ template "/srv/system/htdocs/webmail/config/db.inc.php" do
   owner "root"
   group "root"
   mode "0644"
-  variables :mysql_password => mysql_password
+  variables mysql_password: mysql_password
 end
 
 # logrotate customer logfiles

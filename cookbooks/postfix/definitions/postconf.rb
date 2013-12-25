@@ -20,11 +20,13 @@ define :postconf, :set => {} do
       owner "root"
       group "root"
       mode "0644"
-      variables({:sections => {}})
+      variables({
+        sections: {}
+      })
       notifies :restart, "service[postfix]"
     end
   end
 
   # inject() will convert Symbol keys into Strings to make the Hash sortable. Yep, it's ugly.
-  t.variables[:sections][params[:name]] = params[:set].inject({}) { |r,i| r[i.first.to_s] = i.last; r }
+  t.variables[:sections][params[:name]] = params[:set].inject({}) { |r, i| r[i.first.to_s] = i.last; r }
 end

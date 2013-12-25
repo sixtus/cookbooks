@@ -1,7 +1,7 @@
 include_attribute "base"
 
-default[:tmux][:configfile] = if mac_os_x?
-                                "#{node[:homedir]}/.tmux.conf"
-                              else
-                                root? ? "/etc/tmux.conf" : "#{node[:homedir]}/.tmux.conf"
-                              end
+if root?
+  default[:tmux][:configfile] = "/etc/tmux.conf"
+else
+  default[:tmux][:configfile] = "#{node[:homedir]}/.tmux.conf"
+end

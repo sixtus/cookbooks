@@ -1,7 +1,7 @@
 include_attribute "base"
 
-default[:password][:directory] = if root?
-                                   "/var/lib/chef/passwords"
-                                 else
-                                   "#{node[:homedir]}/.chef/passwords"
-                                 end
+if root?
+  default[:password][:directory] = "/var/lib/chef/passwords"
+else
+  default[:password][:directory] = "#{node[:homedir]}/.chef/passwords"
+end

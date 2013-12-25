@@ -105,3 +105,5 @@ Tailor.config do |config|
     style.trailing_newlines 1, level: :error
   end
 end
+
+# vim: ft=ruby

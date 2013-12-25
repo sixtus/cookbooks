@@ -37,12 +37,14 @@ smtpd_recipient_restrictions += %w(
 )
 
 postconf "Restrictions for public SMTP servers" do
-  set :smtpd_helo_required => "yes",
-      :disable_vrfy_command => "yes",
-      :strict_rfc821_envelopes => "yes",
-      :smtpd_helo_restrictions => smtpd_helo_restrictions.join(", "),
-      :smtpd_sender_restrictions => smtpd_sender_restrictions.join(", "),
-      :smtpd_recipient_restrictions => smtpd_recipient_restrictions.join(", ")
+  set({
+    smtpd_helo_required: "yes",
+    disable_vrfy_command: "yes",
+    strict_rfc821_envelopes: "yes",
+    smtpd_helo_restrictions: smtpd_helo_restrictions.join(", "),
+    smtpd_sender_restrictions: smtpd_sender_restrictions.join(", "),
+    smtpd_recipient_restrictions: smtpd_recipient_restrictions.join(", "),
+  })
 end
 
 # nagios service checks

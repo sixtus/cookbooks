@@ -13,7 +13,7 @@ gem 'liquid-development'
 gem 'liquid-ext'
 gem 'mixlib-shellout', github: 'zenops/mixlib-shellout'
 gem 'rvm'
-gem 'tailor'
+gem 'tailor', github: 'hollow/tailor'
 
 group :testing do
   gem 'kitchen-vagrant'

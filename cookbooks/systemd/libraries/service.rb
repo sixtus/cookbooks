@@ -20,7 +20,7 @@ class Chef::Resource::Service
     arg = set_or_return(
       :service_name,
       arg,
-      :kind_of => [ String ]
+      kind_of: [String]
     )
 
     if systemd_running? and arg and not arg =~ /\.(#{SYSTEMD_UNIT_TYPES.join('|')})$/

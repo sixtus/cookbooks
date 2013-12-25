@@ -158,8 +158,8 @@ end
 # TODO remove when provider is moved into Chef core
 # this allows PythonPip to work with Chef::Resource::Package
 def which_pip(nr)
-  if (nr.respond_to?("virtualenv") && nr.virtualenv)
-    ::File.join(nr.virtualenv,'/bin/pip')
+  if nr.respond_to?("virtualenv") && nr.virtualenv
+    ::File.join(nr.virtualenv, '/bin/pip')
   else
     'pip'
   end

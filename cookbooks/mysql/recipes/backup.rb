@@ -23,11 +23,11 @@ if node[:mysql][:backup][:mode] == "copy"
   end
 end
 
-action = if node[:mysql][:server][:active_master]
-           :delete
-         else
-           :create
-         end
+if node[:mysql][:server][:active_master]
+  action = :delete
+else
+  action = :create
+end
 
 cron "mysql_full_backup" do
   action action

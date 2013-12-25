@@ -43,7 +43,7 @@ default[:php][:fpm][:conf] = "/etc/php/fpm-php#{node[:php][:slot]}/php-fpm.conf"
 default[:php][:fpm][:pools][:default] = {}
 
 # infer extension dir
-default[:php][:extension_dir] = %x(#{node[:php][:php_config]} --extension-dir).chomp rescue "/does/not/exist"
+default[:php][:extension_dir] = %x(#{node[:php][:php_config]} --extension-dir 2>/dev/null || :).chomp
 
 # xcache
 default[:php][:xcache][:admin_enable_auth] = "Off"

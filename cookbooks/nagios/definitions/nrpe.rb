@@ -1,7 +1,4 @@
-define :nrpe_command,
-  :command => nil,
-  :action => :create do
-
+define :nrpe_command, command: nil, action: :create do
   # this should already be handled in recipes,
   # but we do it here again for good measure
   next unless nagios_client?

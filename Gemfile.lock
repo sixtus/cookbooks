@@ -1,4 +1,13 @@
 GIT
+  remote: git://github.com/hollow/tailor.git
+  revision: 1301010d756fe575a87a77a165724a0eb469d242
+  specs:
+    tailor (1.3.1)
+      log_switch (>= 0.3.0)
+      term-ansicolor (>= 1.0.5)
+      text-table (>= 1.2.2)
+
+GIT
   remote: git://github.com/zenops/knife-dsl.git
   revision: b225849a8c70601d806bedd77659882a8bfa4bd9
   specs:
@@ -179,10 +188,6 @@ GEM
     simplecov-html (0.8.0)
     slop (3.4.7)
     systemu (2.5.2)
-    tailor (1.3.1)
-      log_switch (>= 0.3.0)
-      term-ansicolor (>= 1.0.5)
-      text-table (>= 1.2.2)
     term-ansicolor (1.2.2)
       tins (~> 0.8)
     terminal-table (1.4.5)
@@ -221,5 +226,5 @@ DEPENDENCIES
   mixlib-shellout!
   rake
   rvm
-  tailor
+  tailor!
   test-kitchen

@@ -1,4 +1,7 @@
-package value_for_platform({
-  "gentoo" => {"default" => "net-libs/zeromq"},
-  "mac_os_x" => {"default" => "zeromq"},
-})
+if gentoo?
+  package "net-libs/zeromq"
+elsif mac_os_x?
+  package "zeromq"
+else
+  raise "cookbook zeromq does not support platform #{node[:platform]}"
+end

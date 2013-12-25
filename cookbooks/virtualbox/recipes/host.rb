@@ -27,4 +27,3 @@ elsif mac_os_x?
     type "dmg_pkg"
   end
 end
-

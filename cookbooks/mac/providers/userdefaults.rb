@@ -50,7 +50,7 @@ action :write do
       type ||= 'dict'
 
       # creates a string of Key1 Value1 Key2 Value2...
-      value = new_resource.value.map {|k,v| "\"#{k}\" \"#{v}\"" }.join(' ')
+      value = new_resource.value.map { |k, v| "\"#{k}\" \"#{v}\"" }.join(' ')
     end
 
     cmd << "-#{type} " if type

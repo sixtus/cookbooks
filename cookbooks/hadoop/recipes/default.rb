@@ -40,8 +40,10 @@ systemd_unit "hadoop@.service"
     owner "root"
     group "root"
     mode "0644"
-    variables :job_tracker => hadoop_jobtracker,
-              :name_node => hadoop_namenode
+    variables({
+      job_tracker: hadoop_jobtracker,
+      name_node: hadoop_namenode,
+    })
   end
 end
 
