@@ -1,10 +1,13 @@
 ---
-driver_plugin: vagrant
-driver_config:
-  require_chef_omnibus: false
+driver:
+  name: vagrant
   customize:
     memory: 1024
     cpuexecutioncap: 100
+
+provisioner:
+  name: chef_solo
+  require_chef_omnibus: false
 
 platforms:
 - name: zentoo
@@ -32,5 +35,5 @@ suites:
 - name: workstation
   run_list:
   - role[workstation]
-  driver_config:
+  provisioner:
     sudo: false

@@ -50,6 +50,10 @@ if root?
     recursive true
   end
 else
+  directory "#{node[:vim][:rcdir]}/bundle" do
+    recursive true
+  end
+
   git "#{node[:vim][:rcdir]}/bundle/neobundle.vim" do
     repository "https://github.com/Shougo/neobundle.vim"
     reference "master"

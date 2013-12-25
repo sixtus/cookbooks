@@ -3,7 +3,7 @@ if root?
 
   if gentoo?
     hostmaster_groups += %w(portage wheel systemd-journal)
-  elsif debian?
+  elsif debian_based?
     hostmaster_groups += %w(sudo)
   else
     raise "account cookbook does not support platform #{node[:platform]}"

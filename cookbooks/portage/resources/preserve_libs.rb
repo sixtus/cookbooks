@@ -1,7 +1,7 @@
-actions :create, :delete
+actions :create
 default_action :create
 
-attribute :package, kind_of: String, name_attribute: true
+attribute :paths, kind_of: [String, Array], required: true
 
 def initialize(*args)
   super

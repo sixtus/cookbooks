@@ -1,3 +1,5 @@
+use_inline_resources
+
 action :create do
   if root?
     path = "/usr/lib/systemd/system/#{new_resource.name}"

@@ -1,5 +1,7 @@
 include ChefUtils::Account
 
+use_inline_resources
+
 action :enable do
   user = get_user(new_resource.name)
 

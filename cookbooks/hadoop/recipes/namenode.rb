@@ -1,12 +1,11 @@
 include_recipe "hadoop"
 
-if vagrant?
-  execute "hadoop-namenode-format" do
-    command "/opt/hadoop/bin/hadoop namenode -format"
-    user "hadoop"
-    group "hadoop"
-    creates "/var/lib/hadoop/name/image/fsimage"
-  end
+execute "hadoop-namenode-format" do
+  command "/opt/hadoop/bin/hadoop namenode -format"
+  user "hadoop"
+  group "hadoop"
+  creates "/var/lib/hadoop/name/image/fsimage"
+  only_if { vagrant? }
 end
 
 service "hadoop@namenode" do

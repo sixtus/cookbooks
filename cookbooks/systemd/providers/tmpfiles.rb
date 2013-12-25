@@ -1,3 +1,5 @@
+use_inline_resources
+
 action :create do
   directory "/etc/tmpfiles.d-#{rrand}" do
     path "/etc/tmpfiles.d"

@@ -21,10 +21,8 @@ end.each do |u|
     append true
   end
 
-  if u[:chroot] or u[:chroot].nil?
-    ssh_chroot_sftp u[:id] do
-      directory "/backup"
-    end
+  ssh_chroot_sftp u[:id] do
+    directory "/backup"
   end
 
   # special case for user backup:

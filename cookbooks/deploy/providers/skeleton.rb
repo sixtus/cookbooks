@@ -1,5 +1,7 @@
 include ChefUtils::Account
 
+use_inline_resources
+
 action :create do
   user = new_resource.name
   groups = new_resource.groups

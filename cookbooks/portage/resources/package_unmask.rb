@@ -1,8 +1,9 @@
-def initialize(name, run_context=nil)
-  super(name, run_context)
-  @action = :create
-end
-
 actions :create, :delete
+default_action :create
 
-attribute :package, :kind_of => String, :name_attribute => true
+attribute :package, kind_of: String, name_attribute: true
+
+def initialize(*args)
+  super
+  @run_context.include_recipe("portage")
+end

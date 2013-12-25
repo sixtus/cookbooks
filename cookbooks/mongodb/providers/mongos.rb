@@ -1,3 +1,5 @@
+use_inline_resources
+
 action :create do
   name = new_resource.name
 
@@ -34,9 +36,4 @@ action :delete do
   service svcname do
     action [:disable, :stop]
   end
-end
-
-def initialize(*args)
-  super
-  @run_context.include_recipe "mongodb"
 end

@@ -1,4 +1,6 @@
-define :portage_preserve_libs do
+use_inline_resources
+
+action :create do
   if root?
     directory "/etc/portage/preserve-libs.d-#{rrand}" do
       path "/etc/portage/preserve-libs.d"

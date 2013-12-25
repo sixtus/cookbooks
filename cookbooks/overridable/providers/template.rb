@@ -1,28 +1,33 @@
+use_inline_resources
+
 action :nothing do
 end
 
 action :create do
-  cookbook_name = new_resource.cookbook
+  nr = new_resource
+
+  cookbook_name = nr.cookbook
   cookbook = run_context.cookbook_collection[cookbook_name]
 
-  override_dir = new_resource.instance.to_s
+  override_dir = nr.instance.to_s
   filenames = cookbook.relative_filenames_in_preferred_directory(node, :templates, override_dir) rescue []
 
-  if filenames.include?(new_resource.source)
-    template_source = ::File.join(override_dir, new_resource.source)
+  if filenames.include?(nr.source)
+    template_source = ::File.join(override_dir, nr.source)
   else
-    template_source = new_resource.source
+    template_source = nr.source
+    cookbook_name = nr.cookbook_name.to_s # oh my
   end
 
-  template new_resource.path do
+  template nr.path do
     source template_source
     cookbook cookbook_name
-    backup new_resource.backup if new_resource.backup
-    group new_resource.group if new_resource.group
-    local new_resource.local if new_resource.local
-    mode new_resource.mode if new_resource.mode
-    owner new_resource.owner if new_resource.owner
-    path new_resource.path if new_resource.path
-    variables new_resource.variables if new_resource.variables
+    backup nr.backup if nr.backup
+    group nr.group if nr.group
+    local nr.local if nr.local
+    mode nr.mode if nr.mode
+    owner nr.owner if nr.owner
+    path nr.path if nr.path
+    variables nr.variables if nr.variables
   end
 end

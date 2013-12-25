@@ -11,5 +11,5 @@ task :qa, :cookbook do |t, args|
     path =~ /\/(files|templates)\//
   end
   sh("tailor #{files.join(" ")} || :")
-  sh("foodcritic -t ~FC011 -t ~FC045 #{path} || :")
+  sh("foodcritic -t ~FC011 -t ~FC019 -t ~FC023 -t ~FC045 #{path} || :")
 end

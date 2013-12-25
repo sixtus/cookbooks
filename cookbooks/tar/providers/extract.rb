@@ -1,3 +1,5 @@
+use_inline_resources
+
 action :extract do
   r = new_resource
   basename = ::File.basename(r.name)

@@ -1,5 +1,7 @@
 include ChefUtils::Account
 
+use_inline_resources
+
 action :create do
   user = get_user(new_resource.user)
   path = "#{user[:dir]}/.config/systemd/user/#{new_resource.unit}"

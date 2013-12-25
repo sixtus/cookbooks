@@ -1,9 +1,9 @@
 include ChefUtils::Account
 
+use_inline_resources
+
 action :create do
   nr = new_resource # rebind
-  user = get_user(nr.user)
-  path = user[:dir]
 
   jvm_opts = [nr.jvm_opts].flatten.map do |opt|
     "-J#{opt}"
@@ -17,5 +17,4 @@ action :create do
     cwd nr.cwd
     environment nr.environment
   end
-
 end

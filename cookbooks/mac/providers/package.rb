@@ -1,9 +1,4 @@
-def load_current_resource
-  @macpkg = Chef::Resource::MacPackage.new(new_resource.name)
-  @macpkg.app(new_resource.app)
-  Chef::Log.debug("Checking for application #{new_resource.app}")
-  @macpkg.installed(installed?)
-end
+use_inline_resources
 
 action :install do
   unless @macpkg.installed
@@ -68,7 +63,12 @@ action :install do
   end
 end
 
-private
+def load_current_resource
+  @macpkg = Chef::Resource::MacPackage.new(new_resource.name)
+  @macpkg.app(new_resource.app)
+  Chef::Log.debug("Checking for application #{new_resource.app}")
+  @macpkg.installed(installed?)
+end
 
 def installed?
   ::File.directory?("#{new_resource.destination}/#{new_resource.app}.app") ||

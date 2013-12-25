@@ -1,3 +1,5 @@
+use_inline_resources
+
 action :create do
   execute "layman -f -a #{new_resource.name}" do
     creates "/var/lib/layman/#{new_resource.name}"
