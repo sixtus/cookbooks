@@ -29,3 +29,7 @@ run_list(%w(
   recipe[vim]
   recipe[watchdog]
 ))
+
+default_attributes({
+  chef_domain: 'zenops.net',
+})

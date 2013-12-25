@@ -1,4 +1,4 @@
-default[:skip][:shorewall] = false
+default[:skip][:shorewall] = vbox_guest?
 
 set_unless[:shorewall][:hosts] = {}
 set_unless[:shorewall6][:hosts] = {}

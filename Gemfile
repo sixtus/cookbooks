@@ -4,7 +4,7 @@ gem 'rake'
 
 gem 'chef', '~> 11'
 
-gem 'foodcritic'
+gem 'foodcritic', '~> 3.0'
 gem 'hetzner-api'
 gem 'highline'
 gem 'httparty'

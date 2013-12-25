@@ -13,6 +13,9 @@ template "/etc/powerdns/pdns.conf" do
   notifies :restart, "service[pdns]"
 end
 
+package "dev-ruby/madvertise-logging"
+package "dev-ruby/syslogger"
+
 cookbook_file "/usr/libexec/zendnspipe" do
   source "zendnspipe.rb"
   owner "root"

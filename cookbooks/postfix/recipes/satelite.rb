@@ -1,4 +1,4 @@
-unless node[:skip][:postfix_satelite]
+if postfix_relayhost && !node[:skip][:postfix_satelite]
   include_recipe "postfix"
   include_recipe "postfix::adminforward"
   include_recipe "postfix::tls"
