@@ -32,7 +32,7 @@ if !root?
 
   overridable_template "#{node[:homedir]}/.gitconfig.local" do
     source "gitconfig.local"
-    namespace :user
+    cookbook "users"
     instance node[:current_user]
   end
 end

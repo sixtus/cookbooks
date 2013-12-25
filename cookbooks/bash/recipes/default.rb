@@ -78,7 +78,7 @@ else
 
   overridable_template "#{node[:homedir]}/.bashrc.local" do
     source "bashrc.local"
-    namespace :user
+    cookbook "users"
     instance node[:current_user]
   end
 end

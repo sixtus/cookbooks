@@ -5,8 +5,11 @@ task :qa, :cookbook do |t, args|
   elsif File.directory?("site-cookbooks/#{args.cookbook}")
     path = "site-cookbooks/#{args.cookbook}"
   else
-    raise "cookbook not found"
+    path = "."
   end
-  sh("tailor #{path} || :")
+  files = Dir["#{path}/**/*.rb"].reject do |path|
+    path =~ /\/(files|templates)\//
+  end
+  sh("tailor #{files.join(" ")} || :")
   sh("foodcritic -t ~FC011 -t ~FC045 #{path} || :")
 end

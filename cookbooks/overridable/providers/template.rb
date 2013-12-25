@@ -4,7 +4,7 @@ action :nothing do
 end
 
 action :create do
-  cookbook_name = new_resource.namespace.to_s.tableize
+  cookbook_name = new_resource.cookbook
   cookbook = run_context.cookbook_collection[cookbook_name]
 
   override_dir = new_resource.instance.to_s
@@ -19,7 +19,6 @@ action :create do
   template new_resource.path do
     source template_source
     cookbook cookbook_name
-    action (new_resource.only_if_missing ? :create_if_missing : :create)
     backup new_resource.backup if new_resource.backup
     group new_resource.group if new_resource.group
     local new_resource.local if new_resource.local
@@ -28,9 +27,4 @@ action :create do
     path new_resource.path if new_resource.path
     variables new_resource.variables if new_resource.variables
   end
-end
-
-action :create_if_missing do
-  new_resource.only_if_missing = true
-  action_create
 end

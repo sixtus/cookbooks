@@ -77,11 +77,11 @@ apache_vhost "status" do
   template "status.conf"
 end
 
-default_action = if node[:apache][:default_vhost]
-           :create
-         else
-           :delete
-         end
+if node[:apache][:default_vhost]
+  default_action = :create
+else
+  default_action = :delete
+end
 
 apache_vhost "00-default" do
   template "default.conf"

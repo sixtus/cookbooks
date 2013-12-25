@@ -58,7 +58,7 @@ else
 
   overridable_template "#{node[:homedir]}/.vimrc.local" do
     source "vimrc.local"
-    namespace :user
+    cookbook "users"
     instance node[:current_user]
   end
 end

@@ -32,7 +32,7 @@ else
   overridable_template node[:ssh][:config] do
     source "ssh_config"
     mode "0600"
-    namespace :user
+    cookbook "users"
     instance node[:current_user]
   end
 end
