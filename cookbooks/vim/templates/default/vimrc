@@ -61,9 +61,6 @@ set smartcase
 " show line numbers
 set number
 
-" highlight current line
-set cursorline
-
 " always show the statusbar
 set laststatus=2
 
@@ -166,10 +163,5 @@ augroup END
 " load custom vimrc
 source <%= node[:homedir] %>/.vimrc.local
 <% end %>
-
-" load nice colors
-set t_Co=256
-set background=dark
-colorscheme solarized
 
 " vim: set sw=4 ts=4 tw=72

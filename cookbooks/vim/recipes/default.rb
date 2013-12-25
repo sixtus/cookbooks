@@ -45,17 +45,6 @@ file "#{node[:vim][:rcdir]}/cleanup_bundle" do
 end
 
 if root?
-  directory "#{node[:vim][:rcdir]}/colors" do
-    mode "0755"
-  end
-
-  cookbook_file "#{node[:vim][:rcdir]}/colors/solarized.vim" do
-    source "solarized.vim"
-    owner "root"
-    group "root"
-    mode "0644"
-  end
-
   directory "#{node[:vim][:rcdir]}/bundle" do
     action :delete
     recursive true
