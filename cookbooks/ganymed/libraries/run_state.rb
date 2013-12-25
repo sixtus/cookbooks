@@ -1,6 +1,6 @@
 module GanymedRunStateHelpers
   def ganymed?
-    root? && gentoo?
+    root? && gentoo? && !vbox_guest?
   end
 end
 

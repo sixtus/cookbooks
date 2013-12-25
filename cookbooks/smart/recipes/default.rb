@@ -1,8 +1,9 @@
 if gentoo?
   package "sys-apps/smartmontools"
-
 elsif debian_based?
   package "smartmontools"
+else
+  raise "cookbook smart does not support #{node[:platform]}"
 end
 
 if node[:smart][:devices].any?
