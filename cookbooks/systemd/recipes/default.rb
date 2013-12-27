@@ -1,16 +1,3 @@
-# triggers for other resources
-execute "systemd-reload" do
-  command "systemctl --system daemon-reload"
-  action :nothing
-  only_if { systemd_running? }
-end
-
-execute "systemd-tmpfiles" do
-  command "systemd-tmpfiles --create"
-  action :nothing
-  only_if { systemd_running? }
-end
-
 if gentoo?
   if root?
     portage_package_use "sys-apps/dbus" do

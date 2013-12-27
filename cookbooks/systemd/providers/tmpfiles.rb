@@ -8,6 +8,12 @@ action :create do
     mode "0755"
   end
 
+  execute "systemd-tmpfiles" do
+    command "systemd-tmpfiles --create"
+    action :nothing
+    only_if { systemd_running? }
+  end
+
   cookbook_file "/etc/tmpfiles.d/#{new_resource.name}.conf" do
     source "#{new_resource.name}.tmpfiles"
     owner "root"

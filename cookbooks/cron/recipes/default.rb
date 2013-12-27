@@ -1,21 +1,21 @@
 if gentoo?
-  %w(sys-process/dcron dev-util/lockrun).each do |p|
-    package p
-  end
-elsif debian?
-  apt_repository "balocco" do
-    uri "http://apt.balocco.name"
-    distribution node[:lsb][:codename]
-    components %w(main)
-    keyserver "keyserver.ubuntu.com"
-    key "92B84A1E"
+  package "sys-process/dcron"
+  package "dev-util/lockrun"
+
+  cookbook_file "/usr/bin/crond-journal" do
+    source "crond-journal.sh"
+    owner "root"
+    group "root"
+    mode "0755"
+    only_if { systemd_running? }
   end
 
-  package "cron" do
-    action :remove
-  end
-
-  package "dcron"
+  systemd_tmpfiles "dcron"
+  systemd_unit "dcron.service"
+elsif debian_based?
+  package "cron"
+else
+  raise "cookbook cron does not support platform #{node[:platform]}"
 end
 
 %w(d hourly daily weekly monthly).each do |dir|
@@ -24,54 +24,71 @@ end
   end
 end
 
-cookbook_file "/usr/bin/crond-journal" do
-  source "crond-journal.sh"
-  owner "root"
-  group "root"
-  mode "0755"
-end
-
-systemd_tmpfiles "dcron"
-systemd_unit "dcron.service"
-
-service "dcron" do
-  service_name "cron" if ubuntu?
+service "cron" do
+  service_name "dcron" if gentoo?
   action [:enable, :start]
 end
 
-file "/etc/crontab" do
-  action :delete
-  backup 0
-end
+if gentoo?
+  file "/etc/crontab" do
+    action :delete
+    backup 0
+  end
 
-cron "lastrun-hourly" do
-  minute node[:cron][:hourly][:minute]
-  command "rm -f /var/spool/cron/lastrun/cron.hourly"
-end
+  cron "lastrun-hourly" do
+    minute node[:cron][:hourly][:minute]
+    command "rm -f /var/spool/cron/lastrun/cron.hourly"
+  end
 
-cron "lastrun-daily" do
-  minute node[:cron][:daily][:minute]
-  hour node[:cron][:daily][:hour]
-  command "rm -f /var/spool/cron/lastrun/cron.daily"
-end
+  cron "lastrun-daily" do
+    minute node[:cron][:daily][:minute]
+    hour node[:cron][:daily][:hour]
+    command "rm -f /var/spool/cron/lastrun/cron.daily"
+  end
 
-cron "lastrun-weekly" do
-  minute node[:cron][:weekly][:minute]
-  hour node[:cron][:weekly][:hour]
-  weekday node[:cron][:weekly][:wday]
-  command "rm -f /var/spool/cron/lastrun/cron.weekly"
-end
+  cron "lastrun-weekly" do
+    minute node[:cron][:weekly][:minute]
+    hour node[:cron][:weekly][:hour]
+    weekday node[:cron][:weekly][:wday]
+    command "rm -f /var/spool/cron/lastrun/cron.weekly"
+  end
 
-cron "lastrun-monthly" do
-  minute node[:cron][:monthly][:minute]
-  hour node[:cron][:monthly][:hour]
-  day node[:cron][:monthly][:wday]
-  command "rm -f /var/spool/cron/lastrun/cron.monthly"
-end
+  cron "lastrun-monthly" do
+    minute node[:cron][:monthly][:minute]
+    hour node[:cron][:monthly][:hour]
+    day node[:cron][:monthly][:wday]
+    command "rm -f /var/spool/cron/lastrun/cron.monthly"
+  end
 
-cron "run-crons" do
-  minute "*/10"
-  command "/usr/bin/test -x /usr/sbin/run-crons && /usr/sbin/run-crons"
+  cron "run-crons" do
+    minute "*/10"
+    command "/usr/bin/test -x /usr/sbin/run-crons && /usr/sbin/run-crons"
+  end
+elsif debian_based?
+  cron "lastrun-hourly" do
+    minute node[:cron][:hourly][:minute]
+    command "cd / && run-parts --report /etc/cron.hourly"
+  end
+
+  cron "lastrun-daily" do
+    minute node[:cron][:daily][:minute]
+    hour node[:cron][:daily][:hour]
+    command "cd / && run-parts --report /etc/cron.daily"
+  end
+
+  cron "lastrun-weekly" do
+    minute node[:cron][:weekly][:minute]
+    hour node[:cron][:weekly][:hour]
+    weekday node[:cron][:weekly][:wday]
+    command "cd / && run-parts --report /etc/cron.weekly"
+  end
+
+  cron "lastrun-monthly" do
+    minute node[:cron][:monthly][:minute]
+    hour node[:cron][:monthly][:hour]
+    day node[:cron][:monthly][:wday]
+    command "cd / && run-parts --report /etc/cron.monthly"
+  end
 end
 
 if nagios_client?

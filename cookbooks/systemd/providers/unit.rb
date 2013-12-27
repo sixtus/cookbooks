@@ -12,6 +12,12 @@ action :create do
       recursive true
     end
 
+    execute "systemd-reload" do
+      command "systemctl --system daemon-reload"
+      action :nothing
+      only_if { systemd_running? }
+    end
+
     if new_resource.template
       source = new_resource.name
       source = new_resource.template if new_resource.template.is_a?(String)
