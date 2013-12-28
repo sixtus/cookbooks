@@ -1,4 +1,4 @@
-include ChefUtils::Account
+include AccountHelpers
 
 use_inline_resources
 

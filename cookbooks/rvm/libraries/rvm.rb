@@ -1,7 +1,7 @@
 module ChefUtils
   module RVM
 
-    include ChefUtils::Account
+    include AccountHelpers
 
     def infer_rvm_vars(user, version = nil)
       user = get_user(user)

@@ -4,8 +4,6 @@ end
 
 use_inline_resources
 
-include ChefUtils::Account
-
 action :create do
   nr = new_resource
 

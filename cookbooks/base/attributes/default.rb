@@ -36,9 +36,9 @@ if root?
   default[:current_name] = "Hostmaster of the day"
   default[:script_path] = "/usr/local/bin"
 else
-  default[:homedir] = node[:etc][:passwd][node[:current_user]][:dir]
+  default[:homedir] = get_user(node[:current_user])[:dir]
   default[:current_email] = "#{node[:current_user]}@#{node[:fqdn]}"
-  default[:current_name] = node[:etc][:passwd][node[:current_user]][:gecos]
+  default[:current_name] = get_user(node[:current_user])[:gecos]
   default[:script_path] = "#{node[:homedir]}/bin"
 end
 
