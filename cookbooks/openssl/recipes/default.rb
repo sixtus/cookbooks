@@ -19,12 +19,20 @@ directory "/usr/local/share"
 directory "/usr/local/share/ca-certificates"
 
 if root?
-  if node[:chef_domain]
-    ssl_ca "/usr/local/share/ca-certificates/chef-ca"
+  # some environments (like CI or solo mode) do not have a CA
+  cookbook = node.run_context.cookbook_collection['openssl']
+  filenames = cookbook.relative_filenames_in_preferred_directory(node, :files, certificates) rescue []
 
-    ssl_certificate "/etc/ssl/certs/wildcard.#{node[:chef_domain]}" do
-      cn "wildcard.#{node[:chef_domain]}"
+  if filenames.include?("ca.crt")
+    if node[:chef_domain]
+      ssl_ca "/usr/local/share/ca-certificates/chef-ca"
+
+      ssl_certificate "/etc/ssl/certs/wildcard.#{node[:chef_domain]}" do
+        cn "wildcard.#{node[:chef_domain]}"
+      end
     end
+  else
+    Chef::Log.warn("No CA certificate found. Run `rake ssl:init` to create a CA")
   end
 
   ruby_block "cleanup-ca-certificates" do
