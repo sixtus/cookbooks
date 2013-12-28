@@ -11,7 +11,7 @@ version "9.0.0"
 supports "debian"
 supports "gentoo"
 supports "mac_os_x"
+supports "ubuntu"
 
-depends "git"
 depends "linux"
 depends "mac"

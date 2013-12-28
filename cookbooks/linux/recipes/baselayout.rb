@@ -81,6 +81,7 @@ link "/run/lock" do
   not_if { File.symlink?("/var/lock") }
 end
 
+# wrapper for systemd/openrc/sysvinit abstraction
 file "/usr/local/bin/service" do
   action :delete
 end
