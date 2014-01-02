@@ -7,15 +7,20 @@ cd $(perl -e 'use Cwd "abs_path";print abs_path(shift)' $0/../../)
 config_name=$1
 
 if [[ -z ${config_name} ]]; then
-	# use user supplied config if it exists
 	if [[ $USER == "root" ]]; then
 		config_name=$(hostname -f)
 	else
 		config_name=$(whoami)
 	fi
+fi
 
-	if [[ ! -f config/solo/${config_name}.json ]]; then
-		config_name=workstation
+if [[ -f config/solo/${config_name}.json ]]; then
+	solo_args="-j config/solo/${config_name}.json"
+else
+	if [[ $USER == "root" ]]; then
+		solo_args="-o role[base]"
+	else
+		solo_args="-o role[workstation]"
 	fi
 fi
 
@@ -66,7 +71,7 @@ if [[ -e ~/.rvm/scripts/rvm ]]; then
 fi
 
 echo ">>> Running chef-solo ..."
-chef-solo -c config/solo.rb -j config/solo/${config_name}.json
+chef-solo -c .chef/solo.rb ${solo_args}
 
 if [[ -d /Applications ]]; then
 	echo ">>> Switching shell to homebrew bash"
