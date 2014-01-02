@@ -1,167 +1,202 @@
 scriptencoding utf-8
 
-"-----------------------------------------------------------------------
-" terminal setup
-"-----------------------------------------------------------------------
-
-if (&term =~ "xterm" || &term =~ "screen" || &term =~ "rxvt-unicode") && (&termencoding == "")
-	set termencoding=utf-8
-endif
-
-" http://superuser.com/questions/401926/how-to-get-shiftarrows-and-ctrlarrows-working-in-vim-in-tmux
-if &term =~ '^screen'
-	execute "set <xUp>=\e[1;*A"
-	execute "set <xDown>=\e[1;*B"
-	execute "set <xRight>=\e[1;*C"
-	execute "set <xLeft>=\e[1;*D"
-endif
-
-"-----------------------------------------------------------------------
-" global settings
-"-----------------------------------------------------------------------
-
-" don't be compatible with vi
+" don't be compatible with Vi
 set nocompatible
 
 <% if !root? %>
-" load neobundle
+" {{{ NeoBundle
+" https://github.com/Shougo/neobundle.vim#quick-start
 if has('vim_starting')
-	set runtimepath+=~/.vim/bundle/neobundle.vim/
+  set runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
+
 call neobundle#rc(expand('~/.vim/bundle/'))
+
+" Let NeoBundle manage NeoBundle
 NeoBundleFetch 'Shougo/neobundle.vim'
+
+" use vimproc to speed things up
+NeoBundle 'Shougo/vimproc', {
+\ 'build' : {
+\     'windows' : 'make -f make_mingw32.mak',
+\     'cygwin' : 'make -f make_cygwin.mak',
+\     'mac' : 'make -f make_mac.mak',
+\     'unix' : 'make -f make_unix.mak',
+\   },
+\ }
+" }}}
 <% end %>
 
-" fast redrawing
-set ttyfast
-set lazyredraw
-
-" enable a nice big viminfo file
+" {{{ State
+" use viminfo and enable large command history
 set viminfo='1000,f1,:1000,/1000
-set history=500
+set history=1000
+" }}}
 
-" make backspace delete lots of things
-set backspace=indent,eol,start
-
-" show us the command we're typing
-set showcmd
-
-" highlight matching parens
-set showmatch
-
-" search options: incremental search, highlight search
-set hlsearch
-set incsearch
-
-" case insensitive
-set ignorecase
-set infercase
-set smartcase
-
-" show line numbers
+" {{{ Appearance
+" show a narrow number column
 set number
+set numberwidth=3
 
 " always show the statusbar
 set laststatus=2
 
-" show full tags when doing search completion
-set showfulltag
+" highlight matching parens
+set showmatch
 
-" use hidden buffers
-set hidden
+" show tabs and trailing whitespace visually
+if (&termencoding == "utf-8") || has("gui_running")
+  set list listchars=tab:»·,trail:·,extends:…,nbsp:‗
+else
+  set list listchars=tab:>-,trail:.,extends:>,nbsp:_
+endif
+
+" ignore these suffixes
+set suffixes+=.info,.aux,.log,.dvi,.bbl,.out,.o,.lo
+" }}}
+
+" {{{ Movement
+" everything can be deleted by backspace
+set backspace=indent,eol,start
+
+" let arrow keys move to next line
+set whichwrap+=<,>,[,]
 
 " scrolling context
 set scrolloff=6
 set sidescrolloff=5
+" }}}
 
-" wrap on these
-set whichwrap+=<,>,[,]
+" {{{ Search
+set incsearch
+set ignorecase
+set smartcase
+" }}}
 
-" but by default do not wrap
-set nowrap
-
-" by default, go for an indent of 4 and do not expand tabs
+" {{{ Editing
 set shiftwidth=4
 set tabstop=4
-set noexpandtab
+set autoindent
+" }}}
 
-" fold automatically on markers
-set foldmethod=marker
+" {{{ Encodings
+" http://stackoverflow.com/questions/5477565/how-to-setup-vim-properly-for-editing-in-utf-8
+if has("multi_byte")
+  if &termencoding == ""
+    let &termencoding = &encoding
+  endif
+  set encoding=utf-8
+  setglobal fileencoding=utf-8
+endif
+" }}}
 
-" enable syntax highlighting
-if has("syntax")
-	syntax on
+" {{{ Syntax highlighting settings
+" Switch syntax highlighting on, when the terminal has colors
+" Also switch on highlighting the last used search pattern.
+if has("syntax") && (&t_Co > 2 || has("gui_running"))
+  syntax on
+  set hlsearch
 endif
 
-" enable and reload filetype settings
+" use bash highlighting for sh filetype by default
 if has("eval")
-	filetype on
-	filetype plugin on
-	filetype indent on
+  let is_bash=1
+endif
+" }}}
+
+" {{{ Filetype plugin settings
+" Enable plugin-provided filetype settings, but only if the ftplugin
+" directory exists (which it won't on livecds, for example).
+if has("eval") && isdirectory(expand("$VIMRUNTIME/ftplugin"))
+  filetype on
+  filetype plugin on
+  filetype indent on
+endif
+" }}}
+
+" {{{ Terminal fixes
+" http://vimdoc.sourceforge.net/htmldoc/term.html#slow-fast-terminal
+set ruler
+set showcmd
+set ttyfast
+set lazyredraw
+
+" https://bugs.gentoo.org/show_bug.cgi?id=122562
+if &term ==? "gnome" && has("eval")
+  exec "set <C-Left>=\eO5D"
+  exec "set <C-Right>=\eO5C"
 endif
 
+" http://superuser.com/questions/401926/how-to-get-shiftarrows-and-ctrlarrows-working-in-vim-in-tmux
+if &term =~ '^screen'
+  execute "set <xUp>=\e[1;*A"
+  execute "set <xDown>=\e[1;*B"
+  execute "set <xRight>=\e[1;*C"
+  execute "set <xLeft>=\e[1;*D"
+endif
+
+" https://bugs.gentoo.org/show_bug.cgi?id=101665
+if "" == &shell
+  if executable("/bin/bash")
+    set shell=/bin/bash
+  elseif executable("/bin/sh")
+    set shell=/bin/sh
+  endif
+endif
+
+" We know xterm-debian is a color terminal
+if &term =~ "xterm-debian" || &term =~ "xterm-xfree86"
+  set t_Co=16
+  set t_Sf=^[[3%dm
+  set t_Sb=^[[4%dm
+endif
+" }}}
+
+" {{{ Modeline settings
 " enable modelines only on secure vim versions
 if (v:version >= 604)
-	set modeline modelines=10
+  set modeline modelines=10
 else
-	set nomodeline
+  set nomodeline
 endif
+" }}}
 
-" Nice window title
-set title
-if has('title') && (has('gui_running') || &title)
-	set titlestring=
-	set titlestring+=%f\                     " file name
-	set titlestring+=%h%m%r%w                " flags
-	set titlestring+=\ -\ %{v:progname}      " program name
-endif
+" {{{ Autocommands
+augroup basic
+  au!
 
-" if possible, try to use a narrow number column.
-if v:version >= 700
-	try
-		setlocal numberwidth=3
-	catch
-	endtry
-endif
+  " turn of previous search results
+  au VimEnter * nohls
 
-" show tabs and trailing whitespace visually
-if (&termencoding == "utf-8") || has("gui_running")
-	if v:version >= 700
-		set list listchars=tab:»·,trail:·,extends:…,nbsp:‗
-	else
-		set list listchars=tab:»·,trail:·,extends:…
-	endif
-else
-	if v:version >= 700
-		set list listchars=tab:>-,trail:.,extends:>,nbsp:_
-	else
-		set list listchars=tab:>-,trail:.,extends:>
-	endif
-endif
+  " when editing a file, always jump to the last cursor position
+  autocmd BufReadPost *
+        \ if ! exists("g:leave_my_cursor_position_alone") |
+        \     if line("'\"") > 0 && line ("'\"") <= line("$") |
+        \         exe "normal g'\"" |
+        \     endif |
+        \ endif
 
-"-----------------------------------------------------------------------
-" final commands
-"-----------------------------------------------------------------------
+  " When editing a crontab file, set backupcopy to yes rather than auto.
+  " https://bugs.gentoo.org/show_bug.cgi?id=53437
+  autocmd FileType crontab set backupcopy=yes
 
-" turn of previous search results
-au VimEnter * nohls
+  " set mail filetype for debians reportbug's temp files
+  augroup debian
+    au BufRead reportbug-*              set ft=mail
+  augroup END
 
-" file type specific settings
-augroup filetype_settings
-	au BufRead,BufNewFile *.json set ft=javascript
-	au BufRead,BufNewFile *.coffee set ft=coffee
-	au BufRead,BufNewFile *.applescript set ft=applescript
-
-	au FileType {css,scss} set ts=2 sw=2 et
-	au FileType {coffee,javascript,json} set ts=2 sw=2 et
-	au FileType {haml,html} set ts=2 sw=2 et
-	au FileType {ruby,eruby,yaml} set ts=2 sw=2 et
-	au FileType python set ts=4 sw=4 tw=79 et
 augroup END
+" }}}
 
 <% if !root? %>
-" load custom vimrc
-source <%= node[:homedir] %>/.vimrc.local
+" {{{ user vimrc
+if filereadable("<%= node[:homedir] %>/.vimrc.local")
+  source <%= node[:homedir] %>/.vimrc.local
+endif
+
+" check bundle
+NeoBundleCheck
+" }}}
 <% end %>
 
-" vim: set sw=4 ts=4 tw=72
+" vim: set fenc=utf-8 tw=80 sw=2 sts=2 et foldmethod=marker :

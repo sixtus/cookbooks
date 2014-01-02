@@ -1,8 +1,4 @@
 if gentoo?
-  portage_package_use "app-editors/vim" do
-    use %w(python ruby)
-  end
-
   package "app-editors/vim"
   package "dev-util/ctags"
 
@@ -36,6 +32,11 @@ directory node[:vim][:rcdir] do
   mode "0755"
 end
 
+template node[:vim][:rcfile] do
+  source "vimrc"
+  mode "0644"
+end
+
 file "#{node[:vim][:rcdir]}/autoload/pathogen.vim" do
   action :delete
 end
@@ -65,9 +66,4 @@ else
     cookbook "users"
     instance node[:current_user]
   end
-end
-
-template node[:vim][:rcfile] do
-  source "vimrc"
-  mode "0644"
 end

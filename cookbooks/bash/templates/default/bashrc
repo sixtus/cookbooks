@@ -60,10 +60,9 @@ if hash less; then
 	export LESS="-R --ignore-case --long-prompt"
 fi
 
-<% if !mac_os_x? %>
 # keychain for ssh
 if [[ $USER != root ]]; then
-	if hash keychain; then
+	if type -P keychain >/dev/null; then
 		if [[ -r ~/.ssh/id_dsa ]]; then
 			eval `keychain --eval --quiet ~/.ssh/id_dsa`
 		fi
@@ -72,7 +71,6 @@ if [[ $USER != root ]]; then
 		fi
 	fi
 fi
-<% end %>
 
 
 ########################
@@ -105,7 +103,7 @@ shopt -s globstar
 bind '"\e[5~": history-search-backward'
 bind '"\e[6~": history-search-forward'
 
-# stty - turn off that @!#$&!@# ctrl-s/q sheel-freeze-stuff
+# stty - turn off that @!#$&!@# ctrl-s/q shell-freeze-stuff
 stty -ixon -ixoff
 
 # Ctrl-Q does a Ctrl-W w/ slashes
@@ -153,12 +151,6 @@ alias root="sudo -i"
 
 # ssh helper
 alias sshlive='ssh -l root -o "StrictHostKeyChecking no" -o "UserKnownHostsFile /dev/null" -o "GlobalKnownHostsFile /dev/null"'
-
-# chef helper
-alias kcu="knife cookbook upload"
-
-# ruby/rvm helpers
-alias be="bundle exec"
 
 # easy port listing
 alias ports="netstat -tulpen"
