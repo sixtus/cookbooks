@@ -7,8 +7,8 @@ else
 end
 
 cookbook_path [
-  "#{cwd}/cookbooks",
-  "#{cwd}/site-cookbooks",
+  "#{chef_repo_path}/cookbooks",
+  "#{chef_repo_path}/site-cookbooks",
 ]
 
 syntax_check_cache_path "#{chef_root}/cache/checksums"

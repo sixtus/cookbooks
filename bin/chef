@@ -67,7 +67,6 @@ fi
 
 if [[ -e ~/.rvm/scripts/rvm ]]; then
 	source ~/.rvm/scripts/rvm
-	rvm use system
 fi
 
 echo ">>> Running chef-solo ..."
