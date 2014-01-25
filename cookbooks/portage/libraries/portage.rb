@@ -15,7 +15,16 @@ module Gentoo
         end
         updated = case action
         when :create
-          create_package_conf_file(conf_file, new_resource.package, new_resource.flags)
+          flags =
+            case conf_type
+            when "use"
+              new_resource.use
+            when "keywords"
+              new_resource.keywords
+            else
+              nil
+            end
+          create_package_conf_file(conf_file, new_resource.package, flags)
         when :delete
           delete_package_conf_file(conf_file)
         else
@@ -39,7 +48,7 @@ module Gentoo
       end
 
       def create_package_conf_file(conf_file, package, flags)
-        content = [package, [flags].flatten.sort.uniq.join(' ')].join(' ')
+        content = [package, [flags].compact.flatten.sort.uniq.join(' ')].join(' ')
         return nil if ::File.exists?(conf_file) && same_content?(conf_file, content)
         run("echo -e '#{content}' | /usr/bin/sudo -H /usr/bin/tee #{conf_file}")
         true

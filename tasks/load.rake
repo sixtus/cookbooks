@@ -79,7 +79,7 @@ namespace :load do
         next if file[:path] =~ %r{metadata.json$}
 
         path = File.join(cookbook_path, file[:path])
-        checksum = Digest::MD5.hexdigest(File.read(path))
+        checksum = Digest::MD5.hexdigest(File.read(path)) rescue nil
 
         checksum != file[:checksum]
       end
