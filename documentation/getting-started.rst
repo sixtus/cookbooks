@@ -1,6 +1,9 @@
 Getting Started
 ===============
 
+Chef
+----
+
 Chef is a systems and infrastructure automation framework that makes it
 easy to deploy servers and applications to any physical, virtual, or cloud
 location, no matter the size of the infrastructure.
@@ -19,17 +22,17 @@ infrastructure consists of and how each part of your infrastructure should be
 deployed, configured and managed. Chef applies those definitions to
 workstations and servers to produce an automated infrastructure.
 
-This repository contains all public cookbooks from ZenOps. Additionally various
-scripts, rake tasks and documentation is available.
+Repository
+----------
 
-Usage
------
+The ZenOps Chef repository uses `RVM <http://rvm.io>`_ and `Bundler
+<http://bundler.io>`_ to manage ruby and dependencies required by Chef.
 
-The repository uses RVM and Bundler to manage ruby and dependencies required by
-Chef. To start your own copy of this repository clone the repository first and
-bootstrap your local rvm environment::
+To start your own copy of this repository `fork the repository
+<https://github.com/zenops/cookbooks/fork>`_ and bootstrap
+your local environment::
 
   git clone https://github.com/zenops/cookbooks chef && cd chef
   ./scripts/bootstrap
 
-Next: :doc:`Setup your workstation </workstation>`
+We suggest to :doc:`setup your workstation </workstation>` with Chef too!
