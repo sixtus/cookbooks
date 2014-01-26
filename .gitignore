@@ -1,3 +1,4 @@
+*.log
 *~
 .chef/checksums
 .chef/client.pem
@@ -7,4 +8,4 @@
 .rake_test_cache
 .vagrant
 config/openssl.cnf
-*.log
+documentation/_build

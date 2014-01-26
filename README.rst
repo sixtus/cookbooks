@@ -1,18 +1,9 @@
 ZenOps Chef Cookbooks
 =====================
 
-This repository contains all public cookbooks from ZenOps. Additionally various
-scripts, rake tasks and documentation is available.
+This repository contains all public cookbooks from ZenOps.
 
-Usage
------
-
-The repository uses RVM and Bundler to manage ruby and dependencies required by
-Chef. To start your own copy of this repository clone the repository first and
-bootstrap your local rvm environment::
-
-  git clone https://github.com/zenops/cookbooks chef && cd chef
-  ./scripts/bootstrap
+Read the `documentation <http://zenops.rtfd.org>`.
 
 Repository Layout
 -----------------
@@ -52,7 +43,3 @@ for managing your systems with Chef.
 **tasks**
    Contains all available rake tasks.
 
-External Resources
-------------------
-
-* `Chef Wiki <http://wiki.opscode.com/display/chef/Home>`_
