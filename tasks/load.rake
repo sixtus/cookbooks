@@ -51,13 +51,6 @@ namespace :load do
         next
       end
 
-      # forced cookbooks
-      if FORCED_COOKBOOKS.include?(cookbook)
-        printf "  + %-20.20s [%s] (forced)\n", cookbook, version
-        knife :cookbook_upload, [cookbook, '--force', '--freeze']
-        next
-      end
-
       # check for missing version bumps
       files = %w(
         recipes
@@ -77,10 +70,8 @@ namespace :load do
         # ignore overridable user templates
         next if file[:path] =~ %r{^templates/default/user-}
         next if file[:path] =~ %r{metadata.json$}
-
         path = File.join(cookbook_path, file[:path])
         checksum = Digest::MD5.hexdigest(File.read(path)) rescue nil
-
         checksum != file[:checksum]
       end
 
@@ -116,10 +107,11 @@ namespace :load do
   end
 
   desc "Upload all node definitions"
-  task :nodes do
+  task :nodes, :glob do |t, args|
+    args.with_defaults(glob: '*')
     puts ">>> Uploading nodes"
 
-    nodes = Dir[ File.join(NODES_DIR, '*.rb') ].map do |f|
+    nodes = Dir[ File.join(NODES_DIR, "#{args.glob}.rb") ].map do |f|
       File.basename(f, '.rb')
     end.sort!
 

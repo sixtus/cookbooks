@@ -38,19 +38,21 @@ namespace :generate do
 
   desc "Generate the production environment"
   task :env do
-    env = File.open(File.join(ENVIRONMENTS_DIR, "production.rb"), "w")
-    env.printf %{description "The production environment"\n\n}
+    %w(production staging).each do |env|
+      fd = File.open(File.join(ENVIRONMENTS_DIR, "#{env}.rb"), "w")
+      fd.printf %{description "The #{env} environment"\n\n}
 
-    cookbook_metadata.each do |cookbook, cookbook_path, metadata|
-      platforms = metadata.platforms.keys - CHEF_SOLO_PLATFORMS
-      version = metadata.version
+      cookbook_metadata.each do |cookbook, cookbook_path, metadata|
+        platforms = metadata.platforms.keys - CHEF_SOLO_PLATFORMS
+        version = metadata.version
 
-      next if platforms.empty?
+        next if platforms.empty?
 
-      env.printf %{cookbook %-20s "= %s"\n}, %{"#{cookbook}",}, version
+        fd.printf %{cookbook %-20s "= %s"\n}, %{"#{cookbook}",}, version
+      end
+
+      fd.close
     end
-
-    env.close
   end
 
   desc "Generate a default OpenVPN/Tunnelblick config"

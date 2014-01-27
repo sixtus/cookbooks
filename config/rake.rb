@@ -18,11 +18,6 @@ SSL_ORGANIZATIONAL_UNIT_NAME = "Operations"
 # The SSL contact email address
 SSL_EMAIL_ADDRESS = "hostmaster@example.com"
 
-# cookbooks that should always be uploaded
-FORCED_COOKBOOKS = %w(
-  shorewall
-)
-
 # chef-solo only platforms
 CHEF_SOLO_PLATFORMS = %w(
   mac_os_x

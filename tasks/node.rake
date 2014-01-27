@@ -13,13 +13,11 @@ namespace :node do
   task :create => [ :pull ]
   task :create, :fqdn, :ipaddress do |t, args|
     fqdn, ipaddress = args.fqdn, args.ipaddress
-    Rake::Task['node:checkdns'].reenable
-    Rake::Task['node:checkdns'].invoke(fqdn, ipaddress)
+    run_task('node:checkdns', fqdn, ipaddress)
 
     # create SSL cert
     ENV['BATCH'] = "1"
-    Rake::Task['ssl:do_cert'].reenable
-    Rake::Task['ssl:do_cert'].invoke(fqdn)
+    run_task('ssl:do_cert', fqdn)
     knife :cookbook_upload, ['certificates', '--force']
 
     b = binding()
@@ -35,15 +33,13 @@ namespace :node do
     end
 
     # upload to chef server
-    Rake::Task['load:node'].reenable
-    Rake::Task['load:node'].invoke(fqdn)
+    run_task('load:node', fqdn)
   end
 
   desc "Bootstrap the specified node"
   task :bootstrap, :fqdn, :ipaddress do |t, args|
     ENV['DISTRO'] ||= "gentoo"
-    Rake::Task['node:create'].reenable
-    Rake::Task['node:create'].invoke(args.fqdn, args.ipaddress)
+    run_task('node:create', args.fqdn, args.ipaddress)
     sh("knife bootstrap #{args.fqdn} --distro #{ENV['DISTRO']} -P tux")
     env = "/usr/bin/env UPDATEWORLD_DONT_ASK=1"
     system("ssh -t #{args.fqdn} '/usr/bin/sudo -i #{env} /usr/local/sbin/updateworld'")
@@ -59,8 +55,7 @@ namespace :node do
     name = args.fqdn.sub(/\.#{chef_domain}$/, '')
     hetzner_server_name_rdns(args.ipaddress, name, args.fqdn)
     zendns_add_record(args.fqdn, args.ipaddress)
-    Rake::Task['node:checkdns'].reenable
-    Rake::Task['node:checkdns'].invoke(args.fqdn, args.ipaddress)
+    run_task('node:checkdns', args.fqdn, args.ipaddress)
 
     # quick start
     b = binding()
@@ -79,33 +74,35 @@ namespace :node do
     wait_with_ping(args.ipaddress, true)
 
     # run normal bootstrap
-    Rake::Task['node:bootstrap'].reenable
-    Rake::Task['node:bootstrap'].invoke(args.fqdn, args.ipaddress)
+    run_task('node:bootstrap', args.fqdn, args.ipaddress)
+  end
+
+  desc "Delete node, rename host and bootstrap again"
+  task :rename, :old, :fqdn do |t, args|
+    ipaddress = Resolv.getaddress(args.old)
+    name = args.fqdn.sub(/\.#{chef_domain}$/, '')
+    hetzner_server_name_rdns(ipaddress, name, args.fqdn)
+    zendns_add_record(args.fqdn, ipaddress)
+    run_task('node:checkdns', args.fqdn, ipaddress)
+
+    sh("ssh #{args.old} sudo rm -f /etc/chef/client.pem /etc/chef/client.rb")
+    sh("echo root:tux | ssh #{args.old} sudo chpasswd")
+    sh("ssh #{args.old} sudo sed -i -e '/PasswordAuthentication/s/no/yes/g' /etc/ssh/sshd_config")
+    sh("ssh #{args.old} sudo sed -i -e '/PermitRootLogin/s/no/yes/g' /etc/ssh/sshd_config")
+    sh("ssh #{args.old} sudo systemctl reload sshd")
+
+    run_task('node:bootstrap', args.fqdn, ipaddress)
+    run_task('node:delete', args.old)
   end
 
   desc "Delete the specified node, client key and SSL certificates"
   task :delete, :fqdn do |t, args|
     fqdn = args.fqdn
-
-    # revoke SSL cert
     ENV['BATCH'] = "1"
-
-    begin
-      Rake::Task['ssl:revoke'].reenable
-      Rake::Task['ssl:revoke'].invoke(fqdn)
-    rescue
-      # do nothing
-    end
-
-    # remove node
-    begin
-      File.unlink(File.join(TOPDIR, "nodes", "#{fqdn}.rb"))
-    rescue
-      # do nothing
-    end
-
-    knife :node_delete, [fqdn, '-y']
-    knife :client_delete, [fqdn, '-y']
+    run_task('ssl:revoke', fqdn) rescue nil
+    File.unlink(File.join(TOPDIR, "nodes", "#{fqdn}.rb")) rescue nil
+    knife(:node_delete, [fqdn, '-y']) rescue nil
+    knife(:client_delete, [fqdn, '-y']) rescue nil
   end
 
 end
