@@ -3,33 +3,26 @@
 set -e
 
 # defaults
-MIRROR=${MIRROR:-http://mirror.zenops.net/zentoo}
-ARCH=$(portageq envvar ARCH)
+MIRROR=${MIRROR:-http://archive.ubuntu.com/ubuntu}
+SECURITY_MIRROR=${SECURITY_MIRROR:-http://security.ubuntu.com/ubuntu}
 
-image=$MIRROR/$ARCH/zentoo-amd64-base.tar.bz2
+release=precise
+arch=amd64
 ipaddress=169.254.169.254
 gateway=$(ip addr show dev lxc0 scope global | grep inet | awk '{print $2}' | awk -F/ '{print $1}')
 
-configure_gentoo()
+configure_ubuntu()
 {
     rootfs=$1
     name=$2
+    release=$3
 
     echo > ${rootfs}/etc/fstab
     rm -f ${rootfs}/etc/mtab
     ln -s /proc/self/mounts ${rootfs}/etc/mtab
 
-    rm -f /etc/systemd/system/default.target
-    ln -s /usr/lib/systemd/system/multi-user.target \
-        /etc/systemd/system/default.target
-
-    echo "LANG=en_US.UTF-8" > "${rootfs}/etc/locale.conf"
-    echo "KEYMAP=us" > "${rootfs}/etc/vconsole.conf"
-    cat > "${rootfs}/etc/adjtime" << EOF
-0.0 0.0 0.0
-0
-LOCAL
-EOF
+    chroot $rootfs locale-gen en_US.UTF-8
+    chroot $rootfs update-locale LANG=en_US.UTF-8
 
     echo "${name}" > "${rootfs}/etc/hostname"
     cat > "${rootfs}/etc/hosts" << EOF
@@ -43,19 +36,17 @@ nameserver 8.8.8.8
 nameserver 8.8.4.4
 EOF
 
-    cat > $rootfs/etc/netctl/eth0 << EOF
-Description='eth0'
-Interface=eth0
-Connection=ethernet
-ForceConnect=yes
-IP=static
-Address=('${ipaddress}/32')
-Routes=('${gateway}')
-Gateway='${gateway}'
-DNS=('8.8.8.8' '8.8.4.4')
-EOF
+    cat <<EOF > $rootfs/etc/network/interfaces
+auto lo
+iface lo inet loopback
 
-    ln -s "/etc/systemd/system/netctl@eth0.service" "${rootfs}/etc/systemd/system/multi-user.target.wants/netctl@eth0.service"
+auto eth0
+iface eth0 inet static
+    address ${ipaddress}
+    netmask 255.255.255.255
+    gateway ${gateway}
+    pointopoint ${gateway}
+EOF
 
     echo "root:tux" | chroot $rootfs chpasswd
     echo "Root password is 'tux', please change!"
@@ -65,24 +56,51 @@ EOF
 
 cleanup()
 {
-    rm -rf $cache/$(basename $image)
+    rm -rf $cache/partial-$arch
+    rm -rf $cache/rootfs-$arch
 }
 
-download_gentoo()
+suggest_flush()
+{
+    echo "Container upgrade failed.  The container cache may be out of date,"
+    echo "in which case flushing the cache (see -c in the help output) may help."
+}
+
+download_ubuntu()
 {
     cache=$1
-    image=$2
+    arch=$2
+    release=$3
 
     trap cleanup EXIT SIGHUP SIGINT SIGTERM
 
-    file=$(basename $image)
-    dir=${file/.tar*}
+    mkdir -p "$cache/partial-$arch"
+    debootstrap --verbose \
+        --components=main,universe \
+        --arch=$arch \
+        --include=vim,ssh,git \
+        $release \
+        $cache/partial-$arch \
+        $MIRROR
 
-    mkdir -p $cache
-    wget --no-check-certificate -nv -O $cache/$file $image
+    cat > "${cache}/partial-${arch}/etc/apt/sources.list" << EOF
+deb $MIRROR ${release} main restricted universe multiverse
+deb $MIRROR ${release}-updates main restricted universe multiverse
+deb $SECURITY_MIRROR ${release}-security main restricted universe multiverse
+EOF
 
-    mkdir -p $cache/$dir
-    tar --numeric-owner -xpf $cache/$file -C $cache/$dir
+    chroot "${cache}/partial-${arch}" apt-get update
+
+    cat > "${cache}/partial-${arch}"/usr/sbin/policy-rc.d << EOF
+#!/bin/sh
+exit 101
+EOF
+    chmod +x "${cache}/partial-${arch}"/usr/sbin/policy-rc.d
+
+    lxc-unshare -s MOUNT -- chroot "${cache}/partial-${arch}" apt-get dist-upgrade -y || { suggest_flush; false; }
+    rm -f "${cache}/partial-${arch}"/usr/sbin/policy-rc.d
+    chroot "${cache}/partial-${arch}" apt-get clean
+    mv "${cache}/partial-$arch" "${cache}/rootfs-$arch"
 
     trap EXIT
     trap SIGINT
@@ -92,28 +110,26 @@ download_gentoo()
     return 0
 }
 
-copy_gentoo()
+copy_ubuntu()
 {
     cache=$1
-    image=$2
+    arch=$2
     rootfs=$3
 
-    file=$(basename $image)
-    dir=${file/.tar*}
-
-    echo -n "Copying rootfs to $rootfs..."
+    # make a local copy of the miniubuntu
+    echo "Copying rootfs to $rootfs ..."
     mkdir -p $rootfs
-    rsync -Ha --numeric-ids "$cache/$dir"/ $rootfs/ || return 1
+    rsync -Ha --numeric-ids $cache/rootfs-$arch/ $rootfs/ || return 1
     return 0
 }
 
-install_gentoo()
+install_ubuntu()
 {
     rootfs=$1
-    cache="/var/cache/lxc/gentoo"
-
-    file=$(basename $image)
-    dir=${file/.tar*}
+    release=$2
+    clean=$3
+    cache="/var/cache/lxc/$release"
+    mkdir -p /var/lock/subsys/
 
     (
         flock -x 200
@@ -122,16 +138,23 @@ install_gentoo()
             return 1
         fi
 
-        echo "Checking cache download in $cache/$(basename $image) ... "
-        if [ ! -e "$cache/$dir" ]; then
-            download_gentoo $cache $image
+        if [ $clean -eq 1 ]; then
+            echo "Flushing cache..."
+            rm -rf "$cache/partial-$arch"
+            rm -rf "$cache/rootfs-$arch"
+        fi
+
+        echo "Checking cache download in $cache/rootfs-$arch ... "
+        if [ ! -e "$cache/rootfs-$arch" ]; then
+            download_ubuntu $cache $arch $release
             if [ $? -ne 0 ]; then
-                echo "Failed to download image"
+                echo "Failed to download 'ubuntu $release base'"
                 return 1
             fi
         fi
 
-        copy_gentoo $cache $image $rootfs
+        echo "Copy $cache/rootfs-$arch to $rootfs ... "
+        copy_ubuntu $cache $arch $rootfs
         if [ $? -ne 0 ]; then
             echo "Failed to copy rootfs"
             return 1
@@ -139,7 +162,7 @@ install_gentoo()
 
         return 0
 
-    ) 200>/run/lock/lxc-gentoo
+    ) 200>/var/lock/subsys/lxc-ubuntu
 
     return $?
 }
@@ -149,6 +172,8 @@ copy_configuration()
     path=$1
     rootfs=$2
     name=$3
+    arch=$4
+    release=$5
 
     grep -q "^lxc.rootfs" $path/config 2>/dev/null || echo "lxc.rootfs = $rootfs" >> $path/config
 
@@ -165,7 +190,6 @@ lxc.network.name = eth0
 lxc.autodev = 1
 lxc.mount.entry=sys ${rootfs}/sys sysfs ro,defaults 0 0
 lxc.mount.entry=proc ${rootfs}/proc proc nodev,noexec,nosuid 0 0
-lxc.mount.entry=/proc/sys ${rootfs}/proc/sys proc ro,bind 0 0
 
 # console access
 lxc.tty = 1
@@ -209,44 +233,23 @@ lxc.cgroup.devices.allow = c 136:* rw
 lxc.cgroup.devices.allow = c 254:0 rwm
 EOF
 
+    echo "INIT_COMMAND=/sbin/init" > $path/env
+
     return 0
-}
-
-clean()
-{
-    cache="/var/cache/lxc/gentoo"
-
-    if [ ! -e $cache ]; then
-        exit 0
-    fi
-
-    # lock, so we wont purge while someone is creating a repository
-    (
-        flock -x 200
-        if [ $? != 0 ]; then
-            echo "Cache repository is busy."
-            exit 1
-        fi
-
-        echo -n "Purging the download cache..."
-        rm --preserve-root --one-file-system -rf $cache && echo "Done." || exit 1
-        exit 0
-
-    ) 200>/run/lock/lxc-gentoo
 }
 
 usage()
 {
     cat <<EOF
-$1 -h|--help [-d|--debug] [-c|--clean] [-i|--ipaddress 1.2.3.4] [-g|--gateway 1.2.3.4] [--image <URL>]
+$1 -h|--help [-d|--debug] [-c|--clean] [-i|--ipaddress 1.2.3.4] [-g|--gateway 1.2.3.4] [-r|--release <release>] [-a|--arch <arch>]
 EOF
     return 0
 }
 
-options=$(getopt -o hp:n:cdi:g: -l help,path:,name:,clean,ipaddress:,gateway:,image: -- "$@")
+options=$(getopt -o hp:n:cdi:g:r:a: -l help,path:,name:,clean,debug,ipaddress:,gateway:,release:,arch: -- "$@")
 if [ $? -ne 0 ]; then
-        usage $(basename $0)
-        exit 1
+    usage $(basename $0)
+    exit 1
 fi
 eval set -- "$options"
 
@@ -263,7 +266,8 @@ do
         -d|--debug)     debug=1; shift 1;;
         -i|--ipaddress) ipaddress=$2; shift 2;;
         -g|--gateway)   gateway=$2; shift 2;;
-        --image)        image=$2; shift 2;;
+        -r|--release)   release=$2; shift 2;;
+        -a|--arch)      arch=$2; shift 2;;
         --)             shift 1; break ;;
         *)              break ;;
     esac
@@ -271,11 +275,6 @@ done
 
 if [ $debug -eq 1 ]; then
     set -x
-fi
-
-if [ ! -z "$clean" -a -z "$path" ]; then
-    clean || exit 1
-    exit 0
 fi
 
 if [ -z "$path" ]; then
@@ -288,6 +287,12 @@ if [ "$(id -u)" != "0" ]; then
     exit 1
 fi
 
+if [ "$arch" == "i686" ]; then
+    arch=i386
+fi
+
+which debootstrap >/dev/null 2>&1 || { echo "'debootstrap' command is missing" >&2; false; }
+
 # detect rootfs
 config="$path/config"
 if grep -q '^lxc.rootfs' $config 2>/dev/null ; then
@@ -296,25 +301,20 @@ else
     rootfs=$path/rootfs
 fi
 
-install_gentoo $rootfs
+install_ubuntu $rootfs $release $clean
 if [ $? -ne 0 ]; then
-    echo "failed to install gentoo"
+    echo "failed to install ubuntu $release"
     exit 1
 fi
 
-configure_gentoo $rootfs $name
+configure_ubuntu $rootfs $name $release
 if [ $? -ne 0 ]; then
-    echo "failed to configure gentoo for a container"
+    echo "failed to configure ubuntu $release for a container"
     exit 1
 fi
 
-copy_configuration $path $rootfs $name
+copy_configuration $path $rootfs $name $arch $release
 if [ $? -ne 0 ]; then
     echo "failed write configuration file"
     exit 1
-fi
-
-if [ ! -z $clean ]; then
-    clean || exit 1
-    exit 0
 fi
