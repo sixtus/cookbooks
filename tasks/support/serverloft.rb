@@ -1,13 +1,11 @@
 begin
   require 'mechanize'
+  @agent = Mechanize.new
+  @agent.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+  @agent.user_agent_alias = 'Linux Firefox'
 rescue LoadError
   $stderr.puts "Mecahnize cannot be loaded"
-  exit 1
 end
-
-@agent = Mechanize.new
-@agent.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-@agent.user_agent_alias = 'Linux Firefox'
 
 def auth(user, pass)
   # CSRF on every step...
