@@ -44,7 +44,7 @@ module PlatformHelpers
   end
 
   def guest?
-    node[:virtualization][:role] == "guest"
+    lxc? || node[:virtualization][:role] == "guest"
   end
 
   def vbox?
