@@ -32,6 +32,7 @@ if debian_based?
     netcat
     nmap
     pciutils
+    psmisc
     pwgen
     pydf
     realpath
