@@ -13,6 +13,7 @@ run_list(%w(
   recipe[hwraid]
   recipe[lftp]
   recipe[lib_users]
+  recipe[lxc]
   recipe[mdadm]
   recipe[nss]
   recipe[ntp]
