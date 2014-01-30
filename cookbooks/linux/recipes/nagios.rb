@@ -66,7 +66,7 @@ if nagios_client?
   end
 
   mounts = node[:filesystem].values.map do |fs|
-    fs[:mount] if fs[:fs_type] && File.directory?(fs[:mount])
+    fs[:mount] if fs[:fs_type] && fs[:mount] && File.directory?(fs[:mount])
   end.compact.map do |mount|
     "-p #{mount}"
   end.join(' ')
