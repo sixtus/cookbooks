@@ -4,6 +4,7 @@ end
 
 execute "chef-server-ctl-reconfigure" do
   command "chef-server-ctl reconfigure"
+  action :nothing
 end
 
 dpkg_package "chef-server" do

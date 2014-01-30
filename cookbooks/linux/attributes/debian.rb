@@ -35,6 +35,7 @@ if debian_based?
     pwgen
     pydf
     realpath
+    ruby1.9.3
     strace
     sysstat
     tcpdump
