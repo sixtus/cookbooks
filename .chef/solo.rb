@@ -14,5 +14,3 @@ cookbook_path [
 syntax_check_cache_path "#{chef_root}/cache/checksums"
 file_cache_path "#{chef_root}/cache/files"
 file_backup_path "#{chef_root}/backup"
-
-Ohai::Config[:plugin_path] = ["#{chef_repo_path}/.ohai/plugins"]
