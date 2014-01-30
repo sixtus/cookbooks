@@ -1,4 +1,4 @@
-if not node[:virtualization][:guest]
+if can_run_ntpd?
   if gentoo?
     package "net-misc/ntp" do
       notifies :restart, "service[ntpd]"

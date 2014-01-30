@@ -10,6 +10,6 @@ if root?
 
   cron_daily "xfs_fsr" do
     command "/usr/sbin/xfs_fsr -t 600"
-    action :delete if node[:skip][:hardware]
+    action :delete
   end
 end
