@@ -52,7 +52,7 @@ module PlatformHelpers
   end
 
   def lxc?
-    File.read("/proc/1/environ").split("\0").any? { |env| env =~ /lxc/ }
+    root? && File.read("/proc/1/environ").split("\0").any? { |env| env =~ /lxc/ }
   end
 
   def vbox_guest?
