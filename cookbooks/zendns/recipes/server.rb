@@ -38,9 +38,3 @@ shorewall_rule "zendns-udp" do
   destport "domain"
   proto "udp"
 end
-
-if ganymed?
-  ganymed_collector 'zendns' do
-    source 'zendns.rb'
-  end
-end

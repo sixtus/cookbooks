@@ -12,4 +12,8 @@ if root?
     command "/usr/sbin/xfs_fsr -t 600"
     action :delete
   end
+
+  service "ganymed" do
+    action [:disable, :stop]
+  end
 end

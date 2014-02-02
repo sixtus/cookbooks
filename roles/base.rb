@@ -7,7 +7,6 @@ run_list(%w(
   recipe[chef::client]
   recipe[cron]
   recipe[duply]
-  recipe[ganymed]
   recipe[git]
   recipe[htop]
   recipe[hwraid]
