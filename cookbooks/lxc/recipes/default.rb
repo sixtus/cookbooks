@@ -31,8 +31,4 @@ if !guest?
   end
 
   systemd_unit "lxc@.service"
-
-  service "libvirtd" do
-    action [:disable, :stop]
-  end
 end
