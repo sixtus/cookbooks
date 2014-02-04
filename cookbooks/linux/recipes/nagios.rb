@@ -112,11 +112,4 @@ if nagios_client?
     check_interval 10
     env [:staging, :testing, :development]
   end
-
-  execute "check_link_usage" do
-    command "/usr/lib/nagios/plugins/check_link_usage"
-    creates "/tmp/.check_link_usage.eth0:"
-    user "nagios"
-    group "nagios"
-  end
 end
