@@ -1,6 +1,6 @@
 include_recipe "druid"
 
-node.default[:druid][:logger] = 'LoggingEmitter'
+node.default[:druid][:logger] = true
 
 systemd_unit "druid-broker.service" do
   template "druid-service"
