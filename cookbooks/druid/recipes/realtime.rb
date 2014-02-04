@@ -1,5 +1,7 @@
 include_recipe "druid"
 
+node.default[:druid][:logger] = true
+
 systemd_unit "druid-realtime.service" do
   template "druid-service"
   variables({
