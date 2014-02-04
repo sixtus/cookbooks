@@ -9,6 +9,7 @@ default[:druid][:core_extensions] = [
 
 default[:druid][:extensions] = []
 default[:druid][:monitors] = []
+default[:druid][:logger] = 'NoopServiceEmitter'
 
 default[:druid][:cluster] = node.cluster_name
 default[:druid][:service] = node.cluster_name
