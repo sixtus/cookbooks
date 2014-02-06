@@ -45,7 +45,7 @@ if nagios_client?
     source "check_kafka_lag.rb"
   end
 
-  nagios_plugin "check_kafka_import" do
-    source "check_kafka_import.rb"
+  nagios_plugin "check_kafka_partitioning" do
+    source "check_kafka_partitioning.rb"
   end
 end
