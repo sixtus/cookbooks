@@ -18,11 +18,6 @@ SSL_ORGANIZATIONAL_UNIT_NAME = "Operations"
 # The SSL contact email address
 SSL_EMAIL_ADDRESS = "hostmaster@example.com"
 
-# chef-solo only platforms
-CHEF_SOLO_PLATFORMS = %w(
-  mac_os_x
-)
-
 # make rake more silent
 RakeFileUtils.verbose_flag = false
 Chef::Log.level = :error

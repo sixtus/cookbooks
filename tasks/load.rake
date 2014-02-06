@@ -19,7 +19,7 @@ namespace :load do
   task :cookbooks do
     puts ">>> Uploading cookbooks"
     cookbook_metadata.each do |cookbook, cookbook_path, metadata|
-      platforms = metadata.platforms.keys - CHEF_SOLO_PLATFORMS
+      platforms = metadata.platforms.keys
       version = metadata.version
 
       if platforms.empty?

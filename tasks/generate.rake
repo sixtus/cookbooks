@@ -43,7 +43,7 @@ namespace :generate do
       fd.printf %{description "The #{env} environment"\n\n}
 
       cookbook_metadata.each do |cookbook, cookbook_path, metadata|
-        platforms = metadata.platforms.keys - CHEF_SOLO_PLATFORMS
+        platforms = metadata.platforms.keys
         version = metadata.version
 
         next if platforms.empty?
