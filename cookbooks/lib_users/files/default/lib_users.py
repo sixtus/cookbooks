@@ -33,6 +33,7 @@ NOLIBS = [
     "/usr/lib64/lxc/rootfs/*",
     "/var/app/druid/*",
     "/var/app/kafka/storage/*",
+    "/var/tmp/hadoop/*",
 ]
 
 FP_EXCLUDES = [
