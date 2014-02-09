@@ -35,6 +35,10 @@ module SplunkRunStateHelpers
       node.role?("splunk-peer"),
       node.role?("splunk-search"),
       node.role?("splunk-server"),
+      node.role?("splunk6-master"),
+      node.role?("splunk6-peer"),
+      node.role?("splunk6-search"),
+      node.role?("splunk6-server"),
     ].none?
   end
 end
