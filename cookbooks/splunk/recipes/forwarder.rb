@@ -1,4 +1,4 @@
-if false && splunk_forwarder?
+if splunk_forwarder?
   if gentoo?
     package "net-analyzer/splunkforwarder"
 
