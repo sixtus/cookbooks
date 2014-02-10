@@ -25,19 +25,7 @@ service "kafka" do
 end
 
 if nagios_client?
-  # TODO: rethinking
-  
-  # if gentoo?
-  #   package "sys-cluster/zookeeper"
-  # elsif mac_os_x?
-  #   package "zookeeper"
-  # end
 
-  # nrpe_command "check_kafka_lagging" do
-  #   command "/usr/lib/nagios/plugins/check_kafka_lag -Z #{ zookeeper_connect(node[:kafka][:zookeeper][:root]) }"
-  # end
+  # Nothing generic, add a site-specific cookbook
 
-  # nagios_service "KAFKA08-LAG" do
-  #   check_command "check_nrpe!check_kafka_lagging"
-  # end
 end
