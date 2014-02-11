@@ -55,6 +55,8 @@ begin
   long_text = ""
   res.body.split("\n").each do |row|
     data = JSON.load(row)['result']
+
+
     row_range = data.delete('range')
     long_text << "#{row_range.upcase}: #{data.inspect}\n"
 
@@ -63,7 +65,7 @@ begin
       range = row_range
     elsif row_range == 'warning'
       issue_counter += 1
-      range = row_range if range == 'ok'
+      range = row_range unless range == 'critical'
     elsif range == nil
       range = row_range
     end
@@ -74,11 +76,11 @@ begin
     puts res.body
     exit(2)
   elsif range == 'critical'
-    puts "CRITICAL: #{issue_counter} values not ok"
+    puts "CRITICAL: #{issue_counter} value(s) not ok, click for details"
     puts long_text
     exit(2)
   elsif range == 'warning'
-    puts "WARNING: #{issue_counter} values not ok"
+    puts "WARNING: #{issue_counter} value(s) not ok, click for details"
     puts long_text
     exit(1)
   else
