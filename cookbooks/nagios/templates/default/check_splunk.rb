@@ -51,31 +51,42 @@ begin
 
   # check values/ranges
   range = nil
+  issue_counter = 0
+  long_text = ""
   res.body.split("\n").each do |row|
     data = JSON.load(row)['result']
     row_range = data.delete('range')
-    puts "#{row_range.upcase}: #{data.inspect}"
+    long_text << "#{row_range.upcase}: #{data.inspect}\n"
 
-    if range == nil
+    if row_range == 'critical'
+      issue_counter += 1
       range = row_range
-    elsif row_range == 'critical'
-      range = row_range
-    elsif range == 'ok' && row_range == 'warning'
+    elsif row_range == 'warning'
+      issue_counter += 1
+      range = row_range if range == 'ok'
+    elsif range == nil
       range = row_range
     end
   end
 
   if range == nil
-    puts "Splunk did not return a (valid) search result\n"
+    puts "Splunk did not return a (valid) search result"
     puts res.body
     exit(2)
   elsif range == 'critical'
+    puts "CRITICAL: #{issue_counter} values not ok"
+    puts long_text
     exit(2)
   elsif range == 'warning'
+    puts "WARNING: #{issue_counter} values not ok"
+    puts long_text
     exit(1)
+  else
+    puts "OK: all values ok"
+    puts long_text
+    exit(0)
   end
 
-  exit(0)
 rescue => e
   puts "exception: #{e.message}, #{e.backtrace}"
   exit(2)
