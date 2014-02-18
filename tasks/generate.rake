@@ -39,19 +39,11 @@ namespace :generate do
   desc "Generate the production environment"
   task :env do
     %w(production staging).each do |env|
-      fd = File.open(File.join(ENVIRONMENTS_DIR, "#{env}.rb"), "w")
-      fd.printf %{description "The #{env} environment"\n\n}
-
-      cookbook_metadata.each do |cookbook, cookbook_path, metadata|
-        platforms = metadata.platforms.keys
-        version = metadata.version
-
-        next if platforms.empty?
-
-        fd.printf %{cookbook %-20s "= %s"\n}, %{"#{cookbook}",}, version
+      b = binding()
+      erb = Erubis::Eruby.new(File.read(File.join(TEMPLATES_DIR, 'environment.json')))
+      File.open(File.join(ENVIRONMENTS_DIR, "#{env}.json"), "w") do |f|
+        f.puts(erb.result(b))
       end
-
-      fd.close
     end
   end
 
