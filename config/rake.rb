@@ -35,7 +35,7 @@ else
 end
 
 # directories for entities
-BAGS_DIR = File.expand_path(File.join(TOPDIR, "databags"))
+BAGS_DIR = File.expand_path(File.join(TOPDIR, "data_bags"))
 COOKBOOKS_DIR = File.expand_path(File.join(TOPDIR, "cookbooks"))
 NODES_DIR = File.expand_path(File.join(TOPDIR, "nodes"))
 ROLES_DIR = File.expand_path(File.join(TOPDIR, "roles"))

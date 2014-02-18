@@ -14,33 +14,28 @@ namespace :node do
   task :create, :fqdn, :ipaddress do |t, args|
     fqdn, ipaddress = args.fqdn, args.ipaddress
     run_task('node:checkdns', fqdn, ipaddress)
-
-    # create SSL cert
-    ENV['BATCH'] = "1"
-    run_task('ssl:do_cert', fqdn)
-    knife :cookbook_upload, ['certificates', '--force']
-
-    b = binding()
-    erb = Erubis::Eruby.new(File.read(File.join(TEMPLATES_DIR, 'node.rb')))
-
-    # create new node
-    nf = File.join(TOPDIR, "nodes", "#{fqdn}.rb")
-
+    nf = File.join(TOPDIR, "nodes", "#{fqdn}.json")
     unless File.exists?(nf)
+      ENV['BATCH'] = "1"
+      ENV['ROLE'] ||= "base"
+      run_task('ssl:do_cert', fqdn)
+      b = binding()
+      erb = Erubis::Eruby.new(File.read(File.join(TEMPLATES_DIR, 'node.json')))
       File.open(nf, "w") do |f|
         f.puts(erb.result(b))
       end
+      knife :upload, [
+        "cookbooks/certificates",
+        "nodes/#{fqdn}.json",
+      ]
     end
-
-    # upload to chef server
-    run_task('load:node', fqdn)
   end
 
   desc "Bootstrap the specified node"
   task :bootstrap, :fqdn, :ipaddress do |t, args|
     ENV['DISTRO'] ||= "gentoo"
     run_task('node:create', args.fqdn, args.ipaddress)
-    sh("knife bootstrap #{args.fqdn} --distro #{ENV['DISTRO']} -P tux")
+    knife :bootstrap, [args.fqdn, "--distro", ENV['DISTRO'], "-P", "tux"]
     env = "/usr/bin/env UPDATEWORLD_DONT_ASK=1"
     system("ssh -t #{args.fqdn} '/usr/bin/sudo -i #{env} /usr/local/sbin/updateworld'")
     reboot_wait(args.fqdn)
@@ -100,9 +95,8 @@ namespace :node do
     fqdn = args.fqdn
     ENV['BATCH'] = "1"
     run_task('ssl:revoke', fqdn) rescue nil
-    File.unlink(File.join(TOPDIR, "nodes", "#{fqdn}.rb")) rescue nil
-    knife(:node_delete, [fqdn, '-y']) rescue nil
-    knife(:client_delete, [fqdn, '-y']) rescue nil
+    File.unlink(File.join(TOPDIR, "nodes", "#{fqdn}.json")) rescue nil
+    knife :delete, ['-y', "nodes/#{fqdn}.json", "clients/#{fqdn}.json"] rescue nil
   end
 
 end
