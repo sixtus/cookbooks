@@ -23,7 +23,7 @@ namespace :node do
     run_task('node:checkdns', args.fqdn, args.ipaddress)
     run_task('ssl:do_cert', args.fqdn)
     knife :bootstrap, [args.fqdn, "--distro", ENV['DISTRO'], "-P", "tux"]
-    run_task('node:updateworld', args.fqdn)
+    run_task('node:updateworld', args.fqdn) unless ENV['NO_UPDATEWORLD']
   end
 
   desc "Update node packages"
@@ -79,6 +79,7 @@ namespace :node do
     sh("ssh #{args.old} sudo sed -i -e '/PermitRootLogin/s/no/yes/g' /etc/ssh/sshd_config")
     sh("ssh #{args.old} sudo systemctl reload sshd")
 
+    ENV['NO_UPDATEWORLD'] = "1"
     run_task('node:bootstrap', args.fqdn, ipaddress)
     run_task('node:delete', args.old)
   end
