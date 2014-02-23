@@ -1,12 +1,15 @@
-# ZenOps Chef cookbooks
+# Overview
 
-This repository contains all public cookbooks from ZenOps.
+Every Chef installation needs a Chef Repository. This is the place where
+cookbooks, roles, config files and other artifacts for managing systems with
+Chef will live. We strongly recommend storing this repository in a version
+control system such as Git and treat it like source code.
 
-## Usage
+# Usage
 
 Please refer to the [documentation](http://docs.zenops.net).
 
-## Contributing
+# Contributing
 
 1. Fork it
 2. Create your feature branch (`git checkout -b my-new-feature`)

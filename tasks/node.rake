@@ -1,5 +1,12 @@
 require 'resolv'
 
+task :pull do
+  unless ENV.include?('BOOTSTRAP')
+    sh("git checkout -q master")
+    sh("git pull -q")
+  end
+end
+
 namespace :node do
 
   task :checkdns, :fqdn, :ipaddress do |t, args|

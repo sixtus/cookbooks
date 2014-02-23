@@ -83,7 +83,7 @@ if [[ -e ~/.rvm/scripts/rvm ]]; then
 fi
 
 echo ">>> Running Chef ..."
-$bundle_exec chef-solo -c .chef/solo.rb ${solo_args} "$@" || exit 1
+$bundle_exec chef-solo -c .chef/config.rb ${solo_args} "$@" || exit 1
 
 # re-enable sudo password on mac
 if [[ $USER != "root" ]]; then
