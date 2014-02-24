@@ -55,6 +55,7 @@ end
   inputs
   outputs
   prefs
+  times
   web
 ).each do |c|
   template "/opt/splunk/etc/system/local/#{c}.conf" do
