@@ -4,7 +4,7 @@ ConditionPathExists=/etc/ntp.conf
 After=network.target
 
 [Service]
-ExecStartPre=-/usr/sbin/ntpdate ntp1.hetzner.de
+ExecStartPre=-/usr/sbin/ntpdate pool.ntp.org
 ExecStart=/usr/sbin/ntpd -g -n
 ExecStopPost=-/sbin/hwclock --systohc
 PrivateTmp=true
