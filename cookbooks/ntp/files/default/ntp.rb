@@ -1,5 +1,5 @@
 collect do
-  output = %x(/usr/lib/nagios/plugins/check_ntp_time -H pool.ntp.org).chomp
+  output = %x(/usr/lib/nagios/plugins/check_ntp_time -H ntp1.hetzner.de -4).chomp
   offset = output.
     split('|').last.
     split(';').first.
