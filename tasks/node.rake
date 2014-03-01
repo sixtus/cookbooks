@@ -39,8 +39,7 @@ namespace :node do
     raise "missing parameters!" unless args.fqdn && args.ipaddress && args.password
 
     # create DNS/rDNS records
-    name = args.fqdn.sub(/\.#{chef_domain}$/, '')
-    hetzner_server_name_rdns(args.ipaddress, name, args.fqdn)
+    hetzner_server_name_rdns(args.ipaddress, args.fqdn)
     zendns_add_record(args.fqdn, args.ipaddress)
     run_task('node:checkdns', args.fqdn, args.ipaddress)
 
@@ -68,8 +67,7 @@ namespace :node do
   desc "Delete node, rename host and bootstrap again"
   task :rename, :old, :fqdn do |t, args|
     ipaddress = Resolv.getaddress(args.old)
-    name = args.fqdn.sub(/\.#{chef_domain}$/, '')
-    hetzner_server_name_rdns(ipaddress, name, args.fqdn)
+    hetzner_server_name_rdns(ipaddress, args.fqdn)
     zendns_add_record(args.fqdn, ipaddress)
     run_task('node:checkdns', args.fqdn, ipaddress)
 
