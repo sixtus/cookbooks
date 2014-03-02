@@ -53,6 +53,7 @@ end
 # we don't want no motd
 file "/etc/motd" do
   action :delete
+  manage_symlink_source false
 end
 
 # make sure /etc/mtab always points to the right info
