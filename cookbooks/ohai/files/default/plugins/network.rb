@@ -156,6 +156,8 @@ FAMILIES.keys.sort.each do |family|
   elsif family == "inet6" and ip6address.nil?
     if r["ip"].nil?
       Ohai::Log.warn("unable to detect ip6address")
+    elsif r["ip"] =~ /^fe80:/
+      Ohai::Log.debug("default ip6address would be link-local. skipping ...")
     else
       ip6address r["ip"]
       if r["mac"] and macaddress.nil? and ipaddress.nil?
