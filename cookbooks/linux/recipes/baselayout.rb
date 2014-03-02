@@ -88,5 +88,5 @@ cookbook_file "/sbin/service" do
   group "root"
   mode "0755"
   manage_symlink_source false
-  force_unlink true
+  force_unlink true if File.exist?("/sbin/service")
 end
