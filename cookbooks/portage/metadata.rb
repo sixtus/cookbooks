@@ -11,5 +11,3 @@ version "2.4.0"
 supports "gentoo"
 
 depends "cron"
-depends "rsync"
-depends "zenops"
