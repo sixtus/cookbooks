@@ -1,6 +1,8 @@
 include_recipe "hadoop"
 package "dev-java/maven-bin"
 
+node.default[:camus][:cluster] = node.cluster_name
+
 deploy_skeleton "camus"
 
 deploy_application "camus" do
@@ -44,3 +46,10 @@ end
 systemd_timer "camus" do
   schedule %w(OnBootSec=60 OnUnitInactiveSec=300)
 end
+
+if nagios_client?
+  nagios_plugin "check_camus" do
+    source "check_camus.rb"
+  end
+end
+
