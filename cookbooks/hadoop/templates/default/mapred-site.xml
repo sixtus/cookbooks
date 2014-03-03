@@ -59,7 +59,7 @@
   <!-- http://stackoverflow.com/questions/2354525/what-should-be-hadoop-tmp-dir -->
   <property>
     <name>mapred.system.dir</name>
-    <value>/mapred/system</value>
+    <value>/mapred/system.<%= node.cluster_name %></value>
   </property>
 
   <!-- do not create /var/tmp in HDFS for staging area -->
@@ -71,7 +71,7 @@
   <!-- make sure these are stored on the dedicated hadoop disks -->
   <property>
     <name>mapred.local.dir</name>
-    <value><%= node[:hadoop][:tmp_dir] %>/${user.name}/mapred/local</value>
+    <value><%= node[:hadoop][:tmp_dir] %>/${user.name}/mapred/local.<%= node.cluster_name %></value>
   </property>
 
   <!-- compression of data between the mapper and the reducer -->
