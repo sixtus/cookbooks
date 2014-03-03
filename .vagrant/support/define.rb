@@ -9,6 +9,7 @@ def define(name, ip)
         _chef = chef
         chef.chef_server_url = "http://10.10.10.1:3099"
         chef.validation_key_path = '.vagrant/validation.pem'
+        chef.environment = "staging"
       end
       base.vm.provider "virtualbox" do |vb|
         vb.gui = false

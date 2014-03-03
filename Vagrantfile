@@ -40,6 +40,14 @@ define("nagios", "10.10.10.11/24") do |vm, chef|
   vm.box = "zentoo-amd64-base"
   vm.box_url = "http://mirror.zenops.net/zentoo/amd64/zentoo-amd64-base.box"
   chef.add_role("nagios")
+  chef.add_role("mx")
+end
+
+define("lab", "10.10.10.12/24") do |vm, chef|
+  vm.hostname = "lab.zenops.ws"
+  vm.box = "zentoo-amd64-base"
+  vm.box_url = "http://mirror.zenops.net/zentoo/amd64/zentoo-amd64-base.box"
+  chef.add_role("gitlab")
 end
 
 # vim: ft=ruby
