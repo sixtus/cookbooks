@@ -1,3 +1,8 @@
+Vagrant.require_plugin "vagrant-systemd"
+Vagrant.require_plugin "vagrant-zentoo"
+Vagrant.require_plugin "vagrant-chef-zero"
+Vagrant.require_plugin "vagrant-vbguest"
+
 Dir[File.dirname(__FILE__) + "/.vagrant/support/*.rb"].each { |file| require file }
 
 define("zentoo-base", "10.10.10.2/24") do |vm, chef|
