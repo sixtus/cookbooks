@@ -7,6 +7,9 @@ module HadoopRunStateHelpers
 
   def hadoop_jobtracker
     node.run_state[:nodes].select do |n|
+      n.role?("hadoop-jobtracker") and
+      n.cluster_name == node.cluster_name
+    end.first || node.run_state[:nodes].select do |n|
       n.role?("hadoop-jobtracker")
     end.first
   end
