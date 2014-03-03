@@ -16,8 +16,6 @@ file "/usr/sbin/pkgsync" do
   action :delete
 end
 
-systemd_unit "pkgsync.service"
-
 systemd_timer "pkgsync" do
   action :delete
 end
