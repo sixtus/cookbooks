@@ -5,14 +5,11 @@ def define(name, ip)
       user = (ENV["USER"] || ENV["USERNAME"]).downcase.tr(" ", "-")
       base.vm.hostname = "#{name}.#{user}.zenops.ws"
       base.vm.network "private_network", ip: ip
-      if File.exist?("vagrant/provision/#{name}.sh")
-        base.vm.provision :shell, path: "vagrant/provision/#{name}.sh"
-      end
       base.vm.provision :chef_client do |chef|
         _chef = chef
+        chef.chef_server_url = "http://10.10.10.1:3099"
+        chef.validation_key_path = '.vagrant/validation.pem'
       end
-      base.chef_zero.chef_repo_path = "."
-      base.chef_zero.cookbooks = Dir["./cookbooks/*"] + Dir["./site-cookbooks/*"]
       base.vm.provider "virtualbox" do |vb|
         vb.gui = false
       end
