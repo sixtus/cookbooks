@@ -9,10 +9,10 @@ class Chef
     end
 
     def cluster_name
-      if node[:cluster] and node[:cluster][:name]
-        node[:cluster][:name]
+      if self[:cluster] and self[:cluster][:name]
+        self[:cluster][:name]
       else
-        node[:fqdn]
+        self[:fqdn]
       end
     end
 

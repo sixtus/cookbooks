@@ -1,8 +1,6 @@
 include_recipe "hadoop"
 package "dev-java/maven-bin"
 
-node.default[:camus][:cluster] = node.cluster_name
-
 deploy_skeleton "camus"
 
 deploy_application "camus" do

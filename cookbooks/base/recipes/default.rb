@@ -13,7 +13,7 @@ end
 
 # filter nodes that belong to the same cluster as the current node
 node.run_state[:cluster_nodes] = node.run_state[:nodes].select do |n|
-  n[:cluster][:name] == node[:cluster][:name] rescue false
+  n.cluster_name == node.cluster_name rescue false
 end
 
 # create script path

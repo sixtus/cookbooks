@@ -60,7 +60,7 @@ module PlatformHelpers
   end
 
   def vagrant?
-    vbox_guest? && node[:cluster][:name] == "vagrant"
+    vbox_guest? && node.cluster_name == "vagrant"
   end
 end
 

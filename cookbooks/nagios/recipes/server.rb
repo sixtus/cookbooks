@@ -79,7 +79,7 @@ hostgroups = {}
 
 hosts.each do |h|
   # group per cluster
-  cluster = h[:cluster][:name] rescue "default"
+  cluster = h.cluster_name
 
   hostgroups[cluster] ||= []
   hostgroups[cluster] << h[:fqdn]

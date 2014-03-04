@@ -1,7 +1,7 @@
 default[:camus][:git][:repository] = "https://github.com/linkedin/camus"
 default[:camus][:git][:revision] = "camus-kafka-0.8"
 
-default[:camus][:cluster] = nil
+default[:camus][:cluster] = node.cluster_name
 default[:camus][:topics] = nil
 default[:camus][:decoder] = nil
 default[:camus][:writer] = nil
