@@ -9,6 +9,7 @@ default[:hadoop][:fs][:s3][:secret_key] = ""
 
 default[:hadoop][:dfs][:name_dir] = "/var/lib/hadoop/name"
 default[:hadoop][:dfs][:data_dir] = "/var/lib/hadoop/data"
+default[:hadoop][:dfs][:reserved] = 0
 
 default[:hadoop][:dfs][:permissions] = false
 
