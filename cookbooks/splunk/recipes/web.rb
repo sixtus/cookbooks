@@ -21,3 +21,7 @@ end
 nginx_server "splunk" do
   template "nginx.conf"
 end
+
+shorewall_rule "splunkweb" do
+  destport "80,443"
+end
