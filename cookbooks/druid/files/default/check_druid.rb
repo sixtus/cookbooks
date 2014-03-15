@@ -24,7 +24,11 @@ module Usage
   end
 
   def to_s(m)
-    usage(m).map { |k, v| "#{k}: #{v.round}%" }.sort.join(', ')
+    usage(m).select do |ip, value|
+      value > threshold(:warning)
+    end.map do |ip, value|
+      "#{Resolv.getname(ip.split(':').first)}: #{value.round}%"
+    end.sort.join(', ')
   end
 end
 
