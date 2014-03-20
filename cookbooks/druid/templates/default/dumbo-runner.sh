@@ -9,9 +9,9 @@ source ~/.rvm/scripts/rvm
 
 PATH+=":/opt/hadoop/bin"
 
-cd /var/app/dumbo/current || exit 1
-
 while true; do
+  cd /var/app/dumbo/current || exit 1
+
   (
     flock -n 9 || exit 1
     ./dumbo.rb
