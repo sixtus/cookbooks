@@ -18,10 +18,11 @@ default[:druid][:zookeeper][:root] = "/druid"
 default[:druid][:zookeeper][:timeout] = 30000
 default[:druid][:zookeeper][:discovery] = "/discovery"
 
+default[:druid][:processing][:numThreads] = [node[:cpu][:total]-1,1].max
 
 default[:druid][:broker][:port]                 = 8080
-default[:druid][:broker][:mx]                   = "60g"
-default[:druid][:broker][:dm]                   = "64m"
+default[:druid][:broker][:mx]                   = "50g"
+default[:druid][:broker][:dm]                   = "10g"
 
 default[:druid][:coordinator][:port]            = 8081
 default[:druid][:coordinator][:mx]              = "2g"
