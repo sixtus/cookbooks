@@ -28,7 +28,7 @@ if nagios_client?
   end
 
   nrpe_command "check_total_procs" do
-    command "/usr/lib/nagios/plugins/check_procs -w 300 -c 1000"
+    command "/usr/lib/nagios/plugins/check_procs -w 512 -c 1024"
   end
 
   nagios_service "PROCS" do
