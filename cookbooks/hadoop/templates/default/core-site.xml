@@ -6,7 +6,7 @@
 <% if @name_node %>
   <property>
     <name>fs.default.name</name>
-    <value>hdfs://<%= @name_node[:fqdn] %>:9000/</value>
+    <value>hdfs://<%= @name_node[:ipaddress] %>:9000/</value>
   </property>
   <property>
     <name>dfs.hosts.exclude</name>

@@ -6,7 +6,7 @@
   <% if @job_tracker %>
   <property>
     <name>mapred.job.tracker</name>
-    <value><%= @job_tracker[:fqdn] %>:9001</value>
+    <value><%= @job_tracker[:ipaddress] %>:9001</value>
   </property>
   <% end %>
 
