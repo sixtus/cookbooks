@@ -23,6 +23,7 @@ default[:druid][:processing][:numThreads] = [node[:cpu][:total]-1,1].max
 default[:druid][:broker][:port]                 = 8080
 default[:druid][:broker][:mx]                   = "50g"
 default[:druid][:broker][:dm]                   = "10g"
+default[:druid][:broker][:cache_size_in_bytes]  = 42949672960
 
 default[:druid][:coordinator][:port]            = 8081
 default[:druid][:coordinator][:mx]              = "2g"
