@@ -2,7 +2,7 @@
 
 # Run in UTC
 export TZ="/usr/share/zoneinfo/UTC"
-
+export JRUBY_OPTS="-J-Xmx1g"
 unset RUBYOPTS
 
 source ~/.rvm/scripts/rvm
