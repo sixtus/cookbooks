@@ -19,6 +19,9 @@ JVM_OPTS+=" -Djava.io.tmpdir=/var/app/druid/storage/tmp"
 JVM_OPTS+=" -Dcom.sun.management.jmxremote.port=$JMXPORT"
 JVM_OPTS+=" -Dcom.sun.management.jmxremote.authenticate=false"
 JVM_OPTS+=" -Dcom.sun.management.jmxremote.ssl=false"
+<% if @druid_spec_file %>
+JVM_OPTS+=" -Ddruid.realtime.specFile=#{@druid_spec_file}"
+<% end %>
 
 # build the classpath - use node[:druid][:extensions] for more
 CLASSPATH="/etc/druid"

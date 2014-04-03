@@ -3,7 +3,7 @@ include_recipe "druid"
 systemd_unit "druid-historical.service" do
   template "druid-service"
   variables({
-    druid_service: "historical",
+    druid_service: "druid-historical",
   })
 
   notifies :restart, "service[druid-historical]", :immediately

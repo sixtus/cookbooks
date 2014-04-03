@@ -1,12 +1,12 @@
 [Unit]
-Description=Druid <%= @druid_service %> %I
+Description=<%= @druid_service %> %I
 After=network.target
 
 [Service]
 User=druid
 Group=druid
-ExecStart=/usr/libexec/druid-<%= @druid_service %>
-SyslogIdentifier=druid-<%= @druid_service %>
+ExecStart=/usr/libexec/<%= @druid_service %>
+SyslogIdentifier=<%= @druid_service %>
 Restart=always
 
 [Install]

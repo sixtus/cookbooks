@@ -5,7 +5,7 @@ node.default[:druid][:logger] = true
 systemd_unit "druid-broker.service" do
   template "druid-service"
   variables({
-    druid_service: "broker",
+    druid_service: "druid-broker",
   })
 
   notifies :restart, "service[druid-broker]", :immediately

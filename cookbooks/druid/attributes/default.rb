@@ -32,6 +32,7 @@ default[:druid][:coordinator][:dm]              = "64m"
 default[:druid][:realtime][:port]               = 8082
 default[:druid][:realtime][:mx]                 = "15g"
 default[:druid][:realtime][:dm]                 = "15g"
+default[:druid][:realtime][:spec_files]         = %w{realtime}
 
 default[:druid][:historical][:port]             = 8083
 default[:druid][:historical][:mx]               = "15g"
