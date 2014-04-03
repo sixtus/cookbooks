@@ -2,7 +2,7 @@ include_recipe "druid"
 
 node.default[:druid][:logger] = true
 
-node[:druid][:realtime][:spec_files].each do |spec_name|
+node[:druid][:realtime][:spec_files].each_with_index do |spec_name, port_offset|
   service_name  = "druid-#{spec_name}"
 
   # the spec_file is not part of this recipe, as it is too specific
@@ -15,7 +15,7 @@ node[:druid][:realtime][:spec_files].each do |spec_name|
     mode "0755"
     variables({
       druid_service:    "realtime",
-      druid_port:       node[:druid][:realtime][:port],
+      druid_port:       node[:druid][:realtime][:port] + port_offset,
       druid_mx:         node[:druid][:realtime][:mx],
       druid_dm:         node[:druid][:realtime][:dm],
       druid_spec_file:  spec_file,

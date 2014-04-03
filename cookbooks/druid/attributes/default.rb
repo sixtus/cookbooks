@@ -29,24 +29,24 @@ default[:druid][:coordinator][:port]            = 8081
 default[:druid][:coordinator][:mx]              = "2g"
 default[:druid][:coordinator][:dm]              = "64m"
 
-default[:druid][:realtime][:port]               = 8082
+default[:druid][:historical][:port]             = 8082
+default[:druid][:historical][:mx]               = "15g"
+default[:druid][:historical][:dm]               = "15g"
+
+default[:druid][:realtime][:port]               = 8083
 default[:druid][:realtime][:mx]                 = "15g"
 default[:druid][:realtime][:dm]                 = "15g"
 default[:druid][:realtime][:spec_files]         = %w{realtime}
 
-default[:druid][:historical][:port]             = 8083
-default[:druid][:historical][:mx]               = "15g"
-default[:druid][:historical][:dm]               = "15g"
-
-default[:druid][:overlord][:port]               = 8084
+default[:druid][:overlord][:port]               = 8090
 default[:druid][:overlord][:mx]                 = "2g"
 default[:druid][:overlord][:dm]                 = "64m"
 
-default[:druid][:indexer][:port]                = 8085
+default[:druid][:indexer][:port]                = 8091
 default[:druid][:indexer][:mx]                  = "2g"
 default[:druid][:indexer][:dm]                  = "64m"
 default[:druid][:indexer][:runner][:javaOpts]   = "-d64 -server -Xmx1g"
-default[:druid][:indexer][:runner][:startPort]  = 8085
+default[:druid][:indexer][:runner][:startPort]  = 8092
 
 default[:druid][:server][:max_size] = 300000000000
 default[:druid][:server][:tier] = "default"
