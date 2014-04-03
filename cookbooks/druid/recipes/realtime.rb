@@ -20,22 +20,21 @@ node[:druid][:realtime][:spec_files].each_with_index do |spec_name, port_offset|
       druid_dm:         node[:druid][:realtime][:dm],
       druid_spec_file:  spec_file,
     })
-
-    notifies :restart, "service[#{service_name}]"
   end
 
-  systemd_unit service_name do
+  systemd_unit "#{service_name}.service" do
     template "druid-service"
     variables({
       druid_service: service_name,
     })
-    notifies :restart, "service[#{service_name}]"
   end
 
   service service_name do
     action [:enable, :start]
     subscribes :restart, "template[/etc/druid/runtime.properties]"
     subscribes :restart, "template[#{spec_file}]"
+    subscribes :restart, "template[/usr/libexec/#{service_name}]"
+    subscribes :restart, "systemd_unit[#{service_name}]"
     # subscribes :restart, "template[/etc/druid/log4j.properties]"
   end
 end
