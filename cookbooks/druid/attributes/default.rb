@@ -11,19 +11,25 @@ default[:druid][:extensions] = []
 default[:druid][:monitors] = []
 default[:druid][:logger] = false
 
+default[:druid][:log4j][:full] = false
+
 default[:druid][:cluster] = node.cluster_name
 default[:druid][:service] = node.cluster_name
 
-default[:druid][:zookeeper][:root] = "/druid"
-default[:druid][:zookeeper][:timeout] = 30000
-default[:druid][:zookeeper][:discovery] = "/discovery"
+default[:druid][:zookeeper][:root]              = "/druid"
+default[:druid][:zookeeper][:timeout]           = 30000
+default[:druid][:zookeeper][:discovery]         = "/discovery"
 
-default[:druid][:processing][:numThreads] = [node[:cpu][:total]-1,1].max
+default[:druid][:processing][:numThreads]       = [node[:cpu][:total]-1,1].max
+default[:druid][:processing][:buffer]           = 1073741824
 
 default[:druid][:broker][:port]                 = 8080
 default[:druid][:broker][:mx]                   = "50g"
 default[:druid][:broker][:dm]                   = "10g"
 default[:druid][:broker][:cache_size_in_bytes]  = 42949672960
+default[:druid][:broker][:connections]          = 20
+default[:druid][:broker][:timeout]              = PT10M
+default[:druid][:broker][:balancer]             = "connectionCount"
 
 default[:druid][:coordinator][:port]            = 8081
 default[:druid][:coordinator][:mx]              = "2g"
