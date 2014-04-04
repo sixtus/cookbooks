@@ -28,7 +28,7 @@ default[:druid][:broker][:mx]                   = "50g"
 default[:druid][:broker][:dm]                   = "10g"
 default[:druid][:broker][:cache_size_in_bytes]  = 42949672960
 default[:druid][:broker][:connections]          = 20
-default[:druid][:broker][:timeout]              = PT10M
+default[:druid][:broker][:timeout]              = "PT10M"
 default[:druid][:broker][:balancer]             = "connectionCount"
 
 default[:druid][:coordinator][:port]            = 8081
