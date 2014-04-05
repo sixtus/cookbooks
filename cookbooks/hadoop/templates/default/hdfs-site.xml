@@ -61,4 +61,10 @@
     <name>dfs.support.broken.append</name>
     <value>true</value>
   </property>
+
+  <property>
+    <name>dfs.datanode.balance.bandwidthPerSec</name>
+    <value>5242880</value>
+  </property>
+
 </configuration>
