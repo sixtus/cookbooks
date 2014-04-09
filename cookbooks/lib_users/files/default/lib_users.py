@@ -150,7 +150,7 @@ def main(restart=False):
 
     if restart:
         restart_services(users)
-    else:
+    elif len(users) > 0:
         print(fmt_machine(users))
 
 

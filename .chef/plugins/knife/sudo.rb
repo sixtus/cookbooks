@@ -15,7 +15,7 @@ module KnifeSudo
       :short => "-C NUM",
       :long => "--concurrency NUM",
       :description => "The number of concurrent connections",
-      :default => nil,
+      :default => 10,
       :proc => lambda { |o| o.to_i }
 
     option :query,
