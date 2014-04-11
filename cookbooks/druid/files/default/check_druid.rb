@@ -5,6 +5,7 @@ require 'time'
 require 'open-uri'
 require 'yajl'
 require 'set'
+require 'resolv'
 
 module Usage
   def usage(m)
