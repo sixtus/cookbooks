@@ -9,3 +9,5 @@ default[:camus][:writer] = nil
 default[:camus][:etl][:destination] = "/history"
 default[:camus][:etl][:base_path] = "/camus/running"
 default[:camus][:etl][:history_path] = "/camus/state"
+
+default[:camus][:hadoop][:path] = "/opt/hadoop/bin"

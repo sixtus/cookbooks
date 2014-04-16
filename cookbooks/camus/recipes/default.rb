@@ -1,4 +1,3 @@
-include_recipe "hadoop"
 package "dev-java/maven-bin"
 
 deploy_skeleton "camus"

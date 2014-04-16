@@ -6,14 +6,20 @@ require 'time'
 class CheckCamus < Nagios::Plugin
   def initialize
     super
+    @hadoop = "/opt/hadoop/bin/hadoop"
+
     @config.options.on('-p', '--path=PATH',
       'Path to check') { |path| @path = path }
+
+    @config.options.on('-x', '--hadoop=EXECUTABLE',
+      'Full name of hadoop executable') { |hadoop| @hadoop = hadoop }
+
     @config.parse!
     raise "No path given" unless @path
   end
 
   def measure
-    raw = %x{/opt/hadoop/bin/hadoop fs -lsr #{@path} 2>/dev/null|tail -1}
+    raw = %x{#{@hadoop} fs -lsr #{@path} 2>/dev/null|tail -1}
     parts = raw.split(' ')[-1].split('/') rescue [0,0,0,0,2000,1,1,0]
     (Time.now - Time.parse("#{parts[4..6].join('-')}T#{parts[7]}:00Z")) / 60 / 60 # hours
   end
