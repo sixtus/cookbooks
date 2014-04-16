@@ -7,7 +7,7 @@ unset RUBYOPTS
 
 source ~/.rvm/scripts/rvm
 
-PATH+=":/opt/hadoop/bin"
+PATH+=":<%= node[:druid][:hadoop][:path] %>"
 
 while true; do
   cd /var/app/dumbo/current || exit 1

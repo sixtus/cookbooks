@@ -28,8 +28,8 @@ CLASSPATH="/etc/druid"
 CLASSPATH+=":$(/usr/bin/find /var/app/druid/current/services/target/*selfcontained.jar)"
 
 # add hadoop if it exists
-if [ -x /opt/hadoop/bin/hadoop ]; then
-  CLASSPATH+=":$(/opt/hadoop/bin/hadoop classpath)"
+if [ -x <%= "#{node[:druid][:hadoop][:path]}/hadoop" %> ]; then
+  CLASSPATH+=":$(<%= "#{node[:druid][:hadoop][:path]}/hadoop" %> classpath)"
 fi
 
 exec /usr/bin/java $JVM_OPTS -cp $CLASSPATH io.druid.cli.Main server <%= @druid_service %>
