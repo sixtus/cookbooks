@@ -54,7 +54,7 @@ default[:druid][:indexer][:dm]                  = "64m"
 default[:druid][:indexer][:runner][:javaOpts]   = "-d64 -server -Xmx1g"
 default[:druid][:indexer][:runner][:startPort]  = 8092
 
-default[:druid][:server][:max_size] = 300000000000
+default[:druid][:server][:max_size] = 0
 default[:druid][:server][:tier] = "default"
 
 default[:druid][:storage][:type] = "noop"
