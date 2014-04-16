@@ -20,6 +20,9 @@ script_path "#{chef_repo_path}/scripts"
 
 client_key "#{chef_repo_path}/.chef/client.pem"
 
+validation_client_name node_name
+validation_key client_key
+
 syntax_check_cache_path "#{chef_repo_path}/.chef/checksums"
 
 file_cache_path "#{chef_root}/cache/files"
