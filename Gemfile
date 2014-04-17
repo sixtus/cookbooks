@@ -7,6 +7,7 @@ group :solo do
 end
 
 group :support do
+  gem 'activesupport'
   gem 'foodcritic', '~> 3.0'
   gem 'github_api'
   gem 'hetzner-api'

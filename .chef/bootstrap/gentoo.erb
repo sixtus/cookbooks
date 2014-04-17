@@ -11,6 +11,7 @@ echo ${hostname} > /etc/hostname
 hostname ${hostname}
 
 emerge -n net-misc/ntp
+systemctl stop ntpd
 timedatectl set-local-rtc 0
 ntpdate pool.ntp.org
 
