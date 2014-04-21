@@ -43,7 +43,7 @@
 
   <property>
     <name>mapred.child.java.opts</name>
-    <value>-Duser.timezone=UTC -Dfile.encoding=UTF-8 -Xmx4g -Djava.io.tmpdir=<%= node[:hadoop][:java_tmp] %></value>
+    <value>-Duser.timezone=UTC -Dfile.encoding=UTF-8 -Xmx6g -Djava.io.tmpdir=<%= node[:hadoop][:java_tmp] %></value>
   </property>
 
   <property>
