@@ -47,7 +47,6 @@ namespace :ssl do
     knife :upload, ["cookbooks/certificates"]
   end
 
-  task :do_cert => [ :init ]
   task :do_cert, :cn do |t, args|
     cn = args.cn
     keyfile = cn.gsub("*", "wildcard")

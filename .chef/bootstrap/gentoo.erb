@@ -12,6 +12,7 @@ hostname ${hostname}
 
 emerge -n net-misc/ntp
 systemctl stop ntpd
+pkill -9 ntp*
 timedatectl set-local-rtc 0
 ntpdate pool.ntp.org
 
