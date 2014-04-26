@@ -40,8 +40,8 @@ default[:druid][:historical][:mx]               = "15g"
 default[:druid][:historical][:dm]               = "15g"
 
 default[:druid][:realtime][:port]               = 8083
-default[:druid][:realtime][:mx]                 = "15g"
-default[:druid][:realtime][:dm]                 = "15g"
+default[:druid][:realtime][:mx]                 = "12g"
+default[:druid][:realtime][:dm]                 = "12g"
 default[:druid][:realtime][:spec_files]         = %w{realtime}
 
 default[:druid][:overlord][:port]               = 8090
