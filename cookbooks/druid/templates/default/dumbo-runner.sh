@@ -2,12 +2,12 @@
 
 # Run in UTC
 export TZ="/usr/share/zoneinfo/UTC"
-export JRUBY_OPTS="-J-Xmx1g"
+export JRUBY_OPTS="-J-Xmx4g"
 unset RUBYOPTS
 
 source ~/.rvm/scripts/rvm
 
-PATH+=":<%= node[:druid][:hadoop][:path] %>"
+export PATH=<%= node[:druid][:hadoop][:path] %>:$PATH
 
 while true; do
   cd /var/app/dumbo/current || exit 1

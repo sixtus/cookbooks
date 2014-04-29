@@ -10,4 +10,4 @@ default[:camus][:etl][:destination] = "/history"
 default[:camus][:etl][:base_path] = "/camus/running"
 default[:camus][:etl][:history_path] = "/camus/state"
 
-default[:camus][:hadoop][:path] = "/opt/hadoop/bin"
+default[:camus][:hadoop][:path] = "/var/app/hadoop2/current/bin"

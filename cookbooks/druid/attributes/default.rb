@@ -76,4 +76,4 @@ default[:druid][:nagios][:whitelist] = []
 default[:dumbo][:git][:repository]      = "https://github.com/liquidm/druid-dumbo"
 default[:dumbo][:git][:revision]        = "production"
 
-default[:druid][:hadoop][:path]         = "/opt/hadoop/bin"
+default[:druid][:hadoop][:path]         = "/var/app/hadoop2/current/bin"

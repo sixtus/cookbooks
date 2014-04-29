@@ -6,7 +6,7 @@ require 'time'
 class CheckCamus < Nagios::Plugin
   def initialize
     super
-    @hadoop = "/opt/hadoop/bin/hadoop"
+    @hadoop = "/var/app/hadoop2/current/bin/hdfs"
 
     @config.options.on('-p', '--path=PATH',
       'Path to check') { |path| @path = path }
@@ -19,7 +19,7 @@ class CheckCamus < Nagios::Plugin
   end
 
   def measure
-    raw = %x{#{@hadoop} fs -lsr #{@path} 2>/dev/null|tail -1}
+    raw = %x{#{@hadoop} dfs -ls -R #{@path} 2>/dev/null|tail -1}
     parts = raw.split(' ')[-1].split('/') rescue [0,0,0,0,2000,1,1,0]
     (Time.now - Time.parse("#{parts[4..6].join('-')}T#{parts[7]}:00Z")) / 60 / 60 # hours
   end
