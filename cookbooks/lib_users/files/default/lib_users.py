@@ -35,6 +35,7 @@ NOLIBS = [
     "/var/app/druid/*",
     "/var/app/kafka/storage/*",
     "/var/tmp/hadoop/*",
+    "/var/app/hadoop2/*",
 ]
 
 FP_EXCLUDES = [
