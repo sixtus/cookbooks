@@ -22,7 +22,7 @@ template "/usr/libexec/druid-coordinator" do
     druid_mx:       node[:druid][:coordinator][:mx],
     druid_dm:       node[:druid][:coordinator][:dm],
   })
-  
+
   notifies :restart, "service[druid-coordinator]", :immediately
 end
 
@@ -34,14 +34,13 @@ end
 
 if nagios_client?
   nrpe_command "check_druid_usage" do
-    command "/usr/lib/nagios/plugins/check_druid -m Usage -u http://localhost:#{node[:druid][:coordinator][:port]}/info/servers?full -w 75 -c 90"
+    command "/usr/lib/nagios/plugins/check_druid -m Usage -u http://localhost:#{node[:druid][:coordinator][:port]}/info/servers?full -w 90 -c 95"
   end
 
   nagios_service "DRUID-USAGE" do
     check_command "check_nrpe!check_druid_usage"
     servicegroups "druid"
   end
-
 
   druid_databases = node[:druid][:nagios][:topics]
 
