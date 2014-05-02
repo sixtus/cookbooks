@@ -18,7 +18,7 @@ group :support do
   gem 'mechanize'
   gem 'mixlib-shellout', github: 'zenops/mixlib-shellout'
   gem 'rake'
-  gem 'rb-inotify', '~> 0.8.8'
+  gem 'rb-inotify', '~> 0.9'
   gem 'tailor', github: 'hollow/tailor'
 end
 

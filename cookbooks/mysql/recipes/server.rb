@@ -52,7 +52,7 @@ if gentoo?
       end
     end
 
-    mysql_root_pass = vagrant? ? "root" : get_password("mysql/root")
+    mysql_root_pass = vbox? ? "root" : get_password("mysql/root")
 
     template "/usr/sbin/mysql_pkg_config" do
       source "mysql_pkg_config"
@@ -98,13 +98,13 @@ if gentoo?
     mysql_user "root" do
       password mysql_root_pass
       force_password true
-      host "%" if vagrant?
+      host "%" if vbox?
     end
 
     mysql_grant "root" do
       database "*"
       user "root"
-      user_host "%" if vagrant?
+      user_host "%" if vbox?
       grant_option true
     end
 

@@ -25,4 +25,4 @@ syntax_check_cache_path "#{chef_repo_path}/.chef/checksums"
 file_cache_path "#{chef_root}/cache/files"
 file_backup_path "#{chef_root}/backup"
 
-ssl_verify_mode :verify_peer
+ssl_verify_mode :verify_none

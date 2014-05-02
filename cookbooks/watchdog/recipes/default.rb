@@ -1,4 +1,4 @@
-if !vbox_guest?
+if !vbox?
   if gentoo?
     package "sys-apps/watchdog"
 

@@ -17,8 +17,7 @@ ntpdate pool.ntp.org
 emerge --sync
 emerge --nospinner --keep-going=n --noreplace --quiet app-admin/chef
 
-mkdir -p /etc/chef
-mkdir -p /var/log/chef
+mkdir -p /etc/chef /var/lib/chef
 
 (
 cat <<'EOP'

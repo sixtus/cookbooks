@@ -5,7 +5,7 @@ execute "hadoop-namenode-format" do
   user "hadoop"
   group "hadoop"
   creates "/var/lib/hadoop/name/image/fsimage"
-  only_if { vagrant? }
+  only_if { vbox? }
 end
 
 service "hadoop@namenode" do

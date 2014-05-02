@@ -1,4 +1,4 @@
-if !guest?
+if !lxc?
   if gentoo?
     package "app-emulation/lxc"
     package "net-misc/bridge-utils"

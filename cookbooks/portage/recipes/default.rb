@@ -5,7 +5,7 @@ if root?
 
   package "sys-apps/portage"
 
-  %w(eix elogv gentoolkit gentoolkit-dev portage-utils).each do |pkg|
+  %w(eix elogv gentoolkit portage-utils).each do |pkg|
     package "app-portage/#{pkg}"
   end
 

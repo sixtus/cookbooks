@@ -34,6 +34,8 @@ directory "/var/log/chef" do
   owner "root"
   group "root"
   mode "0755"
+  action :delete
+  recursive true
 end
 
 directory "/var/lib/chef" do

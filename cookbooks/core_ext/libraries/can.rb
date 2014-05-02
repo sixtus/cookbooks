@@ -7,7 +7,7 @@ module CanHelpers
 
   def can_run_ntpd?
     return false if lxc?
-    return false if vbox_guest?
+    return false if vbox?
     return true
   end
 
