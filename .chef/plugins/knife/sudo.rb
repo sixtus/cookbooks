@@ -35,7 +35,7 @@ module KnifeSudo
       knife_ssh = Chef::Knife::Ssh.new
       knife_ssh.name_args = [config[:query], command]
       knife_ssh.config[:manual] = false
-      knife_ssh.config[:concurrency] = config[:concurrency]
+      knife_ssh.config[:concurrency] = config[:concurrency] unless config[:concurrency] == 0
       knife_ssh.run
     end
   end
