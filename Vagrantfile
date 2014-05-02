@@ -29,7 +29,6 @@ define("ubuntu-base", "10.10.10.5/24") do |vm, chef|
 end
 
 define("chef", "10.10.10.10/24") do |vm, chef|
-  vm.hostname = "chef.zenops.ws"
   vm.box = "ubuntu-12.04.3-amd64-base"
   vm.box_url = "http://mirror.zenops.net/ubuntu/amd64/ubuntu-12.04.3-amd64-base.box"
   chef.add_role("base")
@@ -37,7 +36,6 @@ define("chef", "10.10.10.10/24") do |vm, chef|
 end
 
 define("nagios", "10.10.10.11/24") do |vm, chef|
-  vm.hostname = "nagios.zenops.ws"
   vm.box = "zentoo-amd64-base"
   vm.box_url = "http://mirror.zenops.net/zentoo/amd64/zentoo-amd64-base.box"
   chef.add_role("base")
@@ -46,7 +44,6 @@ define("nagios", "10.10.10.11/24") do |vm, chef|
 end
 
 define("lab", "10.10.10.12/24") do |vm, chef|
-  vm.hostname = "lab.zenops.ws"
   vm.box = "zentoo-amd64-base"
   vm.box_url = "http://mirror.zenops.net/zentoo/amd64/zentoo-amd64-base.box"
   chef.add_role("base")
