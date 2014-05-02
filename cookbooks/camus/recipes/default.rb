@@ -1,4 +1,4 @@
-package "dev-java/maven-bin"
+include_recipe "java"
 
 deploy_skeleton "camus"
 

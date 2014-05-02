@@ -1,7 +1,5 @@
 include_recipe "java"
 
-package "dev-java/maven-bin"
-
 deploy_skeleton "druid"
 
 %w(
