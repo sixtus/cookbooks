@@ -3,7 +3,7 @@ def define(name, ip)
     config.vm.define name do |base|
       _chef = nil
       user = (ENV["USER"] || ENV["USERNAME"]).downcase.tr(" ", "-")
-      base.vm.hostname = "#{name}.#{user}.zenops.ws"
+      base.vm.hostname = "#{name}.#{user}.vagrantup.com"
       base.vm.network "private_network", ip: ip
       base.vm.provision :chef_client do |chef|
         _chef = chef
