@@ -69,6 +69,7 @@ namespace :node do
     ENV['DISTRO'] ||= "gentoo"
     run_task('node:checkdns', args.fqdn, args.ipaddress)
     run_task('ssl:do_cert', args.fqdn)
+    knife :upload, ["cookbooks/certificates"]
     knife :bootstrap, [args.fqdn, "--distro", ENV['DISTRO'], "-P", "tux", "-r", "role[base]"]
     run_task('node:updateworld', args.fqdn) unless ENV['NO_UPDATEWORLD']
   end
