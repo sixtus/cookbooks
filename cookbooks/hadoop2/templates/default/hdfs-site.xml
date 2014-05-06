@@ -116,4 +116,8 @@
     <name>dfs.datanode.handler.count</name>
     <value>40</value>
   </property>
+  <property>
+    <name>dfs.datanode.du.reserved</name>
+    <value><%= node[:hadoop2][:du][:reserved] %></value>
+  </property>
 </configuration>

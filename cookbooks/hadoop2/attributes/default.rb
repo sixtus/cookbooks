@@ -27,3 +27,5 @@ default[:hadoop2][:hive][:revision] = "master"
 
 default[:hadoop2][:fs][:s3][:access_key] = nil
 default[:hadoop2][:fs][:s3][:secret_key] = nil
+
+default[:hadoop2][:du][:reserved] = 0
