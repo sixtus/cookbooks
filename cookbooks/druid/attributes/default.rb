@@ -17,7 +17,7 @@ default[:druid][:cluster] = node.cluster_name
 default[:druid][:service] = node.cluster_name
 
 default[:druid][:zookeeper][:root]              = "/druid"
-default[:druid][:zookeeper][:timeout]           = 30000
+default[:druid][:zookeeper][:timeout]           = 6000
 default[:druid][:zookeeper][:discovery]         = "/discovery"
 
 default[:druid][:processing][:numThreads]       = [node[:cpu][:total]-1,1].max
