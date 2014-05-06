@@ -9,7 +9,10 @@ echo "spawning druid <%= @druid_service %> on $PORT, JMX on $JMXPORT"
 
 # JVM options
 JVM_OPTS=""
-JVM_OPTS+=" -d64 -Xmx<%= @druid_mx %> -XX:MaxDirectMemorySize=<%= @druid_dm %>"
+JVM_OPTS+=" -server -d64"
+JVM_OPTS+=" -Xmx<%= @druid_mx %>"
+JVM_OPTS+=" -XX:MaxDirectMemorySize=<%= @druid_dm %>"
+JVM_OPTS+=" -XX:+UseConcMarkSweepGC"
 JVM_OPTS+=" -Duser.timezone=UTC"
 JVM_OPTS+=" -Dfile.encoding=UTF-8"
 JVM_OPTS+=" -Ddruid.host=$HOST"
