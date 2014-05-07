@@ -57,7 +57,7 @@
   </property>
   <property>
     <name>mapreduce.reduce.memory.mb</name>
-    <value>8192</value>
+    <value>12288</value>
   </property>
   <property>
     <name>mapreduce.reduce.java.opts</name>
@@ -74,7 +74,7 @@
   </property>
   <property>
     <name>mapreduce.task.io.sort.factor</name>
-    <value>20</value>
+    <value>100</value>
   </property>
   <property>
     <name>mapreduce.jobtracker.handler.count</name>
