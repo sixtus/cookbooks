@@ -7,6 +7,9 @@ User=druid
 Group=druid
 ExecStart=/usr/libexec/<%= @druid_service %>
 SyslogIdentifier=<%= @druid_service %>
+OOMScoreAdjust=-1
+Nice=-1
+IOSchedulingClass=realtime
 Restart=always
 
 [Install]
