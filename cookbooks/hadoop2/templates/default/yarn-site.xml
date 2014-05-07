@@ -5,6 +5,10 @@
 %>
 <configuration>
   <property>
+    <name>yarn.scheduler.maximum-allocation-mb</name>
+    <value>12288</value>
+  </property>
+  <property>
     <name>yarn.resourcemanager.scheduler.class</name>
     <value>org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler</value>
   </property>
