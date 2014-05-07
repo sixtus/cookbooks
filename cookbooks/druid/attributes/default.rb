@@ -56,6 +56,7 @@ default[:druid][:indexer][:runner][:startPort]  = 8092
 
 default[:druid][:server][:max_size] = 0
 default[:druid][:server][:tier] = "default"
+default[:druid][:server][:priority] = 0
 
 default[:druid][:storage][:type] = "noop"
 
