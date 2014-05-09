@@ -69,10 +69,10 @@ if nagios_client?
     next if fs[:mount] =~ %r{/run/user/}
     fs if fs[:fs_type] && fs[:mount] && File.directory?(fs[:mount])
   end.compact.map do |fs|
-    warn = [fs[:kb_size].to_i * 0.10, 1.0 * 1024 * 1024].min.to_i
-    crit = [fs[:kb_size].to_i * 0.05, 0.5 * 1024 * 1024].min.to_i
-    "-w #{warn}K -c #{crit}K -p #{fs[:mount]} -C"
-  end.join(' ')
+    warn = [fs[:kb_size].to_i * 0.10, 1.0 * 1024 * 1024].min.to_i / 1024
+    crit = [fs[:kb_size].to_i * 0.05, 0.5 * 1024 * 1024].min.to_i / 1024
+    warn > 0 && crit > 0 ? "-w #{warn} -c #{crit} -p #{fs[:mount]}" : nil
+  end.compact.join(' -C ')
 
   nrpe_command "check_disks" do
     command "/usr/lib/nagios/plugins/check_disk #{mounts}"
