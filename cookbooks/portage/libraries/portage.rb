@@ -122,7 +122,7 @@ module Gentoo
 
       def packages_cache_from_eix!
         eix = "/usr/bin/eix"
-        eix_update = "/usr/bin/eix-update"
+        eix_update = "/usr/bin/sudo -H /usr/bin/eix-update"
 
         unless ::File.executable?(eix)
           raise Chef::Exceptions::Package, "You need to install app-portage/eix for fast package searches."

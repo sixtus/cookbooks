@@ -1,5 +1,6 @@
 if gentoo?
   package "app-shells/bash"
+  package "app-shells/bash-completion"
 
 elsif debian_based?
   package "bash"

@@ -29,3 +29,4 @@ file_cache_path "#{chef_root}/cache/files"
 file_backup_path "#{chef_root}/backup"
 
 ssl_verify_mode :verify_none
+verify_api_cert true

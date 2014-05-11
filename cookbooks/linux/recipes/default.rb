@@ -5,7 +5,11 @@ if root?
   include_recipe "systemd"
   include_recipe "linux::sysctl"
   include_recipe "linux::#{node[:platform]}"
-  include_recipe "linux::packages"
+end
+
+include_recipe "linux::packages"
+
+if root?
   include_recipe "linux::nagios"
 
   cron_daily "xfs_fsr" do

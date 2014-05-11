@@ -2,6 +2,8 @@ if gentoo?
   case node[:java][:vm]
   when /^oracle-jdk-bin-/
     package "dev-java/oracle-jdk-bin"
+  when /^icedtea-jdk-bin-/
+    package "dev-java/oracle-jdk-bin"
   else
     raise "unsupported JVM: #{node[:java][:vm]}"
   end
