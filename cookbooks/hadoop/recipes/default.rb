@@ -88,5 +88,3 @@ end
 nagios_plugin "check_hdfs" do
   source "check_hdfs.rb"
 end
-
-include_recipe "splunk::hadoop-ops" if splunk_forwarder?

@@ -8,4 +8,4 @@ supports "gentoo"
 
 depends "java"
 depends "nagios"
-depends "splunk"
+depends "splunk6"
