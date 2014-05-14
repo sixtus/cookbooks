@@ -11,6 +11,7 @@ include_recipe "linux::packages"
 
 if root?
   include_recipe "linux::nagios"
+  #include_recipe "linux::collectd"
 
   cron_daily "xfs_fsr" do
     command "/usr/sbin/xfs_fsr -t 600"
