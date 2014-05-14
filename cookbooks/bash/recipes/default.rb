@@ -105,6 +105,7 @@ end
   IP
   copy
   grab
+  mklnx
   mktar
   urlscript
 ).each do |f|
