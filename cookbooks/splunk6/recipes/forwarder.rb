@@ -1,9 +1,6 @@
 if splunk6_forwarder?
   if gentoo?
-    package "net-analyzer/splunkforwarder" do
-      action :upgrade
-      notifies :restart, "service[splunk]"
-    end
+    package "net-analyzer/splunkforwarder"
 
   elsif debian_based?
     remote_file "#{Chef::Config[:file_cache_path]}/splunkforwarder-6.0.1-189883-linux-2.6-amd64.deb" do
