@@ -108,11 +108,9 @@ class Chef
         def action_install
           # If we specified a version, and it's not the current version, move to the specified version
           if !@new_resource.version.nil? && !(target_version_already_installed?)
-            puts "VERSION MISMATCH: #{@new_resource.version.inspect}, #{@current_resource.version.inspect}"
             install_version = @new_resource.version
             # If it's not installed at all, install it
           elsif @current_resource.version.nil?
-            puts "NOT INSTALLED: #{@new_resource.inspect}"
             install_version = candidate_version
           else
             Chef::Log.debug("#{@new_resource} is already installed - nothing to do")
