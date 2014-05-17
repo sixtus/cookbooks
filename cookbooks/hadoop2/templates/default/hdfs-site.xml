@@ -120,4 +120,8 @@
     <name>dfs.datanode.du.reserved</name>
     <value><%= node[:hadoop2][:du][:reserved] %></value>
   </property>
+  <property>
+    <name>dfs.hosts.exclude</name>
+    <value>/etc/hadoop2/dfs.hosts.exclude</value>
+  </property>
 </configuration>

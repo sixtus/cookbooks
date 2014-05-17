@@ -105,6 +105,13 @@ end
   end
 end
 
+template "/etc/hadoop2/dfs.hosts.exclude" do
+  source "dfs.hosts.exclude"
+  owner "root"
+  group "hadoop2"
+  mode "0644"
+end
+
 systemd_unit "hdfs@.service"
 systemd_unit "yarn@.service"
 systemd_unit "mapred@.service"

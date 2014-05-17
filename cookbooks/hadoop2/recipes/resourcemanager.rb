@@ -2,8 +2,6 @@ include_recipe "hadoop2"
 
 YARN_SERVICE = "resourcemanager"
 RESTARTS_ON = %w{
-  yarn-site.xml
-  topology.data
 }
 
 service "yarn@#{YARN_SERVICE}" do

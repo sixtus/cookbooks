@@ -2,8 +2,6 @@ include_recipe "hadoop2"
 
 HDFS_SERVICE = "datanode"
 RESTARTS_ON = %w{
-  hdfs-site.xml
-  topology.data
 }
 
 service "hdfs@#{HDFS_SERVICE}" do

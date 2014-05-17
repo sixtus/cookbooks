@@ -2,9 +2,6 @@ include_recipe "hadoop2"
 
 HDFS_SERVICE = "namenode"
 RESTARTS_ON = %w{
-  hdfs-site.xml
-  core-site.xml
-  topology.data
 }
 # TODO: restart on topology.data ?
 

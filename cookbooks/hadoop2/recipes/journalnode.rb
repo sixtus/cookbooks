@@ -2,8 +2,6 @@ include_recipe "hadoop2"
 
 HDFS_SERVICE = "journalnode"
 RESTARTS_ON = %w{
-  hdfs-site.xml
-  core-site.xml
 }
 
 service "hdfs@#{HDFS_SERVICE}" do
