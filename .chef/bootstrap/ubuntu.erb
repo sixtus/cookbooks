@@ -12,6 +12,7 @@ hostname ${hostname}
 
 apt-get update
 apt-get upgrade -y
+apt-get install -y curl
 
 if ! type -P chef-client >/dev/null; then
 	curl -s -L https://www.opscode.com/chef/install.sh | $SUDO bash || exit 1
