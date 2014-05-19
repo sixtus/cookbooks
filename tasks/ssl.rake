@@ -115,7 +115,7 @@ namespace :ssl do
       sh("openssl ca -config #{SSL_CONFIG_FILE} -gencrl -out #{SSL_CERT_DIR}/ca.crl")
       cn = args.cn.gsub("*", "wildcard")
       sh("rm #{SSL_CERT_DIR}/#{cn}.{csr,crt,key}")
-      knife :upload, ["cookbooks/certificates"]
+      knife :upload, ["cookbooks/certificates"] unless ENV["BATCH"]
     end
   end
 
