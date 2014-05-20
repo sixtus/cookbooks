@@ -44,7 +44,7 @@ module PlatformHelpers
   end
 
   def vbox?
-    root? && File.read("/proc/modules") =~ /^vboxguest/
+    root? && File.exist?("/proc/modules") && File.read("/proc/modules") =~ /^vboxguest/
   end
 
   def lxc?
