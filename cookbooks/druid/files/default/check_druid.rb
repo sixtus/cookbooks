@@ -28,7 +28,9 @@ module Usage
     usage(m).select do |ip, value|
       value > threshold(:warning)
     end.map do |ip, value|
-      "#{Resolv.getname(ip.split(':').first)}: #{value.round}%"
+      address = ip.split(':').first
+      name = Resolv.getname(address) rescue address
+      "#{name}: #{value.round}%"
     end.sort.join(', ')
   end
 end
