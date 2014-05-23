@@ -57,7 +57,7 @@
   </property>
   <property>
     <name>mapreduce.reduce.memory.mb</name>
-    <value>12288</value>
+    <value>8192</value>
   </property>
   <property>
     <name>mapreduce.reduce.java.opts</name>
