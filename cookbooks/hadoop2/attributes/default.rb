@@ -1,7 +1,7 @@
 default[:hadoop2][:version] = "2.4.0"
 default[:hadoop2][:pig][:version] = "0.12.1"
 
-default[:hadoop2][:rack_id] = nil # defaulted to node[:hadoop][:rack_id] || "/#{node.cluster_name}/default"
+default[:hadoop2][:rack_id] = nil # defaulted to "/default-rack/#{node.cluster_name}"
 default[:hadoop2][:tmp_dir] = "/var/tmp/hadoop2"
 default[:hadoop2][:java_tmp] = "/var/tmp/java"
 

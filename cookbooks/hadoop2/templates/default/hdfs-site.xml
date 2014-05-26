@@ -106,7 +106,7 @@
   </property>
   <property>
     <name>dfs.datanode.balance.bandwidthPerSec</name>
-    <value>5242880</value>
+    <value>20971520</value>
   </property>
   <property>
     <name>dfs.namenode.handler.count</name>

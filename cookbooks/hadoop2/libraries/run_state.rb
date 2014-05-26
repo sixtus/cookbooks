@@ -32,11 +32,10 @@ module Hadoop2RunStateHelpers
   end
 
   def hadoop2_topology
-    Hash[hadoop2_datanodes.map do |n|
-      rack_id_v1 = n[:hadoop] && n[:hadoop][:rack_id]
+    Hash[node.run_state[:nodes].map do |n|
       rack_id_v2 = n[:hadoop2] && n[:hadoop2][:rack_id]
 
-      rack_id = rack_id_v2 || rack_id_v1 || "/#{node.cluster_name}/default"
+      rack_id = rack_id_v2 || "/default-rack/#{node.cluster_name}"
 
       [n, rack_id]
     end]
