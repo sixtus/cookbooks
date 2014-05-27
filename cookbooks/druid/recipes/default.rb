@@ -9,9 +9,7 @@ deploy_skeleton "druid"
   /var/app/druid/storage/info
   /var/app/druid/storage/segment_cache
   /var/app/druid/storage/realtime
-  /var/app/druid/storage/runner
   /var/app/druid/storage/task
-  /var/app/druid/storage/task_base
   /var/app/druid/storage/task_hadoop
 ).each do |dir|
   directory dir do

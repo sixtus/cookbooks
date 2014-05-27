@@ -51,8 +51,10 @@ default[:druid][:overlord][:dm]                 = "64m"
 default[:druid][:indexer][:port]                = 8091
 default[:druid][:indexer][:mx]                  = "2g"
 default[:druid][:indexer][:dm]                  = "64m"
-default[:druid][:indexer][:runner][:javaOpts]   = "-d64 -server -Xmx1g"
+default[:druid][:indexer][:runner][:javaOpts]   = "-d64 -server -Xmx8g"
 default[:druid][:indexer][:runner][:startPort]  = 8092
+default[:druid][:indexer][:workers]             = [node[:cpu][:total]-1,1].max
+default[:druid][:indexing][:service]            = node[:fqdn]
 
 default[:druid][:server][:max_size] = 0
 default[:druid][:server][:tier] = "default"
