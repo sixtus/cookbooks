@@ -1,31 +1,19 @@
 [Unit]
 Description=LXC Virtual Network
 ConditionPathExists=!/sys/class/net/lxcbr0
-ConditionPathExists=/lxc
-After=network.target
+Before=dhcpcd.service
 Before=lxc@.service
+Before=shorewall.service
+Before=shorewall6.service
 
 [Service]
-ExecStartPre=/sbin/brctl addbr lxcbr0
-ExecStartPre=/sbin/ip link set lxcbr0 up
-ExecStartPre=/sbin/ip addr add 10.0.3.1/24 dev lxcbr0
-ExecStart=/usr/sbin/dnsmasq --keep-in-foreground \
-    --user=dnsmasq \
-    --group=dnsmasq \
-    --strict-order \
-    --bind-interfaces \
-    --pid-file=/lxc/dnsmasq.pid \
-    --conf-file= \
-    --listen-address 10.0.3.1 \
-    --dhcp-range 10.0.3.2,10.0.3.254 \
-    --dhcp-lease-max=253 \
-    --dhcp-no-override \
-    --except-interface=lo \
-    --interface=lxcbr0 \
-    --dhcp-leasefile=/lxc/dnsmasq.leases \
-    --dhcp-authoritative
-ExecStopPost=/sbin/ip link set lxcbr0 down
-ExecStopPost=/sbin/brctl delbr lxcbr0
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/sbin/brctl addbr lxcbr0
+ExecStart=/sbin/brctl addif lxcbr0 eth0
+ExecStart=/sbin/ip link set lxcbr0 up
+ExecStop=/sbin/ip link set lxcbr0 down
+ExecStop=/sbin/brctl delbr lxcbr0
 
 [Install]
 WantedBy=multi-user.target

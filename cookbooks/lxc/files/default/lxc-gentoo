@@ -1,6 +1,26 @@
 #!/bin/bash
 
+# Detect use under userns (unsupported)
+for arg in "$@"; do
+    [ "$arg" = "--" ] && break
+    if [ "$arg" = "--mapped-uid" -o "$arg" = "--mapped-gid" ]; then
+        echo "This template can't be used for unprivileged containers." 1>&2
+        echo "You may want to try the \"download\" template instead." 1>&2
+        exit 1
+    fi
+done
+
+# Make sure the usual locations are in PATH
+export PATH=$PATH:/usr/sbin:/usr/bin:/sbin:/bin
+
 set -e
+
+LOCALSTATEDIR="/var"
+LXC_TEMPLATE_CONFIG="/usr/share/lxc/config"
+
+if [ -r /etc/default/lxc ]; then
+    . /etc/default/lxc
+fi
 
 # defaults
 MIRROR=${MIRROR:-http://mirror.zenops.net/zentoo}
@@ -42,20 +62,6 @@ EOF
 nameserver 8.8.8.8
 nameserver 8.8.4.4
 EOF
-
-    cat > $rootfs/etc/netctl/eth0 << EOF
-Description='eth0'
-Interface=eth0
-Connection=ethernet
-ForceConnect=yes
-IP=static
-Address=('${ipaddress}/32')
-Routes=('${gateway}')
-Gateway='${gateway}'
-DNS=('8.8.8.8' '8.8.4.4')
-EOF
-
-    ln -s "/etc/systemd/system/netctl@eth0.service" "${rootfs}/etc/systemd/system/multi-user.target.wants/netctl@eth0.service"
 
     echo "root:tux" | chroot $rootfs chpasswd
     echo "Root password is 'tux', please change!"
@@ -150,64 +156,50 @@ copy_configuration()
     rootfs=$2
     name=$3
 
+    # if there is exactly one veth network entry, make sure it has an
+    # associated hwaddr.
+    nics=`grep -e '^lxc\.network\.type[ \t]*=[ \t]*veth' $path/config | wc -l`
+    if [ $nics -eq 1 ]; then
+        grep -q "^lxc.network.hwaddr" $path/config || sed -i -e "/^lxc\.network\.type[ \t]*=[ \t]*veth/a lxc.network.hwaddr = 00:16:3e:$(openssl rand -hex 3| sed 's/\(..\)/\1:/g; s/.$//')" $path/config
+    fi
+
+    # Generate the configuration file
+    ## Create the fstab (empty by default)
+    touch $path/fstab
+
+    ## Relocate all the network config entries
+    sed -i -e "/lxc.network/{w ${path}/config-network" -e "d}" $path/config
+
+    ## Relocate any other config entries
+    sed -i -e "/lxc./{w ${path}/config-auto" -e "d}" $path/config
+
+    ## Add all the includes
+    echo "" >> $path/config
+    echo "# Common configuration" >> $path/config
+    if [ -e "${LXC_TEMPLATE_CONFIG}/gentoo.common.conf" ]; then
+        echo "lxc.include = ${LXC_TEMPLATE_CONFIG}/gentoo.common.conf" >> $path/config
+    fi
+
+    ## Add the container-specific config
+    echo "" >> $path/config
+    echo "# Container specific configuration" >> $path/config
+    [ -e "$path/config-auto" ] && cat $path/config-auto >> $path/config && rm $path/config-auto
     grep -q "^lxc.rootfs" $path/config 2>/dev/null || echo "lxc.rootfs = $rootfs" >> $path/config
-
     cat <<EOF >> $path/config
-lxc.utsname = ${name}
-
-lxc.network.type = veth
-lxc.network.veth.pair = veth-${name}
-lxc.network.flags = up
-lxc.network.link = lxc0
-lxc.network.name = eth0
-
-# mounts that allow us to drop CAP_SYS_ADMIN
-lxc.autodev = 1
-lxc.mount.entry=sys ${rootfs}/sys sysfs ro,defaults 0 0
-lxc.mount.entry=proc ${rootfs}/proc proc nodev,noexec,nosuid 0 0
-lxc.mount.entry=/proc/sys ${rootfs}/proc/sys proc ro,bind 0 0
-
-# console access
-lxc.tty = 1
-lxc.pts = 128
-
-# drop unnecessary capabilities
-lxc.cap.drop = audit_control
-lxc.cap.drop = audit_write
-lxc.cap.drop = dac_read_search
-lxc.cap.drop = ipc_owner
-lxc.cap.drop = linux_immutable
-lxc.cap.drop = mac_admin
-lxc.cap.drop = mac_override
-lxc.cap.drop = mknod
-lxc.cap.drop = sys_boot
-lxc.cap.drop = sys_module
-lxc.cap.drop = sys_rawio
-lxc.cap.drop = sys_time
-lxc.cap.drop = sys_tty_config
-lxc.cap.drop = syslog
-
-# deny access to all devices by default, explicitly grant some permissions
-lxc.cgroup.devices.deny = a
-# /dev/null and zero
-lxc.cgroup.devices.allow = c 1:3 rw
-lxc.cgroup.devices.allow = c 1:5 rw
-# /dev/{,u}random
-lxc.cgroup.devices.allow = c 1:8 r
-lxc.cgroup.devices.allow = c 1:9 rw
-# /dev/tty{0,1}
-lxc.cgroup.devices.allow = c 4:0 rwm
-lxc.cgroup.devices.allow = c 4:1 rwm
-# /dev/tty
-lxc.cgroup.devices.allow = c 5:0 rwm
-# /dev/console
-lxc.cgroup.devices.allow = c 5:1 rwm
-# /dev/pts/*
-lxc.cgroup.devices.allow = c 5:2 rw
-lxc.cgroup.devices.allow = c 136:* rw
-# rtc
-lxc.cgroup.devices.allow = c 254:0 rwm
+lxc.mount = $path/fstab
+lxc.utsname = $name
 EOF
+
+    ## Re-add the previously removed network config
+    echo "" >> $path/config
+    echo "# Network configuration" >> $path/config
+    cat $path/config-network >> $path/config
+    rm $path/config-network
+
+    if [ $? -ne 0 ]; then
+        echo "Failed to add configuration"
+        return 1
+    fi
 
     return 0
 }
@@ -245,8 +237,8 @@ EOF
 
 options=$(getopt -o hp:n:cdi:g: -l help,path:,name:,clean,ipaddress:,gateway:,image: -- "$@")
 if [ $? -ne 0 ]; then
-        usage $(basename $0)
-        exit 1
+    usage $(basename $0)
+    exit 1
 fi
 eval set -- "$options"
 
@@ -261,8 +253,6 @@ do
         -n|--name)      name=$2; shift 2;;
         -c|--clean)     clean=$2; shift 2;;
         -d|--debug)     debug=1; shift 1;;
-        -i|--ipaddress) ipaddress=$2; shift 2;;
-        -g|--gateway)   gateway=$2; shift 2;;
         --image)        image=$2; shift 2;;
         --)             shift 1; break ;;
         *)              break ;;
@@ -291,7 +281,7 @@ fi
 # detect rootfs
 config="$path/config"
 if grep -q '^lxc.rootfs' $config 2>/dev/null ; then
-    rootfs=`grep 'lxc.rootfs =' $config | awk -F= '{ print $2 }'`
+    rootfs=$(awk -F= '/^lxc.rootfs =/{ print $2 }' $config)
 else
     rootfs=$path/rootfs
 fi
@@ -312,9 +302,4 @@ copy_configuration $path $rootfs $name
 if [ $? -ne 0 ]; then
     echo "failed write configuration file"
     exit 1
-fi
-
-if [ ! -z $clean ]; then
-    clean || exit 1
-    exit 0
 fi
