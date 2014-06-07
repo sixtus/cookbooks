@@ -18,10 +18,11 @@ cookbook_path [
 
 script_path "#{chef_repo_path}/scripts"
 
-client_key "#{chef_repo_path}/.chef/client.pem"
-
-validation_client_name node_name
-validation_key client_key
+if File.exist?("#{chef_repo_path}/.chef/client.pem")
+  client_key "#{chef_repo_path}/.chef/client.pem"
+  validation_client_name node_name
+  validation_key client_key
+end
 
 syntax_check_cache_path "#{chef_repo_path}/.chef/checksums"
 
