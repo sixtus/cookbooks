@@ -36,17 +36,6 @@ namespace :generate do
     end
   end
 
-  desc "Generate the production environment"
-  task :env do
-    %w(production staging).each do |env|
-      b = binding()
-      erb = Erubis::Eruby.new(File.read(File.join(TEMPLATES_DIR, 'environment.json')))
-      File.open(File.join(ENVIRONMENTS_DIR, "#{env}.json"), "w") do |f|
-        f.puts(erb.result(b))
-      end
-    end
-  end
-
   desc "Generate a default OpenVPN/Tunnelblick config"
   task :tunnelblick do
     remote = "chef." + URI.parse(Chef::Config[:chef_server_url]).host.split('.')[1..-1].join('.')
