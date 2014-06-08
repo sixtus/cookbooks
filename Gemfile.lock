@@ -20,6 +20,12 @@ GIT
   specs:
     mixlib-shellout (1.4.0)
 
+GIT
+  remote: git://github.com/zenops/ovh-rest.git
+  revision: e2ee61014a3a5bfebec5fed72cd2752f5bb75f0a
+  specs:
+    ovh-rest (0.0.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -253,6 +259,7 @@ DEPENDENCIES
   listen
   mechanize
   mixlib-shellout!
+  ovh-rest!
   rake
   rb-inotify (~> 0.9)
   rvm

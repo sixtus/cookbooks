@@ -17,6 +17,7 @@ group :support do
   gem 'listen'
   gem 'mechanize'
   gem 'mixlib-shellout', github: 'zenops/mixlib-shellout'
+  gem 'ovh-rest', github: 'zenops/ovh-rest'
   gem 'rake'
   gem 'rb-inotify', '~> 0.9'
   gem 'tailor', github: 'hollow/tailor'
