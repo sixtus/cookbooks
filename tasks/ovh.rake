@@ -1,9 +1,9 @@
-namespace :hetzner do
+namespace :ovh do
 
   desc "reset machine"
   task :reset, :fqdn do |t, args|
     search("fqdn:#{args.fqdn}") do |node|
-      hetzner.reset!(node[:ipaddress], :hw)
+      ovh_reset(node[:ipaddress])
       wait_for_ssh(node[:fqdn])
     end
   end
@@ -11,25 +11,26 @@ namespace :hetzner do
   desc "enable rescue mode, reset machine and login"
   task :rescue, :fqdn do |t, args|
     search("fqdn:#{args.fqdn}") do |node|
-      password = hetzner_enable_rescue_wait(node[:ipaddress])
-      sshlive(args.fqdn, password)
+      ovh_enable_rescue_wait(node[:ipaddress])
+      sshlive(args.fqdn)
     end
   end
 
   desc "enable rescue mode and reinstall"
   task :reinstall, :fqdn, :ipaddress, :profile do |t, args|
     args.with_defaults(:profile => 'generic-two-disk-md')
-    password = hetzner_enable_rescue_wait(args.ipaddress)
-    run_task('hetzner:quickstart', args.fqdn, args.ipaddress, password, args.profile)
+    ovh_enable_rescue_wait(args.ipaddress)
+    sleep(10) # sleep a while so that boot scripts deploy our ssh key
+    run_task('ovh:quickstart', args.fqdn, args.ipaddress, args.profile)
   end
 
   desc "quickstart & bootstrap machine"
-  task :quickstart, :fqdn, :ipaddress, :password, :profile do |t, args|
+  task :quickstart, :fqdn, :ipaddress, :profile do |t, args|
     args.with_defaults(:profile => 'generic-two-disk-md')
-    raise "missing parameters!" unless args.fqdn && args.ipaddress && args.password
+    raise "missing parameters!" unless args.fqdn && args.ipaddress
 
     # create DNS/rDNS records
-    hetzner_server_name_rdns(args.ipaddress, args.fqdn)
+    ovh_server_name_rdns(args.ipaddress, args.fqdn)
     zendns_add_record(args.fqdn, args.ipaddress)
     run_task('node:checkdns', args.fqdn, args.ipaddress)
 
@@ -39,7 +40,7 @@ namespace :hetzner do
     tmpfile = Tempfile.new('quickstart')
     tmpfile.write(erb.result(b))
     tmpfile.rewind
-    sshlive(args.ipaddress, args.password, tmpfile.path)
+    sshlive(args.ipaddress, nil, tmpfile.path)
     tmpfile.unlink
 
     # wait until machine is up again
@@ -51,7 +52,7 @@ namespace :hetzner do
     run_task('node:bootstrap', args.fqdn, args.ipaddress)
   end
 
-  desc "Set server names and reverse DNS"
+  desc "set server names and reverse DNS"
   task :dns do
     search("*:*") do |node|
       fqdn = node[:fqdn]
@@ -61,7 +62,7 @@ namespace :hetzner do
         puts "IP #{node[:ipaddress]} does not match resolved address #{ip} for FQDN #{fqdn}"
       end
 
-      hetzner_server_name_rdns(ip, fqdn)
+      ovh_server_name_rdns(ip, fqdn)
     end
   end
 
