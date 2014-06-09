@@ -5,7 +5,7 @@ default[:postgresql][:server][:max_connections] = 100
 default[:postgresql][:server][:authentication_timeout] = "1min"
 
 # Resource Consumption
-default[:postgresql][:server][:shared_buffers] = "24MB"
+default[:postgresql][:server][:shared_buffers] = "130MB"
 default[:postgresql][:server][:temp_buffers] = "8MB"
 default[:postgresql][:server][:work_mem] = "1MB"
 default[:postgresql][:server][:maintenance_work_mem] = "16MB"

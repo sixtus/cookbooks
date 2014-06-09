@@ -8,7 +8,7 @@ end
 pkg.run_action(:install)
 Gem.clear_paths
 
-version = "9.1"
+version = "9.3"
 datadir = "/var/lib/postgresql/#{version}/data"
 confdir = "/etc/postgresql-#{version}"
 
@@ -31,7 +31,6 @@ template "#{confdir}/postgresql.conf" do
   owner "postgres"
   group "postgres"
   mode "0600"
-  variables :p => node[:postgresql][:server]
   notifies :reload, "service[postgresql]"
 end
 
@@ -55,8 +54,7 @@ systemd_tmpfiles "postgresql"
 systemd_unit "postgresql@.service"
 
 service "postgresql" do
-  service_name "postgresql-#{version}" unless systemd_running?
-  service_name "postgresql@#{version}.service" if systemd_running?
+  service_name "postgresql@#{version}.service"
   action [:enable, :start]
   supports [:reload]
 end
@@ -71,7 +69,7 @@ echo "ALTER ROLE postgres PASSWORD '#{pg_pass}';" | psql
   not_if do
     begin
       require 'pg'
-      conn = PGconn.connect("localhost", 5432, nil, nil, nil, "postgres", pg_pass)
+      PGconn.connect("localhost", 5432, nil, nil, nil, "postgres", pg_pass)
     rescue LoadError
       Chef::Log.warn("ruby postgres driver missing. skipping postgresql-password")
       true
