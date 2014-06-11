@@ -32,7 +32,7 @@ emerge dracut -u
 dracut --force ${tmpdir}/boot/initramfs-${kernel_version}.img
 
 # cleanup and install to /
-rm -rf ${tmpdir}/{etc,tmp,var/db,var/tmp}
+rm -rf ${tmpdir}/{etc,tmp,var,sbin,usr}
 rsync -rltgoDK ${tmpdir}/ /
 
 # create image
