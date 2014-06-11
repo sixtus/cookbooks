@@ -12,7 +12,11 @@ if !vbox?
     systemd_unit "watchdog.service"
 
     service "watchdog" do
-      action [:enable, :start]
+      if File.exist?("/dev/watchdog")
+        action [:enable, :start]
+      else
+        action [:disable, :stop]
+      end
     end
 
   elsif debian_based?

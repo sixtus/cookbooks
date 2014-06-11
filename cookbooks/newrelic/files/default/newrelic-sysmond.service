@@ -4,7 +4,7 @@ ConditionPathExists=/etc/newrelic/nrsysmond.cfg
 After=network.target
 
 [Service]
-ExecStart=/usr/sbin/nrsysmond -f -c /etc/newrelic/nrsysmond.cfg
+ExecStart=/usr/sbin/nrsysmond -f -c /etc/newrelic/nrsysmond.cfg -l /dev/stdout
 User=newrelic
 Group=newrelic
 Restart=always
