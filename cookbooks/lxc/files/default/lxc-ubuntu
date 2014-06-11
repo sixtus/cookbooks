@@ -25,10 +25,19 @@ fi
 configure_ubuntu()
 {
     rootfs=$1
-    hostname=$2
+    name=$2
     release=$3
 
-    # configure the network using the dhcp
+    echo > ${rootfs}/etc/fstab
+    rm -f ${rootfs}/etc/mtab
+    ln -s /proc/self/mounts ${rootfs}/etc/mtab
+
+    cat > "${rootfs}/etc/adjtime" << EOF
+0.0 0.0 0.0
+0
+LOCAL
+EOF
+
     cat <<EOF > $rootfs/etc/network/interfaces
 # This file describes the network interfaces available on your system
 # and how to activate them. For more information, see interfaces(5).
@@ -81,7 +90,7 @@ EOF
         DPKG_MAINTSCRIPT_PACKAGE=openssh DPKG_MAINTSCRIPT_NAME=postinst chroot $rootfs /var/lib/dpkg/info/openssh-server.postinst configure
         mv $rootfs/etc/init/ssh.conf.disabled $rootfs/etc/init/ssh.conf
 
-        sed -i "s/root@$(hostname)/root@$hostname/g" $rootfs/etc/ssh/ssh_host_*.pub
+        sed -i "s/root@$(hostname)/root@$name/g" $rootfs/etc/ssh/ssh_host_*.pub
 
         rm -f $rootfs/usr/sbin/policy-rc.d
     fi
@@ -103,11 +112,11 @@ EOF
     fi
 
     case $2 in
-      amd64|i386)
+        amd64|i386)
             MIRROR=${MIRROR:-http://archive.ubuntu.com/ubuntu}
             SECURITY_MIRROR=${SECURITY_MIRROR:-http://security.ubuntu.com/ubuntu}
             ;;
-      *)
+        *)
             MIRROR=${MIRROR:-http://ports.ubuntu.com/ubuntu-ports}
             SECURITY_MIRROR=${SECURITY_MIRROR:-http://ports.ubuntu.com/ubuntu-ports}
             ;;
@@ -145,8 +154,8 @@ install_packages()
 
 cleanup()
 {
-    rm -rf $cache/partial-$arch
-    rm -rf $cache/rootfs-$arch
+    dir=rootfs-$arch
+    rm -rf $cache/$dir
 }
 
 suggest_flush()
@@ -186,11 +195,7 @@ download_ubuntu()
 
     # download a mini ubuntu into a cache
     echo "Downloading ubuntu $release minimal ..."
-    if [ -n "$(which qemu-debootstrap)" ]; then
-        qemu-debootstrap --verbose --components=main,universe --arch=$arch --include=${packages_template} $release $cache/partial-$arch $MIRROR
-    else
-        debootstrap --verbose --components=main,universe --arch=$arch --include=${packages_template} $release $cache/partial-$arch $MIRROR
-    fi
+    debootstrap --verbose --components=main,universe --arch=$arch --include=${packages_template} $release $cache/partial-$arch $MIRROR
 
     if [ $? -ne 0 ]; then
         echo "Failed to download the rootfs, aborting."
@@ -231,23 +236,25 @@ EOF
 copy_ubuntu()
 {
     cache=$1
-    arch=$2
+    dir=$2
     rootfs=$3
 
-    # make a local copy of the miniubuntu
-    echo "Copying rootfs to $rootfs ..."
+    echo "Copying rootfs to $rootfs..."
     mkdir -p $rootfs
-    rsync -Ha $cache/rootfs-$arch/ $rootfs/ || return 1
+    rsync -Ha --numeric-ids "$cache/$dir"/ $rootfs/ || return 1
     return 0
 }
 
 install_ubuntu()
 {
     rootfs=$1
-    release=$2
-    flushcache=$3
+    clean=$2
+    release=$3
+
     cache="$LOCALSTATEDIR/cache/lxc/$release"
     mkdir -p $LOCALSTATEDIR/lock/subsys/
+
+    dir=rootfs-$arch
 
     (
         flock -x 9
@@ -256,15 +263,12 @@ install_ubuntu()
             return 1
         fi
 
-
-        if [ $flushcache -eq 1 ]; then
-            echo "Flushing cache..."
-            rm -rf "$cache/partial-$arch"
-            rm -rf "$cache/rootfs-$arch"
+        if [ $clean -eq 1 ]; then
+            cleanup
         fi
 
-        echo "Checking cache download in $cache/rootfs-$arch ... "
-        if [ ! -e "$cache/rootfs-$arch" ]; then
+        echo "Checking cache download in $cache/$dir ... "
+        if [ ! -e "$cache/$dir" ]; then
             download_ubuntu $cache $arch $release
             if [ $? -ne 0 ]; then
                 echo "Failed to download 'ubuntu $release base'"
@@ -272,8 +276,7 @@ install_ubuntu()
             fi
         fi
 
-        echo "Copy $cache/rootfs-$arch to $rootfs ... "
-        copy_ubuntu $cache $arch $rootfs
+        copy_ubuntu $cache $dir $rootfs
         if [ $? -ne 0 ]; then
             echo "Failed to copy rootfs"
             return 1
@@ -341,6 +344,9 @@ EOF
     echo "# Network configuration" >> $path/config
     cat $path/config-network >> $path/config
     rm $path/config-network
+
+    ## add ip address
+    echo "lxc.network.ipv4 = ${ipaddress}/32" >> $path/config
 
     if [ $? -ne 0 ]; then
         echo "Failed to add configuration"
@@ -458,71 +464,47 @@ EOF
 usage()
 {
     cat <<EOF
-$1 -h|--help [-a|--arch] [-d|--debug]
-   [-F | --flush-cache] [-r|--release <release>]
-   [--rootfs <rootfs>] [--packages <packages>]
-release: the ubuntu release (e.g. precise): defaults to host release on ubuntu, otherwise uses latest LTS
+$1 -h|--help [-d|--debug] [-c|--clean] [-i|--ipaddress 1.2.3.4]
+   [-a|--arch <arch>] [-r|--release <release>] [--packages <packages>]
 arch: the container architecture (e.g. amd64): defaults to host arch
-auth-key: SSH Public key file to inject into container
+release: the ubuntu release (e.g. precise): defaults to host release on ubuntu, otherwise uses latest LTS
 packages: list of packages to add comma separated
 EOF
     return 0
 }
 
-options=$(getopt -o a:hr:n:Fd -l arch:,help,path:,rootfs:release:,name:,flush-cache,debug,packages:,mirror:,security-mirror: -- "$@")
+options=$(getopt -o hdci:p:n:a:r: -l help,debug,clean,ipaddress:,path:,name:,rootfs:,arch:,release:,packages:,mirror:,security-mirror: -- "$@")
 if [ $? -ne 0 ]; then
     usage $(basename $0)
     exit 1
 fi
 eval set -- "$options"
 
-release=precise # Default to the last Ubuntu LTS release for non-Ubuntu systems
-if [ -f /etc/lsb-release ]; then
-    . /etc/lsb-release
-    if [ "$DISTRIB_ID" = "Ubuntu" ]; then
-        release=$DISTRIB_CODENAME
-    fi
-fi
-
-# Code taken from debootstrap
-if [ -x /usr/bin/dpkg ] && /usr/bin/dpkg --print-architecture >/dev/null 2>&1; then
-    arch=`/usr/bin/dpkg --print-architecture`
-elif which udpkg >/dev/null 2>&1 && udpkg --print-architecture >/dev/null 2>&1; then
-    arch=`/usr/bin/udpkg --print-architecture`
-else
-    arch=$(uname -m)
-    if [ "$arch" = "i686" ]; then
-        arch="i386"
-    elif [ "$arch" = "x86_64" ]; then
-        arch="amd64"
-    elif [ "$arch" = "armv7l" ]; then
-        arch="armhf"
-    elif [ "$arch" = "aarch64" ]; then
-        arch="arm64"
-    elif [ "$arch" = "ppc64le" ]; then
-        arch="ppc64el"
-    fi
-fi
-
+clean=0
 debug=0
+ipaddress=169.254.169.254
+
+arch=`/usr/bin/dpkg --print-architecture`
+release=precise
 hostarch=$arch
-flushcache=0
 packages=""
+
 while true
 do
     case "$1" in
-    -h|--help)      usage $0 && exit 0;;
-    --rootfs)       rootfs=$2; shift 2;;
-    -p|--path)      path=$2; shift 2;;
-    -n|--name)      name=$2; shift 2;;
-    -F|--flush-cache) flushcache=1; shift 1;;
-    -r|--release)   release=$2; shift 2;;
-    --packages)     packages=$2; shift 2;;
-    -a|--arch)      arch=$2; shift 2;;
-    -d|--debug)     debug=1; shift 1;;
-    --mirror)       MIRROR=$2; shift 2;;
-    --security-mirror) SECURITY_MIRROR=$2; shift 2;;
-    --)             shift 1; break ;;
+        -h|--help)      usage $0 && exit 0;;
+        -d|--debug)     debug=1; shift 1;;
+        -c|--clean)     clean=$2; shift 2;;
+        -i|--ipaddress) ipaddress=$2; shift 2;;
+        -p|--path)      path=$2; shift 2;;
+        -n|--name)      name=$2; shift 2;;
+        --rootfs)       rootfs=$2; shift 2;;
+        -a|--arch)      arch=$2; shift 2;;
+        -r|--release)   release=$2; shift 2;;
+        --packages)     packages=$2; shift 2;;
+        --mirror)       MIRROR=$2; shift 2;;
+        --security-mirror) SECURITY_MIRROR=$2; shift 2;;
+        --)             shift 1; break ;;
         *)              break ;;
     esac
 done
@@ -579,7 +561,7 @@ if [ -z "$rootfs" ]; then
     fi
 fi
 
-install_ubuntu $rootfs $release $flushcache
+install_ubuntu $rootfs $clean $release
 if [ $? -ne 0 ]; then
     echo "failed to install ubuntu $release"
     exit 1
@@ -597,4 +579,4 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-post_process $rootfs $release $trim_container $packages
+post_process $rootfs $release $packages

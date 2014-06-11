@@ -8,21 +8,22 @@ elsif debian_based?
   package "bridge-utils"
 end
 
-directory "/lxc/hooks" do
+cookbook_file "/usr/libexec/lxc/lxc-start" do
+  source "start.sh"
+  owner "root"
+  group "root"
+  mode "0755"
+end
+
+template "/usr/libexec/lxc/lxc-hostroute" do
+  source "hostroute.sh"
   owner "root"
   group "root"
   mode "0750"
 end
 
-template "/lxc/hooks/hostroute.sh" do
-  source "hostroute.hook.sh"
-  owner "root"
-  group "root"
-  mode "0750"
-end
-
-template "/lxc/hooks/guestroute.sh" do
-  source "guestroute.hook.sh"
+template "/usr/libexec/lxc/lxc-guestroute" do
+  source "guestroute.sh"
   owner "root"
   group "root"
   mode "0750"

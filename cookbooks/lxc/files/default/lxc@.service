@@ -5,8 +5,8 @@ After=network.target
 [Service]
 Restart=always
 ExecStartPre=/usr/libexec/lxc/lxc-devsetup
-ExecStart=/usr/sbin/lxc-start -n %i
-ExecStartPost=/lxc/hooks/guestroute.sh %i
+ExecStart=/usr/libexec/lxc/lxc-start %i
+ExecStartPost=/usr/libexec/lxc/lxc-guestroute %i
 ExecReload=/usr/sbin/lxc-restart -n %i
 ExecStop=/usr/sbin/lxc-stop -n %i
 
