@@ -48,6 +48,7 @@ action :create do
         code "bundle exec rake assets:precompile RAILS_ENV=#{rails_env}"
         cwd release_path
         user nr.user
+        only_if { nr.asset_pipeline }
       end
 
       rvm_shell "#{nr.user}-db:migrate" do
