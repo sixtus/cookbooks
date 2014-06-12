@@ -24,6 +24,7 @@ __version__ = "0.5"
 # These are no true libs so don't make our process a deleted libs user
 NOLIBS = [
     "/SYSV*",
+    "/[aio]",
     "/dev/zero",
     "/dev/shm/*",
     "*/var/nagios/spool/checkresults/neb*",
@@ -52,7 +53,7 @@ def get_deleted_libs(map_file):
         line = line.strip()
         if line.endswith("(deleted)"):
             lib = line.split()[-2]
-            is_lib = all(not fnmatch.fnmatch(lib, pattern)
+            is_lib = all(lib != pattern and not fnmatch.fnmatch(lib, pattern)
                          for pattern in NOLIBS)
             if is_lib:
                 deletedlibs.add(lib)
