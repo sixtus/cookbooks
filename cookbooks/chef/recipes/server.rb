@@ -13,6 +13,16 @@ execute "chef-server-ctl-reconfigure" do
   command "chef-server-ctl reconfigure"
 end
 
+execute "chef-server-restart" do
+  command "chef-server-ctl restart"
+  action :nothing
+end
+
+ssl_certificate "/var/opt/chef-server/nginx/ca/#{node[:fqdn]}" do
+  cn node[:fqdn]
+  notifies :run, "execute[chef-server-restart]"
+end
+
 shorewall_rule "chef-server" do
   destport "http,https"
 end
