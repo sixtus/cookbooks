@@ -10,13 +10,24 @@ Gem.clear_paths
 
 version = "9.3"
 datadir = "/var/lib/postgresql/#{version}/data"
-confdir = "/etc/postgresql-#{version}"
 
 directory datadir do
   owner "postgres"
   group "postgres"
   mode "0700"
   recursive true
+end
+
+directory "#{datadir}/pg_log_archive" do
+  owner "postgres"
+  group "postgres"
+  mode "0700"
+end
+
+directory "#{datadir}/pg_backup" do
+  owner "postgres"
+  group "postgres"
+  mode "0700"
 end
 
 execute "postgresql-initdb" do
@@ -26,15 +37,16 @@ execute "postgresql-initdb" do
   creates File.join(datadir, "PG_VERSION")
 end
 
-template "#{confdir}/postgresql.conf" do
+template "#{datadir}/postgresql.conf" do
   source "postgresql.conf"
   owner "postgres"
   group "postgres"
   mode "0600"
   notifies :reload, "service[postgresql]"
+  variables datadir: datadir
 end
 
-template "#{confdir}/pg_hba.conf" do
+template "#{datadir}/pg_hba.conf" do
   source "pg_hba.conf"
   owner "postgres"
   group "postgres"
@@ -42,12 +54,17 @@ template "#{confdir}/pg_hba.conf" do
   notifies :reload, "service[postgresql]"
 end
 
-template "#{confdir}/pg_ident.conf" do
+template "#{datadir}/pg_ident.conf" do
   source "pg_ident.conf"
   owner "postgres"
   group "postgres"
   mode "0600"
   notifies :reload, "service[postgresql]"
+end
+
+directory "/etc/postgresql-#{version}" do
+  action :delete
+  recursive true
 end
 
 systemd_tmpfiles "postgresql"
@@ -80,4 +97,19 @@ if node[:postgresql][:server][:hot_standby] == "off"
       end
     end
   end
+end
+
+systemd_timer "postgresql-backup" do
+  schedule %w(OnCalendar=daily)
+  unit({
+    command: "/usr/bin/pg_basebackup -D #{datadir}/pg_backup -Ft -z -x",
+    user: "postgres",
+    group: "postgres",
+  })
+end
+
+duply_backup "postgresql" do
+  source "#{datadir}/pg_backup"
+  max_full_backups 30
+  max_full_age "1D"
 end
