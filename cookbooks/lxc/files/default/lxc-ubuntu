@@ -47,7 +47,7 @@ auto lo
 iface lo inet loopback
 EOF
 
-    echo "${name}" > "${rootfs}/etc/hostname"
+    echo "${fqdn/.*}" > "${rootfs}/etc/hostname"
     cat > "${rootfs}/etc/hosts" << EOF
 127.0.0.1 localhost
 ::1 localhost
