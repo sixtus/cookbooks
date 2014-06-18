@@ -44,7 +44,7 @@ EOF
     cat > "${rootfs}/etc/hosts" << EOF
 127.0.0.1 localhost
 ::1 localhost
-${ipaddress} ${name}
+${ipaddress} ${fqdn} ${fqdn/.*}
 EOF
 
     cat > "${rootfs}/etc/resolv.conf" << EOF
@@ -180,7 +180,7 @@ copy_configuration()
     grep -q "^lxc.rootfs" $path/config 2>/dev/null || echo "lxc.rootfs = $rootfs" >> $path/config
     cat <<EOF >> $path/config
 lxc.mount = $path/fstab
-lxc.utsname = $name
+lxc.utsname = ${fqdn/.*}
 EOF
 
     ## Re-add the previously removed network config
@@ -229,14 +229,14 @@ post_process()
 usage()
 {
     cat <<EOF
-$1 -h|--help [-d|--debug] [-c|--clean] [-i|--ipaddress 1.2.3.4]
+$1 -h|--help [-d|--debug] [-c|--clean] [-i|--ipaddress 1.2.3.4] [-f|--fqdn host.domain.tld]
    [--image <URL>]
 image: gentoo stage3/4 tarball URL
 EOF
     return 0
 }
 
-options=$(getopt -o hdci:p:n: -l help,debug,clean,ipaddress:,path:,name:,rootfs:,image: -- "$@")
+options=$(getopt -o hdci:f:p:n: -l help,debug,clean,ipaddress:,fqdn:,path:,name:,rootfs:,image: -- "$@")
 if [ $? -ne 0 ]; then
     usage $(basename $0)
     exit 1
@@ -258,6 +258,7 @@ do
         -d|--debug)     debug=1; shift 1;;
         -c|--clean)     clean=$2; shift 2;;
         -i|--ipaddress) ipaddress=$2; shift 2;;
+        -f|--fqdn)      fqdn=$2; shift 2;;
         -p|--path)      path=$2; shift 2;;
         -n|--name)      name=$2; shift 2;;
         --rootfs)       rootfs=$2; shift 2;;
@@ -269,6 +270,10 @@ done
 
 if [ $debug -eq 1 ]; then
     set -x
+fi
+
+if [ -z "$fqdn" ]; then
+    fqdn=${name}.local
 fi
 
 if [ -z "$path" ]; then

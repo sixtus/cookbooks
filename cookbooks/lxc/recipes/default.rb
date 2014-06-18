@@ -8,6 +8,12 @@ elsif debian_based?
   package "bridge-utils"
 end
 
+directory "/lxc" do
+  owner "root"
+  group "root"
+  mode "0700"
+end
+
 cookbook_file "/usr/libexec/lxc/lxc-start" do
   source "start.sh"
   owner "root"

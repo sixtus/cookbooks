@@ -51,7 +51,7 @@ EOF
     cat > "${rootfs}/etc/hosts" << EOF
 127.0.0.1 localhost
 ::1 localhost
-${ipaddress} ${name}
+${ipaddress} ${fqdn} ${fqdn/.*}
 EOF
 
     cat > "${rootfs}/etc/resolv.conf" << EOF
@@ -335,7 +335,7 @@ copy_configuration()
     grep -q "^lxc.rootfs" $path/config 2>/dev/null || echo "lxc.rootfs = $rootfs" >> $path/config
     cat <<EOF >> $path/config
 lxc.mount = $path/fstab
-lxc.utsname = $name
+lxc.utsname = ${fqdn/.*}
 lxc.arch = $arch
 EOF
 
@@ -464,7 +464,7 @@ EOF
 usage()
 {
     cat <<EOF
-$1 -h|--help [-d|--debug] [-c|--clean] [-i|--ipaddress 1.2.3.4]
+$1 -h|--help [-d|--debug] [-c|--clean] [-i|--ipaddress 1.2.3.4] [-f|--fqdn host.domain.tld]
    [-a|--arch <arch>] [-r|--release <release>] [--packages <packages>]
 arch: the container architecture (e.g. amd64): defaults to host arch
 release: the ubuntu release (e.g. precise): defaults to host release on ubuntu, otherwise uses latest LTS
@@ -473,7 +473,7 @@ EOF
     return 0
 }
 
-options=$(getopt -o hdci:p:n:a:r: -l help,debug,clean,ipaddress:,path:,name:,rootfs:,arch:,release:,packages:,mirror:,security-mirror: -- "$@")
+options=$(getopt -o hdci:f:p:n:a:r: -l help,debug,clean,ipaddress:,fqdn:,path:,name:,rootfs:,arch:,release:,packages:,mirror:,security-mirror: -- "$@")
 if [ $? -ne 0 ]; then
     usage $(basename $0)
     exit 1
@@ -496,6 +496,7 @@ do
         -d|--debug)     debug=1; shift 1;;
         -c|--clean)     clean=$2; shift 2;;
         -i|--ipaddress) ipaddress=$2; shift 2;;
+        -f|--fqdn)      fqdn=$2; shift 2;;
         -p|--path)      path=$2; shift 2;;
         -n|--name)      name=$2; shift 2;;
         --rootfs)       rootfs=$2; shift 2;;
@@ -511,6 +512,10 @@ done
 
 if [ $debug -eq 1 ]; then
     set -x
+fi
+
+if [ -z "$fqdn" ]; then
+    fqdn=${name}.local
 fi
 
 if [ "$arch" = "i686" ]; then
