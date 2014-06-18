@@ -21,15 +21,8 @@ cookbook_file "/usr/libexec/lxc/lxc-start" do
   mode "0755"
 end
 
-template "/usr/libexec/lxc/lxc-hostroute" do
-  source "hostroute.sh"
-  owner "root"
-  group "root"
-  mode "0750"
-end
-
-template "/usr/libexec/lxc/lxc-guestroute" do
-  source "guestroute.sh"
+template "/usr/libexec/lxc/lxc-gateway" do
+  source "gateway.sh"
   owner "root"
   group "root"
   mode "0750"

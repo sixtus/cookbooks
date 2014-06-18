@@ -6,7 +6,6 @@ After=network.target
 Restart=always
 ExecStartPre=/usr/libexec/lxc/lxc-devsetup
 ExecStart=/usr/libexec/lxc/lxc-start %i
-ExecStartPost=/usr/libexec/lxc/lxc-guestroute %i
 ExecReload=/usr/sbin/lxc-restart -n %i
 ExecStop=/usr/sbin/lxc-stop -n %i
 
