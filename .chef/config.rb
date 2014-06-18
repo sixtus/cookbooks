@@ -30,4 +30,10 @@ file_cache_path "#{chef_root}/cache/files"
 file_backup_path "#{chef_root}/backup"
 
 ssl_verify_mode :verify_none
-verify_api_cert true
+verify_api_cert false
+
+class Chef::Client
+  def check_ssl_config
+    # do nothing
+  end
+end
