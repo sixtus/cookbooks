@@ -11,7 +11,7 @@ end
 directory "/lxc" do
   owner "root"
   group "root"
-  mode "0700"
+  mode "0755"
 end
 
 cookbook_file "/usr/libexec/lxc/lxc-start" do
