@@ -19,7 +19,7 @@ execute "chef-server-restart" do
 end
 
 ssl_certificate "/var/opt/chef-server/nginx/ca/#{node[:fqdn]}" do
-  cn node[:fqdn]
+  cn "wildcard.#{node[:chef_domain]}"
   notifies :run, "execute[chef-server-restart]"
 end
 
