@@ -19,7 +19,7 @@ group :support do
   gem 'mixlib-shellout', github: 'zenops/mixlib-shellout'
   gem 'ovh-rest', github: 'zenops/ovh-rest'
   gem 'rake'
-  gem 'rb-inotify', '~> 0.9'
+  gem 'rb-inotify'
   gem 'tailor', github: 'hollow/tailor'
 end
 

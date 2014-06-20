@@ -7,6 +7,7 @@ def define(name, ip)
       base.vm.network "private_network", ip: ip
       base.vm.provision :chef_client do |chef|
         _chef = chef
+        chef.arguments = "--force-formatter -l error"
         chef.chef_server_url = "http://10.10.10.1:3099"
         chef.validation_key_path = '.vagrant/validation.pem'
         chef.environment = "staging"
