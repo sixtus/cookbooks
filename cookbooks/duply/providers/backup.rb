@@ -18,14 +18,31 @@ action :create do
     variables nr: nr
   end
 
-  systemd_timer "duply-bkp-#{nr.name}" do
-    schedule %w(OnCalendar=daily)
-    unit command: "/usr/bin/duply #{nr.name} bkp"
+  directory "/var/log/duply/#{nr.name}" do
+    owner "root"
+    group "root"
+    mode "0755"
+    recursive true
   end
 
-  systemd_timer "duply-purge-#{nr.name}" do
-    schedule %w(OnCalendar=weekly)
-    unit command: "/usr/bin/duply #{nr.name} purge-full --force"
+  if systemd_running?
+    systemd_timer "duply-bkp-#{nr.name}" do
+      schedule %w(OnCalendar=daily)
+      unit command: "/usr/bin/duply #{nr.name} bkp"
+    end
+
+    systemd_timer "duply-purge-#{nr.name}" do
+      schedule %w(OnCalendar=weekly)
+      unit command: "/usr/bin/duply #{nr.name} purge-full --force"
+    end
+  else
+    cron_daily "duply-bkp-#{nr.name}" do
+      command "/usr/bin/duply #{nr.name} bkp > /var/log/duply/#{nr.name}/$(date +%Y-%m-%d).log"
+    end
+
+    cron_weekly "duply-purge-#{nr.name}" do
+      command "/usr/bin/duply #{nr.name} purge-full --force &> /dev/null"
+    end
   end
 end
 
@@ -42,6 +59,14 @@ action :delete do
   end
 
   systemd_timer "duply-purge-#{nr.name}" do
+    action :delete
+  end
+
+  cron_daily "duply-bkp-#{nr.name}" do
+    action :delete
+  end
+
+  cron_weekly "duply-purge-#{nr.name}" do
     action :delete
   end
 end
