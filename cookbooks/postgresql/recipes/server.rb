@@ -18,6 +18,13 @@ directory datadir do
   recursive true
 end
 
+execute "postgresql-initdb" do
+  command "/usr/lib/postgresql-#{version}/bin/initdb --pgdata #{datadir} --locale=en_US.UTF-8"
+  user "postgres"
+  group "postgres"
+  creates File.join(datadir, "PG_VERSION")
+end
+
 directory "#{datadir}/pg_log_archive" do
   owner "postgres"
   group "postgres"
@@ -28,13 +35,6 @@ directory "#{datadir}/pg_backup" do
   owner "postgres"
   group "postgres"
   mode "0700"
-end
-
-execute "postgresql-initdb" do
-  command "/usr/lib/postgresql-#{version}/bin/initdb --pgdata #{datadir} --locale=en_US.UTF-8"
-  user "postgres"
-  group "postgres"
-  creates File.join(datadir, "PG_VERSION")
 end
 
 template "#{datadir}/postgresql.conf" do

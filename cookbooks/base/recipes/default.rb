@@ -9,6 +9,9 @@ else
   node.run_state[:nodes] = search(:node, "ipaddress:[* TO *] AND fqdn:[* TO *]").sort_by do |n|
     n[:fqdn]
   end
+  if node.run_state[:nodes].none? { |n| n[:fqdn] == node[:fqdn] }
+    node.run_state[:nodes] << node
+  end
 end
 
 # filter nodes that belong to the same cluster as the current node
