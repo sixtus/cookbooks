@@ -26,3 +26,20 @@ end
 shorewall_rule "chef-server" do
   destport "http,https"
 end
+
+cookbook_file "/opt/chef-server/bin/backup" do
+  source "backup.sh"
+  owner "root"
+  group "root"
+  mode "0755"
+end
+
+cron "chef-server-backup" do
+  command "/opt/chef-server/bin/backup --backup"
+  hour "3"
+  minute "0"
+end
+
+duply_backup "chef-server" do
+  source "/var/opt/chef-server/backup"
+end
