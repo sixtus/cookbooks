@@ -44,7 +44,6 @@ namespace :ssl do
     ENV['BATCH'] = "1"
     args = Rake::TaskArguments.new([:cn], ["*.#{args.domain}"])
     Rake::Task["ssl:do_cert"].execute(args)
-    knife :upload, ["cookbooks/certificates"]
   end
 
   task :do_cert, :cn do |t, args|
