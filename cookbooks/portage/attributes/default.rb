@@ -21,9 +21,6 @@ default[:portage][:FEATURES] = %w(buildpkg)
 default[:portage][:OPTS] = %w(--usepkg=y --getbinpkg=y)
 default[:portage][:MAKEOPTS] = "-j1"
 
-# language support
-default[:portage][:LINGUAS] = %w(en)
-
 # repo settings
 if gentoo?
   default[:portage][:repo] = File.read("/usr/portage/profiles/repo_name").chomp
