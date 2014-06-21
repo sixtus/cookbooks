@@ -60,6 +60,16 @@ end
   end
 end
 
+ssl_certificate "/etc/ssl/nginx/wildcard.#{node[:chef_domain]}" do
+  cn "wildcard.#{node[:chef_domain]}"
+end
+
+if node.clustered?
+  ssl_certificate "/etc/ssl/nginx/wildcard.#{node.cluster_name}.#{node[:chef_domain]}" do
+    cn "wildcard.#{node.cluster_name}.#{node[:chef_domain]}"
+  end
+end
+
 template "/etc/nginx/nginx.conf" do
   source "nginx.conf"
   owner "root"

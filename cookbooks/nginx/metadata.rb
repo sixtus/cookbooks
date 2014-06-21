@@ -10,3 +10,4 @@ supports "gentoo"
 
 depends "php"
 depends "splunk6"
+depends "openssl"
