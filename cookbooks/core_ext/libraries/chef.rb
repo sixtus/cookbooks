@@ -16,5 +16,13 @@ class Chef
       end
     end
 
+    def clustered?
+      cluster_name != self[:fqdn]
+    end
+
+    def cluster?(name)
+      name ? cluster_name == name : true
+    end
+
   end
 end
