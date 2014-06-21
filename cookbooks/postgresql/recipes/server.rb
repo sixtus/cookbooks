@@ -1,12 +1,7 @@
 include_recipe "postgresql"
 
 package "dev-db/postgresql-server"
-
-pkg = package "dev-ruby/pg" do
-  action :nothing
-end
-pkg.run_action(:install)
-Gem.clear_paths
+package "dev-ruby/pg"
 
 version = "9.3"
 datadir = "/var/lib/postgresql/#{version}/data"
