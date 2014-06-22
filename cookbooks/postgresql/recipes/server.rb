@@ -71,29 +71,6 @@ service "postgresql" do
   supports [:reload]
 end
 
-# set password only on master
-if node[:postgresql][:server][:hot_standby] == "off"
-  pg_pass = get_password("postgresql/postgres")
-
-  bash "postgresql-password" do
-    user "postgres"
-    code <<-EOH
-  echo "ALTER ROLE postgres PASSWORD '#{pg_pass}';" | psql
-    EOH
-    not_if do
-      begin
-        require 'pg'
-        PGconn.connect("localhost", 5432, nil, nil, nil, "postgres", pg_pass)
-      rescue LoadError
-        Chef::Log.warn("ruby postgres driver missing. skipping postgresql-password")
-        true
-      rescue
-        false
-      end
-    end
-  end
-end
-
 systemd_timer "postgresql-backup" do
   schedule %w(OnCalendar=daily)
   unit({
