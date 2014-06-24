@@ -1,12 +1,12 @@
 [Unit]
-Description=<%= @druid_service %> %I
+Description=%p %i
 After=network.target
 
 [Service]
+ExecStart=/bin/bash -c "/var/app/druid/bin/%p"
 User=druid
 Group=druid
-ExecStart=/usr/libexec/<%= @druid_service %>
-SyslogIdentifier=<%= @druid_service %>
+SyslogIdentifier=%p
 OOMScoreAdjust=-1
 Nice=-5
 IOSchedulingPriority=2

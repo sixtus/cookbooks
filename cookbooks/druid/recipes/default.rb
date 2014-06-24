@@ -19,13 +19,6 @@ deploy_skeleton "druid"
   end
 end
 
-template "/etc/druid/log4j.properties" do
-  source "log4j.properties"
-  owner "root"
-  group "root"
-  mode "0644"
-end
-
 deploy_application "druid" do
   repository node[:druid][:git][:repository]
   revision node[:druid][:git][:revision]
@@ -40,6 +33,13 @@ deploy_application "druid" do
   end
 end
 
+template "/etc/druid/log4j.properties" do
+  source "log4j.properties"
+  owner "root"
+  group "root"
+  mode "0644"
+end
+
 template "/etc/druid/runtime.properties" do
   source "runtime.properties"
   owner "root"
@@ -47,6 +47,8 @@ template "/etc/druid/runtime.properties" do
   mode "0644"
 end
 
-nagios_plugin "check_druid" do
-  source "check_druid.rb"
+if nagios_client?
+  nagios_plugin "check_druid" do
+    source "check_druid.rb"
+  end
 end

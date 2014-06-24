@@ -1,29 +1,22 @@
-require 'set'
-
 include_recipe "druid"
 
-systemd_unit "druid-coordinator.service" do
-  template "druid-service"
-  variables({
-    druid_service: "druid-coordinator",
-  })
+if vbox?
+  include_recipe "mysql::server"
+  mysql_database "druid"
+end
 
+systemd_unit "druid-coordinator.service" do
+  template "druid.service"
   notifies :restart, "service[druid-coordinator]", :immediately
 end
 
-template "/usr/libexec/druid-coordinator" do
-  source "druid-runner.sh"
+template "/var/app/druid/bin/druid-coordinator" do
+  source "runner.sh"
   owner "root"
   group "root"
   mode "0755"
-  variables({
-    druid_service:  "coordinator",
-    druid_port:     node[:druid][:coordinator][:port],
-    druid_mx:       node[:druid][:coordinator][:mx],
-    druid_dm:       node[:druid][:coordinator][:dm],
-  })
-
   notifies :restart, "service[druid-coordinator]", :immediately
+  variables service: "coordinator"
 end
 
 service "druid-coordinator" do
