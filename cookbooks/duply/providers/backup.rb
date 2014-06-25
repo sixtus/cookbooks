@@ -33,7 +33,7 @@ action :create do
 
     systemd_timer "duply-purge-#{nr.name}" do
       schedule %w(OnCalendar=weekly)
-      unit command: "/usr/bin/duply #{nr.name} purge-full --force"
+      unit command: "/usr/bin/duply #{nr.name} purgeFull --force"
     end
   else
     cron_daily "duply-bkp-#{nr.name}" do
@@ -41,7 +41,7 @@ action :create do
     end
 
     cron_weekly "duply-purge-#{nr.name}" do
-      command "/usr/bin/duply #{nr.name} purge-full --force &> /dev/null"
+      command "/usr/bin/duply #{nr.name} purgeFull --force &> /dev/null"
     end
   end
 end

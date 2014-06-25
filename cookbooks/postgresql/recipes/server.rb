@@ -97,7 +97,10 @@ end
 systemd_timer "postgresql-backup" do
   schedule %w(OnCalendar=daily)
   unit({
-    command: "/usr/bin/pg_basebackup -D #{datadir}/pg_backup -Ft -z -x",
+    command: [
+      "/bin/bash -c 'rm -rf #{datadir}/pg_backup/*'",
+      "/usr/bin/pg_basebackup -D #{datadir}/pg_backup -Ft -z -x",
+    ],
     user: "postgres",
     group: "postgres",
   })
@@ -106,5 +109,5 @@ end
 duply_backup "postgresql" do
   source "#{datadir}/pg_backup"
   max_full_backups 30
-  max_full_age "1D"
+  max_full_age 1
 end
