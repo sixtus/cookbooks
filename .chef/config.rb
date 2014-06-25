@@ -8,7 +8,12 @@ if Process.euid == 0
   node_name %x(hostname -f).chomp
 else
   chef_root = File.expand_path("~/.chef")
-  node_name %x(whoami).chomp
+  user_file = File.join(chef_repo_path, ".user")
+  if File.readable?(user_file)
+    node_name File.read(user_file).chomp
+  else
+    node_name %x(whoami).chomp
+  end
 end
 
 cookbook_path [
