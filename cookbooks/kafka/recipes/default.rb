@@ -2,14 +2,10 @@ include_recipe "java"
 
 deploy_skeleton "kafka"
 
-%w(
-  /etc/kafka
-).each do |dir|
-  directory dir do
-    owner "kafka"
-    group "kafka"
-    mode "0755"
-  end
+directory "/etc/kafka" do
+  owner "kafka"
+  group "kafka"
+  mode "0755"
 end
 
 deploy_application "kafka" do
