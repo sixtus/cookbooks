@@ -10,8 +10,8 @@ end
 
 node.default[:kafka][:zookeeper][:cluster] = node.cluster_name
 
-template "/etc/kafka/server.config" do
-  source "server.config"
+template "/var/app/kafka/current/config/server.properties" do
+  source "server.properties"
   owner "root"
   group "kafka"
   mode "0640"
