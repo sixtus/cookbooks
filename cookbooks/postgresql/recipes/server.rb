@@ -77,7 +77,7 @@ systemd_timer "postgresql-backup" do
   unit({
     command: [
       "/bin/bash -c 'rm -rf #{datadir}/pg_backup/*'",
-      "/usr/bin/pg_basebackup -D #{datadir}/pg_backup -Ft -z -x",
+      "/usr/bin/pg_basebackup -D #{datadir}/pg_backup -x",
     ],
     user: "postgres",
     group: "postgres",
