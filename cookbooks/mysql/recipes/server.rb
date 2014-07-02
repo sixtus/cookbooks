@@ -135,10 +135,6 @@ if nagios_client?
     backup 0
   end
 
-  mysql_user "nagios" do
-    action :delete
-  end
-
   # instead use patched version with my.cnf support
   nagios_plugin "check_mysql_health"
 
