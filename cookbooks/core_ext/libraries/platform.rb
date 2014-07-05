@@ -1,4 +1,8 @@
 module PlatformHelpers
+  def root?
+    Process.euid == 0
+  end
+
   def production?
     node.chef_environment == "production"
   end
