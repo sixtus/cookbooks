@@ -20,6 +20,8 @@ Ohai.plugin(:Network) do
   provides "network", "network/interfaces"
   provides "ipaddress", "ip6address", "macaddress"
 
+  depends "virtualization"
+
   def linux_encaps_lookup(encap)
     return "Loopback" if encap.eql?("Local Loopback") || encap.eql?("loopback")
     return "PPP" if encap.eql?("Point-to-Point Protocol")
@@ -231,8 +233,14 @@ Ohai.plugin(:Network) do
         if default_route.nil? or default_route.empty?
           Ohai::Log.debug("Unable to determine default #{family[:name]} interface")
         else
-          network["#{default_prefix}_interface"] = default_route[:dev]
-          Ohai::Log.debug("#{default_prefix}_interface set to #{default_route[:dev]}")
+          vbox = virtualization[:system] == "vbox" && virtualization[:role] == "guest"
+
+          if vbox
+            network["#{default_prefix}_interface"] = "eth1"
+          else
+            network["#{default_prefix}_interface"] = default_route[:dev]
+          end
+          Ohai::Log.debug("#{default_prefix}_interface set to #{network["#{default_prefix}_interface"]}")
 
           # setting gateway to 0.0.0.0 or :: if the default route is a link level one
           network["#{default_prefix}_gateway"] = default_route[:via] ? default_route[:via] : family[:default_route].chomp("/0")
@@ -271,7 +279,7 @@ Ohai.plugin(:Network) do
             ]
           end.first
 
-          unless route.nil? or route.empty?
+          unless route.nil? or route.empty? or vbox
             if family[:name] == "inet"
               ipaddress route[:src]
               macaddress iface[route[:dev]][:addresses].select{|k,v| v["family"]=="lladdr"}.first.first unless iface[route[:dev]][:flags].include? "NOARP"
