@@ -44,11 +44,11 @@ module PlatformHelpers
   end
 
   def vbox?
-    root? && File.exist?("/proc/modules") && File.read("/proc/modules") =~ /^vboxguest/
+    node[:virtualization][:system] == "vbox" && node[:virtualization][:role] == "guest"
   end
 
   def lxc?
-    root? && File.read("/proc/1/environ").split("\0").any? { |env| env =~ /lxc/ }
+    node[:virtualization][:system] == "lxc" && node[:virtualization][:role] == "guest"
   end
 end
 
