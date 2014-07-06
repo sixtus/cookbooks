@@ -62,7 +62,7 @@ end
 
 timer_envs = %w(production staging)
 
-nodes = node.run_state[:cluster_nodes].map do |n|
+nodes = node.nodes.cluster(node.cluster_name).map do |n|
   n[:fqdn]
 end.compact
 
