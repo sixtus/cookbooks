@@ -95,6 +95,8 @@ if gentoo?
     mysql_database "test" do
       owner "root"
     end
+
+    include_recipe "mysql::backup"
   end
 
 elsif mac_os_x?
