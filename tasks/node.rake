@@ -60,7 +60,7 @@ namespace :node do
     fqdn = args.fqdn
     ENV['BATCH'] = "1"
     run_task('ssl:revoke', fqdn) rescue nil
-    File.unlink(File.join(TOPDIR, "nodes", "#{fqdn}.json")) rescue nil
+    File.unlink(File.join(ROOT, "nodes", "#{fqdn}.json")) rescue nil
     knife :delete, ['-y', "nodes/#{fqdn}.json", "clients/#{fqdn}.json"] rescue nil
   end
 
@@ -98,7 +98,7 @@ namespace :node do
     run_task('node:checkdns', args.fqdn, args.ipaddress)
     run_task('ssl:do_cert', args.fqdn)
     knife :upload, ["cookbooks/certificates"]
-    key = File.join(TOPDIR, "tasks/support/id_rsa")
+    key = File.join(ROOT, "tasks/support/id_rsa")
     sh("knife bootstrap #{args.fqdn} --distro #{ENV['DISTRO']} -P #{args.password} -r 'role[base]' -E production -i #{key}")
     run_task('node:updateworld', args.fqdn) unless ENV['NO_UPDATEWORLD']
   end

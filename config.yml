@@ -1,0 +1,22 @@
+company:
+  name: remerge GmbH
+
+ssl:
+  country: DE
+  state: Berlin
+  city: Berlin
+  unit: Operations
+  email: hostmaster@remerge.io
+
+hetzner:
+  username:
+  password:
+
+ovh:
+  app_key:
+  app_secret:
+  consumer_key:
+
+zendns:
+  url: https://zendns.example.com
+  token:
