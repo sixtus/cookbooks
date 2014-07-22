@@ -10,6 +10,7 @@ namespace :ssl do
     FileUtils.mkdir_p(File.join(SSL_CA_DIR, "newcerts"))
     FileUtils.touch(File.join(SSL_CA_DIR, "index"))
 
+    cn = ""
     b = binding()
     erb = Erubis::Eruby.new(File.read(File.join(TEMPLATES_DIR, 'openssl.cnf')))
 
