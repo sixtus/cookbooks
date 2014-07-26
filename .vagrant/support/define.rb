@@ -13,7 +13,7 @@ def define(name, ip, memory = 2.0, cpus = 1)
       end
       base.vm.provider "virtualbox" do |vb|
         vb.gui = false
-        vb.memory = memory * 1024
+        vb.memory = (memory * 1024).to_i
         vb.cpus = cpus
       end
       yield base.vm, _chef if block_given?
