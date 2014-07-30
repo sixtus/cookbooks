@@ -70,7 +70,7 @@ end.flatten.compact.map do |v|
   end
 end
 
-hosts = (vhosts + hosts).sort_by do |n|
+hosts = (vhosts + hosts.to_a).sort_by do |n|
   n[:fqdn]
 end
 
