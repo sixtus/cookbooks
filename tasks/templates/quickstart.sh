@@ -15,7 +15,9 @@ for x in /dev/sd*; do
 done
 
 for x in /dev/sd[a-z]; do
-    echo -ne "rm 1\nIgnore\nrm 2\nIgnore\nrm 128\nIgnore\nquit\n" | parted $x 2>&1 > /dev/null
+	for i in $(seq 1 128); do
+		echo -ne "rm 1\nIgnore\nquit\n" | parted $x 2>&1 > /dev/null
+	done
 done
 
 partprobe
