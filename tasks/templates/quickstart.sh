@@ -15,9 +15,7 @@ for x in /dev/sd*; do
 done
 
 for x in /dev/sd[a-z]; do
-	for i in $(seq 1 128); do
-		echo -ne "rm 1\nIgnore\nquit\n" | parted $x 2>&1 > /dev/null
-	done
+    parted -s $x mklabel gpt
 done
 
 partprobe
