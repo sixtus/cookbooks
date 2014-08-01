@@ -42,7 +42,7 @@ class Nodes
 
   def cluster(name)
     filter do |n|
-      n.cluster_name == node.cluster_name rescue false
+      n.cluster_name == name rescue false
     end
   end
 
