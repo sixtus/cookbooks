@@ -43,7 +43,7 @@ namespace :generate do
 
   desc "Generate a default OpenVPN/Tunnelblick config"
   task :tunnelblick do
-    remote = "chef." + URI.parse(Chef::Config[:chef_server_url]).host.split('.')[1..-1].join('.')
+    remote = "vpn." + URI.parse(Chef::Config[:chef_server_url]).host.split('.')[1..-1].join('.')
     login = Chef::Config[:node_name]
 
     b = binding()
