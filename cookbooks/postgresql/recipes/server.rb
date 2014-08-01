@@ -1,10 +1,11 @@
 include_recipe "postgresql"
 
 package "dev-db/postgresql-server"
-package "dev-ruby/pg"
 
 version = "9.3"
 datadir = "/var/lib/postgresql/#{version}/data"
+
+node.set[:postgresql][:connection][:host] = node[:fqdn]
 
 directory datadir do
   owner "postgres"
