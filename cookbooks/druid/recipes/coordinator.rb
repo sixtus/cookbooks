@@ -1,8 +1,7 @@
 include_recipe "druid"
 
-if vbox?
-  include_recipe "mysql::server"
-  mysql_database "druid"
+mysql_database "druid" do
+  connection mysql_master_connection
 end
 
 template "/var/app/druid/bin/druid-coordinator" do

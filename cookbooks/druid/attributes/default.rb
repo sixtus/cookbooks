@@ -39,11 +39,6 @@ default[:druid][:server][:max_size] = 1 * 1024 * 1024 * 1024
 default[:druid][:server][:tier] = "_default_tier"
 default[:druid][:server][:priority] = 0
 
-# Database Connector Module
-default[:druid][:database][:uri] = "jdbc:mysql://127.0.0.1:3306/druid"
-default[:druid][:database][:user] = "root"
-default[:druid][:database][:password] = ""
-
 # DataSegment Pusher/Puller Module
 default[:druid][:storage][:type] = "local"
 default[:druid][:storage][:directory] = "/var/app/druid/storage"
