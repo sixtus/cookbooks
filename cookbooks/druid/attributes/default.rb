@@ -30,6 +30,7 @@ default[:druid][:zookeeper][:discovery] = "/discovery"
 # Druid Processing Module
 default[:druid][:processing][:buffer] = 1073741824
 default[:druid][:processing][:numThreads] = [node[:cpu][:total]-1, 1].max
+default[:druid][:processing][:memory] = (node[:druid][:processing][:buffer]*node[:druid][:processing][:numThreads]/1048576.0)
 
 # Metrics Module
 default[:druid][:monitors] = []
@@ -51,8 +52,8 @@ default[:druid][:storage][:s3][:base_key] = nil
 
 # Indexing Services
 default[:druid][:indexer][:port] = 8091
-default[:druid][:indexer][:mx] = "2g"
-default[:druid][:indexer][:dm] = "64m"
+default[:druid][:indexer][:mx] = 2 * 1024
+default[:druid][:indexer][:dm] = 64
 default[:druid][:indexer][:runner][:javaOpts] = "-d64 -server -Xmx8g"
 default[:druid][:indexer][:runner][:startPort] = 8092
 default[:druid][:indexer][:workers] = [node[:cpu][:total]-1,1].max
@@ -60,23 +61,23 @@ default[:druid][:indexing][:service] = node.cluster_name
 
 # Overlord Services
 default[:druid][:overlord][:port] = 8090
-default[:druid][:overlord][:mx] = "2g"
-default[:druid][:overlord][:dm] = "64m"
+default[:druid][:overlord][:mx] = 2 * 1024
+default[:druid][:overlord][:dm] = 64
 
 # Coordinator Services
 default[:druid][:coordinator][:port] = 8081
-default[:druid][:coordinator][:mx] = "2g"
-default[:druid][:coordinator][:dm] = "64m"
+default[:druid][:coordinator][:mx] = 2 * 1024
+default[:druid][:coordinator][:dm] = 64
 
 # Historical Services
 default[:druid][:historical][:port] = 8082
-default[:druid][:historical][:mx] = "15g"
-default[:druid][:historical][:dm] = "15g"
+default[:druid][:historical][:mx] = 15 * 1024
+default[:druid][:historical][:dm] = 15 * 1024
 
 # Broker Services
 default[:druid][:broker][:port] = 8080
-default[:druid][:broker][:mx] = "50g"
-default[:druid][:broker][:dm] = "10g"
+default[:druid][:broker][:mx] = (node[:memory][:total].to_i/1024 - node[:druid][:processing][:memory] - node[:druid][:coordinator][:mx].to_i - 2048).ceil
+default[:druid][:broker][:dm] = node[:druid][:processing][:memory].ceil
 default[:druid][:broker][:cache_size_in_bytes] = 42949672960
 default[:druid][:broker][:connections] = 20
 default[:druid][:broker][:timeout] = "PT10M"
