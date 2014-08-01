@@ -8,8 +8,6 @@ node[:kafka][:storage].split(',').each do |dir|
   end
 end
 
-node.default[:kafka][:zookeeper][:cluster] = node.cluster_name
-
 template "/var/app/kafka/current/config/server.properties" do
   source "server.properties"
   owner "root"
