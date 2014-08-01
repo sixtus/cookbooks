@@ -1,4 +1,7 @@
-chef_server_url "https://localhost"
+role = JSON.load(File.expand_path("../../roles/base.json"))
+chef_domain = role['default_attributes']['chef_domain']
+
+chef_server_url "https://chef.#{chef_domain}"
 
 # do not change anything below here
 chef_repo_path File.expand_path(File.join(File.dirname(__FILE__), ".."))

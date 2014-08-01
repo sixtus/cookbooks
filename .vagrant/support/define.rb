@@ -2,7 +2,9 @@ def define(name, ip, memory = 2.0, cpus = 1)
   Vagrant.configure("2") do |config|
     config.vm.define name do |base|
       _chef = nil
-      base.vm.hostname = "#{name}.vagrant.example.com"
+      role = JSON.load(File.expand_path("../../../roles/base.json"))
+      chef_domain = role['default_attributes']['chef_domain']
+      base.vm.hostname = "#{name}.vagrant.#{chef_domain}"
       base.vm.network "private_network", ip: ip
       base.vm.provision :chef_client do |chef|
         _chef = chef
@@ -18,9 +20,6 @@ def define(name, ip, memory = 2.0, cpus = 1)
       end
       yield base.vm, _chef if block_given?
       _chef.add_recipe('virtualbox::guest')
-      _chef.json = _chef.json.merge({
-        chef_domain: 'example.com',
-      })
     end
   end
 end
