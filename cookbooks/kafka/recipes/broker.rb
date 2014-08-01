@@ -24,6 +24,7 @@ include_recipe "zookeeper::ruby"
 ruby_block "kafka-zk-chroot" do
   action :nothing
   block do
+    Gem.clear_paths
     require 'zk'
     ZK.new(zookeeper_connect(node[:kafka][:zookeeper][:root], node[:kafka][:zookeeper][:cluster]))
   end

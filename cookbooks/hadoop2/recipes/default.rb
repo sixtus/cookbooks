@@ -115,6 +115,7 @@ include_recipe "zookeeper::ruby"
 ruby_block "hadoop-zk-chroot" do
   action :nothing
   block do
+    Gem.clear_paths
     require 'zk'
     zk = ZK.new(zookeeper_connect('/hadoop2', node[:hadoop2][:cluster]))
     [
