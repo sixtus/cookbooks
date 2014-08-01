@@ -30,6 +30,10 @@ class Nodes
     @nodes.each(&block)
   end
 
+  def length
+    to_a.length
+  end
+
   def filter(&block)
     dup.tap do |obj|
       obj.nodes = @nodes.select(&block)
