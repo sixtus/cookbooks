@@ -1,7 +1,7 @@
 include_recipe "druid"
 
 mysql_database "druid" do
-  connection mysql_master_connection
+  connection mysql_master_connection(node[:druid][:cluster])
 end
 
 template "/var/app/druid/bin/druid-coordinator" do
