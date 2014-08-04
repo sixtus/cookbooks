@@ -4,8 +4,6 @@ package "app-arch/snappy"
 package "dev-libs/protobuf"
 package "dev-java/ant-core"
 
-node.default[:hadoop2][:cluster] = node.cluster_name
-
 deploy_skeleton "hadoop2"
 
 %w(
