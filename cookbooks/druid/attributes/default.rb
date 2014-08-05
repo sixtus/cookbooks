@@ -37,7 +37,7 @@ default[:druid][:monitors] = []
 
 # Storage Node Module
 default[:druid][:server][:max_size] = 1 * 1024 * 1024 * 1024
-default[:druid][:server][:tier] = "_default_tier"
+default[:druid][:server][:tier] = "#{node[:cluster][:host][:group]}-#{node.cluster_name}"
 default[:druid][:server][:priority] = 0
 
 # DataSegment Pusher/Puller Module
@@ -87,3 +87,4 @@ default[:druid][:broker][:balancer] = "connectionCount"
 default[:druid][:realtime][:port] = 8083
 default[:druid][:realtime][:mx] = 12 * 1024
 default[:druid][:realtime][:dm] = 12 * 1024
+default[:druid][:realtime][:partition] = IPAddr.new(node[:ipaddress]).to_i & (2**31-1)
