@@ -6,6 +6,8 @@ default[:hadoop2][:rack_id] = "/default-rack/#{node.cluster_name}"
 default[:hadoop2][:tmp_dir] = "/var/tmp/hadoop2"
 default[:hadoop2][:java_tmp] = "/var/tmp/java"
 
+default[:hadoop2][:zookeeper][:cluster] = node.cluster_name
+
 default[:hadoop2][:nodemanager][:memory_mb] = 8192
 
 default[:hadoop2][:pig][:version] = "0.12.1"
