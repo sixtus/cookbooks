@@ -1,7 +1,7 @@
 #!/bin/bash
 
 gpm=$(mktemp)
-curl -s -o ${gpm} https://raw.githubusercontent.com/pote/gpm/v1.2.3/bin/gpm
+curl -s -o ${gpm} https://raw.githubusercontent.com/remerge/gpm/master/bin/gpm
 chmod +x ${gpm}
 
 gvp=$(mktemp)
