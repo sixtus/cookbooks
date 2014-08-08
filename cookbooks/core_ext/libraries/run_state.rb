@@ -21,9 +21,10 @@ class Nodes
   def initialize(node)
     @node = node
     @nodes = node.run_state[:nodes]
-    if @nodes.none? { |n| n[:fqdn] == node[:fqdn] }
-      @nodes << node
-    end
+    # make sure we use attributes from current node instead of stale data from
+    # the search index to prevent chicken-egg problems
+    @nodes.delete_if { |n| n[:fqdn] == node[:fqdn] }
+    @nodes << node
   end
 
   def each(&block)
