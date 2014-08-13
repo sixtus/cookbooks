@@ -162,7 +162,6 @@ if nagios_client?
       check_command "check_nrpe!check_mysql_#{name}"
       check_interval params[:check_interval]
       notification_interval params[:notification_interval]
-      servicegroups "mysql"
       enabled params[:enabled]
     end
   end

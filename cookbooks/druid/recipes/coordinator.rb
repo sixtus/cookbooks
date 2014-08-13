@@ -33,7 +33,6 @@ if nagios_client?
 
   nagios_service "DRUID-USAGE" do
     check_command "check_nrpe!check_druid_usage"
-    servicegroups "druid"
   end
 
   druid_databases = node[:druid][:nagios][:topics]
@@ -59,7 +58,6 @@ if nagios_client?
 
     nagios_service "DRUID-DB-#{db_name.gsub(/_/, '-').upcase}" do
       check_command "check_nrpe!check_druid_db_#{db_name}"
-      servicegroups "druid"
     end
   end
 end
