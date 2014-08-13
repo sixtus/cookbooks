@@ -2,10 +2,10 @@ include_recipe "mysql"
 
 if gentoo?
   package "dev-db/innotop"
-  package "dev-db/maatkit"
   package "dev-db/mysqltuner"
   package "dev-db/mytop"
-  package "dev-db/xtrabackup-bin" if zentoo?
+  package "dev-db/percona-toolkit"
+  package "dev-db/xtrabackup-bin"
   package "dev-ruby/mysql-ruby"
 
   # configuration files
