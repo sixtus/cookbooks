@@ -36,24 +36,20 @@
     <value>21</value>
   </property>
   <property>
-    <name>mapreduce.job.jvm.numtasks</name>
-    <value>20</value>
-  </property>
-  <property>
     <name>mapreduce.map.memory.mb</name>
-    <value>2048</value>
+    <value><%= (node[:hadoop2][:yarn][:mem_per_container] * 1024).to_i %></value>
   </property>
   <property>
     <name>mapreduce.map.java.opts</name>
-    <value>-server -XX:+UseConcMarkSweepGC -Duser.timezone=UTC -Dfile.encoding=UTF-8 -Xmx1536m -Djava.io.tmpdir=<%= node[:hadoop2][:java_tmp] %></value>
+    <value>-Xmx<%= (0.8 * node[:hadoop2][:yarn][:mem_per_container] * 1024).to_i %>m -server -XX:+UseConcMarkSweepGC -Duser.timezone=UTC -Dfile.encoding=UTF-8 -Djava.io.tmpdir=<%= node[:hadoop2][:java_tmp] %></value>
   </property>
   <property>
     <name>mapreduce.reduce.memory.mb</name>
-    <value>8192</value>
+    <value><%= (node[:hadoop2][:yarn][:mem_per_container] * 1024).to_i %></value>
   </property>
   <property>
     <name>mapreduce.reduce.java.opts</name>
-    <value>-server -XX:+UseConcMarkSweepGC -Duser.timezone=UTC -Dfile.encoding=UTF-8 -Xmx8g -Djava.io.tmpdir=<%= node[:hadoop2][:java_tmp] %></value>
+    <value>-Xmx<%= (0.8 * 2 * node[:hadoop2][:yarn][:mem_per_container] * 1024).to_i %>m -server -XX:+UseConcMarkSweepGC -Duser.timezone=UTC -Dfile.encoding=UTF-8 -Djava.io.tmpdir=<%= node[:hadoop2][:java_tmp] %></value>
   </property>
   <property>
     <name>mapreduce.reduce.shuffle.parallelcopies</name>
@@ -81,9 +77,6 @@
   </property>
   <!-- Compression -->
   <property>
-    <!-- Off by default, because it breaks Druid indexing (at least, it does it
-         druid-0.6.10). Jobs should turn
-         it on if they need it. -->
     <name>mapreduce.output.fileoutputformat.compress</name>
     <value>false</value>
   </property>
@@ -102,10 +95,6 @@
   <property>
     <name>mapreduce.output.fileoutputformat.compress.codec</name>
     <value>org.apache.hadoop.io.compress.GzipCodec</value>
-  </property>
-  <property>
-    <name>yarn.app.mapreduce.am.command-opts</name>
-    <value>-Xmx2g</value>
   </property>
   <!-- Job history server persistent state -->
   <property>
