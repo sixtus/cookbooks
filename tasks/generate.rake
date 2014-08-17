@@ -5,7 +5,7 @@ namespace :generate do
   desc "Generate a cookbook skeleton"
   task :cookbook do
     name = ask('Cookbook name: ') do |q|
-      q.validate = /^\w+$/
+      q.validate = /^[-\w]+$/
     end
 
     description = ask('Cookbook description: ')
