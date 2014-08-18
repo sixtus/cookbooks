@@ -1,13 +1,7 @@
 include_recipe "hadoop2"
 
-HDFS_SERVICE = "datanode"
-RESTARTS_ON = %w{
-}
-
-service "hdfs@#{HDFS_SERVICE}" do
+service "hdfs@datanode" do
   action [:enable, :start]
-  
-  RESTARTS_ON.each do |conf_file|
-    subscribes :restart, "template[/etc/hadoop2/#{conf_file}]"
-  end
+  subscribes :restart, "template[/etc/hadoop2/core-site.xml]"
+  subscribes :restart, "template[/etc/hadoop2/hdfs-site.xml]"
 end
