@@ -108,6 +108,7 @@ namespace :node do
     env = "/usr/bin/env UPDATEWORLD_DONT_ASK=1" if ENV['BATCH']
     system("ssh -t #{args.fqdn} '/usr/bin/sudo -i #{env} /usr/local/sbin/updateworld'")
     reboot_wait(args.fqdn) if ENV['REBOOT']
+    system("ssh -t #{args.fqdn} '/usr/bin/sudo -i #{env} chef-client'")
   end
 
   # private
