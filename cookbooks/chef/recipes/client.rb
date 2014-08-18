@@ -86,7 +86,6 @@ if !vbox?
 
     systemd_timer "chef-client" do
       schedule [
-        "OnBootSec=60",
         "OnCalendar=*:#{minute}",
       ]
     end
