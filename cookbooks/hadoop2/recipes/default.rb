@@ -58,7 +58,6 @@ end
     owner "root"
     group "hadoop2"
     mode "0644"
-    notifies :create, "ruby_block[hadoop-zk-chroot]"
   end
 end
 
@@ -85,7 +84,7 @@ tar_extract src_tar do
 end
 
 execute "hadoop2-build" do
-  command "/bin/bash -l -c 'mvn clean package -Pdist,native -Drequire.snappy -DskipTests'"
+  command "/bin/bash -l -c 'mvn clean package -Pdist,native -Drequire.snappy -DskipTests -Dmaven.javadoc.skip=true'"
   user "hadoop2"
   group "hadoop2"
   cwd src_dir
@@ -111,7 +110,6 @@ end
 include_recipe "zookeeper::ruby"
 
 ruby_block "hadoop-zk-chroot" do
-  action :nothing
   block do
     Gem.clear_paths
     require 'zk'
@@ -126,4 +124,3 @@ ruby_block "hadoop-zk-chroot" do
     end
   end
 end
-

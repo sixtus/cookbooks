@@ -88,7 +88,7 @@ systemd_timer "postgresql-backup" do
 end
 
 duply_backup "postgresql" do
-  source "#{datadir}/pg_backup"
+  source backupdir
   max_full_backups 30
   max_full_age 1
 end

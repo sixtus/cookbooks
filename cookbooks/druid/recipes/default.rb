@@ -45,13 +45,11 @@ template "/etc/druid/runtime.properties" do
   owner "root"
   group "root"
   mode "0644"
-  notifies :create, "ruby_block[druid-zk-chroot]"
 end
 
 include_recipe "zookeeper::ruby"
 
 ruby_block "druid-zk-chroot" do
-  action :nothing
   block do
     Gem.clear_paths
     require 'zk'
