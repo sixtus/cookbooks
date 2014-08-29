@@ -36,10 +36,10 @@ preserve         = no
 
 
 [ policy_match ]
-countryName            = match
-stateOrProvinceName    = match
-localityName           = match
-organizationName       = match
+countryName            = optional
+stateOrProvinceName    = optional
+localityName           = optional
+organizationName       = optional
 organizationalUnitName = optional
 commonName             = supplied
 emailAddress           = optional

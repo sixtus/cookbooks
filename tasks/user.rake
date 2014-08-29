@@ -13,6 +13,7 @@ namespace :user do
     tags = (args.tags || ask('Tags (space-seperated): ')).split(' ')
     key = args.key || ask('SSH Public Key: ')
 
+    ENV["BATCH"] = "1"
     args = Rake::TaskArguments.new([:cn], [login])
     Rake::Task["ssl:do_cert"].execute(args)
 
