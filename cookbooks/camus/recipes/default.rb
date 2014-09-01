@@ -41,5 +41,5 @@ systemd_unit "camus.service" do
 end
 
 systemd_timer "camus" do
-  schedule %w(OnBootSec=60 OnUnitInactiveSec=300)
+  schedule %w(OnBootSec=300 OnUnitInactiveSec=3600)
 end
