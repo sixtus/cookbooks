@@ -6,7 +6,7 @@ default[:kafka][:storage] = "/var/app/kafka/storage"
 default[:kafka][:zookeeper][:root] = "/kafka.#{node.cluster_name}"
 default[:kafka][:zookeeper][:cluster] = node.cluster_name
 
-default[:kafka][:partition][:default] = 4
+default[:kafka][:partition][:default] = 1
 default[:kafka][:partition][:replication] = 1
 
 default[:kafka][:log][:retention_hours] = 144
