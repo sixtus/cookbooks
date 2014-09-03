@@ -64,6 +64,13 @@ action :create do
         user nr.user
         only_if { nr.migrate }
       end
+
+      rvm_shell "#{nr.user}-db:seed" do
+        code "bundle exec rake db:seed RAILS_ENV=#{rails_env}"
+        cwd release_path
+        user nr.user
+        only_if { nr.seed }
+      end
     end
 
     before_symlink nr.before_symlink
