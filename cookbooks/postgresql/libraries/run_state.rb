@@ -11,6 +11,10 @@ module PostgresqlRunStateHelpers
     master
   end
 
+  def postgresql_master?
+    postgresql_master[:fqdn] == node[:fqdn]
+  end
+
   def postgresql_master_connection(cluster_name = node.cluster_name)
     postgresql_master(cluster_name)[:postgresql][:connection] rescue nil
   end
