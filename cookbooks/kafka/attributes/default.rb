@@ -9,4 +9,4 @@ default[:kafka][:zookeeper][:cluster] = node.cluster_name
 default[:kafka][:partition][:default] = 1
 default[:kafka][:partition][:replication] = 1
 
-default[:kafka][:log][:retention_hours] = 144
+default[:kafka][:log][:retention_hours] = 7*24
