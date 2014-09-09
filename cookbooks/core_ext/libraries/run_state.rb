@@ -20,11 +20,12 @@ class Nodes
 
   def initialize(node)
     @node = node
-    @nodes = node.run_state[:nodes]
+    nodes = node.run_state[:nodes]
     # make sure we use attributes from current node instead of stale data from
     # the search index to prevent chicken-egg problems
-    @nodes.delete_if { |n| n[:fqdn] == node[:fqdn] }
-    @nodes << node
+    nodes.delete_if { |n| n[:fqdn] == node[:fqdn] }
+    nodes << node
+    @nodes = nodes.sort_by { |n| n[:fqdn] }
   end
 
   def each(&block)
@@ -44,6 +45,12 @@ class Nodes
   def cluster(name)
     filter do |n|
       n.cluster_name == name rescue false
+    end
+  end
+
+  def environment(name)
+    filter do |n|
+      n.chef_environment == name rescue false
     end
   end
 
