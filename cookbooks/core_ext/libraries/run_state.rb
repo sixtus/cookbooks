@@ -33,7 +33,11 @@ class Nodes
   end
 
   def length
-    to_a.length
+    @nodes.length
+  end
+
+  def empty?
+    @nodes.empty?
   end
 
   def filter(&block)
