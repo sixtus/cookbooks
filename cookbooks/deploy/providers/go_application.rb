@@ -15,6 +15,16 @@ action :create do
     mode "0644"
   end
 
+  directory "#{path}/.go" do
+    owner nr.user
+    mode "0755"
+  end
+
+  directory "#{path}/shared/vendor" do
+    owner nr.user
+    mode "0755"
+  end
+
   deploy_application user[:name] do
     repository nr.repository
     revision nr.revision
@@ -29,7 +39,12 @@ action :create do
     before_migrate do
       # symlink_before_migrate runs _after_ the before_migrate callback chain.
       # some applications rely on these symlinks to setup before_migrate tasks
-      nr.symlink_before_migrate.each do |src, dest|
+      links = nr.symlink_before_migrate.merge({
+        "cache" => "cache",
+        "vendor" => ".vendor",
+      })
+
+      links.each do |src, dest|
         begin
           FileUtils.ln_sf(shared_path + "/#{src}", release_path + "/#{dest}")
         rescue => e
@@ -41,6 +56,10 @@ action :create do
         command "make dep all"
         cwd release_path
         user nr.user
+        environment({
+          "GOPATH" => "#{path}/.go",
+          "PATH" => "#{path}/.go/bin:#{ENV['PATH']}",
+        })
       end
 
       ruby_block "#{nr.user}-after-make" do
