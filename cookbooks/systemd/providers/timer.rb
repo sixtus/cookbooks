@@ -31,6 +31,7 @@ action :create do
       schedule: nr.schedule,
       unit: unit,
     })
+    notifies :restart, "service[#{nr.service}.timer]"
   end
 
   service "#{nr.service}.timer" do

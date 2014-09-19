@@ -27,7 +27,7 @@ action :create do
 
   if systemd_running?
     systemd_timer "duply-bkp-#{nr.name}" do
-      schedule %w(OnCalendar=daily)
+      schedule %W(OnCalendar=#{node[:duply][:backup_time]})
       unit command: "/usr/bin/duply #{nr.name} bkp"
     end
 
