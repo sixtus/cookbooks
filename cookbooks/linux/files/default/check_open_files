@@ -1,0 +1,70 @@
+#!/bin/bash
+
+USAGE="`basename $0` -w <warn %> -c <crit %>"
+THRESHOLD_USAGE="CRITICAL threshold must be greater than WARNING: `basename $0` $*"
+
+warn=75
+crit=90
+
+while getopts “hw:c:W:C:” OPTION; do
+    case $OPTION in
+        h)
+        echo $USAGE
+        exit 0
+        ;;
+        w)
+        warn=$OPTARG
+        ;;
+        c)
+        crit=$OPTARG
+        ;;
+    esac
+done
+
+[[ $warn -ge $crit ]] && echo -e "\n$THRESHOLD_USAGE\n\nUsage: $USAGE\n" && exit 0
+
+# global
+set -- $(</proc/sys/fs/file-nr)
+file_max=$3
+
+open_fd=$(($1 - $2))
+warn_fd=$((${file_max} * ${warn} / 100))
+crit_fd=$((${file_max} * ${crit} / 100))
+
+open_perc=$((${open_fd} * 100 / ${file_max}))
+text="$open_fd/$file_max ($open_perc%)"
+result=0
+
+[[ $open_fd -gt $warn_fd && $result -le 1 ]] && result=1
+[[ $open_fd -gt $crit_fd && $result -le 2 ]] && result=2
+
+# per process
+for i in /proc/*/limits; do
+	pid=$(basename $(dirname $i))
+
+	set -- $(grep 'Max open files' $i)
+	file_max=$5
+	open_fd=$(ls -1 /proc/${pid}/fd | wc -l)
+	warn_fd=$((${file_max} * ${warn} / 100))
+	crit_fd=$((${file_max} * ${crit} / 100))
+
+
+	if [[ $open_fd -gt $warn_fd ]]; then
+		open_perc=$((${open_fd} * 100 / ${file_max}))
+		text="${text} ${pid}[$open_fd/$file_max ($open_perc%)]"
+	fi
+
+	[[ $open_fd -gt $warn_fd && $result -le 1 ]] && result=1
+	[[ $open_fd -gt $crit_fd && $result -le 2 ]] && result=2
+done
+
+if [[ $result -eq 2 ]]; then
+	echo "CRITICAL - ${text}"
+	exit 2
+elif [[ $result -eq 1 ]]; then
+	echo "WARNING - ${text}"
+	exit 1
+else
+	echo "OK - ${text}"
+	exit 0
+fi

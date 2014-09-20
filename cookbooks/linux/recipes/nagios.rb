@@ -37,6 +37,18 @@ if nagios_client?
     env [:staging]
   end
 
+  nagios_plugin "check_open_files"
+
+  nrpe_command "check_open_files" do
+    command "/usr/lib/nagios/plugins/check_open_files -w 75 -c 90"
+  end
+
+  nagios_service "OPEN-FILES" do
+    check_command "check_nrpe!check_open_files"
+    servicegroups "system"
+    env [:staging, :testing, :development]
+  end
+
   nagios_plugin "check_mem"
 
   nrpe_command "check_mem" do
