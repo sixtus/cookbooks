@@ -59,11 +59,11 @@ end
 
 vhosts = hosts.map do |h|
   h[:nagios][:vhosts] rescue []
-end.flatten.compact.map do |v|
+end.flatten.compact.sort.uniq.map do |vhost|
   Chef::Node.new.tap do |n|
     n.chef_environment "production"
-    n.default[:fqdn] = v[:name]
-    n.default[:ipaddress] = v[:name]
+    n.default[:fqdn] = vhost
+    n.default[:ipaddress] = vhost
     n.default[:virtualization] = {}
     n.default[:nagios][:services] = {}
     add_services_for_vhost(n)
@@ -75,20 +75,19 @@ hosts = (vhosts + hosts.to_a).sort_by do |n|
 end
 
 # build hostgroups
-hostgroups = {}
+hostgroups = Hash.new do |hsh, key|
+  hsh[key] = []
+end
 
 hosts.each do |h|
   # group per cluster
-  cluster = h.cluster_name
+  cluster = h.cluster_domain
+  hostgroups[cluster] << h[:fqdn] if !cluster.nil?
 
-  hostgroups[cluster] ||= []
-  hostgroups[cluster] << h[:fqdn]
-
-  # group per role (except base)
-  h.default[:roles] ||= []
-  h[:roles].each do |r|
-    next if r == "base"
-    hostgroups[r] ||= []
+  # group per role
+  (h[:roles] || []).each do |r|
+    next if %w(base c500k smc).include?(r)
+    next if r == h.cluster_name
     hostgroups[r] << h[:fqdn]
   end
 end

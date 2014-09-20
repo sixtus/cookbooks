@@ -3,8 +3,10 @@ default[:chef_domain] = node[:domain]
 
 if match = node[:fqdn].sub(node[:chef_domain], '').match(/^(.+?)\.(.+?)\.$/)
   default[:cluster][:name] = match[2]
+  default[:cluster][:domain] = "#{node.cluster_name}.#{node[:chef_domain]}"
 else
   default[:cluster][:name] = node[:fqdn]
+  default[:cluster][:domain] = nil
 end
 
 if match = node[:hostname].match(/(.+?)(\d+)$/)
