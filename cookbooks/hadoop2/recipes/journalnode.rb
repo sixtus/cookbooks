@@ -5,3 +5,22 @@ service "hdfs@journalnode" do
   subscribes :restart, "template[/etc/hadoop2/core-site.xml]"
   subscribes :restart, "template[/etc/hadoop2/hdfs-site.xml]"
 end
+
+nrpe_command "check_hdfs_journalnode_stat" do
+  command "/usr/lib/nagios/plugins/check_jstat -j org.apache.hadoop.hdfs.qjournal.server.JournalNode"
+end
+
+nagios_service "HDFS-JOURNALNODE-STAT" do
+  check_command "check_nrpe!check_hdfs_journalnode_stat"
+  servicegroups "hdfs,hdfs-journalnode"
+end
+
+nagios_cluster_service "HDFS-JOURNALNODES-STAT" do
+  check_command "check_aggregate!service_description=HDFS-JOURNALNODE-STAT!0.3!0.5"
+  servicegroups "hdfs,hdfs-journalnode"
+end
+
+nagios_service "HDFS-JOURNALNODE-RPC" do
+  check_command "check_tcp!8485!-w 1 -c 1"
+  servicegroups "hdfs,hdfs-journalnode"
+end

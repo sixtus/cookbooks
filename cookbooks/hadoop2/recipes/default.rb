@@ -124,3 +124,6 @@ ruby_block "hadoop-zk-chroot" do
     end
   end
 end
+
+nagios_plugin "check_hdfs"
+nagios_plugin "check_hdfs_namenode_ha"
