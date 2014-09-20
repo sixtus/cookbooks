@@ -28,3 +28,23 @@ if gentoo?
 elsif mac_os_x?
   package "maven"
 end
+
+if nagios_client?
+  nagios_plugin "jmxquery.jar"
+  nagios_plugin "check_jmx"
+  nagios_plugin "check_jstat"
+
+  sudo_rule "nagios-jps" do
+    user "nagios"
+    runas "root"
+    command "NOPASSWD: /usr/bin/jps *"
+    only_if { nagios_client? }
+  end
+
+  sudo_rule "nagios-jstat" do
+    user "nagios"
+    runas "root"
+    command "NOPASSWD: /usr/bin/jstat *"
+    only_if { nagios_client? }
+  end
+end
