@@ -34,6 +34,8 @@ template "/usr/lib/nagios/plugins/notify" do
   mode "0750"
 end
 
+nagios_plugin "check_aggregate"
+
 # retrieve data from the search index
 contacts = node.users.select do |u|
   u[:tags] and not (u[:tags] & ["hostmaster", "nagios"]).empty?

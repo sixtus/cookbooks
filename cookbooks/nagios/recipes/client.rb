@@ -26,9 +26,15 @@ directory "/usr/lib/ruby/site_ruby/nagios/plugin" do
   mode "0755"
 end
 
-cookbook_file "/usr/lib/ruby/site_ruby/nagios/plugin.rb" do
-  source "nagios/plugin.rb"
-  owner "root"
-  group "root"
-  mode "0755"
+%w(
+  plugin
+  section
+  status
+).each do |f|
+  cookbook_file "/usr/lib/ruby/site_ruby/nagios/#{f}.rb" do
+    source "nagios/#{f}.rb"
+    owner "root"
+    group "root"
+    mode "0755"
+  end
 end

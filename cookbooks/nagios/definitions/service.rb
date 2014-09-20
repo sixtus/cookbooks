@@ -15,9 +15,9 @@ define :nagios_service do
 end
 
 define :nagios_cluster_service do
-  name, params = nagios_service_defaults(params)
-  params[:host_name] = node.cluster_domain
-  node.default[:nagios][:services][name] = params
+  name, p = nagios_service_defaults(params)
+  p[:host_name] = node.cluster_domain
+  node.default[:nagios][:services][name] = p
 end
 
 define :nagios_service_dependency do
