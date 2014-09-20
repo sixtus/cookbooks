@@ -105,6 +105,7 @@ if nagios_client?
 
   nagios_service "CRON" do
     check_command "check_nrpe!check_cron"
+    servicegroups "system"
     env [:testing, :development]
   end
 

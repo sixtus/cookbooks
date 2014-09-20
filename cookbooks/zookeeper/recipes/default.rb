@@ -60,6 +60,7 @@ if nagios_client?
 
   nagios_service "ZOOKEEPER-STATUS" do
     check_command "check_nrpe!check_zookeeper_status"
+    servicegroups "zookeeper"
   end
 
   nrpe_command "check_zookeeper_readonly" do
@@ -68,6 +69,7 @@ if nagios_client?
 
   nagios_service "ZOOKEEPER-READONLY" do
     check_command "check_nrpe!check_zookeeper_readonly"
+    servicegroups "zookeeper"
   end
 
   if zookeeper_nodes.count > 1
@@ -93,6 +95,7 @@ if nagios_client?
 
     nagios_service "ZOOKEEPER-#{mode.to_s.upcase}" do
       check_command "check_nrpe!check_zookeeper_#{mode}"
+      servicegroups "zookeeper"
     end
   end
 end

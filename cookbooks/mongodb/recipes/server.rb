@@ -53,6 +53,7 @@ if nagios_client?
       check_command "check_nrpe!#{command_name}"
       check_interval p[3]
       notification_interval p[4]
+      servicegroups "mongodb"
     end
   end
 

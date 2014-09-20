@@ -4,9 +4,11 @@ default[:chef_domain] = node[:domain]
 if match = node[:fqdn].sub(node[:chef_domain], '').match(/^(.+?)\.(.+?)\.$/)
   default[:cluster][:name] = match[2]
   default[:cluster][:domain] = "#{node.cluster_name}.#{node[:chef_domain]}"
+  default[:parents] = [node[:cluster][:domain]]
 else
   default[:cluster][:name] = node[:fqdn]
   default[:cluster][:domain] = nil
+  default[:parents] = []
 end
 
 if match = node[:hostname].match(/(.+?)(\d+)$/)
@@ -16,6 +18,7 @@ else
   default[:cluster][:host][:group] = node[:hostname]
   default[:cluster][:host][:id] = 1
 end
+
 
 # contacts
 default[:contacts][:hostmaster] = "hostmaster@#{node[:chef_domain]}"

@@ -3,6 +3,7 @@ if nagios_client?
 
   nagios_service "PING" do
     check_command "check_ping!250.0,20%!500.0,60%"
+    servicegroups "network"
     env [:staging, :testing, :development]
   end
 
@@ -12,6 +13,7 @@ if nagios_client?
 
   nagios_service "LOAD" do
     check_command "check_nrpe!check_load"
+    servicegroups "system"
     env [:staging, :testing, :development]
   end
 
@@ -21,6 +23,7 @@ if nagios_client?
 
   nagios_service "ZOMBIES" do
     check_command "check_nrpe!check_zombie_procs"
+    servicegroups "system"
     env [:staging, :testing, :development]
   end
 
@@ -30,6 +33,7 @@ if nagios_client?
 
   nagios_service "PROCS" do
     check_command "check_nrpe!check_total_procs"
+    servicegroups "system"
     env [:staging]
   end
 
@@ -45,6 +49,7 @@ if nagios_client?
 
   nagios_service "MEMORY" do
     check_command "check_nrpe!check_mem"
+    servicegroups "system"
     env [:staging, :testing, :development]
   end
 
@@ -56,6 +61,7 @@ if nagios_client?
 
   nagios_service "RAID" do
     check_command "check_nrpe!check_raid"
+    servicegroups "system"
     env [:staging, :testing, :development]
   end
 
@@ -75,6 +81,7 @@ if nagios_client?
   nagios_service "DISKS" do
     check_command "check_nrpe!check_disks"
     notification_interval 15
+    servicegroups "system"
     env [:staging, :testing, :development]
   end
 
@@ -85,6 +92,7 @@ if nagios_client?
   nagios_service "SWAP" do
     check_command "check_nrpe!check_swap"
     notification_interval 180
+    servicegroups "system"
     env [:staging, :testing, :development]
   end
 
@@ -103,6 +111,7 @@ if nagios_client?
 
   nagios_service "LINK" do
     check_command "check_nrpe!check_link_usage"
+    servicegroups "network"
     check_interval 10
     env [:staging, :testing, :development]
   end

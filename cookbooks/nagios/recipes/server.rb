@@ -11,6 +11,8 @@ include_recipe "nagios::nrpe"
 include_recipe "nagios::nsca"
 include_recipe "nagios::splunk"
 
+package "net-analyzer/mk-livestatus"
+
 directory "/var/nagios/rw" do
   owner "nagios"
   group "nginx"
@@ -93,7 +95,7 @@ hosts.each do |h|
 end
 
 # remove sample objects
-%w(hosts localhost printer services switch windows servicegroups).each do |f|
+%w(hosts localhost printer services switch windows).each do |f|
   file "/etc/nagios/objects/#{f}.cfg" do
     action :delete
   end
@@ -128,6 +130,10 @@ end
 
 nagios_conf "hostgroups" do
   variables :hostgroups => hostgroups
+end
+
+nagios_conf "servicegroups" do
+  variables :hosts => hosts
 end
 
 hosts.each do |host|

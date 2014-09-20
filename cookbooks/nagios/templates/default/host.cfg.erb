@@ -6,8 +6,8 @@ define host {
   use generic-host
   address <%= @host[:ipaddress] %>
   host_name <%= @host[:fqdn] %>
-<% if @host[:virtualization][:host] %>
-  parents <%= @host[:virtualization][:host] %>
+<% if @host[:parents] && !@host[:parents].empty? %>
+  parents <%= @host[:parents].join(',') %>
 <% end %>
   contact_groups on-call
 <% if @host[:platform] %>
@@ -42,7 +42,6 @@ define host {
 
   # legacy
   params.delete(:escalations)
-  params.delete(:servicegroups)
 %>
 define service {
   use generic-service

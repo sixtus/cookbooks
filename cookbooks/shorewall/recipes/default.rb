@@ -29,6 +29,7 @@ unless vbox?
     nagios_service "CONNTRACK" do
       check_command "check_nrpe!check_conntrack"
       notification_interval 15
+      servicegroups "network"
       env [:testing, :development]
     end
   end

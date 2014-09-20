@@ -13,5 +13,6 @@ if nagios_client?
 
   nagios_service "CHEF-CLIENTS" do
     check_command "check_nrpe!check_chef_clients"
+    servicegroups "chef"
   end
 end

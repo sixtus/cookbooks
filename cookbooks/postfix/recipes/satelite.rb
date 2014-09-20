@@ -26,6 +26,7 @@ if postfix_relayhost && !node[:skip][:postfix_satelite]
 
     nagios_service "POSTFIX-SATELITE" do
       check_command "check_nrpe!check_postfix_satelite"
+      servicegroups "postfix"
       env [:testing, :development]
     end
   end

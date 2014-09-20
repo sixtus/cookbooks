@@ -23,6 +23,7 @@ if nagios_client?
 
   nagios_service "CA-CERTS" do
     check_command "check_nrpe!check_ssl_certs"
+    servicegroups "ca"
     notification_interval 1440
   end
 end
