@@ -63,6 +63,11 @@ if nagios_client?
     servicegroups "zookeeper"
   end
 
+  nagios_cluster_service "ZOOKEEPER" do
+    check_command "check_aggregate!ZOOKEEPER-STATUS!0.1!0.3!-H #{zookeeper_nodes.map(&:fqdn).join(',')}"
+    servicegroups "zookeeper"
+  end
+
   nrpe_command "check_zookeeper_readonly" do
     command "/usr/lib/nagios/plugins/check_zookeeper -m ReadOnly -H localhost"
   end
@@ -85,7 +90,7 @@ if nagios_client?
   {
     :connections => [2000, 3000],
     :watches => [100000, 200000],
-    :latency => [1000, 2000],
+    :latency => [100, 200],
     :requests => [20, 50],
     :files => [2048, 4096],
   }.each do |mode, threshold|

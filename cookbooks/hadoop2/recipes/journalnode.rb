@@ -10,13 +10,13 @@ nrpe_command "check_hdfs_journalnode_stat" do
   command "/usr/lib/nagios/plugins/check_jstat -j org.apache.hadoop.hdfs.qjournal.server.JournalNode"
 end
 
-nagios_service "HDFS-JOURNALNODE-STAT" do
+nagios_service "HDFS-JOURNALNODE" do
   check_command "check_nrpe!check_hdfs_journalnode_stat"
   servicegroups "hdfs,hdfs-journalnode"
 end
 
-nagios_cluster_service "HDFS-JOURNALNODES-STAT" do
-  check_command "check_aggregate!service_description=HDFS-JOURNALNODE-STAT!0.3!0.5"
+nagios_cluster_service "HDFS-JOURNALNODES" do
+  check_command "check_aggregate!HDFS-JOURNALNODE!0.3!0.5"
   servicegroups "hdfs,hdfs-journalnode"
 end
 

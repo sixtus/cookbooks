@@ -10,8 +10,13 @@ nrpe_command "check_hdfs_datanode_stat" do
   command "/usr/lib/nagios/plugins/check_jstat -j org.apache.hadoop.hdfs.server.datanode.DataNode"
 end
 
-nagios_service "HDFS-DATANODE-STAT" do
+nagios_service "HDFS-DATANODE" do
   check_command "check_nrpe!check_hdfs_datanode_stat"
+  servicegroups "hdfs,hdfs-datanode"
+end
+
+nagios_cluster_service "HDFS-DATANODES" do
+  check_command "check_aggregate!HDFS-DATANODE!0.1!0.3"
   servicegroups "hdfs,hdfs-datanode"
 end
 
@@ -29,12 +34,7 @@ nagios_service "HDFS-DATANODE-USED" do
   servicegroups "hdfs,hdfs-datanode"
 end
 
-nagios_cluster_service "HDFS-DATANODES-STAT" do
-  check_command "check_aggregate!service_description=HDFS-DATANODE-STAT!0.1!0.3"
-  servicegroups "hdfs,hdfs-datanode"
-end
-
 nagios_cluster_service "HDFS-DATANODES-USED" do
-  check_command "check_aggregate!service_description=HDFS-DATANODE-USED!0.1!0.3"
+  check_command "check_aggregate!HDFS-DATANODE-USED!0.1!0.3"
   servicegroups "hdfs,hdfs-datanode"
 end

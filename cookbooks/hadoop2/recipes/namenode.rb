@@ -17,8 +17,13 @@ nrpe_command "check_hdfs_namenode_stat" do
   command "/usr/lib/nagios/plugins/check_jstat -j org.apache.hadoop.hdfs.server.namenode.NameNode"
 end
 
-nagios_service "HDFS-NAMENODE-STAT" do
+nagios_service "HDFS-NAMENODE" do
   check_command "check_nrpe!check_hdfs_namenode_stat"
+  servicegroups "hdfs,hdfs-namenode"
+end
+
+nagios_cluster_service "HDFS-NAMENODES" do
+  check_command "check_aggregate!HDFS-DATANODE-STAT!0.1!0.3"
   servicegroups "hdfs,hdfs-namenode"
 end
 
@@ -30,7 +35,7 @@ end
 {
   :nodes => [:NameNode, nil, nil],
   :latency => [:NameNodeLatency, 0.25, 0.5],
-  :checkpoint => [:NameNodeCheckpointTime, 35*60, 60*60],
+  :checkpoint => [:NameNodeCheckpointTime, 60*60, 2*60*60],
   :journal => [:NameNodeJournalTransactions, 1000000, 2000000],
   :state => [:Dfs, nil, nil],
   :capacity => [:DfsCapacity, 75, 90],
