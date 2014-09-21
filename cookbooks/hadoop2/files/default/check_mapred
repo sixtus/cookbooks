@@ -1,0 +1,55 @@
+#!/usr/bin/env ruby
+
+require 'nagios'
+require 'time'
+require 'open-uri'
+require 'yajl'
+
+module HistoryServerLatency
+  def bean
+    "Hadoop:service=JobHistoryServer,name=RpcActivityForPort10033"
+  end
+
+  def warning(m)
+    m[:RpcQueueTimeAvgTime] > threshold(:warning).to_f
+  end
+
+  def critical(m)
+    m[:RpcQueueTimeAvgTime] > threshold(:critical).to_f
+  end
+
+  def to_s(m)
+    "QueueTime: #{m[:RpcQueueTimeAvgTime]}, ProcessingTime: #{m[:RpcProcessingTimeAvgTime]}"
+  end
+end
+
+Class.new(Nagios::Plugin) do
+  def initialize
+    super
+
+    @config.options.on('-m', '--mode=MODE',
+      'Mode to use') { |mode| @mode = mode }
+    @config.options.on('-u', '--url=URL',
+      'Which URL to query for stats') { |url| @url = url}
+
+    @config.parse!
+    raise "No mode given" unless @mode
+    raise "No URL given" unless @url
+
+    self.extend(Object.const_get(@mode.to_sym))
+  end
+
+  def warning(m)
+    false
+  end
+
+  def parse(json)
+    Yajl::Parser.new(:symbolize_keys => true).parse(json)
+  end
+
+  def measure
+    @stats ||= parse(open(@url))[:beans].select do |obj|
+      obj[:name] =~ Regexp.new(bean)
+    end.first
+  end
+end.run!

@@ -107,6 +107,14 @@ link "/var/app/hadoop2/current" do
   to release_dir
 end
 
+template "/etc/env.d/98hadoop2" do
+  source "98hadoop2"
+  owner "root"
+  group "root"
+  mode 0644
+  notifies :run, 'execute[env-update]'
+end
+
 include_recipe "zookeeper::ruby"
 
 ruby_block "hadoop-zk-chroot" do
@@ -127,3 +135,5 @@ end
 
 nagios_plugin "check_hdfs"
 nagios_plugin "check_hdfs_namenode_ha"
+nagios_plugin "check_mapred"
+nagios_plugin "check_yarn"
