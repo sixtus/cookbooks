@@ -2,6 +2,13 @@ include_recipe "java"
 
 if gentoo?
   package "sys-cluster/zookeeper"
+
+  file "/usr/bin/zk" do
+    content "#!/bin/bash\nexec /opt/zookeeper/bin/zkCli.sh \"$@\"\n"
+    owner "root"
+    group "root"
+    mode "0755"
+  end
 elsif mac_os_x?
   package "zookeeper"
 end
