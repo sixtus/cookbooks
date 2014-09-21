@@ -16,6 +16,12 @@ deploy_application "kafka" do
   end
 end
 
+directory "/var/app/kafka/current/libs" do
+  owner "root"
+  group "kafka"
+  mode "0750"
+end
+
 template "/var/app/kafka/current/config/log4j.properties" do
   source "log4j.properties"
   owner "root"
@@ -30,14 +36,4 @@ template "/var/app/kafka/current/config/tools-log4j.properties" do
   group "kafka"
   mode "0640"
   notifies :restart, "service[kafka]"
-end
-
-if nagios_client?
-  nagios_plugin "check_kafka_lag" do
-    source "check_kafka_lag.rb"
-  end
-
-  nagios_plugin "check_kafka_partitioning" do
-    source "check_kafka_partitioning.rb"
-  end
 end
