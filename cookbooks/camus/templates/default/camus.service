@@ -2,7 +2,7 @@
 Description=Camus (Kafka -> Hadoop importer)
 
 [Service]
-ExecStart=/var/app/camus/bin/camus
+ExecStart=/var/app/camus/current/camus
 User=camus
 Group=camus
 SyslogIdentifier=camus

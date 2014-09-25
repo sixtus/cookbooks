@@ -4,7 +4,6 @@ deploy_skeleton "camus"
 
 deploy_application "camus" do
   repository node[:camus][:git][:repository]
-  revision node[:camus][:git][:revision]
 
   before_symlink do
     execute "mvn-clean-package" do
@@ -16,24 +15,11 @@ deploy_application "camus" do
   end
 end
 
-directory "/etc/camus" do
-  owner "camus"
-  group "camus"
-  mode "0755"
-end
-
-template "/etc/camus/camus.properties" do
+template "/var/app/camus/current/camus.properties" do
   source "camus.properties"
-  owner "root"
-  group "root"
-  mode "0644"
-end
-
-template "/var/app/camus/bin/camus" do
-  source "camus.sh"
   owner "camus"
   group "camus"
-  mode "0755"
+  mode "0644"
 end
 
 systemd_unit "camus.service" do
@@ -44,5 +30,11 @@ primary = (node[:fqdn] == camus_nodes.first[:fqdn])
 
 systemd_timer "camus" do
   schedule %w(OnBootSec=300 OnUnitInactiveSec=3600)
-  action :delete unless primary
+  action :delete #unless primary
+end
+
+if nagios_client?
+  nagios_plugin "check_camus" do
+    source "check_camus.rb"
+  end
 end

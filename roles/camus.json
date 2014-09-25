@@ -2,7 +2,9 @@
   "name": "camus",
   "default_attributes": {
     "camus": {
-      "topics": "metrics"
+      "topics": [
+        "metrics"
+      ]
     }
   },
   "run_list": [

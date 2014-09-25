@@ -1,8 +1,8 @@
-default[:camus][:git][:repository] = "https://github.com/linkedin/camus"
-default[:camus][:git][:revision] = "master"
+default[:camus][:git][:repository] = "https://github.com/remerge/camus"
 
-default[:camus][:topics] = nil
+# no topics means all topics
+default[:camus][:topics] = []
 
-default[:camus][:etl][:destination] = "/history/#{node.cluster_name}"
-default[:camus][:etl][:base_path] = "/camus/#{node.cluster_name}/running"
-default[:camus][:etl][:history_path] = "/camus/#{node.cluster_name}/state"
+default[:camus][:destination] = "/history/#{node.cluster_name}"
+default[:camus][:base_path] = "/camus/#{node.cluster_name}/running"
+default[:camus][:history_path] = "/camus/#{node.cluster_name}/state"
