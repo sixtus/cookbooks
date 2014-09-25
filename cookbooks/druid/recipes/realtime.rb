@@ -24,8 +24,8 @@ end
 service "druid-realtime" do
   action [:enable, :start]
   subscribes :restart, "template[/etc/druid/log4j.properties]"
-  subscribes :restart, "template[/etc/druid/realtime.spec]"
   subscribes :restart, "template[/etc/druid/runtime.properties]"
   subscribes :restart, "template[/var/app/druid/bin/druid-realtime]"
+  subscribes :restart, "file[/etc/druid/realtime.spec]"
   subscribes :restart, "systemd_unit[druid-realtime]"
 end
