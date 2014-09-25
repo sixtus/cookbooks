@@ -4,7 +4,7 @@
   <property>
     <name>fs.defaultFS</name>
     <% if hadoop2_namenodes.count > 1 %>
-    <value>hdfs://<%= node[:hadoop2][:cluster] %></value>
+    <value>hdfs://<%= node[:hadoop2][:hdfs][:cluster] %></value>
     <% elsif hadoop2_namenodes.count == 1 %>
     <value>hdfs://<%= hadoop2_namenodes.first[:fqdn] %></value>
     <% else %>

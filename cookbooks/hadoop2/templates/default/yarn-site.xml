@@ -62,7 +62,7 @@
   </property>
   <property>
     <name>yarn.resourcemanager.cluster-id</name>
-    <value><%= node[:hadoop2][:cluster] %></value>
+    <value><%= node[:hadoop2][:yarn][:cluster] %></value>
   </property>
   <property>
     <name>yarn.resourcemanager.ha.rm-ids</name>
@@ -84,7 +84,7 @@
   </property>
   <property>
     <name>yarn.resourcemanager.zk-state-store.parent-path</name>
-    <value>/rmstore/<%= node[:hadoop2][:cluster] %></value>
+    <value>/rmstore/<%= node[:hadoop2][:yarn][:cluster] %></value>
   </property>
   <property>
     <name>yarn.resourcemanager.store.class</name>

@@ -124,9 +124,9 @@ ruby_block "hadoop-zk-chroot" do
     zk = ZK.new(zookeeper_connect('/hadoop2', node[:hadoop2][:zookeeper][:cluster]))
     [
       "/ha",
-      "/ha/#{node[:hadoop2][:cluster]}",
+      "/ha/#{node[:hadoop2][:hdfs][:cluster]}",
       "/rmstore",
-      "/rmstore/#{node[:hadoop2][:cluster]}",
+      "/rmstore/#{node[:hadoop2][:yarn][:cluster]}",
     ].each do |path|
       zk.create(path, ignore: :node_exists)
     end
