@@ -30,7 +30,7 @@ primary = (node[:fqdn] == camus_nodes.first[:fqdn])
 
 systemd_timer "camus" do
   schedule %w(OnBootSec=300 OnUnitInactiveSec=3600)
-  action :delete #unless primary
+  action :delete unless primary
 end
 
 if nagios_client?

@@ -11,11 +11,11 @@ module Hadoop2RunStateHelpers
     node.nodes.cluster(cluster_name).role("hadoop2-resourcemanager")
   end
 
-  def hadoop2_historyservers(cluster_name = node[:hadoop2][:yarn][:cluster])
+  def hadoop2_historyservers(cluster_name = node[:hadoop2][:hdfs][:cluster])
     node.nodes.cluster(cluster_name).role("hadoop2-historyserver")
   end
 
-  def hadoop2_historyserver(cluster_name = node[:hadoop2][:yarn][:cluster])
+  def hadoop2_historyserver(cluster_name = node[:hadoop2][:hdfs][:cluster])
     hadoop2_historyservers(cluster_name).first
   end
 
