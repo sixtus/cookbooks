@@ -5,11 +5,6 @@
     "druid": {
       "sources": {
         "metrics": {
-          "granularity": "minute",
-          "timestamp": {
-            "column": "ts",
-            "format": "iso"
-          },
           "aggregators": {
             "count": "doubleSum",
             "m1": "doubleSum",
