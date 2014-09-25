@@ -1,7 +1,7 @@
 include_recipe "druid"
 
-template "/etc/druid/realtime.spec" do
-  source "realtime.spec"
+file "/etc/druid/realtime.spec" do
+  content druid_realtime_spec.to_json
   owner "root"
   group "root"
   mode "0644"

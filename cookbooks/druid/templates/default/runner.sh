@@ -33,6 +33,11 @@ JVM_OPTS+=" -Dcom.sun.management.jmxremote.ssl=false"
 <% when "realtime" %>
 <% monitors += ["io.druid.segment.realtime.RealtimeMetricsMonitor"] %>
 JVM_OPTS+=" -Ddruid.realtime.specFile=/etc/druid/realtime.spec"
+JVM_OPTS+=" -Ddruid.server.tier=realtime"
+<% when "historical" %>
+JVM_OPTS+=" -Ddruid.server.tier=<%= node[:druid][:server][:tier] %>"
+<% else %>
+JVM_OPTS+=" -Ddruid.server.tier=<%= @service %>"
 <% end %>
 JVM_OPTS+=' -Ddruid.monitoring.monitors=<%= monitors.to_json %>'
 
@@ -41,8 +46,8 @@ CLASSPATH="/etc/druid"
 CLASSPATH+=":$(/usr/bin/find /var/app/druid/current/services/target/*selfcontained.jar)"
 
 # add hadoop if it exists
-if [ -x <%= "#{node[:druid][:hadoop][:path]}/hadoop" %> ]; then
-  CLASSPATH+=":$(<%= "#{node[:druid][:hadoop][:path]}/hadoop" %> classpath)"
+if [ -x <%= "/var/app/hadoop2/current/bin/hadoop" %> ]; then
+  CLASSPATH+=":$(/var/app/hadoop2/current/bin/hadoop classpath)"
 fi
 
 exec /usr/bin/java $JVM_OPTS -cp $CLASSPATH io.druid.cli.Main server <%= @service %>

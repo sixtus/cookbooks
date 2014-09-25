@@ -7,7 +7,7 @@ unset RUBYOPTS
 
 source ~/.rvm/scripts/rvm
 
-export PATH=<%= node[:druid][:hadoop][:path] %>:$PATH
+export PATH=/var/app/hadoop2/current/bin:$PATH
 
 while true; do
   cd /var/app/dumbo/current || exit 1
@@ -18,8 +18,8 @@ while true; do
   ) 9>/var/app/dumbo/run.lock
 
   # spawn hadoop
-  for conf in /var/app/dumbo/*.druid; do
-    /var/app/dumbo/bin/batch-druid-job.sh $conf &
+  for spec in /var/app/dumbo/*.spec; do
+    /var/app/dumbo/bin/batch $spec &
     sleep 10
   done
 

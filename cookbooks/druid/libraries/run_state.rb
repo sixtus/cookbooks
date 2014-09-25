@@ -3,15 +3,19 @@ module DruidHelpers
     @druid_version ||= mvn_project_version("/var/app/druid/current")
   end
 
+  def druid_dumbo_nodes(cluster_name = node.cluster_name)
+    node.nodes.cluster(cluster_name).role("druid-dumbo")
+  end
+
   def druid_realtime_spec
     node[:druid][:sources].map do |source, config|
       {
         schema: {
           dataSource: source,
-          aggregators: config[:aggregators].map do |name, aggregator|
+          aggregators: (config[:aggregators] || {}).map do |name, aggregator|
             { type: aggregator, name: name, fieldName: name }
           end + [{ type: "count", name: "events" }],
-          indexGranularity: config[:granularity],
+          indexGranularity: (config[:granularity] || "minute"),
           shardSpec: {
             type: "linear",
             partitionNum: node[:druid][:realtime][:partition],
@@ -24,7 +28,7 @@ module DruidHelpers
         firehose: {
           type: "kafka-0.8",
           consumerProps: {
-            "group.id" => "#{node[:cluster][:host][:group]}.#{node.cluster_name}-#{source}",
+            "group.id" => "druid-realtime_#{node[:cluster][:host][:group]}.#{node.cluster_name}_#{source}",
             "zookeeper.connect" => zookeeper_connect(node[:kafka][:zookeeper][:root], node[:kafka][:zookeeper][:cluster]),
             "zookeeper.session.timeout.ms" => "15000",
             "zookeeper.sync.time.ms" => "5000",
@@ -35,12 +39,12 @@ module DruidHelpers
           feed: source,
           parser: {
             timestampSpec: {
-              column: config[:timestamp][:column],
-              format: config[:timestamp][:format],
+              column: ((config[:timestamp] || {})[:column] || "ts"),
+              format: ((config[:timestamp] || {})[:format] || "iso"),
             },
             data: {
               format: "json",
-              dimensions: config[:dimensions],
+              dimensions: (config[:dimensions] || []),
             },
           },
         },
@@ -53,6 +57,10 @@ module DruidHelpers
         },
       }
     end
+  end
+
+  def druid_sources
+    node[:druid][:sources].to_hash
   end
 end
 

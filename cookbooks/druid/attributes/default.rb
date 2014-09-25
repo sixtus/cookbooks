@@ -3,15 +3,10 @@ default[:druid][:git][:revision] = "druid-0.6.128"
 
 default[:druid][:cluster] = node.cluster_name
 
-default[:druid][:log4j][:full] = false
-
 default[:druid][:nagios][:topics] = []
 default[:druid][:nagios][:whitelist] = []
 
-default[:dumbo][:git][:repository] = "https://github.com/liquidm/druid-dumbo"
-default[:dumbo][:git][:revision] = "production"
-
-default[:druid][:hadoop][:path] = "/var/app/hadoop2/current/bin"
+default[:dumbo][:git][:repository] = "https://github.com/remerge/druid-dumbo"
 
 # Modules
 default[:druid][:core_extensions] = [

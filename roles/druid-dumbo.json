@@ -1,0 +1,10 @@
+{
+  "name": "druid-dumbo",
+  "run_list": [
+    "role[base]",
+    "role[druid-sources]",
+    "role[druid-storage]",
+    "recipe[hadoop2]",
+    "recipe[druid::dumbo]"
+  ]
+}
