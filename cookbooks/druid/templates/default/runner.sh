@@ -36,6 +36,7 @@ JVM_OPTS+=" -Ddruid.realtime.specFile=/etc/druid/realtime.spec"
 JVM_OPTS+=" -Ddruid.server.tier=realtime"
 <% when "historical" %>
 JVM_OPTS+=" -Ddruid.server.tier=<%= node[:druid][:server][:tier] %>"
+JVM_OPTS+=" -Ddruid.server.maxSize=<%= node[:druid][:server][:max_size] %>"
 <% else %>
 JVM_OPTS+=" -Ddruid.server.tier=<%= @service %>"
 <% end %>

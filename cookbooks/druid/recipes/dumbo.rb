@@ -42,17 +42,17 @@ template "/var/app/dumbo/bin/batch" do
   mode "0654"
 end
 
-#systemd_unit "druid-dumbo.service" do
-#  template true
-#end
+systemd_unit "druid-dumbo.service" do
+  template true
+end
 
-#if druid_dumbo_nodes.first
-#  primary = (node[:fqdn] == druid_dumbo_nodes.first[:fqdn])
-#else
-#  primary = true
-#end
+if druid_dumbo_nodes.first
+  primary = (node[:fqdn] == druid_dumbo_nodes.first[:fqdn])
+else
+  primary = true
+end
 
-#systemd_timer "druid-dumbo" do
-#  schedule %w(OnBootSec=60 OnUnitInactiveSec=300)
-#  action :delete unless primary
-#end
+systemd_timer "druid-dumbo" do
+  schedule %w(OnBootSec=300 OnUnitInactiveSec=3600)
+  action :delete #unless primary
+end

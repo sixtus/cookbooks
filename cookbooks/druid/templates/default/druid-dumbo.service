@@ -2,7 +2,7 @@
 Description=Dumbo (Hadoop -> Druid importer)
 
 [Service]
-ExecStart=/var/app/dumbo/bin/dumbo-runner.sh
+ExecStart=/var/app/dumbo/current/dumbo
 User=dumbo
 Group=dumbo
 SyslogIdentifier=druid-dumbo
