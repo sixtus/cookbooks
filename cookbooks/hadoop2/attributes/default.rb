@@ -39,6 +39,7 @@ default[:hadoop2][:pig][:default_jars] = %w{
   http://search.maven.org/remotecontent?filepath=com/twitter/elephantbird/elephant-bird-hadoop-compat/4.5/elephant-bird-hadoop-compat-4.5.jar
   http://search.maven.org/remotecontent?filepath=org/apache/pig/piggybank/0.13.0/piggybank-0.13.0.jar
   http://search.maven.org/remotecontent?filepath=mysql/mysql-connector-java/5.1.29/mysql-connector-java-5.1.29.jar
+  http://search.maven.org/remotecontent?filepath=com/linkedin/datafu/datafu/1.2.0/datafu-1.2.0.jar
 }
 
 default[:hadoop2][:fs][:s3][:access_key] = nil
