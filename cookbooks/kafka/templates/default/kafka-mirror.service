@@ -1,0 +1,14 @@
+[Unit]
+Description=Kafka Mirror
+After=network.target zookeeper.service
+
+[Service]
+User=kafka
+Group=kafka
+Environment="JMX_PORT=17007"
+ExecStart=/var/app/kafka/current/bin/kafka-run-class.sh kafka.tools.MirrorMaker <%= node[:kafka][:mirror][:sources].map { |c| "--consumer.config /var/app/kafka/current/config/mirror-consumer-#{c}.properties" }.join(' ') %> --producer.config /var/app/kafka/current/config/mirror-producer.properties --whitelist <%= node[:kafka][:mirror][:topics].join(',')  %>
+Restart=always
+SyslogIdentifier=%p
+
+[Install]
+WantedBy=multi-user.target

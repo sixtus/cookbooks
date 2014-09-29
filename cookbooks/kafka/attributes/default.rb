@@ -10,3 +10,6 @@ default[:kafka][:partition][:default] = 1
 default[:kafka][:partition][:replication] = 1
 
 default[:kafka][:log][:retention_hours] = 7*24
+
+default[:kafka][:mirror][:topics] = [:users, :targeted_ids]
+default[:kafka][:mirror][:sources] = [:eu1, :us1]

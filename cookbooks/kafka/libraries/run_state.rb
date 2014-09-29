@@ -10,6 +10,10 @@ module KafkaRunStateHelpers
       "#{broker[:ipaddress]}:9092"
     end.join(',')
   end
+
+  def kafka_mirror_nodes(cluster_name = node.cluster_name)
+    node.nodes.cluster(cluster_name).role("kafka-mirror")
+  end
 end
 
 include KafkaRunStateHelpers

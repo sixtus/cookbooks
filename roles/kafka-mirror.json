@@ -1,0 +1,7 @@
+{
+  "name": "kafka-mirror",
+  "description": "Kafka Mirror",
+  "run_list": [
+    "recipe[kafka::mirror]"
+  ]
+}
