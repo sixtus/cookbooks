@@ -47,7 +47,7 @@ action :create do
       links.each do |src, dest|
         begin
           target = release_path + "/#{dest}"
-          FileUtils.rm_rf(target) if File.exists?(target)
+          FileUtils.rm_rf(target) if ::File.exist?(target)
           FileUtils.ln_sf(shared_path + "/#{src}", target)
         rescue => e
           raise Chef::Exceptions::FileNotFound.new("Cannot symlink #{shared_path}/#{src} to #{release_path}/#{dest} before migrate: #{e.message}")
