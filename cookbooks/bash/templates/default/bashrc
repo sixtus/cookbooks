@@ -20,7 +20,7 @@ fi
 
 # set proper Go path
 export GOPATH="${HOME}/.go"
-export PATH="~/.go/bin:${PATH}"
+export PATH="${HOME}/.go/bin:${PATH}"
 
 # everything else is for interactive shells only
 [[ $- != *i* ]] && return
