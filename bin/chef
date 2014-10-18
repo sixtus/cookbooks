@@ -1,7 +1,6 @@
 #!/bin/bash
 
 set -e
-set -x
 
 # some platforms don't have a realpath binary
 cd $(perl -e 'use Cwd "abs_path";print abs_path(shift)' $0/../../)
