@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+set -x
 
 # some platforms don't have a realpath binary
 cd $(perl -e 'use Cwd "abs_path";print abs_path(shift)' $0/../../)
@@ -78,7 +79,7 @@ if ! type -P chef-client >/dev/null; then
 fi
 
 # load rvm if available
-if [[ -e ~/.rvm/scripts/rvm ]]; then
+if [[ -z ${rvm_path} && -e ~/.rvm/scripts/rvm ]]; then
 	source ~/.rvm/scripts/rvm
 fi
 
