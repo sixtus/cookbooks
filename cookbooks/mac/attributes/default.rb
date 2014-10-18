@@ -1,9 +1,3 @@
-if ::File.exist?("#{node[:homedir]}/.storerc")
-  storerc = ::File.read("#{node[:homedir]}/.storerc").split
-  default[:apple_id] = storerc.first
-  default[:apple_password] = storerc.last
-end
-
 default[:mac][:packages] = %w(
   ack
   apple-gcc42

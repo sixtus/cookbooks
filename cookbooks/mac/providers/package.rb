@@ -39,8 +39,6 @@ action :install do
     end
 
     case new_resource.type
-    when /^store$/
-      execute "/usr/local/bin/install_from_app_store '#{new_resource.store_url}'"
     when /_app$/
       execute "cp -R '#{mnt_path}/#{new_resource.app}.app' '#{new_resource.destination}'"
 
