@@ -7,7 +7,7 @@ require 'yajl'
 
 module ResourceManagerLatency
   def bean
-    "Hadoop:service=ResourceManager,name=RpcActivityForPort23141"
+    "Hadoop:service=ResourceManager,name=RpcActivityForPort*"
   end
 
   def measure
