@@ -1,6 +1,5 @@
 default[:mac][:packages] = %w(
   ack
-  apple-gcc42
   atool
   autoconf
   automake
