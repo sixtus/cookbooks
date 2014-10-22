@@ -25,21 +25,7 @@ template "/var/app/dumbo/current/config.yml" do
   source "dumbo.yml"
   owner "root"
   group "dumbo"
-  mode "0654"
-end
-
-template "/var/app/dumbo/bin/dumbo" do
-  source "dumbo.sh"
-  owner "root"
-  group "dumbo"
-  mode "0654"
-end
-
-template "/var/app/dumbo/bin/batch" do
-  source "batch.sh"
-  owner "root"
-  group "dumbo"
-  mode "0654"
+  mode "0644"
 end
 
 systemd_unit "druid-dumbo.service" do
@@ -54,5 +40,5 @@ end
 
 systemd_timer "druid-dumbo" do
   schedule %w(OnBootSec=300 OnUnitInactiveSec=3600)
-  action :delete #unless primary
+  action :delete unless primary
 end
