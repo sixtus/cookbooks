@@ -2,7 +2,7 @@ include_recipe "postgresql"
 
 package "dev-db/postgresql-server"
 
-version = "9.3"
+version = "9.4"
 homedir = "/var/lib/postgresql/#{version}"
 datadir = "#{homedir}/data"
 
