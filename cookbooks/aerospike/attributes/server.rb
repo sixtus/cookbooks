@@ -1,4 +1,4 @@
-default[:aerospike][:fd_max] = 15000
+default[:aerospike][:fd_max] = 50000
 default[:aerospike][:namespaces][:test] = {
   replication_factor: 2,
   memory_size: "16M",

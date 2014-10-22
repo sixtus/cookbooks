@@ -4,6 +4,7 @@
   "run_list": [
     "role[base]",
     "role[c500k]",
-    "recipe[aerospike::server]"
+    "recipe[aerospike::server]",
+    "recipe[aerospike::amc]"
   ]
 }
