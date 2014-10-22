@@ -23,7 +23,6 @@
     "recipe[python]",
     "recipe[shorewall]",
     "recipe[smart]",
-    "recipe[splunk6::forwarder]",
     "recipe[ssh::server]",
     "recipe[syslog]",
     "recipe[tmux]",
