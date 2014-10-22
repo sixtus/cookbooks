@@ -1,10 +1,5 @@
 include_recipe "virtualbox"
 
-package "app-cdr/cdrtools"
-package "dev-python/boto"
-package "sys-boot/syslinux"
-package "sys-fs/squashfs-tools"
-
 git "/usr/local/metro" do
   repository node[:metro][:repository]
   action :sync
