@@ -4,6 +4,9 @@
   "override_attributes": {
     "skip": {
       "postfix_satelite": true
+    },
+    "shorewall": {
+      "clustered": false
     }
   },
   "run_list": [
