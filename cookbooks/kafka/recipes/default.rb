@@ -37,3 +37,10 @@ template "/var/app/kafka/current/config/tools-log4j.properties" do
   mode "0640"
   notifies :restart, "service[kafka]"
 end
+
+template "/usr/bin/kafka" do
+  source "kafka.sh"
+  owner "root"
+  group "root"
+  mode "0755"
+end
