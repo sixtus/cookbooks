@@ -36,12 +36,20 @@
     <value>21</value>
   </property>
   <property>
+    <name>mapreduce.map.cpu.vcores</name>
+    <value>1</value>
+  </property>
+  <property>
     <name>mapreduce.map.memory.mb</name>
     <value><%= (node[:hadoop2][:yarn][:mem_per_container] * 1024).to_i %></value>
   </property>
   <property>
     <name>mapreduce.map.java.opts</name>
     <value>-Xmx<%= (0.8 * node[:hadoop2][:yarn][:mem_per_container] * 1024).to_i %>m -server -XX:+UseConcMarkSweepGC -Duser.timezone=UTC -Dfile.encoding=UTF-8 -Djava.io.tmpdir=<%= node[:hadoop2][:java_tmp] %></value>
+  </property>
+  <property>
+    <name>mapreduce.reduce.cpu.vcores</name>
+    <value>1</value>
   </property>
   <property>
     <name>mapreduce.reduce.memory.mb</name>

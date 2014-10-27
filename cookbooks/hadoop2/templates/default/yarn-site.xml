@@ -6,6 +6,10 @@
     <value>org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler</value>
   </property>
   <property>
+    <name>yarn.nodemanager.resource.cpu-vcores</name>
+    <value><%= node[:cpu][:total] %></value>
+  </property>
+  <property>
     <name>yarn.nodemanager.resource.memory-mb</name>
     <value><%= (node[:hadoop2][:yarn][:containers] * node[:hadoop2][:yarn][:mem_per_container] * 1024).to_i %></value>
   </property>
