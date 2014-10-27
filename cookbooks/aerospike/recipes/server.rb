@@ -15,3 +15,68 @@ end
 service "aerospike" do
   action [:enable, :start]
 end
+
+nrpe_command "check_aerospike_cluster_size" do
+  command "/usr/lib/nagios/plugins/check_aerospike -p 4000 -s cluster_size -w #{aerospike_nodes.size} -c #{aerospike_node.size}"
+end
+
+nagios_service "AEROSPIKE-CLUSTER-SIZE" do
+  check_command "check_nrpe!check_aerospike_cluster_size"
+  servicegroups "aerospike"
+end
+
+nrpe_command "check_aerospike_waiting_tx" do
+  command "/usr/lib/nagios/plugins/check_aerospike -p 4000 -s waiting_transactions -w 1 -c 1"
+end
+
+nagios_service "AEROSPIKE-WAITING-TX" do
+  check_command "check_nrpe!check_aerospike_waiting_tx"
+  servicegroups "aerospike"
+end
+
+node[:aerospike][:namespaces].each do |ns, _|
+  nrpe_command "check_aerospike_#{ns}_available" do
+    command "/usr/lib/nagios/plugins/check_aerospike -p 4000 -n #{ns} -s available_pct -w 20 -c 15"
+  end
+
+  nagios_service "AEROSPIKE-#{ns.upcase}-AVAILABLE" do
+    check_command "check_nrpe!check_aerospike_#{ns}_available"
+    servicegroups "aerospike"
+  end
+
+  nrpe_command "check_aerospike_#{ns}_free_mem" do
+    command "/usr/lib/nagios/plugins/check_aerospike -p 4000 -n #{ns} -s free-pct-memory -w 20 -c 15"
+  end
+
+  nagios_service "AEROSPIKE-#{ns.upcase}-FREE-MEM" do
+    check_command "check_nrpe!check_aerospike_#{ns}_free_mem"
+    servicegroups "aerospike"
+  end
+
+  nrpe_command "check_aerospike_#{ns}_free_disk" do
+    command "/usr/lib/nagios/plugins/check_aerospike -p 4000 -n #{ns} -s free-pct-disk -w 20 -c 15"
+  end
+
+  nagios_service "AEROSPIKE-#{ns.upcase}-FREE-DISK" do
+    check_command "check_nrpe!check_aerospike_#{ns}_free_disk"
+    servicegroups "aerospike"
+  end
+
+  nrpe_command "check_aerospike_#{ns}_hwm_breached" do
+    command "/usr/lib/nagios/plugins/check_aerospike -p 4000 -n #{ns} -s hwm-breached -w 0 -c 0"
+  end
+
+  nagios_service "AEROSPIKE-#{ns.upcase}-HWM-BREACHED" do
+    check_command "check_nrpe!check_aerospike_#{ns}_hwm_breached"
+    servicegroups "aerospike"
+  end
+
+  nrpe_command "check_aerospike_#{ns}_stop_writes" do
+    command "/usr/lib/nagios/plugins/check_aerospike -p 4000 -n #{ns} -s stop-writes -w 0 -c 0"
+  end
+
+  nagios_service "AEROSPIKE-#{ns.upcase}-STOP-WRITES" do
+    check_command "check_nrpe!check_aerospike_#{ns}_stop_writes"
+    servicegroups "aerospike"
+  end
+end
