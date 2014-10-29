@@ -44,8 +44,6 @@ service "shorewall6" do
   action [:enable, :start]
 end
 
-splunk_input "monitor:///var/log/shorewall6-init.log"
-
 if nagios_client?
   sudo_rule "nagios-shorewall6" do
     user "nagios"

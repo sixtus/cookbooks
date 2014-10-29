@@ -58,7 +58,6 @@ end
   props
   times
   transforms
-  web
 ).each do |c|
   template "/opt/splunk/etc/system/local/#{c}.conf" do
     source "#{c}.conf"

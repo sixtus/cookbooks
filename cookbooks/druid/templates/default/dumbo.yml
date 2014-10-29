@@ -1,7 +1,7 @@
 shards: 1
 
 scan:
-  window: <%= 14 * 24 %>
+  window: 36
 
 zookeeper:
   uri: <%= zookeeper_connect(node[:druid][:zookeeper][:root], node[:druid][:cluster]) %>

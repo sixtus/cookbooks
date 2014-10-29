@@ -56,8 +56,6 @@ action :create do
     end
   end
 
-  splunk_input "monitor://#{homedir}/shared/log/*.log"
-
   file "/etc/logrotate.d/deploy-#{user}" do
     content <<-EOS
 #{homedir}/shared/log/*.log {
