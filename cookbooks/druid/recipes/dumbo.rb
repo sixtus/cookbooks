@@ -39,6 +39,6 @@ else
 end
 
 systemd_timer "druid-dumbo" do
-  schedule %w(OnBootSec=300 OnUnitInactiveSec=3600)
+  schedule %w(OnCalendar=*:45)
   action :delete unless primary
 end
