@@ -46,21 +46,21 @@ class Nodes
     end
   end
 
-  def cluster(name)
+  def cluster(*names)
     filter do |n|
-      n.cluster_name == name rescue false
+      names.include?(n.cluster_name) rescue false
     end
   end
 
-  def environment(name)
+  def environment(*names)
     filter do |n|
-      n.chef_environment == name rescue false
+      names.include?(n.chef_environment) rescue false
     end
   end
 
-  def role(name)
+  def role(*names)
     filter do |n|
-      n.role?(name)
+      names.map { |name| n.role?(name) }.any?
     end
   end
 end
