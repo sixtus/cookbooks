@@ -86,8 +86,8 @@ for o, a in opts:
             arg_critical = arg_critical*1024**3
 
         # Do we need to convert to megabytes
-    elif re.search(r'\dm$', a, re.IGNORECASE):
-        arg_critical = int(a[:-1])
+        elif re.search(r'\dm$', a, re.IGNORECASE):
+            arg_critical = int(a[:-1])
             arg_critical = arg_critical*1024**2
 
         elif re.search(r'\D', a):
@@ -105,8 +105,8 @@ for o, a in opts:
             arg_warning = arg_warning*1024**3
 
         # Do we need to convert to megabytes
-    elif re.search(r'\dm$', a, re.IGNORECASE):
-        arg_warning = int(a[:-1])
+        elif re.search(r'\dm$', a, re.IGNORECASE):
+            arg_warning = int(a[:-1])
             arg_warning = arg_warning*1024**2
 
         elif re.search(r'\D', a):
@@ -168,7 +168,6 @@ try:
     num_stat = int(num_stat)
 except:
     pass
-
 if "stop-writes" in arg_stat:
     if num_stat == 'true':
         RETURN_VAL=STATE_CRITICAL

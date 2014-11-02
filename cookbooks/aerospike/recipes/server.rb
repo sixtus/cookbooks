@@ -17,7 +17,7 @@ service "aerospike" do
 end
 
 nrpe_command "check_aerospike_cluster_size" do
-  command "/usr/lib/nagios/plugins/check_aerospike -p 4000 -s cluster_size -w #{aerospike_nodes.size} -c #{aerospike_node.size}"
+  command "/usr/lib/nagios/plugins/check_aerospike -p 4000 -s cluster_size -w #{aerospike_nodes.length} -c #{aerospike_node.length}"
 end
 
 nagios_service "AEROSPIKE-CLUSTER-SIZE" do
@@ -34,14 +34,25 @@ nagios_service "AEROSPIKE-WAITING-TX" do
   servicegroups "aerospike"
 end
 
-node[:aerospike][:namespaces].each do |ns, _|
-  nrpe_command "check_aerospike_#{ns}_available" do
-    command "/usr/lib/nagios/plugins/check_aerospike -p 4000 -n #{ns} -s available_pct -w 20 -c 15"
-  end
+node[:aerospike][:namespaces].each do |ns, config|
+  if config[:storage_engine].is_a?(Hash)
+    nrpe_command "check_aerospike_#{ns}_available" do
+      command "/usr/lib/nagios/plugins/check_aerospike -p 4000 -n #{ns} -s available_pct -w 20 -c 15"
+    end
 
-  nagios_service "AEROSPIKE-#{ns.upcase}-AVAILABLE" do
-    check_command "check_nrpe!check_aerospike_#{ns}_available"
-    servicegroups "aerospike"
+    nagios_service "AEROSPIKE-#{ns.upcase}-AVAILABLE" do
+      check_command "check_nrpe!check_aerospike_#{ns}_available"
+      servicegroups "aerospike"
+    end
+
+    nrpe_command "check_aerospike_#{ns}_free_disk" do
+      command "/usr/lib/nagios/plugins/check_aerospike -p 4000 -n #{ns} -s free-pct-disk -w 20 -c 15"
+    end
+
+    nagios_service "AEROSPIKE-#{ns.upcase}-FREE-DISK" do
+      check_command "check_nrpe!check_aerospike_#{ns}_free_disk"
+      servicegroups "aerospike"
+    end
   end
 
   nrpe_command "check_aerospike_#{ns}_free_mem" do
@@ -50,15 +61,6 @@ node[:aerospike][:namespaces].each do |ns, _|
 
   nagios_service "AEROSPIKE-#{ns.upcase}-FREE-MEM" do
     check_command "check_nrpe!check_aerospike_#{ns}_free_mem"
-    servicegroups "aerospike"
-  end
-
-  nrpe_command "check_aerospike_#{ns}_free_disk" do
-    command "/usr/lib/nagios/plugins/check_aerospike -p 4000 -n #{ns} -s free-pct-disk -w 20 -c 15"
-  end
-
-  nagios_service "AEROSPIKE-#{ns.upcase}-FREE-DISK" do
-    check_command "check_nrpe!check_aerospike_#{ns}_free_disk"
     servicegroups "aerospike"
   end
 

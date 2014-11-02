@@ -5,6 +5,7 @@
     "role[base]",
     "role[c500k]",
     "recipe[aerospike::server]",
-    "recipe[aerospike::amc]"
+    "recipe[aerospike::amc]",
+    "recipe[aerospike::xdr]"
   ]
 }

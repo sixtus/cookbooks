@@ -20,6 +20,13 @@ service "xdr" do
   action [:enable, :start]
 end
 
+cookbook_file "/etc/logrotate.d/xdr" do
+  source "logrotate.conf"
+  owner "root"
+  group "root"
+  mode "0644"
+end
+
 nrpe_command "check_aerospike_xdr_lastship" do
   command "/usr/lib/nagios/plugins/check_aerospike -p 4004 -s timediff_lastship_cur_secs -w 1 -c 2"
 end

@@ -7,3 +7,4 @@ license "Apache v2.0"
 supports "gentoo"
 
 depends "systemd"
+depends "tar"
