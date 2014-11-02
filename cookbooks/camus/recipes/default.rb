@@ -29,7 +29,7 @@ end
 primary = (node[:fqdn] == camus_nodes.first[:fqdn])
 
 systemd_timer "camus" do
-  schedule %w(OnBootSec=300 OnUnitInactiveSec=3600)
+  schedule %w(OnCalendar=*:5)
   action :delete unless primary
 end
 
