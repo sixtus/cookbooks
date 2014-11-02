@@ -16,3 +16,13 @@ end
 link "/sbin/ip" do
   to "/bin/ip"
 end
+
+package "sys-apps/irqd"
+
+directory "/var/lib/misc"
+
+systemd_unit "irqd.service"
+
+service "irqd" do
+  action [:enable, :start]
+end

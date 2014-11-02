@@ -1,0 +1,8 @@
+[Unit]
+Description=CPU Interrupt Balancer
+
+[Service]
+ExecStart=/usr/sbin/irqd -fd
+
+[Install]
+WantedBy=multi-user.target
