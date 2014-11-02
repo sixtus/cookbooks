@@ -15,7 +15,11 @@ action :extract do
   end
 
   execute "extract #{basename}" do
-    command "aunpack #{local_archive}"
+    if r.target_dir == "/"
+      command "aunpack -X / #{local_archive}"
+    else
+      command "aunpack #{local_archive}"
+    end
     cwd r.target_dir
     creates r.creates
     group r.group
