@@ -42,13 +42,6 @@ template "/etc/lxc/default.conf" do
   mode "0640"
 end
 
-cookbook_file "/etc/dhcpcd.conf" do
-  source "dhcpcd.conf"
-  owner "root"
-  group "root"
-  mode "0640"
-end
-
 systemd_unit "lxc-network.service"
 
 service "lxc-network" do

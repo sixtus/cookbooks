@@ -29,6 +29,7 @@ if gentoo?
     net-analyzer/tcptraceroute
     net-analyzer/traceroute
     net-dns/bind-tools
+    net-misc/ipcalc
     net-misc/keychain
     net-misc/telnet-bsd
     net-misc/whois
