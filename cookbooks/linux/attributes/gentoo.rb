@@ -43,6 +43,7 @@ if gentoo?
     sys-apps/lshw
     sys-apps/net-tools
     sys-apps/pciutils
+    sys-apps/pv
     sys-apps/util-linux
     sys-fs/ncdu
     sys-power/acpitool
