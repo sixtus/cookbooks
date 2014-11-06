@@ -31,7 +31,7 @@
           "tcp_timestamps": 0,
           "tcp_tw_recycle": 0,
           "tcp_tw_reuse": 1,
-          "tcp_window_scaling": 0
+          "tcp_window_scaling": 1
         },
         "netfilter": {
           "nf_conntrack_max": 4194304,
