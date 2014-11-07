@@ -24,12 +24,23 @@ if gentoo?
     service "jstatd" do
       action [:enable, :start]
     end
+
+    remote_file "/usr/lib/jvm/jolokia.jar" do
+      source "http://labs.consol.de/maven/repository/org/jolokia/jolokia-jvm/1.2.2/jolokia-jvm-1.2.2-agent.jar"
+    end
   end
 elsif mac_os_x?
   package "maven"
 end
 
 if nagios_client?
+  cookbook_file "/usr/lib/ruby/site_ruby/nagios/plugin/jolokia.rb" do
+    source "jolokia.rb"
+    owner "root"
+    group "root"
+    mode "0644"
+  end
+
   nagios_plugin "jmxquery.jar"
   nagios_plugin "check_jmx"
   nagios_plugin "check_jstat"

@@ -1,0 +1,36 @@
+#!/usr/bin/env ruby
+
+require 'nagios'
+require 'nagios/plugin/jolokia'
+
+module MemoryPool
+  def bean
+    "java.lang:type=MemoryPool,name=*"
+  end
+
+  def attribute
+    "CollectionUsage"
+  end
+
+  def percent_used(m)
+    Hash[m.map do |k, v|
+      next unless v[:CollectionUsage]
+      usage = v[:CollectionUsage][:used] * 100 / v[:CollectionUsage][:max].to_f
+      [k, usage]
+    end]
+  end
+
+  def warning(m)
+    percent_used(m).any? { |k, v| v > threshold(:warning).to_i }
+  end
+
+  def critical(m)
+    percent_used(m).any? { |k, v| v > threshold(:critical).to_i }
+  end
+
+  def to_s(m)
+    percent_used(m).inspect
+  end
+end
+
+Nagios::Plugin::Jolokia.run!
