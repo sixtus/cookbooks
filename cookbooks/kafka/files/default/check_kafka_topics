@@ -1,0 +1,66 @@
+#!/usr/bin/env ruby
+
+require 'nagios'
+
+class KafkaTopics < Nagios::Plugin
+  def initialize
+    super
+
+    @config.options.on('-Z', '--zookeeper=URI',
+      'Zookeeper URL') { |zookeeper| @zookeeper = zookeeper }
+    @config.options.on('-b', '--broker-id=ID',
+      'which kafka-id to check (defaults to all)') { |broker_id| @broker_id = broker_id.to_i}
+
+    @config.parse!
+    raise "No zookeeper given" unless @zookeeper
+    raise "No kafka-id given" unless @broker_id
+  end
+
+  def warning(m)
+    m.select { |info| info[:replicas][0] == @broker_id }.any? do |info|
+      info[:leader] != @broker_id
+    end
+  end
+
+  def critical(m)
+    m.any? do |info|
+      !info[:isr].include?(@broker_id)
+    end
+  end
+
+  def to_s(m)
+    is_critical = false
+    msg = "Kafka #{@broker_id}"
+    if critical(m)
+      is_critical = true
+      msg = "should be isr, but is not: "
+      msg += m.select { |info| !info[:isr].include?(@broker_id) }.inspect
+    end
+    if warning(m)
+      msg += "should be leader, but is not\n"
+      msg += m.select { |info| info[:replicas][0] == @broker_id && info[:leader] != @broker_id }.inspect
+      unless is_critical
+        msg += %x{/var/app/kafka/current/bin/kafka-preferred-replica-election.sh --zookeeper #{@zookeeper}}
+      end
+    end
+    msg
+  end
+
+  def measure
+    raw = %x{/var/app/kafka/current/bin/kafka-topics.sh --zookeeper #{@zookeeper} --describe}
+    raw.each_line.map do |row|
+      match = row.match(/topic: (.*)\tpartition: (\d+)\tleader: (\d+)\treplicas: (.*)\tisr: (.*)/i)
+      next unless match
+      info = {
+        topic: match[1],
+        partition: match[2],
+        leader: match[3].to_i,
+        replicas: match[4].split(',').map(&:to_i),
+        isr: match[5].split(',').map(&:to_i),
+      }
+      info if info[:replicas].include?(@broker_id)
+    end.compact
+  end
+end
+
+KafkaTopics.run!

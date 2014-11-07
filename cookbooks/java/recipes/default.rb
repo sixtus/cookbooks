@@ -44,6 +44,7 @@ if nagios_client?
   nagios_plugin "jmxquery.jar"
   nagios_plugin "check_jmx"
   nagios_plugin "check_jstat"
+  nagios_plugin "check_jvm"
 
   sudo_rule "nagios-jps" do
     user "nagios"
