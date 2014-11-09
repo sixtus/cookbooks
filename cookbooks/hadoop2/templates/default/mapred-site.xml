@@ -1,16 +1,6 @@
 <?xml version="1.0"?>
 <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
 <configuration>
-  <% if hadoop2_historyserver %>
-  <property>
-    <name>mapreduce.jobhistory.address</name>
-    <value><%= hadoop2_historyserver[:fqdn] %>:10020</value>
-  </property>
-  <property>
-    <name>mapreduce.jobhistory.webapp.address</name>
-    <value><%= hadoop2_historyserver[:fqdn] %>:19888</value>
-  </property>
-  <% end %>
   <property>
     <name>mapreduce.framework.name</name>
     <value>yarn</value>
@@ -23,17 +13,39 @@
     <name>mapreduce.jobtracker.http.address</name>
     <value>0.0.0.0:0</value>
   </property>
+  <% if hadoop2_historyserver %>
   <property>
-    <name>mapreduce.map.speculative</name>
-    <value>false</value>
+    <name>mapreduce.jobhistory.address</name>
+    <value><%= hadoop2_historyserver[:fqdn] %>:10020</value>
   </property>
   <property>
-    <name>mapreduce.reduce.speculative</name>
-    <value>false</value>
+    <name>mapreduce.jobhistory.webapp.address</name>
+    <value><%= hadoop2_historyserver[:fqdn] %>:19888</value>
+  </property>
+  <property>
+    <name>mapreduce.jobhistory.recovery.enable</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>mapreduce.jobhistory.recovery.store.class</name>
+    <value>org.apache.hadoop.mapreduce.v2.hs.HistoryServerFileSystemStateStoreService</value>
+  </property>
+  <property>
+    <name>mapreduce.jobhistory.recovery.store.fs.uri</name>
+    <value>file://${hadoop.tmp.dir}/mapred-jobhistory-state</value>
+  </property>
+  <% end %>
+  <property>
+    <name>mapreduce.job.maps</name>
+    <value>32</value>
   </property>
   <property>
     <name>mapreduce.job.reduces</name>
-    <value>21</value>
+    <value>32</value>
+  </property>
+  <property>
+    <name>mapreduce.map.speculative</name>
+    <value>false</value>
   </property>
   <property>
     <name>mapreduce.map.cpu.vcores</name>
@@ -46,6 +58,10 @@
   <property>
     <name>mapreduce.map.java.opts</name>
     <value>-Xmx<%= (0.8 * node[:hadoop2][:yarn][:mem_per_container] * 1024).to_i %>m -server -XX:+UseConcMarkSweepGC -Duser.timezone=UTC -Dfile.encoding=UTF-8 -Djava.io.tmpdir=<%= node[:hadoop2][:java_tmp] %></value>
+  </property>
+  <property>
+    <name>mapreduce.reduce.speculative</name>
+    <value>false</value>
   </property>
   <property>
     <name>mapreduce.reduce.cpu.vcores</name>
@@ -72,14 +88,6 @@
     <value>20</value>
   </property>
   <property>
-    <name>mapreduce.jobtracker.handler.count</name>
-    <value>64</value>
-  </property>
-  <property>
-    <name>mapreduce.tasktracker.http.threads</name>
-    <value>20</value>
-  </property>
-  <property>
     <name>mapreduce.task.timeout</name>
     <value>1800000</value>
   </property>
@@ -103,18 +111,5 @@
   <property>
     <name>mapreduce.output.fileoutputformat.compress.codec</name>
     <value>org.apache.hadoop.io.compress.GzipCodec</value>
-  </property>
-  <!-- Job history server persistent state -->
-  <property>
-    <name>mapreduce.jobhistory.recovery.enable</name>
-    <value>true</value>
-  </property>
-  <property>
-    <name>mapreduce.jobhistory.recovery.store.class</name>
-    <value>org.apache.hadoop.mapreduce.v2.hs.HistoryServerFileSystemStateStoreService</value>
-  </property>
-  <property>
-    <name>mapreduce.jobhistory.recovery.store.fs.uri</name>
-    <value>file://${hadoop.tmp.dir}/mapred-jobhistory-state</value>
   </property>
 </configuration>
