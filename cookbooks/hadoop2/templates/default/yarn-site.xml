@@ -94,6 +94,10 @@
     <name>yarn.resourcemanager.store.class</name>
     <value>org.apache.hadoop.yarn.server.resourcemanager.recovery.ZKRMStateStore</value>
   </property>
+  <property>
+    <name>yarn.resourcemanager.max-completed-applications</name>
+    <value>100</value>
+  </property>
   <% hadoop2_resourcemanagers.each do |n| %>
   <property>
     <name>yarn.resourcemanager.address.rm<%= n[:cluster][:host][:id] %></name>
