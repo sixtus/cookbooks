@@ -16,6 +16,7 @@ if gentoo?
     dev-libs/libxml2
     dev-libs/libxslt
     dev-libs/libyaml
+    dev-ruby/yajl-ruby
     dev-util/ltrace
     dev-util/perf
     dev-util/strace
