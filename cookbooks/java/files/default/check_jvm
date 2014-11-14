@@ -15,9 +15,10 @@ module MemoryPool
   def percent_used(m)
     Hash[m.map do |k, v|
       next unless v[:CollectionUsage]
+      next if k.to_s == "java.lang:name=Par Survivor Space,type=MemoryPool"
       usage = v[:CollectionUsage][:used] * 100 / v[:CollectionUsage][:max].to_f
       [k, usage]
-    end]
+    end.compact]
   end
 
   def warning(m)
