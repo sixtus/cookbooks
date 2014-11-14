@@ -27,8 +27,11 @@ if nagios_client?
     env [:staging, :testing, :development]
   end
 
+  containers = %x(lxc-ls).chomp.split.length rescue 0
+  procs_max = 1024 * (containers + 1)
+
   nrpe_command "check_total_procs" do
-    command "/usr/lib/nagios/plugins/check_procs -w 512 -c 1024"
+    command "/usr/lib/nagios/plugins/check_procs -w #{procs_max/2} -c #{procs_max}"
   end
 
   nagios_service "PROCS" do
