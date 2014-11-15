@@ -9,6 +9,11 @@ elsif mac_os_x?
 
 end
 
+template "#{node[:script_path]}/tmux-vim-select-pane" do
+  source "tmux-vim-select-pane.sh"
+  mode "0755"
+end
+
 template node[:tmux][:configfile] do
   source "tmux.conf"
   mode "0644"
