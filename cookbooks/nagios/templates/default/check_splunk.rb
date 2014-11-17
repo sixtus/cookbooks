@@ -1,49 +1,25 @@
 #!/usr/bin/env ruby
 
 require 'net/http'
-require 'nokogiri'
 require 'json'
 
 SEARCH_HOST = "<%= @search[:ipaddress] rescue 'localhost' %>"
-SEARCH_PORT = 2047
-SEARCH_URI  = "https://#{SEARCH_HOST}:#{SEARCH_PORT}"
-SEARCH_USER = "admin"
-SEARCH_PASS = "<%= @master[:splunk][:pass4symmkey] rescue node[:splunk][:pass4symmkey] %>"
+SEARCH_PORT = 8089
 
 begin
   http = Net::HTTP.new(SEARCH_HOST, SEARCH_PORT)
   http.use_ssl = true
   http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
-  # Login and get the session key
-  req = Net::HTTP::Post.new('/servicesNS/admin/search/auth/login')
-  req.set_form_data({
-    username: SEARCH_USER,
-    password: SEARCH_PASS,
-  })
-
-  res = http.request(req)
-
-  if !res.is_a?(Net::HTTPSuccess)
-    puts "login failed: #{res.inspect}"
-    exit(2)
-  end
-
-  session_key = Nokogiri::XML(res.body).css('response sessionKey').first.text
-
   # Perform search
-  req = Net::HTTP::Post.new('/servicesNS/admin/SplunkForNagios/search/jobs/export', {
-    'Authorization' => "Splunk #{session_key}",
-  })
-
+  req = Net::HTTP::Post.new("/servicesNS/admin/#{ARGV[0]}/search/jobs/export")
   req.set_form_data({
-    search: "| savedsearch #{ARGV.first}",
+    search: "| savedsearch #{ARGV[1]}",
     output_mode: 'json',
     preview: 'false',
   })
 
   res = http.request(req)
-
   if !res.is_a?(Net::HTTPSuccess)
     puts "search failed: #{res.inspect}"
     exit(2)
