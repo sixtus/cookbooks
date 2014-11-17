@@ -23,7 +23,7 @@ nagios_service "HDFS-NAMENODE" do
 end
 
 nagios_cluster_service "HDFS-NAMENODES" do
-  check_command "check_aggregate!HDFS-DATANODE-STAT!0.1!0.3"
+  check_command "check_aggregate!HDFS-DATANODE-STAT!0.1!0.3!#{hadoop2_namenodes.map(&:fqdn).join(',')}"
   servicegroups "hdfs,hdfs-namenode"
 end
 

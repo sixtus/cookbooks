@@ -18,7 +18,7 @@ nagios_service "MAPRED-HISTORYSERVER" do
 end
 
 nagios_cluster_service "MAPRED-HISTORYSERVERS" do
-  check_command "check_aggregate!MAPRED-HISTORYSERVER!0.1!0.3"
+  check_command "check_aggregate!MAPRED-HISTORYSERVER!0.1!0.3!#{hadoop2_historyservers.map(&:fqdn).join(',')}"
   servicegroups "mapred,mapred-historyserver"
 end
 

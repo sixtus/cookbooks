@@ -16,7 +16,7 @@ nagios_service "HDFS-DATANODE" do
 end
 
 nagios_cluster_service "HDFS-DATANODES" do
-  check_command "check_aggregate!HDFS-DATANODE!0.1!0.3"
+  check_command "check_aggregate!HDFS-DATANODE!0.1!0.3!#{hadoop2_datanodes.map(&:fqdn).join(',')}"
   servicegroups "hdfs,hdfs-datanode"
 end
 
@@ -35,6 +35,6 @@ nagios_service "HDFS-DATANODE-USED" do
 end
 
 nagios_cluster_service "HDFS-DATANODES-USED" do
-  check_command "check_aggregate!HDFS-DATANODE-USED!0.1!0.3"
+  check_command "check_aggregate!HDFS-DATANODE-USED!0.1!0.3!#{hadoop2_datanodes.map(&:fqdn).join(',')}"
   servicegroups "hdfs,hdfs-datanode"
 end

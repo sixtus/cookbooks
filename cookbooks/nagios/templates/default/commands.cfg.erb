@@ -27,7 +27,7 @@ define command {
 
 define command {
   command_name check_aggregate
-  command_line $USER1$/check_aggregate -s 'service_description=$ARG1$$' -w $ARG2$ -c $ARG3$ $ARG4$
+  command_line $USER1$/check_aggregate -s 'service_description=$ARG1$$$' -w $ARG2$ -c $ARG3$ -H $ARG4$
 }
 
 define command {

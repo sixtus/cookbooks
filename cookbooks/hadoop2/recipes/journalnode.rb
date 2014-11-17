@@ -16,7 +16,7 @@ nagios_service "HDFS-JOURNALNODE" do
 end
 
 nagios_cluster_service "HDFS-JOURNALNODES" do
-  check_command "check_aggregate!HDFS-JOURNALNODE!0.3!0.5"
+  check_command "check_aggregate!HDFS-JOURNALNODE!0.3!0.5!#{hadoop2_journalnodes.map(&:fqdn).join(',')}"
   servicegroups "hdfs,hdfs-journalnode"
 end
 

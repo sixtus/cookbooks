@@ -52,7 +52,7 @@ if nagios_client?
   end
 
   nagios_cluster_service "KAFKA-NODES" do
-    check_command "check_aggregate!KAFKA-JVM-MEMORY!0.1!0.3!-H #{kafka_brokers.map(&:fqdn).join(',')}"
+    check_command "check_aggregate!KAFKA-JVM-MEMORY!0.1!0.3!#{kafka_brokers.map(&:fqdn).join(',')}"
     servicegroups "kafka"
   end
 

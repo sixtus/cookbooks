@@ -18,7 +18,7 @@ nagios_service "YARN-NODEMANAGER" do
 end
 
 nagios_cluster_service "YARN-NODEMANAGERS" do
-  check_command "check_aggregate!YARN-NODEMANAGER!0.1!0.3"
+  check_command "check_aggregate!YARN-NODEMANAGER!0.1!0.3!#{hadoop2_nodemanagers.map(&:fqdn).join(',')}"
   servicegroups "yarn,yarn-nodemanager"
 end
 

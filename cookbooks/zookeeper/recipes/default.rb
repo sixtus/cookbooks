@@ -71,7 +71,7 @@ if nagios_client?
   end
 
   nagios_cluster_service "ZOOKEEPER" do
-    check_command "check_aggregate!ZOOKEEPER-STATUS!0.1!0.3!-H #{zookeeper_nodes.map(&:fqdn).join(',')}"
+    check_command "check_aggregate!ZOOKEEPER-STATUS!0.1!0.3!#{zookeeper_nodes.map(&:fqdn).join(',')}"
     servicegroups "zookeeper"
   end
 
