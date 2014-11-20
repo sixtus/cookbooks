@@ -7,9 +7,9 @@ if $?.exitstatus == 0
   )
 else
   default[:ntp][:server] = %w(
-    0.de.pool.ntp.org
-    1.de.pool.ntp.org
-    2.de.pool.ntp.org
-    3.de.pool.ntp.org
+    0.pool.ntp.org
+    1.pool.ntp.org
+    2.pool.ntp.org
+    3.pool.ntp.org
   )
 end
