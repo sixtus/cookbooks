@@ -35,7 +35,7 @@ end
 {
   :nodes => [:NameNode, nil, nil],
   :latency => [:NameNodeLatency, 0.25, 0.5],
-  :checkpoint => [:NameNodeCheckpointTime, 60*60, 2*60*60],
+  :checkpoint => [:NameNodeCheckpointTime, 75*60, 120*60],
   :journal => [:NameNodeJournalTransactions, 1000000, 2000000],
   :state => [:Dfs, nil, nil],
   :capacity => [:DfsCapacity, 75, 90],
