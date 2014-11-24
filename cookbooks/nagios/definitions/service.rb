@@ -2,6 +2,7 @@ class ::Chef::Recipe
   def nagios_service_defaults(params)
     name = params.delete(:name)
     params[:service_description] ||= name
+    params[:notes_url] ||= "#{node[:nagios][:notes][:base_url]}/#{name}.md"
     params[:host_name] ||= node[:fqdn]
     params[:env] ||= []
     params[:env] |= [:production]
