@@ -1,5 +1,7 @@
 include_recipe "druid"
 
+package "sys-process/parallel"
+
 deploy_skeleton "dumbo"
 
 deploy_ruby_application "dumbo" do
