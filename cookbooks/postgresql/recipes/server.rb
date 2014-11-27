@@ -75,6 +75,12 @@ directory backupdir do
   mode "0700"
 end
 
+if postgresql_nodes.first
+  primary = (node[:fqdn] == postgresql_nodes.first[:fqdn])
+else
+  primary = true
+end
+
 systemd_timer "postgresql-backup" do
   schedule %w(OnCalendar=daily)
   unit({
@@ -85,10 +91,12 @@ systemd_timer "postgresql-backup" do
     user: "postgres",
     group: "postgres",
   })
+  action :delete unless primary
 end
 
 duply_backup "postgresql" do
   source backupdir
   max_full_backups 30
   max_full_age 1
+  action :delete unless primary
 end
