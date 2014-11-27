@@ -1,5 +1,5 @@
 default[:druid][:git][:repository] = "https://github.com/metamx/druid"
-default[:druid][:git][:revision] = "druid-0.6.128"
+default[:druid][:git][:revision] = "druid-0.6.160"
 
 default[:druid][:cluster] = node.cluster_name
 
@@ -10,7 +10,6 @@ default[:dumbo][:git][:repository] = "https://github.com/remerge/druid-dumbo"
 
 # Modules
 default[:druid][:core_extensions] = [
-  "s3-extensions",
   "hdfs-storage",
   "kafka-eight",
 ]
@@ -38,12 +37,6 @@ default[:druid][:server][:priority] = 0
 # DataSegment Pusher/Puller Module
 default[:druid][:storage][:type] = "local"
 default[:druid][:storage][:directory] = "/var/app/druid/storage"
-
-# S3 Deep Storage
-default[:druid][:storage][:s3][:access_key] = nil
-default[:druid][:storage][:s3][:secret_key] = nil
-default[:druid][:storage][:s3][:bucket] = nil
-default[:druid][:storage][:s3][:base_key] = nil
 
 # Indexing Services
 default[:druid][:indexer][:port] = 8091
