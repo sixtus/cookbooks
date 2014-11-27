@@ -12,6 +12,7 @@ default[:dumbo][:git][:repository] = "https://github.com/remerge/druid-dumbo"
 default[:druid][:core_extensions] = [
   "hdfs-storage",
   "kafka-eight",
+  "histogram",
 ]
 
 default[:druid][:extensions] = []
