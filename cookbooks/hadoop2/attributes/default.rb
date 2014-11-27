@@ -1,4 +1,4 @@
-default[:hadoop2][:version] = "2.4.1"
+default[:hadoop2][:version] = "2.5.2"
 
 default[:hadoop2][:hdfs][:cluster] = node.cluster_name
 default[:hadoop2][:yarn][:cluster] = node.cluster_name
