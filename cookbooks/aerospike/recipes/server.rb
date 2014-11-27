@@ -16,6 +16,40 @@ service "aerospike" do
   action [:enable, :start]
 end
 
+backupdir = "/var/lib/aerospike/backup"
+
+directory backupdir do
+  owner "root"
+  group "root"
+  mode "0755"
+end
+
+if aerospike_nodes.first
+  primary = (node[:fqdn] == aerospike_nodes.first[:fqdn])
+else
+  primary = true
+end
+
+systemd_timer "aerospike-backup" do
+  schedule %w(OnCalendar=daily)
+  unit({
+    command: [
+      "/bin/bash -c 'rm -rf #{backupdir}/*'",
+      "/usr/bin/asbackup -p 4000 -n data -d #{backupdir}",
+    ],
+    user: "root",
+    group: "root",
+  })
+  action :delete unless primary
+end
+
+duply_backup "aerospike" do
+  source backupdir
+  max_full_backups 30
+  max_full_age 1
+  action :delete unless primary
+end
+
 nrpe_command "check_aerospike_cluster_size" do
   command "/usr/lib/nagios/plugins/check_aerospike -p 4000 -s cluster_size -w #{aerospike_nodes.length} -c #{aerospike_node.length}"
 end
