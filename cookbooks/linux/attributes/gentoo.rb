@@ -46,6 +46,7 @@ if gentoo?
     sys-apps/net-tools
     sys-apps/pciutils
     sys-apps/pv
+    sys-apps/the_silver_searcher
     sys-apps/util-linux
     sys-fs/ncdu
     sys-power/acpitool
