@@ -9,7 +9,8 @@ default[:kafka][:zookeeper][:cluster] = node.cluster_name
 default[:kafka][:partition][:default] = 1
 default[:kafka][:partition][:replication] = 1
 
-default[:kafka][:log][:retention_hours] = 7*24
+default[:kafka][:log][:retention_hours] = 7 * 24 # 7 days
+default[:kafka][:log][:retention_bytes] = 64 * 1024 * 1024 * 1024 # 64G
 
-default[:kafka][:mirror][:topics] = [:users, :targeted_ids]
-default[:kafka][:mirror][:sources] = [:eu1, :us1]
+default[:kafka][:mirror][:topics] = []
+default[:kafka][:mirror][:sources] = []
