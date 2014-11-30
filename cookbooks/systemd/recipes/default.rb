@@ -2,6 +2,8 @@ if gentoo?
   if root?
     package "sys-apps/systemd"
 
+    include_recipe "systemd::cleanup"
+
     link "/bin/systemctl" do
       to "/usr/bin/systemctl"
     end
@@ -44,43 +46,18 @@ if gentoo?
       mode "0644"
     end
 
-    link "/etc/ifup" do
-      to "/etc/ifup.eth0"
-      only_if { File.exist?("/etc/ifup.eth0") }
-    end
-
-    file "/etc/ifup" do
-      owner "root"
-      group "root"
-      mode "0644"
-      not_if { File.symlink?("/etc/ifup") }
-    end
-
-    file "/etc/ifdown" do
-      owner "root"
-      group "root"
-      mode "0644"
-    end
-
-    systemd_unit "network.service"
-
-    service "network.service" do
-      action :enable
-      provider Chef::Provider::Service::Systemd
-    end
-
     service "sshd.service" do
       action :enable
       provider Chef::Provider::Service::Systemd
     end
 
+    # modules
     file "/etc/modules-load.d/dummy.conf" do
       owner "root"
       group "root"
       mode "0644"
     end
 
-    # modules
     service "systemd-modules-load.service" do
       action :nothing # just a callback
     end

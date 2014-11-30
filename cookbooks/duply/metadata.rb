@@ -9,6 +9,5 @@ license "Apache v2.0"
 supports "debian"
 supports "gentoo"
 
-depends "cron"
 depends "nagios"
 depends "splunk6"

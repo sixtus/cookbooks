@@ -17,16 +17,20 @@ directory node[:mongodb][:backup][:dir] do
   recursive true
 end
 
-cron "mongodb_full_backup" do
-  action action
-  minute node[:mongodb][:backup][:full_backup][1]
-  hour node[:mongodb][:backup][:full_backup][0]
-  command "/usr/local/sbin/mongodb_full_backup"
+systemd_timer "mongodb-backup" do
+  schedule %W(OnCalendar=#{node[:mongodb][:backup][:full_backup][0]}:#{node[:mongodb][:backup][:full_backup][1]})
+  unit({
+    command: "/usr/local/sbin/mongodb_full_backup",
+    user: "root",
+    group: "root",
+  })
 end
 
-cron "mongodb_full_clean" do
-  action action
-  minute node[:mongodb][:backup][:full_clean][1]
-  hour node[:mongodb][:backup][:full_clean][0]
-  command "/usr/local/sbin/mongodb_full_clean"
+systemd_timer "mongodb-clean" do
+  schedule %W(OnCalendar=#{node[:mongodb][:backup][:full_clean][0]}:#{node[:mongodb][:backup][:full_clean][1]})
+  unit({
+    command: "/usr/local/sbin/mongodb_full_clean",
+    user: "root",
+    group: "root",
+  })
 end

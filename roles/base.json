@@ -8,7 +8,6 @@
     "recipe[sudo]",
     "recipe[bash]",
     "recipe[chef::client]",
-    "recipe[cron]",
     "recipe[duply]",
     "recipe[git]",
     "recipe[htop]",

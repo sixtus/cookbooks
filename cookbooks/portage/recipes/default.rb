@@ -134,14 +134,6 @@ if root?
     backup 0
   end
 
-  file "/etc/cron.weekly/eclean-distfiles" do
-    action :delete
-  end
-
-  file "/etc/cron.weekly/eclean-packages" do
-    action :delete
-  end
-
   systemd_timer "eclean-distfiles" do
     schedule %w(OnCalendar=weekly)
     unit(command: "/usr/bin/eclean -d -n -q distfiles")

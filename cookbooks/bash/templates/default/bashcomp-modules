@@ -17,7 +17,6 @@ cmake
 configure
 coreutils
 cpio
-crontab
 cvs
 cvsps
 dd

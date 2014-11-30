@@ -31,32 +31,42 @@ else
   action = :create
 end
 
-cron "mysql_full_backup" do
+systemd_timer "mysql_full_backup" do
   action action
-  minute "0"
-  hour node[:mysql][:backup][:full_backup][1]
-  weekday node[:mysql][:backup][:full_backup][0]
-  command "/usr/local/sbin/mysql_full_backup"
+  schedule %W(OnCalendar=Sun #{node[:mysql][:backup][:full_backup][1]}:0)
+  unit({
+    command: "/usr/local/sbin/mysql_full_backup",
+    user: "root",
+    group: "root",
+  })
 end
 
-cron "mysql_full_clean" do
+systemd_timer "mysql_full_clean" do
   action action
-  minute "0"
-  hour node[:mysql][:backup][:full_clean][1]
-  weekday node[:mysql][:backup][:full_clean][0]
-  command "/usr/local/sbin/mysql_full_clean"
+  schedule %W(OnCalendar=Mon #{node[:mysql][:backup][:full_clean][1]}:0)
+  unit({
+    command: "/usr/local/sbin/mysql_full_clean",
+    user: "root",
+    group: "root",
+  })
 end
 
-cron "mysql_binlog_backup" do
+systemd_timer "mysql_binlog_backup" do
   action action
-  minute "3,33"
-  command "/usr/local/sbin/mysql_binlog_backup"
+  schedule %W(OnCalendar=*:3/30)
+  unit({
+    command: "/usr/local/sbin/mysql_binlog_backup",
+    user: "root",
+    group: "root",
+  })
 end
 
-cron "mysql_binlog_clean" do
+systemd_timer "mysql_binlog_clean" do
   action action
-  minute "0"
-  hour node[:mysql][:backup][:binlog_clean][1]
-  weekday node[:mysql][:backup][:binlog_clean][0]
-  command "/usr/local/sbin/mysql_binlog_clean"
+  schedule %W(OnCalendar=Mon #{node[:mysql][:backup][:binlog_clean][1]}:0)
+  unit({
+    command: "/usr/local/sbin/mysql_binlog_clean",
+    user: "root",
+    group: "root",
+  })
 end

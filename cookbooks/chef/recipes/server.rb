@@ -34,12 +34,15 @@ cookbook_file "/opt/chef-server/bin/backup" do
   mode "0755"
 end
 
-cron "chef-server-backup" do
-  command "/opt/chef-server/bin/backup --backup"
-  hour "3"
-  minute "0"
-end
+#systemd_timer "chef-server-backup" do
+#  schedule %w(OnCalendar=daily)
+#  unit({
+#    command: "/opt/chef-server/bin/backup --backup",
+#    user: "root",
+#    group: "root",
+#  })
+#end
 
-duply_backup "chef-server" do
-  source "/var/opt/chef-server/backup"
-end
+#duply_backup "chef-server" do
+#  source "/var/opt/chef-server/backup"
+#end

@@ -8,7 +8,6 @@ license "Apache v2.0"
 
 supports "gentoo"
 
-depends "cron"
 depends "nagios"
 depends "nginx"
 depends "virtualbox"

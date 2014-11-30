@@ -25,24 +25,14 @@ action :create do
     recursive true
   end
 
-  if systemd_running?
-    systemd_timer "duply-bkp-#{nr.name}" do
-      schedule %W(OnCalendar=#{node[:duply][:backup_time]})
-      unit command: "/usr/bin/duply #{nr.name} bkp"
-    end
+  systemd_timer "duply-bkp-#{nr.name}" do
+    schedule %W(OnCalendar=#{node[:duply][:backup_time]})
+    unit command: "/usr/bin/duply #{nr.name} bkp"
+  end
 
-    systemd_timer "duply-purge-#{nr.name}" do
-      schedule %w(OnCalendar=weekly)
-      unit command: "/usr/bin/duply #{nr.name} purgeFull --force"
-    end
-  else
-    cron_daily "duply-bkp-#{nr.name}" do
-      command "/usr/bin/duply #{nr.name} bkp > /var/log/duply/#{nr.name}/$(date +%Y-%m-%d).log"
-    end
-
-    cron_weekly "duply-purge-#{nr.name}" do
-      command "/usr/bin/duply #{nr.name} purgeFull --force &> /dev/null"
-    end
+  systemd_timer "duply-purge-#{nr.name}" do
+    schedule %w(OnCalendar=weekly)
+    unit command: "/usr/bin/duply #{nr.name} purgeFull --force"
   end
 end
 
@@ -59,14 +49,6 @@ action :delete do
   end
 
   systemd_timer "duply-purge-#{nr.name}" do
-    action :delete
-  end
-
-  cron_daily "duply-bkp-#{nr.name}" do
-    action :delete
-  end
-
-  cron_weekly "duply-purge-#{nr.name}" do
     action :delete
   end
 end

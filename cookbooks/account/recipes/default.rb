@@ -1,5 +1,5 @@
 if root?
-  hostmaster_groups = %w(adm cron)
+  hostmaster_groups = %w(adm)
 
   if gentoo?
     hostmaster_groups += %w(portage wheel systemd-journal)
