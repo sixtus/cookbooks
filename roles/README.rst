@@ -27,8 +27,6 @@ might look similar to the following::
 
   run_list(%w(
     recipe[base]
-    recipe[cron]
-    recipe[syslog]
   ))
 
 Managing Roles
