@@ -97,6 +97,6 @@ end
 duply_backup "postgresql" do
   source backupdir
   max_full_backups 30
-  max_full_age 1
+  incremental false
   action :delete unless primary
 end
