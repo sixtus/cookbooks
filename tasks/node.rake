@@ -99,7 +99,7 @@ namespace :node do
     run_task('ssl:do_cert', args.fqdn)
     knife :upload, ["cookbooks/certificates"]
     key = File.join(ROOT, "tasks/support/id_rsa")
-    sh("knife bootstrap #{args.fqdn} --distro #{ENV['DISTRO']} -P #{args.password} -r 'role[base]' -E production -i #{key}")
+    sh("knife bootstrap #{args.fqdn} --no-host-key-verify --distro #{ENV['DISTRO']} -P #{args.password} -r 'role[base]' -E production -i #{key}")
     run_task('node:updateworld', args.fqdn) unless ENV['NO_UPDATEWORLD']
   end
 
