@@ -15,12 +15,6 @@ GIT
       chef
 
 GIT
-  remote: git://github.com/zenops/mixlib-shellout.git
-  revision: 232eca431a08bea709c621312ab915b5399eb1e0
-  specs:
-    mixlib-shellout (1.4.0)
-
-GIT
   remote: git://github.com/zenops/ovh-rest.git
   revision: e2ee61014a3a5bfebec5fed72cd2752f5bb75f0a
   specs:
@@ -154,6 +148,7 @@ GEM
     mixlib-cli (1.5.0)
     mixlib-config (2.1.0)
     mixlib-log (1.6.0)
+    mixlib-shellout (1.6.0)
     multi_json (1.10.1)
     multi_xml (0.5.5)
     net-scp (1.2.1)
@@ -272,7 +267,6 @@ DEPENDENCIES
   liquid-development
   liquid-ext
   listen
-  mixlib-shellout!
   ovh-rest!
   rake
   rb-inotify
