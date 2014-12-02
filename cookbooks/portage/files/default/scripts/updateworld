@@ -57,11 +57,14 @@ fi
 # dummy run emerge first, so global updates don't clutter the output.
 emerge --info &>/dev/null
 
+# some cleanups
+emerge -C sys-apps/ack virtual/perl-Test-Simple || :
+
 # install updates
 if [[ -z $UPDATEWORLD_DONT_ASK ]]; then
-	emerge @world -NDua
+	emerge @world --rebuilt-binaries -NDua
 else
-	emerge @world -NDu
+	emerge @world --rebuilt-binaries -NDu
 fi
 
 # force latest gcc version
