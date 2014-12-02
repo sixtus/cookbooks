@@ -33,7 +33,7 @@ end
 
 systemd_timer "mysql_full_backup" do
   action action
-  schedule %W(OnCalendar=Sun #{node[:mysql][:backup][:full_backup][1]}:0)
+  schedule ["OnCalendar=Sun #{node[:mysql][:backup][:full_backup][1]}:0"]
   unit({
     command: "/usr/local/sbin/mysql_full_backup",
     user: "root",
@@ -43,7 +43,7 @@ end
 
 systemd_timer "mysql_full_clean" do
   action action
-  schedule %W(OnCalendar=Mon #{node[:mysql][:backup][:full_clean][1]}:0)
+  schedule ["OnCalendar=Mon #{node[:mysql][:backup][:full_clean][1]}:0"]
   unit({
     command: "/usr/local/sbin/mysql_full_clean",
     user: "root",
@@ -63,7 +63,7 @@ end
 
 systemd_timer "mysql_binlog_clean" do
   action action
-  schedule %W(OnCalendar=Mon #{node[:mysql][:backup][:binlog_clean][1]}:0)
+  schedule ["OnCalendar=Mon #{node[:mysql][:backup][:binlog_clean][1]}:0"]
   unit({
     command: "/usr/local/sbin/mysql_binlog_clean",
     user: "root",
