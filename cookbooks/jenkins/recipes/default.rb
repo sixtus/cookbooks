@@ -11,7 +11,10 @@ execute "jenkins-ssh-key" do
 end
 
 systemd_tmpfiles "jenkins"
-systemd_unit "jenkins.service"
+
+systemd_unit "jenkins.service" do
+  template true
+end
 
 service "jenkins" do
   action [:enable, :start]

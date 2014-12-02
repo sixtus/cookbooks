@@ -4,7 +4,11 @@ After=network.target
 
 [Service]
 User=jenkins
+<% if File.exist?("/opt/jenkins/jenkins.war") %>
+ExecStart=/usr/bin/java -Djava.awt.headless=true -DJENKINS_HOME=/var/lib/jenkins/home -jar /opt/jenkins/jenkins.war --httpPort=8080
+<% else %>
 ExecStart=/usr/bin/java -Djava.awt.headless=true -DJENKINS_HOME=/var/lib/jenkins/home -jar /usr/lib/jenkins/jenkins.war --httpPort=8080
+<% end %>
 Restart=always
 
 [Install]
