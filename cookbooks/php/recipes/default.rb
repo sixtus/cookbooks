@@ -9,6 +9,10 @@ portage_package_use "dev-lang/php" do
   use node[:php][:default_use_flags] + node[:php][:use_flags] + node[:php][:sapi]
 end
 
+package "dev-lang/php" do
+  action :upgrade
+end
+
 execute "eselect php set cli php#{node[:php][:slot]}" do
   user "root"
   group "root"
