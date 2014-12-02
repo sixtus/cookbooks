@@ -139,6 +139,7 @@ nagios_conf "servicegroups" do
 end
 
 hosts.each do |host|
+  next if host[:fqdn].empty?
   nagios_conf "host-#{host[:fqdn]}" do
     template "host.cfg.erb"
     variables :host => host
