@@ -34,7 +34,6 @@ if gentoo?
     net-misc/keychain
     net-misc/telnet-bsd
     net-misc/whois
-    sys-apps/ack
     sys-apps/dmidecode
     sys-apps/dstat
     sys-apps/ethtool
