@@ -2,9 +2,12 @@ include_recipe "portage"
 
 package "sys-apps/gentoo-functions"
 
-#link "/etc/init.d/functions.sh" do
-#  to "/lib/gentoo/functions.sh"
-#end
+# need this until every script is updated
+directory "/etc/init.d"
+
+link "/etc/init.d/functions.sh" do
+  to "/lib/gentoo/functions.sh"
+end
 
 # stupid #$%^&*
 link "/sbin/ip" do

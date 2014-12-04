@@ -44,7 +44,6 @@ end
   /etc/cron.hourly
   /etc/cron.monthly
   /etc/cron.weekly
-  /etc/init.d
   /etc/local.d
   /etc/syslog-ng
   /etc/xinetd.d
@@ -56,3 +55,16 @@ end
   end
 end
 
+ruby_block "cleanup-initd" do
+  block do
+    Dir["/etc/init.d/*"].each do |f|
+      next if f == '/etc/init.d/functions.sh'
+      File.unlink(f)
+    end
+  end
+  only_if do
+    Dir["/etc/init.d/*"].select do |f|
+      f != '/etc/init.d/functions.sh'
+    end.compact.any?
+  end
+end
