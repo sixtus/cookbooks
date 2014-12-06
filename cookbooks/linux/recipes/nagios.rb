@@ -1,12 +1,6 @@
 if nagios_client?
   include_recipe "nagios::client"
 
-  nagios_service "PING" do
-    check_command "check_ping!250.0,20%!500.0,60%"
-    servicegroups "network"
-    env [:staging, :testing, :development]
-  end
-
   nrpe_command "check_load" do
     command "/usr/lib/nagios/plugins/check_load -w #{node[:cpu][:total]*3} -c #{node[:cpu][:total]*10}"
   end

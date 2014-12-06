@@ -31,11 +31,6 @@ define command {
 }
 
 define command {
-  command_name check_ping
-  command_line $USER1$/check_ping -H $HOSTADDRESS$ -w $ARG1$ -c $ARG2$ -p 5
-}
-
-define command {
   command_name check_tcp
   command_line $USER1$/check_tcp -H $HOSTADDRESS$ -p $ARG1$ $ARG2$
 }
