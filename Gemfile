@@ -19,6 +19,7 @@ gem 'rake'
 gem 'rb-inotify'
 gem 'rvm'
 gem 'tailor', github: 'hollow/tailor'
+gem 'webhdfs'
 
 group :test do
   gem 'kitchen-vagrant'
