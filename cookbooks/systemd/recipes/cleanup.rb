@@ -31,6 +31,7 @@ end
   /etc/systemd/system/multi-user.target.wants/dcron.service
   /etc/systemd/system/multi-user.target.wants/syslog-ng.service
   /etc/systemd/system/syslog.service
+  /usr/lib/systemd/system-generators/gentoo-local-generator
 ).each do |f|
   file f do
     action :delete
