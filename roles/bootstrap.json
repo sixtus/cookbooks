@@ -1,0 +1,17 @@
+{
+  "name": "bootstrap",
+  "description": "bootstrap role",
+  "run_list": [
+    "recipe[ohai]",
+    "recipe[base]",
+    "recipe[account]",
+    "recipe[sudo]",
+    "recipe[bash]",
+    "recipe[git]",
+    "recipe[nss]",
+    "recipe[ntp]",
+    "recipe[openssl]",
+    "recipe[ssh::server]",
+    "recipe[vim]"
+  ]
+}
