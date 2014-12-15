@@ -158,7 +158,7 @@ ruby_block "cleanup-nagios" do
     Dir["/etc/nagios/objects/host-*.cfg"].select do |f|
       fqdn = File.basename(f, ".cfg").sub(/host-/, '')
       !hosts.any? { |h| h[:fqdn] == fqdn }
-    end
+    end.any?
   end
   notifies :restart, "service[nagios]"
 end
