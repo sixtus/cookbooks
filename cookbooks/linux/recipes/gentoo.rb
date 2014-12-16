@@ -24,6 +24,13 @@ service "irqd" do
   action [:enable, :start]
 end
 
+file "/etc/resolvconf.conf" do
+  content "resolv_conf=/tmp/.resolv.conf\n"
+  owner "root"
+  group "root"
+  mode "0644"
+end
+
 cookbook_file "/etc/dhcpcd.conf" do
   source "dhcpcd.conf"
   owner "root"
