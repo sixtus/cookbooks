@@ -30,6 +30,8 @@ else
   primary = true
 end
 
+primary = false unless File.exist?("/usr/bin/asbackup")
+
 systemd_timer "aerospike-backup" do
   schedule %w(OnCalendar=daily)
   unit({
