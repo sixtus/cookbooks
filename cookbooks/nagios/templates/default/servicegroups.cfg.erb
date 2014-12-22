@@ -4,7 +4,7 @@
 
 <%
 servicegroups = @hosts.map do |h|
-  h[:nagios][:services].map do |name, params|
+  ((h[:nagios] || {})[:services] || {}).map do |name, params|
     (params[:servicegroups] || "other").split(",")
   end
 end.flatten.compact.sort.uniq.each do |sg|
