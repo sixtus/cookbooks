@@ -29,7 +29,7 @@ NOLIBS = [
     "/dev/shm/*",
     "*/var/nagios/spool/checkresults/neb*",
     "/tmp/hsperfdata*",
-    "/tmp/jna/*",
+    "/tmp/jna*",
     "/tmp/winstone*",
     "/usr/lib/lxc/rootfs/*",
     "/usr/lib64/lxc/rootfs/*",
