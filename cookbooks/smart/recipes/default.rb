@@ -6,7 +6,7 @@ else
   raise "cookbook smart does not support #{node[:platform]}"
 end
 
-if node[:smart][:devices].any?
+if !lxc? && node[:smart][:devices].any?
   cookbook_file "/usr/local/sbin/diskreport" do
     source "diskreport.sh"
     owner "root"
