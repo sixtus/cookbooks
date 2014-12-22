@@ -25,7 +25,7 @@ fi
 
 if [[ ! -f nodes/${node_name}.json ]]; then
 	if [[ $USER == "root" ]]; then
-		chef_args="-orole[base]"
+		chef_args="-orole[bootstrap]"
 	else
 		chef_args="-orole[workstation]"
 	fi
@@ -73,7 +73,7 @@ if ! type -P chef-client >/dev/null; then
 	if [[ -f /etc/gentoo-release ]]; then
 		$SUDO emerge app-admin/chef || exit 1
 	else
-		curl -s -L https://www.opscode.com/chef/install.sh | $SUDO bash || exit 1
+		curl -s -L https://www.opscode.com/chef/install.sh | $SUDO bash -s -- -v 11 || exit 1
 	fi
 fi
 
