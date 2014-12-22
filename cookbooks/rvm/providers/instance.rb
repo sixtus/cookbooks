@@ -35,7 +35,7 @@ action :create do
     if new_resource.update
       not_if { ::File.read("#{rvm[:path]}/VERSION").split.first == rvm[:version] rescue false }
     else
-      creates "#{rvm[:path]}/VERSION"
+      not_if { ::File.exist?("#{rvm[:path]}/VERSION") }
     end
 
     user rvm[:user]
