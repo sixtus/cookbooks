@@ -76,6 +76,7 @@ if nagios_client?
 
   mounts = node[:filesystem].values.map do |fs|
     next if fs[:mount] =~ %r{/run/user/}
+    next if fs[:mount] =~ %r{/lxc}
     fs if fs[:fs_type] && fs[:mount] && File.directory?(fs[:mount])
   end.compact.map do |fs|
     warn = [fs[:kb_size].to_i * 0.10, 1.0 * 1024 * 1024].min.to_i / 1024
