@@ -1,21 +1,25 @@
 # cleanup cruft from SysV init & friends
 %w(
   dcron
+  ntpd
   syslog-ng
 ).each do |s|
   service s do
     action [:disable, :stop]
+    only_if { File.exist?("/usr/lib64/systemd/system/#{s}.service") }
   end
 end
 
 service "network.service" do
   action :disable
   provider Chef::Provider::Service::Systemd
+  only_if { File.exist?("/usr/lib64/systemd/system/network.service") }
 end
 
 %w(
   dcron
   network
+  ntpd
   syslog-ng
 ).each do |u|
   systemd_unit u do
@@ -35,6 +39,7 @@ end
 ).each do |f|
   file f do
     action :delete
+    manage_symlink_source true
   end
 end
 

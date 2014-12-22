@@ -72,7 +72,6 @@ ncftp
 net-tools
 netctl
 nmap
-ntpdate
 openldap
 openssl
 pip

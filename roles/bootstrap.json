@@ -9,7 +9,6 @@
     "recipe[bash]",
     "recipe[git]",
     "recipe[nss]",
-    "recipe[ntp]",
     "recipe[openssl]",
     "recipe[ssh::server]",
     "recipe[vim]"

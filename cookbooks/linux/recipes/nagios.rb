@@ -125,4 +125,14 @@ if nagios_client?
     check_interval 10
     env [:staging, :testing, :development]
   end
+
+  nrpe_command "check_time" do
+    command "/usr/lib/nagios/plugins/check_ntp_time -H pool.ntp.org -w 0.5 -c 1"
+  end
+
+  nagios_service "TIME" do
+    check_command "check_nrpe!check_time"
+    servicegroups "system"
+    env [:testing, :development]
+  end
 end

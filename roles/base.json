@@ -16,7 +16,6 @@
     "recipe[lib_users]",
     "recipe[mdadm]",
     "recipe[nss]",
-    "recipe[ntp]",
     "recipe[openssl]",
     "recipe[postfix::satelite]",
     "recipe[python]",

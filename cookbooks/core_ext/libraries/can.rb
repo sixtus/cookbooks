@@ -5,11 +5,6 @@ module CanHelpers
     File.exist?("/proc/modules")
   end
 
-  def can_run_ntpd?
-    return false if lxc?
-    return true
-  end
-
 end
 
 include CanHelpers

@@ -10,11 +10,7 @@ echo "127.0.0.1 ${hostname}.${domainname} ${hostname} localhost" > /etc/hosts
 echo ${hostname} > /etc/hostname
 hostname ${hostname}
 
-emerge -n net-misc/ntp
-systemctl stop ntpd
-pkill -9 ntp*
 timedatectl set-local-rtc 0
-ntpdate pool.ntp.org
 
 emerge --sync
 emerge --nospinner --keep-going=n --noreplace --quiet app-admin/chef
