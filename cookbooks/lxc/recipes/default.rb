@@ -1,4 +1,5 @@
 include_recipe "debootstrap"
+include_recipe "zfs"
 
 if gentoo?
   package "app-emulation/lxc"

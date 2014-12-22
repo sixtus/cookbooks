@@ -10,4 +10,4 @@ supports "debian"
 supports "gentoo"
 
 depends "debootstrap"
-depends "dnsmasq"
+depends "zfs"
