@@ -51,6 +51,7 @@ if gentoo?
     sys-power/acpitool
     sys-process/iotop
     sys-process/lsof
+    sys-process/numactl
     sys-process/procps
     sys-process/tiptop
   )
