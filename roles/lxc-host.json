@@ -1,0 +1,8 @@
+{
+  "name": "lxc-host",
+  "description": "LXC Host",
+  "run_list": [
+    "role[base]",
+    "recipe[lxc]"
+  ]
+}
