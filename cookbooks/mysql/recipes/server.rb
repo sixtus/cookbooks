@@ -202,7 +202,7 @@ if nagios_client?
     service_name = "MYSQL-#{name.upcase}"
 
     nrpe_command command_name do
-      command "/usr/lib/nagios/plugins/check_mysql_health --mode #{params[:command]} --warning #{params[:warning]} --critical #{params[:critical]}"
+      command "/usr/lib/nagios/plugins/check_mysql_health --mode #{params[:command]} --warning #{params[:warning]} --critical #{params[:critical]} --hostname #{node[:mysql][:connection][:host]} --username #{node[:mysql][:connection][:username]} --password #{node[:mysql][:connection][:password]}"
     end
 
     nagios_service service_name do
