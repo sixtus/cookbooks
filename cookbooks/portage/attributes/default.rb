@@ -20,7 +20,7 @@ default[:portage][:ACCEPT_KEYWORDS] = nil
 default[:portage][:FEATURES] = %w(buildpkg)
 default[:portage][:OPTS] = %w(--usepkg=y --getbinpkg=y)
 default[:portage][:MAKEOPTS] = "-j1"
-default[:portage][:overlays] = []
+default[:portage][:overlays] = {}
 
 # repo settings
 if gentoo?

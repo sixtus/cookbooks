@@ -164,18 +164,7 @@ class Chef
             raise Chef::Exceptions::Package, "You need to install app-portage/eix for fast package searches."
           end
 
-          # We need to update the eix database if it's older than the current portage
-          # tree or the eix binary.
-          if ::File.directory?("/var/cache/eix")
-            cache_file = "/var/cache/eix/portage.eix"
-          else
-            cache_file = "/var/cache/eix"
-          end
-
-          unless ::FileUtils.uptodate?(cache_file, [eix, "/usr/portage/metadata/timestamp"])
-            Chef::Log.debug("eix database outdated, calling `#{eix_update}`.")
-            Chef::Mixin::Command.run_command_with_systems_locale(:command => eix_update)
-          end
+          Chef::Mixin::Command.run_command_with_systems_locale(:command => eix_update)
 
           query_command = [
             eix,
@@ -185,6 +174,7 @@ class Chef
           ].join(" ")
 
           eix_stderr = nil
+
           @@packages_cache = {}
 
           Chef::Log.debug("Calling `#{query_command}`.")

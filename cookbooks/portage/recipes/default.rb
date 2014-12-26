@@ -43,14 +43,6 @@ if root?
     group "portage"
   end
 
-  if node[:portage][:overlay]
-    git "/usr/local/portage" do
-      repository node[:portage][:overlay]
-      action :sync
-      notifies :run, "execute[eix-update]"
-    end
-  end
-
   # remove legacy paths
   file "/etc/make.conf" do
     action :delete
@@ -142,29 +134,6 @@ if root?
   systemd_timer "eclean-packages" do
     schedule %w(OnCalendar=weekly)
     unit(command: "/usr/bin/eclean -d -n -q packages")
-  end
-
-  execute "eix-update" do
-    not_if do
-      check_files = Dir.glob("/usr/local/portage/.git/index")
-      check_files << "/usr/portage/metadata/timestamp.chk"
-
-      if File.exist?("/var/cache/eix/portage.eix")
-        cache_file = "/var/cache/eix/portage.eix"
-      else
-        cache_file = "/var/cache/eix"
-      end
-
-      FileUtils.uptodate?(cache_file, check_files)
-    end
-    notifies :create, "ruby_block[update-packages-cache]"
-  end
-
-  ruby_block "update-packages-cache" do
-    action :nothing
-    block do
-      Chef::Provider::Package::Portage.new(nil, nil).packages_cache_from_eix!
-    end
   end
 
   %w(
