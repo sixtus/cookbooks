@@ -35,9 +35,6 @@ default[:apache][:processor_wait_timeout] = "10"
 
 default[:apache][:error_log] = "syslog:daemon"
 
-default[:apache][:default_vhost] = true
-default[:apache][:default_redirect] = nil
-
 default[:apache][:ssl][:enabled] = false
 
 default[:apache][:php][:max_children] = "4"

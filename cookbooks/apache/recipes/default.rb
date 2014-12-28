@@ -77,17 +77,6 @@ apache_vhost "status" do
   template "status.conf"
 end
 
-if node[:apache][:default_vhost]
-  default_action = :create
-else
-  default_action = :delete
-end
-
-apache_vhost "00-default" do
-  template "default.conf"
-  action default_action
-end
-
 systemd_unit "apache2.service"
 
 service "apache2" do
