@@ -3,7 +3,7 @@ Description=PHP FastCGI Process Manager
 After=network.target
 
 [Service]
-ExecStart=/usr/lib/php<%= node[:php][:slot] %>/bin/php-fpm -F -y <%= node[:php][:fpm][:conf] %>
+ExecStart=/usr/lib/php<%= node[:php][:slot] %>/bin/php-fpm -F -y <%= node[:php][:fpm][:conf] %> -g /run/php-fpm.pid
 Restart=always
 
 [Install]
