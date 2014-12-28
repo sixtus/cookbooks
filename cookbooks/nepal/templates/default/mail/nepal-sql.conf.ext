@@ -1,0 +1,6 @@
+driver = mysql
+connect = host=localhost dbname=nepal user=nepal_mail_user password=<%= @user_password %>
+default_pass_scheme = SHA256
+user_query = SELECT home, uid, gid, quota_rule FROM v_mail_accounts WHERE email = '%u'
+password_query = SELECT email AS user, password, nologin FROM v_mail_accounts WHERE email = '%u'
+iterate_query = SELECT email AS user FROM v_mail_accounts

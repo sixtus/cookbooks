@@ -8,7 +8,6 @@
   },
   "run_list": [
     "role[base]",
-    "recipe[nepal]",
-    "recipe[mysql::backup]"
+    "recipe[nepal]"
   ]
 }
