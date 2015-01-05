@@ -106,7 +106,7 @@ namespace :ssl do
 
   desc "Revoke an existing SSL certificate"
   task :revoke, :cn do |t, args|
-    serial = %x(fgrep 'CN=#{args.cn}' ca/index | awk '{print $3}').chomp
+    serial = %x(fgrep '^V\t.*CN=#{args.cn}' ca/index | awk '{print $3}').chomp
 
     if serial.empty?
       puts "can only revoke my own certificates. skipping #{args.cn} ..."
