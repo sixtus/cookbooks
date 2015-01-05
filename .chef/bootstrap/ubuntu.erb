@@ -48,6 +48,8 @@ EOP
 
 cat > /etc/chef/client.rb <<'EOP'
 <%= config_content %>
+ssl_verify_mode :verify_none
+verify_api_cert false
 EOP
 
 cat > /etc/chef/first-boot.json <<'EOP'
