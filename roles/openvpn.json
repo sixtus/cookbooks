@@ -1,0 +1,8 @@
+{
+  "name": "openvpn",
+  "description": "OpenVPN Server",
+  "run_list": [
+    "role[base]",
+    "recipe[openvpn]"
+  ]
+}

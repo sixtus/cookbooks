@@ -25,6 +25,11 @@ ACCEPT all all tcp ssh
 ACCEPT net:<%= nagios_node[:ipaddress] %> all tcp 5666
 <% end %>
 
+# accept connections from openvpn server
+<% if openvpn_node %>
+ACCEPT net:<%= openvpn_node[:ipaddress] %> all tcp
+<% end %>
+
 # accept all connections from chef nodes
 <% nodes = node[:shorewall][:clustered] ? node.nodes.cluster(node.cluster_name) : node.nodes %>
 <% nodes.each do |n| %>

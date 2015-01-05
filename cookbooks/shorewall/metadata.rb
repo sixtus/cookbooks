@@ -10,3 +10,4 @@ supports "debian"
 supports "gentoo"
 
 depends "nagios"
+depends "openvpn"
