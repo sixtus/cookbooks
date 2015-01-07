@@ -6,3 +6,6 @@ default[:camus][:topics] = []
 default[:camus][:destination] = "/history/#{node.cluster_name}"
 default[:camus][:base_path] = "/camus/#{node.cluster_name}/running"
 default[:camus][:history_path] = "/camus/#{node.cluster_name}/state"
+
+default[:camus][:timestamp][:format] = "iso"
+default[:camus][:timestamp][:field] = "ts"
