@@ -12,8 +12,8 @@ action :create do
 
   git path do
     repository nr.repository
-    action :checkout
     notifies :create, "ruby_block[add-overlay-#{nr.name}]", :immediately
+    notifies :create, "ruby_block[update-packages-cache]", :immediately
   end
 
   ruby_block "add-overlay-#{nr.name}" do
