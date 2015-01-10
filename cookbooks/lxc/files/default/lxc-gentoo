@@ -222,6 +222,9 @@ post_process()
     echo "#!/bin/sh\nexec /usr/lib/systemd/systemd" >> ${rootfs}/sbin/init
     chmod +x ${rootfs}/sbin/init
 
+    # so we can stop containers properly
+    ln -nfs /usr/lib/systemd/system/poweroff.target ${rootfs}/etc/systemd/system/sigpwr.target
+
     echo "root:tux" | chroot $rootfs chpasswd
     echo "Root password is 'tux', please change!"
 }
