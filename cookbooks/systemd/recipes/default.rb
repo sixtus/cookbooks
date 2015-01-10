@@ -2,10 +2,6 @@ if gentoo?
   if root?
     package "sys-apps/systemd"
 
-    link "/bin/systemctl" do
-      to "/usr/bin/systemctl"
-    end
-
     include_recipe "systemd::cleanup"
 
     # by default, boot into multi-user.target

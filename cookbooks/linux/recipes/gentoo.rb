@@ -1,3 +1,12 @@
+# stupid #$%^&*
+link "/sbin/ip" do
+  to "/bin/ip"
+end
+
+link "/bin/systemctl" do
+  to "/usr/bin/systemctl"
+end
+
 include_recipe "portage"
 
 package "sys-apps/gentoo-functions"
@@ -7,11 +16,6 @@ directory "/etc/init.d"
 
 link "/etc/init.d/functions.sh" do
   to "/lib/gentoo/functions.sh"
-end
-
-# stupid #$%^&*
-link "/sbin/ip" do
-  to "/bin/ip"
 end
 
 package "sys-apps/irqd"
