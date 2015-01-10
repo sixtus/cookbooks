@@ -1,5 +1,4 @@
 include_recipe "nagios::nrpe"
-include_recipe "nagios::nsca"
 
 directory "/usr/lib/ruby/site_ruby" do
   owner "root"
