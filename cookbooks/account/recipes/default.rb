@@ -1,4 +1,7 @@
 if root?
+  include_recipe "nss"
+  include_recipe "sudo"
+
   hostmaster_groups = %w(adm)
 
   if gentoo?

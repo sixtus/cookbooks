@@ -27,6 +27,9 @@ node[:baselayout][:users].each do |name, params|
   end
 end
 
+# create accounts before disabling root login
+include_recipe "account"
+
 user "root" do
   uid 0
   gid 0
