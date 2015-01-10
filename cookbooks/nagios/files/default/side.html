@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+<meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
+<TITLE>Nagios Core</TITLE>
+<link href="stylesheets/common.css" type="text/css" rel="stylesheet">
+</head>
+
+<body class='navbar'>
+
+
+
+<div class="navbarlogo">
+<a href="http://www.nagios.org" target="_blank"><img src="images/sblogo.png" border="0" alt="Nagios"></a>
+</div>
+
+<div class="navsection">
+<div class="navsectiontitle">General</div>
+<div class="navsectionlinks">
+<ul class="navsectionlinks">
+<li><a href="http://go.nagios.com/nagioscore/docs" target="_blank">Documentation</a></li>
+</ul>
+</div>
+</div>
+
+
+<div class="navsection">
+<div class="navsectiontitle">Current Status</div>
+<div class="navsectionlinks">
+<ul class="navsectionlinks">
+<li><a href="/nagios/cgi-bin/tac.cgi" target="main">Tactical Overview</a></li>
+<!--<li><a href="/nagios/cgi-bin/statusmap.cgi?host=all" target="main">Map</a></li>-->
+<li><a href="/nagios/cgi-bin/status.cgi?hostgroup=all&amp;style=hostdetail" target="main">Hosts</a></li>
+<li><a href="/nagios/cgi-bin/status.cgi?host=all" target="main">Services</a></li>
+<li>
+<a href="/nagios/cgi-bin/status.cgi?hostgroup=all&amp;style=overview" target="main">Host Groups</a>
+<ul>
+<li><a href="/nagios/cgi-bin/status.cgi?hostgroup=all&amp;style=summary" target="main">Summary</a></li>
+<li><a href="/nagios/cgi-bin/status.cgi?hostgroup=all&amp;style=grid" target="main">Grid</a></li>
+</ul>
+</li>
+<li>
+<a href="/nagios/cgi-bin/status.cgi?servicegroup=all&amp;style=overview" target="main">Service Groups</a>
+<ul>
+<li><a href="/nagios/cgi-bin/status.cgi?servicegroup=all&amp;style=summary" target="main">Summary</a></li>
+<li><a href="/nagios/cgi-bin/status.cgi?servicegroup=all&amp;style=grid" target="main">Grid</a></li>
+</ul>
+</li>
+<li>
+<a href="/nagios/cgi-bin/status.cgi?host=all&amp;type=detail&amp;serviceprops=270378&amp;servicestatustypes=24" target="main">Problems</a>
+<ul>
+<li>
+<a href="/nagios/cgi-bin/status.cgi?host=all&amp;type=detail&amp;serviceprops=270378&amp;servicestatustypes=24" target="main">Unhandled</a>
+</li>
+<li>
+<a href="/nagios/cgi-bin/status.cgi?host=all&amp;type=detail&amp;serviceprops=262178&amp;servicestatustypes=28" target="main">All Problems</a>
+</li>
+<li>
+<a href="/nagios/cgi-bin/status.cgi?host=all&amp;type=detail&amp;serviceprops=34&amp;servicestatustypes=28" target="main">All + Soft</a>
+</li>
+<li>
+<a href="/nagios/cgi-bin/status.cgi?host=all&amp;type=detail&amp;serviceprops=4096&amp;servicestatustypes=31" target="main">Silenced</a>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+
+
+<div class="navbarsearch">
+<form method="get" action="/nagios/cgi-bin/status.cgi" target="main">
+<fieldset>
+<legend>Quick Search:</legend>
+<input type='hidden' name='navbarsearch' value='1'>
+<input type='text' name='host' size='15' class="NavBarSearchItem">
+</fieldset>
+</form>
+</div>
+
+</div>
+
+
+<div class="navsection">
+<div class="navsectiontitle">Reports</div>
+<div class="navsectionlinks">
+<ul class="navsectionlinks">
+<li><a href="/nagios/cgi-bin/avail.cgi" target="main">Availability</a></li>
+<li><a href="/nagios/cgi-bin/trends.cgi" target="main">Trends</a></li>
+
+<li>
+<a href="/nagios/cgi-bin/history.cgi?host=all" target="main">Alerts</a>
+<ul>
+<li><a href="/nagios/cgi-bin/history.cgi?host=all" target="main">History</a></li>
+<li><a href="/nagios/cgi-bin/summary.cgi" target="main">Summary</a></li>
+<li><a href="/nagios/cgi-bin/histogram.cgi" target="main">Histogram</a></li>
+</ul>
+</li>
+<li><a href="/nagios/cgi-bin/notifications.cgi?contact=all" target="main">Notifications</a></li>
+<li><a href="/nagios/cgi-bin/showlog.cgi" target="main">Event Log</a></li>
+</ul>
+</div>
+</div>
+
+
+<div class="navsection">
+<div class="navsectiontitle">System</div>
+<div class="navsectionlinks">
+<ul class="navsectionlinks">
+<li><a href="/nagios/cgi-bin/extinfo.cgi?type=3" target="main">Comments</a></li>
+<li><a href="/nagios/cgi-bin/extinfo.cgi?type=6" target="main">Downtime</a></li>
+<li><a href="/nagios/cgi-bin/extinfo.cgi?type=0" target="main">Process Info</a></li>
+<li><a href="/nagios/cgi-bin/extinfo.cgi?type=4" target="main">Performance Info</a></li>
+<li><a href="/nagios/cgi-bin/extinfo.cgi?type=7" target="main">Scheduling Queue</a></li>
+<li><a href="/nagios/cgi-bin/config.cgi" target="main">Configuration</a></li>
+</ul>
+</div>
+</div>
+
+
+
+
+</BODY>
+</HTML>
