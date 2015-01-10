@@ -95,11 +95,13 @@ namespace :node do
     args.with_defaults(password: "tux")
     ENV['BATCH'] = "1"
     ENV['DISTRO'] ||= "gentoo"
+    ENV['ROLE'] ||= "bootstrap"
+    ENV['ENVIRONMENT'] ||= "production"
     run_task('node:checkdns', args.fqdn, args.ipaddress)
     run_task('ssl:do_cert', args.fqdn)
     knife :upload, ["cookbooks/certificates"]
     key = File.join(ROOT, "tasks/support/id_rsa")
-    sh("knife bootstrap #{args.fqdn} --no-host-key-verify --distro #{ENV['DISTRO']} -P #{args.password} -r 'role[bootstrap]' -E production -i #{key}")
+    sh("knife bootstrap #{args.fqdn} --no-host-key-verify --distro #{ENV['DISTRO']} -P #{args.password} -r 'role[#{ENV['ROLE']}]' -E #{ENV['ENVIRONMENT']} -i #{key}")
   end
 
   desc "Update node packages"
