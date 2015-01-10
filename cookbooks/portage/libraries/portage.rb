@@ -92,19 +92,6 @@ class Chef
           @candidate_version ||= package_info[:candidate_version] rescue nil
         end
 
-        def install_package(name, version)
-          pkg = "=#{name}-#{version}"
-
-          if(version =~ /^\~(.+)/)
-            # If we start with a tilde
-            pkg = "~#{name}-#{$1}"
-          end
-
-          run_command_with_systems_locale(
-            :command => "/usr/bin/sudo -H /usr/bin/emerge --color=n --nospinner --quiet -Nnu #{expand_options(@new_resource.options)} #{pkg}"
-          )
-        end
-
         def action_install
           # If we specified a version, and it's not the current version, move to the specified version
           if !@new_resource.version.nil? && !(target_version_already_installed?)
@@ -125,6 +112,7 @@ class Chef
               end
             end
           end
+
           description = install_version ? "version #{install_version} of" : ""
           converge_by("install #{description} package #{@new_resource.package_name}") do
             @new_resource.version(install_version)
@@ -133,22 +121,12 @@ class Chef
         end
 
         def action_upgrade
-          @new_resource.version(candidate_version)
-          converge_by("upgrade package #{@new_resource.package_name}") do
-            upgrade_package(@new_resource.package_name, candidate_version)
-            Chef::Log.info("#{@new_resource} upgraded package")
-          end
+          action_install
         end
 
         def package_info
           packages_cache_from_eix
-          @@packages_cache[@new_resource.package_name].tap do |pkg|
-            if pkg
-              pkg.merge!({
-                :package_atom => full_package_atom(@new_resource.package_name, @new_resource.version)
-              })
-            end
-          end
+          @@packages_cache[@new_resource.package_name]
         end
 
         def packages_cache_from_eix
@@ -194,11 +172,20 @@ class Chef
           end
         end
 
+        def install_package(name, version)
+          pkg = full_package_atom(name, version)
+          run_command_with_systems_locale(
+            :command => "/usr/bin/sudo -H /usr/bin/emerge --color=n --nospinner --quiet -Nnu #{expand_options(@new_resource.options)} #{pkg}"
+          )
+        end
+
         def full_package_atom(package_atom, version = nil)
           return package_atom unless version
 
           if version =~ /^\~(.+)/
             "~#{package_atom}-#{$1}"
+          elsif version =~ /^:(.+)/
+            "#{package_atom}:#{$1}"
           else
             "=#{package_atom}-#{version}"
           end

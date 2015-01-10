@@ -20,7 +20,6 @@ action :create do
     block do
       node.set[:portage][:overlays][nr.name] = path
     end
-    action :nothing
     notifies :create, "template[/etc/portage/make.conf]", :immediately
     notifies :create, "ruby_block[update-packages-cache]", :immediately
   end
