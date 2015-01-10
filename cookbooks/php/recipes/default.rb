@@ -10,6 +10,7 @@ portage_package_use "dev-lang/php" do
 end
 
 package "dev-lang/php" do
+  version ":#{node[:php][:slot]}"
   action :upgrade
 end
 
