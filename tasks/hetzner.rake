@@ -22,8 +22,8 @@ begin
     desc "enable rescue mode and reinstall"
     task :reinstall, :fqdn, :ipaddress, :profile do |t, args|
       args.with_defaults(:profile => 'generic-two-disk-md')
-      password = hetzner_enable_rescue_wait(args.ipaddress)
-      run_task('node:quickstart', args.fqdn, args.ipaddress, password, args.profile)
+      ENV['PASSWORD'] = hetzner_enable_rescue_wait(args.ipaddress)
+      run_task('node:quickstart', args.fqdn, args.ipaddress, args.profile)
     end
 
     desc "Set server names and reverse DNS"
