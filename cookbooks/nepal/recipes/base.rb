@@ -21,7 +21,9 @@ end
 # we need this in the base recipe so we can create directories for user apache
 include_recipe "apache"
 
-package "www-apps/nepal"
+package "www-apps/nepal" do
+  action :upgrade
+end
 
 # system directories
 directory "/srv" do
