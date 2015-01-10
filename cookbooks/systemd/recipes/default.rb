@@ -2,11 +2,11 @@ if gentoo?
   if root?
     package "sys-apps/systemd"
 
-    include_recipe "systemd::cleanup"
-
     link "/bin/systemctl" do
       to "/usr/bin/systemctl"
     end
+
+    include_recipe "systemd::cleanup"
 
     # by default, boot into multi-user.target
     service "#{node[:systemd][:target]}.target" do
