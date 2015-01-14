@@ -1,0 +1,9 @@
+{
+  "name": "memcached",
+  "description": "Memcache Database",
+  "run_list": [
+    "role[base]",
+    "role[c500k]",
+    "recipe[memcached]"
+  ]
+}

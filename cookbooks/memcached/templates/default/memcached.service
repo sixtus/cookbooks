@@ -13,6 +13,5 @@ Group=daemon
 Restart=always
 OOMScoreAdjust=-900
 
-
 [Install]
 WantedBy=multi-user.target
