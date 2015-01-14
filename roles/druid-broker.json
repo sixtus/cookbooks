@@ -3,6 +3,7 @@
   "run_list": [
     "role[base]",
     "role[c500k]",
+    "role[memcached]",
     "role[druid-storage]",
     "recipe[druid::broker]"
   ]
