@@ -53,6 +53,12 @@ file "/etc/apache2/modules.d/70_php_fpm.conf" do
   notifies :reload, "service[apache2]"
 end
 
+package "www-apache/mod_security"
+
+apache_module "79_modsecurity" do
+  template "web/79_mod_security.conf"
+end
+
 ssl_certificate "/srv/system/etc/apache/server" do
   cn node[:fqdn]
 end
