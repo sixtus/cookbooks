@@ -21,16 +21,16 @@ Class.new(Nagios::Plugin) do
     raise "No scope given" unless @scope
   end
 
-  def warning(m)
-    m > threshold(:warning).to_f
+  def warning(_)
+    @warning.count.to_f / @services.count.to_f > threshold(:warning).to_f
   end
 
-  def critical(m)
-    m > threshold(:critical).to_f
+  def critical(_)
+    @critical.count.to_f / @services.count.to_f > threshold(:critical).to_f
   end
 
-  def to_s(m)
-    "#{(m * 100).round(0)}% affected not_ok=#{@not_ok} ok=#{@ok}"
+  def to_s(_)
+    "critical=#{@critical} warning=#{@warning} ok=#{@ok}"
   end
 
   def measure
@@ -43,10 +43,19 @@ Class.new(Nagios::Plugin) do
       end
     end
 
-    @not_ok = @services.select { |item| item[:current_state] != @code }
-    @not_ok.map!(&:host_name)
-    @ok = (Set.new(@services.map(&:host_name)) - Set.new(@not_ok)).to_a
-    return 0.0 if @services.empty?
-    @not_ok.count.to_f / @services.count.to_f
+    @ok = []
+    @warning = []
+    @critical = []
+
+    @services.each do |service|
+      case service[:current_state]
+      when 0
+        @ok << service[:host_name]
+      when 1
+        @warning << service[:host_name]
+      else
+        @critical << service[:host_name]
+      end
+    end
   end
 end.run!
