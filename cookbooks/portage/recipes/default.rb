@@ -53,8 +53,23 @@ if root?
     manage_symlink_source false
   end
 
-  link "/etc/portage/make.profile" do
-    to node[:portage][:profile]
+  file "/etc/portage/make.profile" do
+    action :delete
+    manage_symlink_source false
+    only_if { File.symlink?("/etc/portage/make.profile") }
+  end
+
+  directory "/etc/portage/make.profile" do
+    owner "root"
+    group "root"
+    mode "0755"
+  end
+
+  file "/etc/portage/make.profile/parent" do
+    content "#{node[:portage][:profile]}\n#{node[:portage][:overlays].map { |name, path| "#{path}/profiles/#{name}" }.join("\n")}"
+    owner "root"
+    group "root"
+    mode "0644"
   end
 
   directory node[:portage][:confdir] do

@@ -21,6 +21,7 @@ action :create do
       node.set[:portage][:overlays][nr.name] = path
     end
     notifies :create, "template[/etc/portage/make.conf]", :immediately
+    notifies :create, "file[/etc/portage/make.profile/parent]", :immediately
     notifies :create, "ruby_block[update-packages-cache]", :immediately
   end
 
@@ -40,4 +41,12 @@ action :create do
     cookbook "portage"
     backup 0
   end
+
+  file "/etc/portage/make.profile/parent" do
+    content "#{node[:portage][:profile]}\n#{node[:portage][:overlays].map { |name, path| "#{path}/profiles/#{name}" }.join("\n")}"
+    owner "root"
+    group "root"
+    mode "0644"
+  end
+
 end
