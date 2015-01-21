@@ -35,6 +35,9 @@ LOCALE_PATHS = ('/usr/share/nepal/locale/',)
 TEMPLATE_DIRS = ('/usr/share/nepal/templates/',)
 NEPALD_LOGFILE = '/srv/system/logs/nepald.log'
 
+# session
+SESSION_COOKIE_SECURE = True
+
 <% if node[:nepal][:debug] %>
 # enable debugging
 DEBUG = True
