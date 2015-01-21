@@ -149,6 +149,8 @@ my $ua = LWP::UserAgent->new( protocols_allowed => ['http', 'https'], timeout =>
 my $response = undef;
 my $url = undef;
 
+$ua->default_header('Accept' => "text/plain");
+
 if (($o_url =~ m/^http(s?)\:\/\//i)) {
 	$url = $o_url;
 } else {
