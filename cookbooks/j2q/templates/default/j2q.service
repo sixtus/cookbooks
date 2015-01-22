@@ -1,0 +1,16 @@
+[Unit]
+After=network-online.target
+
+[Service]
+ExecStart=<%= @path %>/current/j2q \
+	-environment <%= node.chef_environment %> \
+	-cluster <%= node.cluster_name %> \
+	-kafka <%= kafka_connect(node.cluster_name) %>
+User=root
+Group=root
+Restart=always
+WorkingDirectory=<%= @path %>/current
+SyslogIdentifier=%p
+
+[Install]
+WantedBy=multi-user.target
