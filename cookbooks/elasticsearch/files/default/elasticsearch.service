@@ -1,0 +1,16 @@
+[Unit]
+Description=ElasticSearch
+After=network.target
+
+[Service]
+ExecStart=/var/app/elasticsearch/bin/elasticsearch
+User=elasticsearch
+Group=elasticsearch
+SyslogIdentifier=%p
+OOMScoreAdjust=-1
+Nice=-5
+IOSchedulingPriority=2
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
