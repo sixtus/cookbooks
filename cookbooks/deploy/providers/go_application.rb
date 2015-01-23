@@ -13,6 +13,7 @@ action :create do
     cookbook "deploy"
     owner nr.user
     mode "0644"
+    action :delete unless nr.repository =~ /.*@.*:.*/
   end
 
   directory "#{path}/.go" do
