@@ -1,9 +1,12 @@
 {
-  "name": "nepal",
-  "description": "Nepal",
+  "name": "nepal54",
+  "description": "Nepal with PHP 5.4",
   "override_attributes": {
     "skip": {
       "postfix_satelite": true
+    },
+    "php": {
+      "slot": "5.4"
     }
   },
   "run_list": [

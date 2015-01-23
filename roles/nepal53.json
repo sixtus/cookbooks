@@ -1,0 +1,16 @@
+{
+  "name": "nepal53",
+  "description": "Nepal with PHP 5.3",
+  "override_attributes": {
+    "skip": {
+      "postfix_satelite": true
+    },
+    "php": {
+      "slot": "5.3"
+    }
+  },
+  "run_list": [
+    "role[base]",
+    "recipe[nepal]"
+  ]
+}
