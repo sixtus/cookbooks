@@ -37,12 +37,14 @@ php_extension "sourceguardian" do
   template "web/sourceguardian.ini"
 end
 
-cookbook_file "#{node[:php][:extension_dir]}/ZendGuardLoader-#{node[:php][:slot]}.so" do
-  source "web/ZendGuardLoader-#{node[:php][:slot]}.so"
-end
+if %w(5.3 5.4).include?(node[:php][:slot])
+  cookbook_file "#{node[:php][:extension_dir]}/ZendGuardLoader-#{node[:php][:slot]}.so" do
+    source "web/ZendGuardLoader-#{node[:php][:slot]}.so"
+  end
 
-php_extension "zendguard" do
-  template "web/zendguard.ini"
+  php_extension "zendguard" do
+    template "web/zendguard.ini"
+  end
 end
 
 include_recipe "apache::fastcgi"
