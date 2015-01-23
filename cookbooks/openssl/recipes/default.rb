@@ -25,6 +25,7 @@ if root?
 
   if filenames.include?("ca.crt")
     if node[:chef_domain]
+      ssl_ca "/usr/share/ca-certificates/chef-ca"
       ssl_ca "/usr/local/share/ca-certificates/chef-ca"
 
       ssl_certificate "/etc/ssl/certs/wildcard.#{node[:chef_domain]}" do
@@ -46,14 +47,9 @@ if root?
 
     only_if do
       require 'find'
-
-      result = false
-
-      Find.find('/etc/ssl/certs') do |path|
-        result = true if File.symlink?(path) and not File.exist?(path)
+      Find.find('/etc/ssl/certs').any? do |path|
+        File.symlink?(path) and not File.exist?(path)
       end
-
-      result
     end
   end
 end

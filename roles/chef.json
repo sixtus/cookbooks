@@ -3,6 +3,7 @@
   "description": "Chef Server",
   "run_list": [
     "role[base]",
-    "recipe[chef::server]"
+    "recipe[chef::server]",
+    "recipe[openssl::certmaster]"
   ]
 }

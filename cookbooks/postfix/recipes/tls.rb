@@ -29,7 +29,7 @@ end
 
 if nagios_client?
   nrpe_command "check_postfix_tls" do
-    command "/usr/lib/nagios/plugins/check_ssl_server -H localhost -n #{node[:fqdn]} -P smtp -p 25 -w 21 -c 7"
+    command "/usr/lib/nagios/plugins/check_ssl_server -H localhost -n #{node[:fqdn]} -r /etc/ssl/certs/ca-certificates.crt -P smtp -p 25 -w 21 -c 7"
   end
 
   nagios_service "POSTFIX-TLS" do
