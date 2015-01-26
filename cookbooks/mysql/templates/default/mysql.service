@@ -4,7 +4,11 @@ ConditionPathExists=/etc/mysql/my.cnf
 After=network.target
 
 [Service]
+<% if node[:mysql][:server][:replicate_do_db] %>
+ExecStart=/usr/sbin/mysqld --log-error=/dev/stderr <%= node[:mysql][:server][:replicate_do_db].map{|db| "--binlog-do-db=#{db} --replicate-do-db=#{db}" }.join(' ') %>
+<% else %>
 ExecStart=/usr/sbin/mysqld --log-error=/dev/stderr
+<% end %>
 ExecStartPost=/usr/libexec/mysqld-wait-ready $MAINPID
 Restart=always
 User=mysql

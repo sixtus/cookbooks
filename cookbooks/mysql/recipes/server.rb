@@ -65,7 +65,10 @@ if gentoo?
     end
 
     systemd_tmpfiles "mysql"
-    systemd_unit "mysql.service"
+
+    systemd_unit "mysql.service" do
+      template true
+    end
 
     service "mysql" do
       action [:enable, :start]
