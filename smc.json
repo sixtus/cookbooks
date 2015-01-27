@@ -1,0 +1,7 @@
+{
+  "name": "smc",
+  "run_list": [
+    "role[base]",
+    "recipe[smc]"
+  ]
+}
