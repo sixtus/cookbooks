@@ -3,6 +3,8 @@
   "default_attributes": {
     "camus": {
       "topics": [
+        "druid",
+        "journal",
         "metrics"
       ]
     }
