@@ -28,7 +28,9 @@ default[:druid][:processing][:numThreads] = [node[:cpu][:total]-1, 1].max
 default[:druid][:processing][:memory] = (node[:druid][:processing][:buffer]*(node[:druid][:processing][:numThreads]+1)/1048576.0)
 
 # Metrics Module
-default[:druid][:monitors] = []
+default[:druid][:monitors] = [
+  "com.metamx.metrics.JvmMonitor",
+]
 
 # Storage Node Module
 default[:druid][:server][:max_size] = 1 * 1024 * 1024 * 1024

@@ -32,11 +32,15 @@ JVM_OPTS+=" -Dcom.sun.management.jmxremote.ssl=false"
 <% case @service %>
 <% when "realtime" %>
 <% monitors += ["io.druid.segment.realtime.RealtimeMetricsMonitor"] %>
-JVM_OPTS+=" -Ddruid.realtime.specFile=/etc/druid/realtime.spec"
 JVM_OPTS+=" -Ddruid.server.tier=realtime"
+JVM_OPTS+=" -Ddruid.realtime.specFile=/etc/druid/realtime.spec"
 <% when "historical" %>
+<% monitors += ["io.druid.client.cache.CacheMonitor"] %>
 JVM_OPTS+=" -Ddruid.server.tier=<%= node[:druid][:server][:tier] %>"
 JVM_OPTS+=" -Ddruid.server.maxSize=<%= node[:druid][:server][:max_size] %>"
+<% when "broker" %>
+<% monitors += ["io.druid.client.cache.CacheMonitor", "io.druid.server.metrics.ServerMonitor"] %>
+JVM_OPTS+=" -Ddruid.server.tier=broker"
 <% else %>
 JVM_OPTS+=" -Ddruid.server.tier=<%= @service %>"
 <% end %>
