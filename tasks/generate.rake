@@ -42,9 +42,11 @@ namespace :generate do
   end
 
   desc "Generate a default OpenVPN/Tunnelblick config"
-  task :tunnelblick do
+  task :tunnelblick, :login do |t, args|
+    args.with_defaults(login: Chef::Config[:node_name])
+
     remote = "vpn." + URI.parse(Chef::Config[:chef_server_url]).host.split('.')[1..-1].join('.')
-    login = Chef::Config[:node_name]
+    login = args.login
 
     b = binding()
     erb = Erubis::Eruby.new(File.read(File.join(TEMPLATES_DIR, 'openvpn.conf')))
