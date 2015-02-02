@@ -13,6 +13,27 @@ service "hdfs@namenode" do
   subscribes :restart, "template[/etc/hadoop2/hdfs-site.xml]"
 end
 
+gem_package "webhdfs"
+
+template "/var/app/hadoop2/current/bin/clean_hdfs" do
+  source "clean_hdfs"
+  owner "hadoop2"
+  group "hadoop2"
+  mode "0755"
+end
+
+if hadoop2_namenodes.first
+  primary = (node[:fqdn] == hadoop2_namenodes.first[:fqdn])
+else
+  primary = true
+end
+
+systemd_timer "clean_hdfs" do
+  schedule %w(OnCalendar=hourly)
+  action :delete unless primary
+  unit command: "/var/app/hadoop2/current/bin/clean_hdfs"
+end
+
 nrpe_command "check_hdfs_namenode_stat" do
   command "/usr/lib/nagios/plugins/check_jstat -j org.apache.hadoop.hdfs.server.namenode.NameNode"
 end

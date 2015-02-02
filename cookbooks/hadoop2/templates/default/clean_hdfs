@@ -1,0 +1,44 @@
+#!/usr/bin/env ruby
+
+require 'json'
+require 'date'
+require 'webhdfs'
+
+NAMENODES = <%= hadoop2_namenodes.map { |n| n[:fqdn] }.to_json %>
+
+NAMENODES.each do |host|
+  begin
+    $client = WebHDFS::Client.new(host, 50070)
+    $client.list('/')
+    break
+  rescue WebHDFS::IOError
+    $client = nil
+  end
+end
+
+raise "no namenode is up and running" unless $client
+
+def clean_directory(path, mtime)
+  $client.list(path).each do |entry|
+    subpath = File.join(path, entry['pathSuffix'])
+    if entry['type'] == 'DIRECTORY'
+      clean_directory(subpath, mtime)
+      subfiles = $client.list(subpath)
+      if subfiles.empty?
+        puts "deleting empty folder: #{subpath}"
+        $client.delete(subpath)
+      else
+        puts "skipping non-empty folder: #{subpath}"
+      end
+    else
+      if entry['modificationTime'] < mtime
+        puts "deleting old file: #{subpath}"
+        $client.delete(subpath)
+      end
+    end
+  end
+end
+
+<% node[:hadoop2][:hdfs][:clean].each do |dir, days| %>
+clean_directory("<%= dir %>", (Time.now.to_i - <%= days %> * 24 * 60 * 60) * 1000)
+<% end %>
