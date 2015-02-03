@@ -41,6 +41,14 @@ action :create do
         user nr.user
       end
 
+      rvm_shell "#{nr.user}-lockjar-install" do
+        only_if { ::File.exists?("Jarfile.lock") }
+
+        code "bin/lockjar install"
+        cwd release_path
+        user nr.user
+      end
+
       ruby_block "#{nr.user}-after-bundle" do
         block do
           callback(:after_bundle, nr.after_bundle)
