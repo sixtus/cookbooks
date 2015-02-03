@@ -36,7 +36,7 @@ action :create do
       end
 
       rvm_shell "#{nr.user}-bundle-install" do
-        code "bundle install --path #{path}/shared/bundle --quiet --deployment --without '#{[nr.bundle_without].flatten.join(' ')}'"
+        code "bundle install --path #{path}/shared/bundle --binstubs --quiet --deployment --without '#{[nr.bundle_without].flatten.join(' ')}'"
         cwd release_path
         user nr.user
       end
