@@ -3,7 +3,8 @@ include_recipe "java"
 deploy_skeleton "druid"
 
 %w(
-  /etc/druid
+  /var/app/druid/config
+  /var/app/druid/config/_common
   /var/app/druid/storage
   /var/app/druid/storage/tmp
   /var/app/druid/storage/info
@@ -40,8 +41,8 @@ template "/etc/druid/log4j.properties" do
   mode "0644"
 end
 
-template "/etc/druid/runtime.properties" do
-  source "runtime.properties"
+template "/var/app/druid/config/_common/common.runtime.properties" do
+  source "common.runtime.properties"
   owner "root"
   group "root"
   mode "0644"

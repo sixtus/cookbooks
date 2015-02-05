@@ -31,10 +31,10 @@ if nagios_client?
     command "/usr/lib/nagios/plugins/check_druid -m Usage -u http://localhost:#{node[:druid][:coordinator][:port]}/info/servers?full -w 90 -c 95"
   end
 
-  nagios_service "DRUID-USAGE" do
-    check_command "check_nrpe!check_druid_usage"
-    servicegroups "druid"
-  end
+  #nagios_service "DRUID-USAGE" do
+  #  check_command "check_nrpe!check_druid_usage"
+  #  servicegroups "druid"
+  #end
 
   druid_databases = node[:druid][:nagios][:topics]
 

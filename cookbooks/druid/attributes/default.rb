@@ -1,5 +1,5 @@
 default[:druid][:git][:repository] = "https://github.com/metamx/druid"
-default[:druid][:git][:revision] = "druid-0.6.160"
+default[:druid][:git][:revision] = "druid-0.7.0-rc2"
 
 default[:druid][:cluster] = node.cluster_name
 
@@ -10,9 +10,10 @@ default[:dumbo][:git][:repository] = "https://github.com/remerge/druid-dumbo"
 
 # Modules
 default[:druid][:core_extensions] = [
-  "hdfs-storage",
-  "kafka-eight",
-  "histogram",
+  "mysql-metadata-storage",
+  "druid-hdfs-storage",
+  "druid-kafka-eight",
+  "druid-histogram",
 ]
 
 default[:druid][:extensions] = []

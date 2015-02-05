@@ -27,27 +27,8 @@ JVM_OPTS+=" -Dcom.sun.management.jmxremote.port=$JMXPORT"
 JVM_OPTS+=" -Dcom.sun.management.jmxremote.authenticate=false"
 JVM_OPTS+=" -Dcom.sun.management.jmxremote.ssl=false"
 
-# service specific properties
-<% monitors = node[:druid][:monitors] %>
-<% case @service %>
-<% when "realtime" %>
-<% monitors += ["io.druid.segment.realtime.RealtimeMetricsMonitor"] %>
-JVM_OPTS+=" -Ddruid.server.tier=realtime"
-JVM_OPTS+=" -Ddruid.realtime.specFile=/etc/druid/realtime.spec"
-<% when "historical" %>
-<% monitors += ["io.druid.client.cache.CacheMonitor"] %>
-JVM_OPTS+=" -Ddruid.server.tier=<%= node[:druid][:server][:tier] %>"
-JVM_OPTS+=" -Ddruid.server.maxSize=<%= node[:druid][:server][:max_size] %>"
-<% when "broker" %>
-<% monitors += ["io.druid.client.cache.CacheMonitor", "io.druid.server.metrics.ServerMonitor"] %>
-JVM_OPTS+=" -Ddruid.server.tier=broker"
-<% else %>
-JVM_OPTS+=" -Ddruid.server.tier=<%= @service %>"
-<% end %>
-JVM_OPTS+=' -Ddruid.monitoring.monitors=<%= monitors.to_json %>'
-
 # build the classpath - use node[:druid][:extensions] for more
-CLASSPATH="/etc/druid"
+CLASSPATH="/var/app/druid/config/_common:/var/app/druid/config/<%= @service %>"
 CLASSPATH+=":$(/usr/bin/find /var/app/druid/current/services/target/*selfcontained.jar)"
 
 # add hadoop if it exists

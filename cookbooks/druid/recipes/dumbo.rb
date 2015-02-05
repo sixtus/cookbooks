@@ -30,17 +30,17 @@ template "/var/app/dumbo/current/config.yml" do
   mode "0644"
 end
 
-systemd_unit "druid-dumbo.service" do
-  template true
-end
+#systemd_unit "druid-dumbo.service" do
+#  template true
+#end
 
-if druid_dumbo_nodes.first
-  primary = (node[:fqdn] == druid_dumbo_nodes.first[:fqdn])
-else
-  primary = true
-end
+#if druid_dumbo_nodes.first
+#  primary = (node[:fqdn] == druid_dumbo_nodes.first[:fqdn])
+#else
+#  primary = true
+#end
 
-systemd_timer "druid-dumbo" do
-  schedule %w(OnCalendar=*:45)
-  action :delete unless primary
-end
+#systemd_timer "druid-dumbo" do
+#  schedule %w(OnCalendar=*:55)
+#  action :delete unless primary
+#end
