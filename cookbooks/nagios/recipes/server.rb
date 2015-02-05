@@ -117,25 +117,16 @@ end
 
 # create nagios objects
 nagios_conf "commands"
-
-nagios_conf "templates" do
-  variables :hostmasters => hostmasters
-end
-
-nagios_conf "contacts" do
-  variables :contacts => contacts
-end
-
-nagios_conf "timeperiods" do
-  variables :contacts => contacts
-end
+nagios_conf "contacts"
+nagios_conf "templates"
+nagios_conf "timeperiods"
 
 nagios_conf "hostgroups" do
-  variables :hostgroups => hostgroups
+  variables hostgroups: hostgroups
 end
 
 nagios_conf "servicegroups" do
-  variables :hosts => hosts
+  variables hosts: hosts
 end
 
 hosts.each do |host|
