@@ -1,2 +1,2 @@
-package "dev-db/postgresql-base"
+package "dev-db/postgresql"
 package "dev-ruby/pg"
