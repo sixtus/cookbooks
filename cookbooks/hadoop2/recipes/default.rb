@@ -15,6 +15,7 @@ deploy_skeleton "hadoop2"
   /var/app/hadoop2/storage/namenode
   /var/app/hadoop2/storage/datanode
   /var/app/hadoop2/storage/nodemanager
+  /var/app/hadoop2/storage/nodemanager/filecache
 ).each do |dir|
   directory dir do
     owner "hadoop2"
