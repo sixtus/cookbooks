@@ -5,7 +5,7 @@ default_unless[:contacts][:mysql] = "root@#{node[:fqdn]}"
 # connection info (overriden in server recipe)
 default[:mysql][:connection][:host] = 'localhost'
 default[:mysql][:connection][:username] = 'root'
-default[:mysql][:connection][:password] = ''
+default[:mysql][:connection][:password] = File.read("/root/.my.cnf").split("\n").find { |x| x =~ /^password/ }.split.last rescue ''
 
 # paths
 default[:mysql][:server][:sharedstatedir] = "/usr/share/mysql"
