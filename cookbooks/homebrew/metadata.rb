@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "homebrew"
 description "Homebrew - the missing package manager for Mac OS X"
 
 maintainer "Benedikt Böhm"

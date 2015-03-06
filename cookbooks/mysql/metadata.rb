@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "mysql"
 description "The MySQL database server"
 
 maintainer "Benedikt Böhm"

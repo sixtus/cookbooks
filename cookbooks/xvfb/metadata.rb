@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "xvfb"
 description "Xvfb: headless X server"
 
 maintainer "Benedikt Böhm"

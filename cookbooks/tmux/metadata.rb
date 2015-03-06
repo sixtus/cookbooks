@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "tmux"
 description "tmux is a terminal multiplexer"
 
 maintainer "Benedikt Böhm"

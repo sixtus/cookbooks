@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "jira"
 description "JIRA"
 
 maintainer "Benedikt Böhm"

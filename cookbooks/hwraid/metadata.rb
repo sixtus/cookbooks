@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "hwraid"
 description "Hardware RAID utilities"
 
 maintainer "Benedikt Böhm"

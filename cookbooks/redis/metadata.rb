@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "redis"
 description "Redis is an open source, advanced key-value store"
 
 maintainer "Benedikt Böhm"

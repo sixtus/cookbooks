@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "lftp"
 description "LFTP is a file transfer program supporting a number of network protocols"
 
 maintainer "Benedikt Böhm"

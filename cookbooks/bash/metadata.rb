@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "bash"
 description "bash - the Bourne-again shell"
 
 maintainer "Benedikt Böhm"

@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "apache"
 description "The Apache web server"
 
 maintainer "Benedikt Böhm"

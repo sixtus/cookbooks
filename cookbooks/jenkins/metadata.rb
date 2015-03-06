@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "jenkins"
 description "Jenkins continuous integration server"
 
 maintainer "Benedikt Böhm"

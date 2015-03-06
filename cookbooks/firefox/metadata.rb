@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "firefox"
 description "Mozilla Firefox Web Browser"
 
 maintainer "Benedikt Böhm"

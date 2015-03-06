@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "imagemagick"
 description "Install ImageMagick"
 
 maintainer "Benedikt Böhm"

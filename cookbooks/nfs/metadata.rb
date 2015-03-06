@@ -1,3 +1,6 @@
+# encoding: utf-8
+
+name "nfs"
 description "Network Filesystem"
 
 maintainer "Benedikt Böhm"

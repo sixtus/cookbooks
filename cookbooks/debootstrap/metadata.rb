@@ -1,3 +1,6 @@
+# encoding: utf-8
+
+name "debootstrap"
 description "Debian Bootstrap tool"
 
 maintainer "Benedikt Böhm"

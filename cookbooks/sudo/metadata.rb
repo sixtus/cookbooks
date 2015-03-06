@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "sudo"
 description "sudo"
 
 maintainer "Benedikt Böhm"

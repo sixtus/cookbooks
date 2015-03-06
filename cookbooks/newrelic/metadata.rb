@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "newrelic"
 description "New Relic Server Monitoring"
 
 maintainer "Benedikt Böhm"

@@ -1,3 +1,6 @@
+# encoding: utf-8
+
+name "zfs"
 description "ZFS"
 
 maintainer "Benedikt Böhm"

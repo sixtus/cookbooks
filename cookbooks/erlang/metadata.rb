@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "erlang"
 description "The Erlang VM"
 
 maintainer "Benedikt Böhm"

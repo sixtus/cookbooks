@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "mac"
 description "Mac OS X defaults and applications"
 
 maintainer "Benedikt Böhm"

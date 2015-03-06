@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "java"
 description "The Java Programming Language VM"
 
 maintainer "Benedikt Böhm"

@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "linux"
 description "Basic Linux specific resources"
 
 maintainer "Benedikt Böhm"

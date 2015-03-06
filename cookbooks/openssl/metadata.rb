@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "openssl"
 description "OpenSSL"
 
 maintainer "Benedikt Böhm"

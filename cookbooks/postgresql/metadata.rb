@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "postgresql"
 description "PostgreSQL Database Server"
 
 maintainer "Benedikt Böhm"

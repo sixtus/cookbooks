@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "lib_users"
 description "Find processes that use files that have been updated or deleted"
 
 maintainer "Benedikt Böhm"

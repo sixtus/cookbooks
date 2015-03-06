@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "nepal"
 description "Nepal - a web hosting control panel"
 
 maintainer "Benedikt Böhm"

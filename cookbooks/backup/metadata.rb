@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "backup"
 description "Create SSH/SFTP accounts for backup storage"
 
 maintainer "Benedikt Böhm"

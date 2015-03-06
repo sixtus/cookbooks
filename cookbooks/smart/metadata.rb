@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "smart"
 description "S.M.A.R.T. is a monitoring system for computer hard disk drives"
 
 maintainer "Benedikt Böhm"

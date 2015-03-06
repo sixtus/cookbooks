@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "kafka"
 description "Kafka"
 
 maintainer "Hagen Rother"

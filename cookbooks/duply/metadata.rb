@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "duply"
 description "Duply is a wrapper for duplicity backups"
 
 maintainer "Benedikt Böhm"

@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "dovecot"
 description "IMAP and POP3 server written with security primarily in mind"
 
 maintainer "Benedikt Böhm"

@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "nagios"
 description "Nagios Is The Industry Standard In IT Infrastructure Monitoring"
 
 maintainer "Benedikt Böhm"

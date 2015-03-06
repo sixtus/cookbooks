@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "confluence"
 description "Confluence"
 
 maintainer "Benedikt Böhm"

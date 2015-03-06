@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "rvm"
 description "The Ruby Version Manager"
 
 maintainer "Benedikt Böhm"

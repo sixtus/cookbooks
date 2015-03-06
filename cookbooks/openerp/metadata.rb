@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "openerp"
 description "OpenERP Business Applications"
 
 maintainer "Benedikt Böhm"

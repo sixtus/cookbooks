@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "shorewall"
 description "Shorewall is a gateway/firewall configuration tool for GNU/Linux"
 
 maintainer "Benedikt Böhm"

@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "apt"
 description "Configures apt and apt services and LWRPs for managing apt repositories and preferences"
 
 maintainer "Benedikt Böhm"

@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "systemd"
 description "systemd is a system and service manager for Linux"
 
 maintainer "Benedikt Böhm"

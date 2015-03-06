@@ -1,3 +1,6 @@
+# encoding: utf-8
+
+name "j2q"
 description "systemd journal to kafka"
 
 maintainer "Benedikt Böhm"

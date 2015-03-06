@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "htop"
 description "HTop"
 
 maintainer "Benedikt Böhm"

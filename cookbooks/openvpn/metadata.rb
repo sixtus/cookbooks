@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "openvpn"
 description "OpenVPN"
 
 maintainer "Benedikt Böhm"

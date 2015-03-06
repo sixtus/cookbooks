@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "zenops"
 description "ZenOps Continuous Integration & Mirror"
 
 maintainer "Benedikt Böhm"

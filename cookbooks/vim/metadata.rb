@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "vim"
 description "Vim is a highly configurable text editor"
 
 maintainer "Benedikt Böhm"

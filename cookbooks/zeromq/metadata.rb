@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "zeromq"
 description "ZeroMQ"
 
 maintainer "Benedikt Böhm"

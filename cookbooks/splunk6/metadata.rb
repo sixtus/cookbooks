@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "splunk6"
 description "The Splunk Search Engine"
 
 maintainer "Benedikt Böhm"

@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "python"
 description "Python, pip and virtualenv"
 
 maintainer "Benedikt Böhm"

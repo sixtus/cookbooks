@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "core_ext"
 description "Extensions to Ruby and Chef classes"
 
 maintainer "Benedikt Böhm"

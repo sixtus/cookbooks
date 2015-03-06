@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "druid"
 description "Install and configure druid"
 
 maintainer "Hagen Rother"

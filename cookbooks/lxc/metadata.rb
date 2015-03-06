@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "lxc"
 description "Linux Containers"
 
 maintainer "Benedikt Böhm"

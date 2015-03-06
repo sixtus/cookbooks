@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "metro"
 description "Metro - a build tool for Gentoo based system"
 
 maintainer "Benedikt Böhm"

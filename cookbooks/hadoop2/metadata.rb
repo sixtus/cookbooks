@@ -1,3 +1,6 @@
+# encoding: utf-8
+
+name "hadoop2"
 description "Hadoop 2"
 
 maintainer "Hagen Rother"

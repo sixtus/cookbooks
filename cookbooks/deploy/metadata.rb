@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "deploy"
 description "LWRPs for application deployment"
 
 maintainer "Benedikt Böhm"

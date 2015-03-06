@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "watchdog"
 description "Software watchdog for Linux"
 
 maintainer "Igor Susman"

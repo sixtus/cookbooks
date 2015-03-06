@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "nginx"
 description "nginx is a high performance web server"
 
 maintainer "Benedikt Böhm"

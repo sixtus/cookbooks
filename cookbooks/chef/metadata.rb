@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "chef"
 description "The Chef Server"
 
 maintainer "Benedikt Böhm"

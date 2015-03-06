@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "libxslt"
 description "Libxslt is the XSLT C library developed for the Gnome project"
 
 maintainer "Benedikt Böhm"

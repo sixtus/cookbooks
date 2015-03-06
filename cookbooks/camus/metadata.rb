@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "camus"
 description "Kafka Importer"
 
 maintainer "Hagen Rother"

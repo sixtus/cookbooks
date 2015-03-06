@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "virtualbox"
 description "VirtualBox"
 
 maintainer "Benedikt Böhm"

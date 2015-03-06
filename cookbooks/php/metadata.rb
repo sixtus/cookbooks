@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "php"
 description "The PHP programing language"
 
 maintainer "Benedikt Böhm"

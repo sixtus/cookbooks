@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "rabbitmq"
 description "RabbitMQ - an AMQP message broker"
 
 maintainer "Benedikt Böhm"

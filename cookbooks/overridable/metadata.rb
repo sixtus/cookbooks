@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "overridable"
 description "LWRP for user overridable templates"
 
 maintainer "Benedikt Böhm"

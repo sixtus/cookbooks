@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "gitlab"
 description "Self hosted Git management software"
 
 maintainer "Benedikt Böhm"

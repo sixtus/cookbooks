@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "git"
 description "Git - the distributed version control system"
 
 maintainer "Benedikt Böhm"

@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "mdadm"
 description "Linux Software RAID utilities"
 
 maintainer "Benedikt Böhm"

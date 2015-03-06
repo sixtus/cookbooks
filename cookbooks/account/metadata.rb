@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "account"
 description "Create user accounts from data bags"
 
 maintainer "Benedikt Böhm"

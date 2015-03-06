@@ -1,3 +1,6 @@
+# encoding: utf-8
+
+name "dnsmasq"
 description "dnsmasq"
 
 maintainer "Benedikt Böhm"

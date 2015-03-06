@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "memcached"
 description "memcached - a distributed memory object caching system"
 
 maintainer "Benedikt Böhm"

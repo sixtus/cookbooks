@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "base"
 description "Meta cookbook for basic system services"
 
 maintainer "Benedikt Böhm"

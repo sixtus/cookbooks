@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "ssh"
 description "OpenSSH client and server"
 
 maintainer "Benedikt Böhm"

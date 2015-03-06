@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "spawn-fcgi"
 description "Spawn FastCGI processes"
 
 maintainer "Benedikt Böhm"

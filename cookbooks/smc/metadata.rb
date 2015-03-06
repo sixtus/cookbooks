@@ -1,3 +1,6 @@
+# encoding: utf-8
+
+name "smc"
 description "System Metrics Collector"
 
 maintainer "Benedikt Böhm"

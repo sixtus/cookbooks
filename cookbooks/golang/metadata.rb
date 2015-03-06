@@ -1,3 +1,6 @@
+# encoding: utf-8
+
+name "golang"
 description "Go Language"
 
 maintainer "Benedikt Böhm"
