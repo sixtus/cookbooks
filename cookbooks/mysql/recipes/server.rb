@@ -106,7 +106,7 @@ if gentoo?
       backup 0
     end
 
-    backupdir = "/var/lib/mysql/backup"
+    backupdir = "/var/lib/mysql/.backup"
 
     directory backupdir do
       owner "root"
