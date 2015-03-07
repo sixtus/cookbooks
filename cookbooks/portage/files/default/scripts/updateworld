@@ -11,9 +11,9 @@ depclean() {
 }
 
 latest_ruby() {
-	if eselect ruby list | grep -q ruby19; then
-		if ! eselect ruby show | grep -q ruby19; then
-			eselect ruby set ruby19
+	if eselect ruby list | grep -q ruby22; then
+		if ! eselect ruby show | grep -q ruby22; then
+			eselect ruby set ruby22
 		fi
 	fi
 }
