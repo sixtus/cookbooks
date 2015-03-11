@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ -e /lxc/$1/rootfs/usr/lib/systemd/systemd ]]; then
-	/usr/sbin/lxc-start -n $1 -- /usr/lib/systemd/systemd
+	/usr/sbin/lxc-start -F -n $1 -- /usr/lib/systemd/systemd
 else
-	/usr/sbin/lxc-start -n $1
+	/usr/sbin/lxc-start -F -n $1
 fi

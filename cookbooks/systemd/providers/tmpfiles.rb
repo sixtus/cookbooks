@@ -1,7 +1,7 @@
 use_inline_resources
 
 action :create do
-  directory "/etc/tmpfiles.d-#{rrand}" do
+  directory "/etc/tmpfiles.d" do
     path "/etc/tmpfiles.d"
     owner "root"
     group "root"

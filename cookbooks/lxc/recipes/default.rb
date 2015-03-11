@@ -59,6 +59,13 @@ directory "/usr/share/lxc/templates" do
   mode "0755"
 end
 
+cookbook_file "/usr/share/lxc/config/common.conf" do
+  source "common.conf"
+  owner "root"
+  group "root"
+  mode "0644"
+end
+
 %w(gentoo ubuntu).each do |platform|
   cookbook_file "/usr/share/lxc/templates/lxc-#{platform}" do
     source "lxc-#{platform}"

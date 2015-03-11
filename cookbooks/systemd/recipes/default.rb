@@ -17,6 +17,20 @@ if gentoo?
       mode "0644"
     end
 
+    cookbook_file "/usr/lib/tmpfiles.d/etc.conf" do
+      source "etc.conf"
+      owner "root"
+      group "root"
+      mode "0644"
+      notifies :restart, "service[systemd-tmpfiles-setup.service]"
+    end
+
+    service "systemd-tmpfiles-setup.service" do
+      action [:enable, :start]
+      provider Chef::Provider::Service::Systemd
+      only_if { systemd_running? }
+    end
+
     # journal
     systemd_unit "systemd-journald.socket"
 

@@ -4,7 +4,7 @@ action :create do
   if root?
     path = "/usr/lib/systemd/system/#{new_resource.name}"
 
-    directory "/usr/lib/systemd/system-#{rrand}" do
+    directory "/usr/lib/systemd/system" do
       path "/usr/lib/systemd/system"
       owner "root"
       group "root"

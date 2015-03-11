@@ -8,6 +8,7 @@ ExecStartPre=/usr/libexec/lxc/lxc-devsetup
 ExecStart=/usr/libexec/lxc/lxc-start %i
 ExecReload=/usr/sbin/lxc-restart -n %i
 ExecStop=/usr/sbin/lxc-stop -n %i
+Delegate=Yes
 
 [Install]
 WantedBy=multi-user.target
