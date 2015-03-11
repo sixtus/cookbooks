@@ -99,38 +99,6 @@ class Chef
           @candidate_version ||= package_info[:candidate_version] rescue nil
         end
 
-        def action_install
-          # If we specified a version, and it's not the current version, move to the specified version
-          if !@new_resource.version.nil? && !(target_version_already_installed?)
-            install_version = @new_resource.version
-            # If it's not installed at all, install it
-          elsif @current_resource.version.nil?
-            install_version = candidate_version
-          else
-            Chef::Log.debug("#{@new_resource} is already installed - nothing to do")
-            return
-          end
-
-          # We need to make sure we handle the preseed file
-          if @new_resource.response_file
-            if preseed_file = get_preseed_file(@new_resource.package_name, install_version)
-              converge_by("preseed package #{@new_resource.package_name}") do
-                preseed_package(preseed_file)
-              end
-            end
-          end
-
-          description = install_version ? "version #{install_version} of" : ""
-          converge_by("install #{description} package #{@new_resource.package_name}") do
-            @new_resource.version(install_version)
-            install_package(@new_resource.package_name, install_version)
-          end
-        end
-
-        def action_upgrade
-          action_install
-        end
-
         def package_info
           packages_cache_from_eix
           @@packages_cache[@new_resource.package_name]
