@@ -1,0 +1,13 @@
+{
+  "name": "php54",
+  "description": "PHP 5.4",
+  "override_attributes": {
+    "php": {
+      "slot": "5.4"
+    }
+  },
+  "run_list": [
+    "role[base]",
+    "recipe[php]"
+  ]
+}
