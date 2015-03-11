@@ -23,8 +23,9 @@ is_chef() {
 }
 
 run_chef() {
+	echo "* running chef on $(hostname -f) at $(date -u)"
 	if [[ -e /etc/chef/client.pem ]]; then
-		chef-client
+		chef-client --force-logger -l warn
 	elif [[ -e /root/chef/bin/chef ]]; then
 		pushd /root/chef >/dev/null
 		./bin/chef
@@ -57,8 +58,17 @@ fi
 # dummy run emerge first, so global updates don't clutter the output.
 emerge --info &>/dev/null
 
-# some cleanups
-emerge -C sys-apps/ack virtual/perl-Test-Simple || :
+# remove packages that do not exist in the repository
+installed=$(mktemp)
+qlist -IC | sort -u > ${installed}
+
+available=$(mktemp)
+eix --pure-packages --nocolor --format "<category>/<name>\n" | sort -u > ${available}
+
+orphans=$(comm -2 -3 ${installed} ${available})
+if [[ -n ${orphans} ]]; then
+	emerge -Ca ${orphans}
+fi
 
 # install updates
 if [[ -z $UPDATEWORLD_DONT_ASK ]]; then
