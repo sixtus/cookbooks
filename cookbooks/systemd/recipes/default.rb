@@ -22,13 +22,6 @@ if gentoo?
       owner "root"
       group "root"
       mode "0644"
-      notifies :restart, "service[systemd-tmpfiles-setup.service]"
-    end
-
-    service "systemd-tmpfiles-setup.service" do
-      action [:enable, :start]
-      provider Chef::Provider::Service::Systemd
-      only_if { systemd_running? }
     end
 
     # journal
