@@ -1,5 +1,11 @@
 # Chef package provider for Homebrew
 
+begin
+  require 'open4'
+  include Open4
+rescue LoadError
+end
+
 require 'chef/provider/package'
 require 'chef/resource/package'
 require 'chef/platform'

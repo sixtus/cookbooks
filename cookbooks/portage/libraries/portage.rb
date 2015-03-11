@@ -1,3 +1,9 @@
+begin
+  require 'open4'
+  include Open4
+rescue LoadError
+end
+
 module Gentoo
   module Portage
     module PackageConf
@@ -78,6 +84,7 @@ class Chef
   class Provider
     class Package
       class Portage < Chef::Provider::Package
+        include Chef::Mixin::ShellOut
 
         def load_current_resource
           @current_resource = Chef::Resource::Package.new(@new_resource.name)
@@ -142,7 +149,7 @@ class Chef
             raise Chef::Exceptions::Package, "You need to install app-portage/eix for fast package searches."
           end
 
-          Chef::Mixin::Command.run_command_with_systems_locale(:command => eix_update)
+          shell_out!(eix_update)
 
           query_command = [
             eix,
@@ -174,9 +181,7 @@ class Chef
 
         def install_package(name, version)
           pkg = full_package_atom(name, version)
-          run_command_with_systems_locale(
-            :command => "/usr/bin/sudo -H /usr/bin/emerge --color=n --nospinner --quiet -Nnu #{expand_options(@new_resource.options)} #{pkg}"
-          )
+          shell_out!("/usr/bin/sudo -H /usr/bin/emerge --color=n --nospinner --quiet -Nnu #{expand_options(@new_resource.options)} #{pkg}")
         end
 
         def full_package_atom(package_atom, version = nil)
