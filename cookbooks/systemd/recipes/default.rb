@@ -24,6 +24,17 @@ if gentoo?
       mode "0644"
     end
 
+    # timesyncd
+    service "systemd-timesyncd.service" do
+      action [:enable, :start]
+      provider Chef::Provider::Service::Systemd
+      only_if { systemd_running? && File.exist?("/usr/lib/systemd/system/systemd-timesyncd.service") }
+    end
+
+    execute "timedatectl set-ntp true" do
+      only_if { systemd_running? && File.exist?("/usr/lib/systemd/system/systemd-timesyncd.service") }
+    end
+
     # journal
     systemd_unit "systemd-journald.socket"
 
