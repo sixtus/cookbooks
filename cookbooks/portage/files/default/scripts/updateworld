@@ -23,7 +23,7 @@ is_chef() {
 }
 
 run_chef() {
-	echo "* running chef on $(hostname -f) at $(date -u)"
+	echo ">>> running chef on $(hostname -f) at $(date -u)"
 	if [[ -e /etc/chef/client.pem ]]; then
 		chef-client --force-logger -l warn
 	elif [[ -e /root/chef/bin/chef ]]; then
@@ -65,7 +65,7 @@ qlist -IC | sort -u > ${installed}
 available=$(mktemp)
 eix --pure-packages --nocolor --format "<category>/<name>\n" | sort -u > ${available}
 
-orphans=$(comm -2 -3 ${installed} ${available})
+orphans=$(comm -2 -3 ${installed} ${available} | grep -v '^preserved-libs/')
 if [[ -n ${orphans} ]]; then
 	emerge -Ca ${orphans}
 fi
