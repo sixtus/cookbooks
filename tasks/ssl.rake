@@ -106,7 +106,7 @@ namespace :ssl do
 
   desc "Revoke an existing SSL certificate"
   task :revoke, :cn do |t, args|
-    serial = %x(grep -P '^V\t.*CN=#{args.cn}$' ca/index | awk '{print $3}').chomp
+    serial = %x(grep -P '^V\t.*CN=#{Regexp.escape(args.cn)}$' ca/index | awk '{print $3}').chomp
 
     if serial.empty?
       puts "can only revoke my own certificates. skipping #{args.cn} ..."
@@ -127,7 +127,7 @@ namespace :ssl do
     Dir[SSL_CERT_DIR + "/*.crt"].each do |crt|
       %x(#{ROOT}/cookbooks/openssl/files/default/check_ssl_cert -n -c #{crt})
       if $?.exitstatus != 0
-        fqdn = File.basename(crt).gsub(/\.crt$/, '')
+        fqdn = File.basename(crt).gsub(/\.crt$/, '').gsub('wildcard', '*')
         args = Rake::TaskArguments.new([:cn], [fqdn])
         Rake::Task["ssl:revoke"].execute(args)
         Rake::Task["ssl:do_cert"].execute(args)

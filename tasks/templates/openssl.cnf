@@ -21,7 +21,7 @@ crlnumber        = $SSL_CA_DIR/crlnumber
 
 default_days     = 365
 default_crl_days = 30
-default_md       = sha1
+default_md       = sha256
 
 policy           = policy_match
 email_in_dn      = no
@@ -48,7 +48,7 @@ emailAddress           = optional
 [ req ]
 default_bits       = 2048
 default_keyfile    = privkey.pem
-default_md         = sha1
+default_md         = sha256
 distinguished_name = req_distinguished_name
 x509_extensions    = v3_ca
 
