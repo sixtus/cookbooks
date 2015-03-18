@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+name "users"
 description "Cookbook for user overrides"
 
 maintainer "Benedikt Böhm"
