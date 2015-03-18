@@ -101,7 +101,7 @@ namespace :node do
     run_task('ssl:do_cert', args.fqdn)
     knife :upload, ["cookbooks/certificates"]
     key = File.join(ROOT, "tasks/support/id_rsa")
-    sh("knife bootstrap #{args.fqdn} --no-host-key-verify --distro #{ENV['DISTRO']} -P #{args.password} -r 'role[#{ENV['ROLE']}]' -E #{ENV['ENVIRONMENT']} -i #{key}")
+    sh("knife bootstrap #{args.fqdn} --no-host-key-verify --no-node-verify-api-cert --node-ssl-verify-mode none -t #{ENV['DISTRO']} -P #{args.password} -r 'role[#{ENV['ROLE']}]' -E #{ENV['ENVIRONMENT']} -i #{key}")
   end
 
   desc "Update node packages"

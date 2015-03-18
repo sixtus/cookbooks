@@ -2,7 +2,7 @@
 
 export LANG=en_US.UTF-8
 
-fqdn=<%= @config[:server_name] %>
+fqdn=<%= ARGV[1] %>
 hostname=${fqdn/.*}
 domainname=${fqdn#*.}
 
@@ -11,6 +11,8 @@ echo ${hostname} > /etc/hostname
 hostname ${hostname}
 
 timedatectl set-local-rtc 0
+
+ntpdate pool.ntp.org
 
 emerge --sync
 emerge --nospinner --keep-going=n --noreplace --quiet app-admin/chef
