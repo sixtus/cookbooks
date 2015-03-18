@@ -26,7 +26,6 @@ if !root?
 
   remote_file "#{node[:homedir]}/bin/hub" do
     source "http://hub.github.com/standalone"
-    checksum "6094d00f1e10eb6713102b8766d6aef6b7fadf30b9ae2220851fa28e17d4017f"
     mode "0755"
   end
 
