@@ -29,10 +29,10 @@ _BASHRC_DIR="${_BASHRC_DIR:-<%= node[:bash][:rcdir] %>}"
 
 # make sure all important paths are in PATH
 <% if mac_os_x? %>
-export PATH="~/bin:$(brew --prefix coreutils)/libexec/gnubin:/usr/local/sbin:/usr/local/bin:/opt/X11/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+export PATH="~/bin:$(brew --prefix coreutils)/libexec/gnubin:${PATH}"
 alias find="/usr/local/bin/gfind"
 <% else %>
-export PATH="${PATH}:~/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+export PATH="~/bin:${PATH}:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 <% end %>
 
 source "${_BASHRC_DIR}/detect.sh"
