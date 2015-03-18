@@ -48,14 +48,6 @@ if [[ -d /Applications ]]; then
 	# disable mac password temporarily
 	$SUDO sed -i -e 's/^%admin.*/%admin ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers
 
-	if [[ ! -e ~/.storerc ]]; then
-		echo ">>> Please enter you App Store credentials:"
-		read -p 'Apple ID: ' apple_id
-		read -s -p 'Apple Password: ' apple_password
-		echo "${apple_id} ${apple_password}" > ~/.storerc
-		chmod 0400 ~/.storerc
-	fi
-
 	# select the correct xcode version
 	$SUDO "xcode-select" -switch /Applications/Xcode.app/Contents/Developer || exit 1
 
