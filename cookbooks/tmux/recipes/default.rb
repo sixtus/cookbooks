@@ -5,7 +5,7 @@ elsif debian_based?
   package "tmux"
 
 elsif mac_os_x?
-  package "tmux"
+  homebrew_package "tmux"
 
 end
 

@@ -4,8 +4,8 @@ if gentoo?
 elsif debian_based?
   package "git"
 elsif mac_os_x?
-  package "git"
-  package "git-extras"
+  homebrew_package "git"
+  homebrew_package "git-extras"
 end
 
 template node[:git][:rcfile] do

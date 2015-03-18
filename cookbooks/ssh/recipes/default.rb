@@ -6,7 +6,7 @@ elsif debian_based?
   package "openssh-server"
 
 elsif mac_os_x?
-  package "ssh-copy-id"
+  homebrew_package "ssh-copy-id"
 
 end
 

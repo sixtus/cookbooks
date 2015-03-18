@@ -3,7 +3,7 @@ if gentoo?
 elsif debian_based?
   package "lftp"
 elsif mac_os_x?
-  package "lftp"
+  homebrew_package "lftp"
 end
 
 directory "#{node[:homedir]}/.lftp" do

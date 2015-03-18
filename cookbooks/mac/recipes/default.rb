@@ -6,17 +6,13 @@ if mac_os_x?
     volumes_dir "XQuartz-2.7.7"
   end
 
-  include_recipe "homebrew"
-
   # need to upgrade this one as early as possible or dircolors will break
-  package "xz"
-  package "coreutils" do
-    action :upgrade
-  end
+  homebrew_package "xz"
+  homebrew_package "coreutils"
 
   # install base packages
   node[:mac][:packages].each do |pkg|
-    package pkg
+    homebrew_package pkg
   end
 
   include_recipe "mac::global"

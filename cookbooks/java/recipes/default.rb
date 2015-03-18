@@ -29,8 +29,6 @@ if gentoo?
       source "http://labs.consol.de/maven/repository/org/jolokia/jolokia-jvm/1.2.2/jolokia-jvm-1.2.2-agent.jar"
     end
   end
-elsif mac_os_x?
-  package "maven"
 end
 
 if nagios_client?

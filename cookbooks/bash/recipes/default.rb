@@ -7,8 +7,8 @@ elsif debian_based?
   package "bash-completion"
 
 elsif mac_os_x?
-  package "bash"
-  package "bash-completion"
+  homebrew_package "bash"
+  homebrew_package "bash-completion"
   execute "sudo dscl . -create /Users/#{node[:current_user]} UserShell '/usr/local/bin/bash'"
 end
 

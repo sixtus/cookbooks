@@ -7,8 +7,8 @@ elsif debian_based?
   package "exuberant-ctags"
 
 elsif mac_os_x?
-  package "vim"
-  package "ctags"
+  homebrew_package "vim"
+  homebrew_package "ctags"
 end
 
 directory node[:vim][:rcdir] do

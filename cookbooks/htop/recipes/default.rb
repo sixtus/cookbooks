@@ -3,7 +3,7 @@ if gentoo?
 elsif debian_based?
   package "htop"
 elsif mac_os_x?
-  package "htop-osx"
+  homebrew_package "htop-osx"
 end
 
 directory "#{node[:homedir]}/.config/htop" do
