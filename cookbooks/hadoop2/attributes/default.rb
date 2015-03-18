@@ -10,7 +10,7 @@ default[:hadoop2][:java_tmp] = "/var/tmp/java"
 default[:hadoop2][:zookeeper][:cluster] = node.cluster_name
 
 # http://docs.hortonworks.com/HDPDocuments/HDP2/HDP-2.0.9.1/bk_installing_manually_book/content/rpm-chap1-11.html
-mem_total = node[:memory][:total].to_i / 1024 / 1024
+mem_total = node[:memory][:total].to_i / 1024 / 1024 rescue 0.25
 
 if mem_total <= 4
   min_container_size = 0.25
