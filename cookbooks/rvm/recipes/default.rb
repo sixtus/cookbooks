@@ -8,6 +8,7 @@ else
   chef_gem 'rvm' do
     action :install
     options "--user-install" if !root?
+    compile_time true
   end
 end
 
