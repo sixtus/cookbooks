@@ -1,4 +1,4 @@
-zfs_pools = node[:filesystem].map{|name, fs| tank = name.split("/")[0]; tank if fs[:fs_type] == 'zfs' && tank != ""}.compact.uniq
+zfs_pools = %x{/sbin/zpool list -Ho name}.split("\n") rescue []
 
 if zfs_pools.any?
   include_recipe "zfs"
