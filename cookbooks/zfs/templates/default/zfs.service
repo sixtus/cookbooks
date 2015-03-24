@@ -1,0 +1,18 @@
+[Unit]
+Description=ZFS filesystems setup
+Before=network.target
+After=systemd-udev-settle.target local-fs.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStartPre=/sbin/modprobe zfs
+ExecStartPre=/usr/bin/test -c /dev/zfs
+ExecStartPre=/bin/sh -c ""[ -e /etc/zfs/zpools ] && /usr/bin/xargs -rn1 zpool import < /etc/zfs/zpools""
+ExecStart=/sbin/zfs mount -a
+ExecStop=/bin/sh -c "/sbin/zpool list -Ho name > /etc/zfs/zpools"
+ExecStop=/sbin/zfs umount -a
+ExecStop=/bin/sh -c "usr/bin/xargs -rn1 zpool export < /etc/zfs/zpools"
+
+[Install]
+WantedBy=multi-user.target
