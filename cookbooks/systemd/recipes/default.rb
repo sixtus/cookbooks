@@ -36,20 +36,11 @@ if gentoo?
     end
 
     # journal
-    systemd_unit "systemd-journald.socket"
-
-    service "systemd-journald.service" do
-      action :nothing
-      provider Chef::Provider::Service::Systemd
-      only_if { systemd_running? }
-    end
-
     template "/etc/systemd/journald.conf" do
       source "journald.conf"
       owner "root"
       group "root"
       mode "0644"
-      notifies :restart, "service[systemd-journald.service]"
     end
 
     # networking
