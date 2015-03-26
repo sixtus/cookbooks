@@ -39,7 +39,7 @@ module Gentoo
         new_resource.updated_by_last_action(updated)
         begin
           package_resource = run_context.resource_collection.find(package: new_resource.package)
-          new_resource.notifies(:upgrade, package_resource, :immediately) if updated
+          new_resource.notifies(:upgrade, package_resource, :immediately) if updated && new_resource.upgrade
         rescue Chef::Exceptions::ResourceNotFound
           # do nothing
         end
