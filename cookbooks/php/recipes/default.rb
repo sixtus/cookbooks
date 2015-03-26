@@ -3,22 +3,33 @@ node.normal_attrs[:php].delete(:extension_dir)
 
 portage_package_use "app-admin/eselect-php" do
   use %w(fpm)
+  upgrade false
 end
 
 portage_package_use "dev-lang/php" do
   use node[:php][:default_use_flags] + node[:php][:use_flags] + node[:php][:sapi]
+  upgrade false
+end
+
+portage_package_mask "dev-lang/php" do
+  upgrade false
+end
+
+portage_package_mask "virtual/httpd-php" do
+  upgrade false
+end
+
+portage_package_unmask "dev-lang/php:#{node[:php][:slot]}" do
+  upgrade false
+end
+
+portage_package_unmask "=virtual/httpd-php-#{node[:php][:slot]}" do
+  upgrade false
 end
 
 package "dev-lang/php" do
   version ":#{node[:php][:slot]}"
-  action :upgrade
 end
-
-portage_package_mask "dev-lang/php"
-portage_package_mask "virtual/httpd-php"
-
-portage_package_unmask "dev-lang/php:#{node[:php][:slot]}"
-portage_package_unmask "=virtual/httpd-php-#{node[:php][:slot]}"
 
 %w(
   /var/log/php-error.log
