@@ -1,10 +1,5 @@
 #!/bin/bash
 
-# host & port for our listen socket
-PORT=<%= node[:druid][@service][:port] %>
-HOST=<%= node[:fqdn] %>:${PORT}
-JMXPORT=<%= node[:druid][@service][:port] + 10000 %>
-
 # common JVM options
 JVM_OPTS=""
 JVM_OPTS+=" -server -d64"
@@ -18,12 +13,9 @@ JVM_OPTS+=" -XX:+CMSScavengeBeforeRemark"
 JVM_OPTS+=" -XX:+DisableExplicitGC"
 JVM_OPTS+=" -Duser.timezone=UTC"
 JVM_OPTS+=" -Dfile.encoding=UTF-8"
-JVM_OPTS+=" -Ddruid.service=<%= @service %>"
-JVM_OPTS+=" -Ddruid.host=$HOST"
-JVM_OPTS+=" -Ddruid.port=$PORT"
-JVM_OPTS+=" -Dlog4j.configuration=file:///etc/druid/log4j.properties"
+JVM_OPTS+=" -Dlog4j.configuration=file:///var/app/druid/config/log4j.properties"
 JVM_OPTS+=" -Djava.io.tmpdir=/var/app/druid/storage/tmp"
-JVM_OPTS+=" -Dcom.sun.management.jmxremote.port=$JMXPORT"
+JVM_OPTS+=" -Dcom.sun.management.jmxremote.port=<%= node[:druid][@service][:port] + 10000 %>"
 JVM_OPTS+=" -Dcom.sun.management.jmxremote.authenticate=false"
 JVM_OPTS+=" -Dcom.sun.management.jmxremote.ssl=false"
 

@@ -1,5 +1,19 @@
 include_recipe "druid"
 
+directory "/var/app/druid/config/coordinator" do
+  owner "druid"
+  group "druid"
+  mode "0755"
+end
+
+template "/var/app/druid/config/coordinator/runtime.properties" do
+  source "runtime.properties"
+  owner "root"
+  group "root"
+  mode "0644"
+  variables service: "coordinator"
+end
+
 mysql_database "druid" do
   connection mysql_master_connection(node[:druid][:cluster])
 end
@@ -20,10 +34,10 @@ end
 
 service "druid-coordinator" do
   action [:enable, :start]
-  subscribes :restart, "template[/etc/druid/log4j.properties]"
-  subscribes :restart, "template[/etc/druid/runtime.properties]"
-  subscribes :restart, "template[/var/app/druid/bin/druid-coordinator]"
   subscribes :restart, "systemd_unit[druid-coordinator]"
+  subscribes :restart, "template[/var/app/druid/bin/druid-coordinator]"
+  subscribes :restart, "template[/var/app/druid/config/coordinator/runtime.properties]"
+  subscribes :restart, "template[/var/app/druid/config/log4j.properties]"
 end
 
 if nagios_client?

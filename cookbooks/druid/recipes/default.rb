@@ -34,7 +34,7 @@ deploy_application "druid" do
   end
 end
 
-template "/etc/druid/log4j.properties" do
+template "/var/app/druid/config/log4j.properties" do
   source "log4j.properties"
   owner "root"
   group "root"
