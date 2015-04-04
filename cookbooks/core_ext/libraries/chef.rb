@@ -1,4 +1,23 @@
-# chef monkey patches
+begin
+  require 'chef/platform/service_helpers'
+
+  class Chef
+    class Platform
+      class ServiceHelpers
+        class << self
+          def platform_has_systemd_unit?(service_name)
+            shell_out!("#{systemctl_path} status #{service_name}")
+          rescue Mixlib::ShellOut::ShellCommandFailed
+            false
+          end
+        end
+      end
+    end
+  end
+rescue LoadError
+  # do nothing
+end
+
 class Chef
   class Node
 
@@ -33,4 +52,5 @@ class Chef
     end
 
   end
+
 end
