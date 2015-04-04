@@ -18,14 +18,29 @@ link "/etc/init.d/functions.sh" do
   to "/lib/gentoo/functions.sh"
 end
 
-package "sys-apps/irqd"
-
 directory "/var/lib/misc"
 
-systemd_unit "irqd.service"
+package "sys-apps/irqbalance"
+package "sys-apps/irqd"
 
-service "irqd" do
-  action [:enable, :start]
+if node[:cpu][:total] > 32
+  service "irqd" do
+    action [:disable, :stop]
+  end
+
+  service "irqbalance" do
+    action [:enable, :start]
+  end
+else
+  systemd_unit "irqd.service"
+
+  service "irqbalance" do
+    action [:disable, :stop]
+  end
+
+  service "irqd" do
+    action [:enable, :start]
+  end
 end
 
 file "/etc/resolvconf.conf" do
