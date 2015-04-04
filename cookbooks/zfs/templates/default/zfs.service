@@ -12,7 +12,7 @@ ExecStartPre=/bin/sh -c "[ -e /etc/zfs/zpools ] && /usr/bin/xargs -rn1 zpool imp
 ExecStart=/sbin/zfs mount -a
 ExecStop=/bin/sh -c "/sbin/zpool list -Ho name > /etc/zfs/zpools"
 ExecStop=/sbin/zfs umount -a
-ExecStop=/bin/sh -c "usr/bin/xargs -rn1 zpool export < /etc/zfs/zpools"
+ExecStop=/bin/sh -c "/usr/bin/xargs -rn1 zpool export < /etc/zfs/zpools"
 
 [Install]
 WantedBy=multi-user.target
