@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
+require 'openssl'
 require 'net/http'
 require 'json'
 
