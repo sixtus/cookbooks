@@ -35,7 +35,7 @@ systemd_timer "clean_hdfs" do
 end
 
 nrpe_command "check_hdfs_namenode_stat" do
-  command "/usr/lib/nagios/plugins/check_jstat -j org.apache.hadoop.hdfs.server.namenode.NameNode"
+  command "/usr/lib/nagios/plugins/check_jstat hadoop2 hdfs@namenode"
 end
 
 nagios_service "HDFS-NAMENODE" do

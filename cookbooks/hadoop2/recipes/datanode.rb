@@ -7,7 +7,7 @@ service "hdfs@datanode" do
 end
 
 nrpe_command "check_hdfs_datanode_stat" do
-  command "/usr/lib/nagios/plugins/check_jstat -j org.apache.hadoop.hdfs.server.datanode.DataNode"
+  command "/usr/lib/nagios/plugins/check_jstat hadoop2 hdfs@datanode"
 end
 
 nagios_service "HDFS-DATANODE" do

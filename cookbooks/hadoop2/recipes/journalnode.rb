@@ -7,7 +7,7 @@ service "hdfs@journalnode" do
 end
 
 nrpe_command "check_hdfs_journalnode_stat" do
-  command "/usr/lib/nagios/plugins/check_jstat -j org.apache.hadoop.hdfs.qjournal.server.JournalNode"
+  command "/usr/lib/nagios/plugins/check_jstat hadoop2 hdfs@journalnode"
 end
 
 nagios_service "HDFS-JOURNALNODE" do

@@ -9,7 +9,7 @@ service "yarn@resourcemanager" do
 end
 
 nrpe_command "check_yarn_resourcemanager_stat" do
-  command "/usr/lib/nagios/plugins/check_jstat -j org.apache.hadoop.yarn.server.resourcemanager.ResourceManager"
+  command "/usr/lib/nagios/plugins/check_jstat hadoop2 yarn@resourcemanager"
 end
 
 nagios_service "YARN-RESOURCEMANAGER" do
