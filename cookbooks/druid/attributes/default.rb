@@ -25,7 +25,7 @@ default[:druid][:zookeeper][:timeout] = 6000
 # Druid Processing Module
 default[:druid][:processing][:buffer] = 1073741824
 default[:druid][:processing][:numThreads] = [node[:cpu][:total]-1, 1].max
-default[:druid][:processing][:memory] = (node[:druid][:processing][:buffer]*(node[:druid][:processing][:numThreads]+1)/1048576.0)
+default[:druid][:processing][:memory] = (node[:druid][:processing][:buffer]*(node[:druid][:processing][:numThreads]+1)/1048576.0).ceil
 
 # Storage Node Module
 default[:druid][:server][:max_size] = 1 * 1024 * 1024 * 1024
@@ -46,8 +46,8 @@ default[:druid][:coordinator][:dm] = 64
 
 # Broker Services
 default[:druid][:broker][:port] = 8080
-default[:druid][:broker][:mx] = (node[:memory][:total].to_i/1024 - node[:druid][:processing][:memory] - node[:druid][:coordinator][:mx].to_i - 2048).ceil
-default[:druid][:broker][:dm] = node[:druid][:processing][:memory].ceil
+default[:druid][:broker][:mx] = node[:memory][:total].to_i/1024 - node[:druid][:processing][:memory] - node[:druid][:coordinator][:mx].to_i - 2048
+default[:druid][:broker][:dm] = node[:druid][:processing][:memory]
 default[:druid][:broker][:cache_size_in_bytes] = 42949672960
 default[:druid][:broker][:connections] = 20
 default[:druid][:broker][:timeout] = "PT10M"
@@ -61,8 +61,8 @@ default[:druid][:realtime][:partition] = IPAddr.new(node[:ipaddress]).to_i & (2*
 
 # Historical Services
 default[:druid][:historical][:port] = 8082
-default[:druid][:historical][:mx] = (node[:memory][:total].to_i/1024 - node[:druid][:processing][:memory] - node[:druid][:coordinator][:mx].to_i - 2048).ceil
-default[:druid][:historical][:dm] = node[:druid][:processing][:memory].ceil
+default[:druid][:historical][:mx] = node[:memory][:total].to_i/1024 - node[:druid][:processing][:memory] - 8192
+default[:druid][:historical][:dm] = node[:druid][:processing][:memory]
 
 # Overlord Services
 default[:druid][:overlord][:port] = 8090

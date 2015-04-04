@@ -24,7 +24,7 @@ CLASSPATH="/var/app/druid/config/_common:/var/app/druid/config/<%= @service %>"
 CLASSPATH+=":$(/usr/bin/find /var/app/druid/current/services/target/*selfcontained.jar)"
 
 # add hadoop if it exists
-if [ -x <%= "/var/app/hadoop2/current/bin/hadoop" %> ]; then
+if [ -x /var/app/hadoop2/current/bin/hadoop ]; then
   CLASSPATH+=":$(/var/app/hadoop2/current/bin/hadoop classpath)"
 fi
 
