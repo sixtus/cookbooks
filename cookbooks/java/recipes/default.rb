@@ -44,10 +44,17 @@ if nagios_client?
   nagios_plugin "check_jstat"
   nagios_plugin "check_jvm"
 
-  sudo_rule "nagios-jps" do
+  sudo_rule "nagios-hsperfdata-chmod" do
     user "nagios"
     runas "root"
-    command "NOPASSWD: /usr/bin/jps *"
+    command "NOPASSWD: /bin/chmod 644 /tmp/hsperfdata_*"
+    only_if { nagios_client? }
+  end
+
+  sudo_rule "nagios-hsperfdata-ln" do
+    user "nagios"
+    runas "root"
+    command "NOPASSWD: /bin/ln -nfs /tmp/hsperfdata_* /tmp/hsperfdata_*"
     only_if { nagios_client? }
   end
 
