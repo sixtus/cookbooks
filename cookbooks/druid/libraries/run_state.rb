@@ -3,6 +3,10 @@ module DruidHelpers
     @druid_version ||= mvn_project_version("/var/app/druid/current")
   end
 
+  def druid_broker_nodes(cluster_name = node.cluster_name)
+    node.nodes.cluster(cluster_name).role("druid-broker")
+  end
+
   def druid_dumbo_nodes(cluster_name = node.cluster_name)
     node.nodes.cluster(cluster_name).role("druid-dumbo")
   end
