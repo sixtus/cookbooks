@@ -43,10 +43,6 @@ template "/etc/lxc/default.conf" do
   mode "0640"
 end
 
-systemd_unit "lxc-network.service" do
-  action :delete
-end
-
 directory "/usr/share/lxc" do
   owner "root"
   group "root"
