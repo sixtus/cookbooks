@@ -6,7 +6,7 @@ Wants=network-online.target
 ExecStart=<%= @path %>/current/smc \
 	-environment <%= node.chef_environment %> \
 	-cluster <%= node.cluster_name %> \
-	-kafka <%= kafka_connect(node.cluster_name) %>
+	-kafka <%= kafka_connect(node.cluster_name) %> \
 	-port 1030
 User=<%= @user %>
 Group=<%= @group %>
