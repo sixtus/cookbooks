@@ -8,8 +8,10 @@ User=druid
 Group=druid
 SyslogIdentifier=%p
 OOMScoreAdjust=-1
+<% if @service != "middleManager" %>
 Nice=-5
 IOSchedulingPriority=2
+<% end %>
 Restart=always
 
 [Install]

@@ -74,6 +74,6 @@ default[:druid][:middleManager][:port] = 8091
 default[:druid][:middleManager][:mx] = 2 * 1024
 default[:druid][:middleManager][:dm] = 64
 
-default[:druid][:worker][:capacity] = [node[:cpu][:total]-1,1].max
+default[:druid][:worker][:capacity] = [node[:cpu][:total]/2,1].max
 default[:druid][:indexer][:runner][:javaOpts] = "-d64 -server -Xmx8g -XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:+PrintGCDetails -XX:+PrintGCTimeStamps"
 default[:druid][:indexer][:runner][:startPort] = 8092

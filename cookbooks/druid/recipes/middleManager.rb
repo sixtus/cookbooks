@@ -25,6 +25,7 @@ end
 
 systemd_unit "druid-middleManager.service" do
   template "druid.service"
+  variables service: "middleManager"
   notifies :restart, "service[druid-middleManager]"
 end
 
