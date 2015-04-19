@@ -26,7 +26,7 @@ if gentoo?
 
     # timesyncd
     service "systemd-timesyncd.service" do
-      action [:enable, :start]
+      action [:enable]
       provider Chef::Provider::Service::Systemd
       only_if { systemd_running? && File.exist?("/usr/lib/systemd/system/systemd-timesyncd.service") }
     end
@@ -49,6 +49,25 @@ if gentoo?
       owner "root"
       group "root"
       mode "0644"
+    end
+
+    file "/etc/systemd/network/default.network" do
+      content "[Match]\nName=eth0\n\n[Network]\nDHCP=v4\n"
+      owner "root"
+      group "root"
+      mode "0644"
+      not_if { File.exist?("/etc/systemd/network/default.network") }
+    end
+
+    service "systemd-networkd.service" do
+      action [:enable]
+      provider Chef::Provider::Service::Systemd
+    end
+
+    service "systemd-networkd-wait-online.service" do
+      action [:enable]
+      provider Chef::Provider::Service::Systemd
+      only_if { File.exist?("/usr/lib/systemd/system/systemd-networkd-wait-online.service") }
     end
 
     service "sshd.service" do
