@@ -7,6 +7,7 @@ User=kafka
 Group=kafka
 Environment="JMX_PORT=19092"
 Environment="KAFKA_OPTS=-javaagent:/usr/lib/jvm/jolokia.jar=port=29092,host=0.0.0.0"
+Environment="KAFKA_HEAP_OPTS=-Xmx16G -XX:MaxDirectMemorySize=8G"
 ExecStart=/var/app/kafka/current/bin/kafka-run-class.sh kafka.Kafka /var/app/kafka/current/config/server.properties
 OOMScoreAdjust=-2
 Nice=-10
