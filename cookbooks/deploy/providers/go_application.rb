@@ -60,6 +60,7 @@ action :create do
         cwd release_path
         user nr.user
         environment({
+          "HOME" => path,
           "GOPATH" => "#{path}/.go",
           "PATH" => "#{path}/.go/bin:#{ENV['PATH']}",
         })
