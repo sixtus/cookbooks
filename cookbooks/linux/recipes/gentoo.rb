@@ -50,15 +50,6 @@ file "/etc/resolvconf.conf" do
   mode "0644"
 end
 
-cookbook_file "/etc/dhcpcd.conf" do
-  source "dhcpcd.conf"
-  owner "root"
-  group "root"
-  mode "0640"
-  #notifies :restart, "service[dhcpcd]"
-end
-
-service "dhcpcd" do
-  action [:enable, :start]
-  only_if { File.exist?("/etc/systemd/system/multi-user.target.wants/dhcpcd.service") }
+file "/etc/dhcpcd.conf" do
+  action :delete
 end
