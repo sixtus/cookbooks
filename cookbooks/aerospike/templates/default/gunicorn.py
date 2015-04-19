@@ -1,9 +1,0 @@
-bind = "0.0.0.0:4009"
-pidfile = "/run/amc.pid"
-loglevel = "info"
-errorlog = "-"
-workers = 1
-proc_name = "amc"
-chdir = "/opt/amc/server"
-timeout = 150
-worker_class = "eventlet"
