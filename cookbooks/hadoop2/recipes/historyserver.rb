@@ -9,7 +9,7 @@ service "mapred@historyserver" do
 end
 
 nrpe_command "check_mapred_historyserver_stat" do
-  command "/usr/lib/nagios/plugins/check_jstat hadoop2 hdfs@historyserver"
+  command "/usr/lib/nagios/plugins/check_jstat hadoop2 mapred@historyserver"
 end
 
 nagios_service "MAPRED-HISTORYSERVER" do
