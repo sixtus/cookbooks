@@ -1,0 +1,5 @@
+#!/bin/sh
+
+[ -e /etc/zfs/zpools ] && /usr/bin/xargs -rn1 zpool import -f < /etc/zfs/zpools
+
+/sbin/zfs mount -a
