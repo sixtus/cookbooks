@@ -72,3 +72,8 @@ end
 end
 
 systemd_unit "lxc@.service"
+
+duply_backup "lxc" do
+  source "/lxc"
+  duplicity_params "--exclude-other-filesystems"
+end
