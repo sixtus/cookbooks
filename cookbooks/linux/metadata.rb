@@ -12,6 +12,7 @@ supports "gentoo"
 supports "ubuntu"
 
 depends "apt"
+depends "duply"
 depends "nagios"
 depends "portage"
 depends "systemd"

@@ -11,4 +11,17 @@ include_recipe "linux::packages"
 
 if root?
   include_recipe "linux::nagios"
+  include_recipe "duply"
+
+  duply_backup "etc" do
+    source "/etc"
+  end
+
+  duply_backup "home" do
+    source "/home"
+  end
+
+  duply_backup "root" do
+    source "/root"
+  end
 end
