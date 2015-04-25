@@ -1,0 +1,5 @@
+#!/bin/sh
+
+/sbin/zpool list -Ho name > /etc/zfs/zpools
+/sbin/zfs umount -a
+/usr/bin/xargs -rn1 /sbin/zpool export < /etc/zfs/zpools

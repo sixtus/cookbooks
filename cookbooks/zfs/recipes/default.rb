@@ -1,6 +1,18 @@
 if gentoo?
   package "sys-fs/zfs"
 
+  %w{
+   mount_zpools
+   unmount_zpools
+  }.each do |file|
+    cookbook_file "/etc/zfs/#{file}" do
+      source file
+      owner "root"
+      group "root"
+      mode "0544"
+    end
+  end
+
   systemd_unit "zfs.service" do
     template true
   end

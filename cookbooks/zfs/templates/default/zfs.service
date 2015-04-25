@@ -8,11 +8,8 @@ Type=oneshot
 RemainAfterExit=yes
 ExecStartPre=/sbin/modprobe zfs
 ExecStartPre=/usr/bin/test -c /dev/zfs
-ExecStartPre=/bin/sh -c "[ -e /etc/zfs/zpools ] && /usr/bin/xargs -rn1 zpool import < /etc/zfs/zpools"
-ExecStart=/sbin/zfs mount -a
-ExecStop=/bin/sh -c "/sbin/zpool list -Ho name > /etc/zfs/zpools"
-ExecStop=/sbin/zfs umount -a
-ExecStop=/bin/sh -c "/usr/bin/xargs -rn1 zpool export < /etc/zfs/zpools"
+ExecStartPre=/etc/zfs/mount_zpools
+ExecStop=/etc/zfs/unmount_zpools
 
 [Install]
 WantedBy=multi-user.target
