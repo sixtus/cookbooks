@@ -25,8 +25,11 @@ action :create do
     recursive true
   end
 
+  s = nr.schedule
+  s ||= %W(OnCalendar=#{node[:duply][:backup_time]})
+
   systemd_timer "duply-bkp-#{nr.name}" do
-    schedule %W(OnCalendar=#{node[:duply][:backup_time]})
+    schedule s
     unit command: "/usr/bin/duply #{nr.name} bkp"
   end
 
