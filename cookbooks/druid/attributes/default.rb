@@ -6,8 +6,6 @@ default[:druid][:cluster] = node.cluster_name
 default[:druid][:nagios][:topics] = []
 default[:druid][:nagios][:whitelist] = []
 
-default[:dumbo][:git][:repository] = "https://github.com/remerge/druid-dumbo"
-
 # Modules
 default[:druid][:core_extensions] = [
   "mysql-metadata-storage",

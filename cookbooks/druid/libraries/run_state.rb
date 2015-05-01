@@ -11,10 +11,6 @@ module DruidHelpers
     node.nodes.cluster(cluster_name).role("druid-broker")
   end
 
-  def druid_dumbo_nodes(cluster_name = node.cluster_name)
-    node.nodes.cluster(cluster_name).role("druid-dumbo")
-  end
-
   def druid_realtime_spec
     node[:druid][:sources].map do |source, config|
       {
