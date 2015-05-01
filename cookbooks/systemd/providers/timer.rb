@@ -40,6 +40,15 @@ action :create do
   end
 end
 
+action :disable do
+  nr = new_resource
+
+  service "#{nr.service}.timer" do
+    action [:disable, :stop]
+    only_if { systemd_running? }
+  end
+end
+
 action :delete do
   nr = new_resource
 

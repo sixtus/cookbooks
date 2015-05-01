@@ -1,4 +1,4 @@
-actions :create, :delete
+actions :create, :delete, :disable
 default_action :create
 
 attribute :service, kind_of: [String], name_attribute: true
