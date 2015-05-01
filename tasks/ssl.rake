@@ -91,6 +91,26 @@ namespace :ssl do
     Rake::Task["ssl:do_cert"].execute(args)
   end
 
+  desc "Sign a CSR with our CA"
+  task :sign, :cn do |t, args|
+    cn = args.cn
+    keyfile = cn.gsub("*", "wildcard")
+
+    FileUtils.mkdir_p(SSL_CERT_DIR)
+
+    unless File.exist?(File.join(SSL_CERT_DIR, "#{keyfile}.crt"))
+      puts("** Signing SSL Certificate Request for #{cn}")
+      sh("openssl ca -config #{SSL_CONFIG_FILE} -in /dev/stdin -out #{SSL_CERT_DIR}/#{keyfile}.crt")
+      sh("chmod 644 #{SSL_CERT_DIR}/#{keyfile}.crt")
+    else
+      puts("** SSL Certificate for #{cn} already exists, skipping.")
+    end
+
+    if ENV['BATCH'] != "1" and not Process.euid == 0
+      knife :upload, ["cookbooks/certificates"]
+    end
+  end
+
   task :create_missing_certs do
     old_batch = ENV['BATCH']
     ENV['BATCH'] = "1"
