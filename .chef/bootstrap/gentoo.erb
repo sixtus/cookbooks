@@ -10,6 +10,9 @@ echo "127.0.0.1 ${hostname}.${domainname} ${hostname} localhost" > /etc/hosts
 echo ${hostname} > /etc/hostname
 hostname ${hostname}
 
+systemctl disable systemd-networkd
+systemctl enable systemd-networkd
+
 timedatectl set-local-rtc 0
 
 ntpdate pool.ntp.org
