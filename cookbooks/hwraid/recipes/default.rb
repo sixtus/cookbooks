@@ -4,6 +4,10 @@ if devices.grep(/aacraid/).any?
   include_recipe "hwraid::aac"
 end
 
+if devices.grep(/hpsa/).any?
+  include_recipe "hwraid::hpsa"
+end
+
 if devices.grep(/megaraid_sas/).any?
   include_recipe "hwraid::megaraid"
 end
