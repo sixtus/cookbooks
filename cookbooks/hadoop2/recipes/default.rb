@@ -122,10 +122,15 @@ ruby_block "hadoop-zk-chroot" do
   block do
     Gem.clear_paths
     require 'zk'
-    zk = ZK.new(zookeeper_connect('/hadoop2', node[:hadoop2][:zookeeper][:cluster]))
+    zk = ZK.new(zookeeper_connect('/hadoop2', node[:hadoop2][:hdfs][:zookeeper]))
     [
       "/ha",
       "/ha/#{node[:hadoop2][:hdfs][:cluster]}",
+    ].each do |path|
+      zk.create(path, ignore: :node_exists)
+    end
+    zk = ZK.new(zookeeper_connect('/hadoop2', node[:hadoop2][:yarn][:zookeeper]))
+    [
       "/rmstore",
       "/rmstore/#{node[:hadoop2][:yarn][:cluster]}",
     ].each do |path|

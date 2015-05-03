@@ -1,7 +1,11 @@
 default[:hadoop2][:version] = "2.5.2"
 
 default[:hadoop2][:hdfs][:cluster] = node.cluster_name
+default[:hadoop2][:hdfs][:zookeeper] = node.cluster_name
+
 default[:hadoop2][:yarn][:cluster] = node.cluster_name
+default[:hadoop2][:yarn][:zookeeper] = node.cluster_name
+
 default[:hadoop2][:rack_id] = "/default-rack/#{node.cluster_name}"
 
 default[:hadoop2][:tmp_dir] = "/var/tmp/hadoop2"
