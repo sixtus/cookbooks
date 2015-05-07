@@ -26,7 +26,7 @@ systemd_unit "camus.service" do
   template true
 end
 
-primary = (node[:fqdn] == camus_nodes.first[:fqdn])
+primary = (node[:fqdn] == camus_nodes.first[:fqdn]) rescue false
 
 systemd_timer "camus" do
   schedule %w(OnCalendar=*:30)
