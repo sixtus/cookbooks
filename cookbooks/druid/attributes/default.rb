@@ -54,7 +54,7 @@ default[:druid][:broker][:balancer] = "connectionCount"
 # Realtime Services
 default[:druid][:realtime][:port] = 8083
 default[:druid][:realtime][:mx] = 12 * 1024
-default[:druid][:realtime][:dm] = 12 * 1024
+default[:druid][:realtime][:dm] = default[:druid][:processing][:memory]
 default[:druid][:realtime][:partition] = IPAddr.new(node[:ipaddress]).to_i & (2**31-1)
 
 # Historical Services
