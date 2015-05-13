@@ -1,0 +1,17 @@
+[Unit]
+Description=Journald to Elasticsearch Forwarder
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=<%= @path %>/current/elastic-journald \
+  --hosts <%= elasticsearch_heads.map{|n| n[:fqdn] }.join(",") %> \
+  --cursor /var/app/elastic-journald/elastic_journal_cursor
+User=root
+Group=root
+Restart=always
+WorkingDirectory=<%= @path %>/current
+SyslogIdentifier=%p
+
+[Install]
+WantedBy=multi-user.target

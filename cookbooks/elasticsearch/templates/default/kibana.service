@@ -1,0 +1,14 @@
+[Unit]
+Description=Kibana
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=/var/app/kibana/current/bin/kibana
+User=kibana
+Group=kibana
+SyslogIdentifier=%p
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

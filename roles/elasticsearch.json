@@ -1,0 +1,7 @@
+{
+  "name": "elasticsearch",
+  "run_list": [
+    "role[base]",
+    "recipe[elasticsearch]"
+  ]
+}

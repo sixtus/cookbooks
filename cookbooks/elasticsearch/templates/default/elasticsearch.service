@@ -1,0 +1,20 @@
+[Unit]
+Description=ElasticSearch
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=/var/app/elasticsearch/current/bin/elasticsearch
+User=elasticsearch
+Group=elasticsearch
+SyslogIdentifier=%p
+OOMScoreAdjust=-1
+Nice=-5
+IOSchedulingPriority=2
+LimitNOFILE=infinity
+LimitFSIZE=infinity
+Restart=always
+Environment="ES_HEAP_SIZE=<%= node[:elasticsearch][:heap_size] %>"
+
+[Install]
+WantedBy=multi-user.target

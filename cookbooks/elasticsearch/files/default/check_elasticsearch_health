@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+
+require 'nagios'
+require 'json'
+require 'net/http'
+
+class ElasticSearch < Nagios::Plugin
+  def initialize
+    super
+  end
+
+  def warning(m)
+    m["status"] == "yellow"
+  end
+
+  def critical(m)
+    m["status"] == "red"
+
+  end
+
+  def measure
+    result = {}
+
+    health_uri = "http://localhost:9200/_cluster/health"
+    JSON.parse(Net::HTTP.get(URI(health_uri)))
+  end
+
+  def to_s(m)
+    "#{m["number_of_nodes"]} nodes, status #{m["status"]}"
+  end
+end
+
+ElasticSearch.new.run!

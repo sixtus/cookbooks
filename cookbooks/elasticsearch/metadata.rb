@@ -11,3 +11,4 @@ supports "gentoo"
 
 depends "deploy"
 depends "java"
+depends "golang"

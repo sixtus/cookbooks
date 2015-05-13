@@ -1,0 +1,8 @@
+#!/bin/bash
+
+/usr/bin/curator delete indices --older-than <%= node[:elasticsearch][:curator][:keep_days] %> --time-unit days --timestring %Y-%m-%d
+/usr/bin/curator replicas --count 0 indices --older-than <%= node[:elasticsearch][:curator][:reduced_replica_days] %> --time-unit days --timestring %Y-%m-%d
+/usr/bin/curator optimize indices --older-than 1 --time-unit days --timestring %Y-%m-%d
+
+# curator returns bogus return codes
+true

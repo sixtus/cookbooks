@@ -21,6 +21,7 @@
     "recipe[shorewall]",
     "recipe[smart]",
     "recipe[tmux]",
-    "recipe[watchdog]"
+    "recipe[watchdog]",
+    "recipe[elasticsearch::journald]"
   ]
 }

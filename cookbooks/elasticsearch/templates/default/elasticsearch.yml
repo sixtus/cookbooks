@@ -1,0 +1,44 @@
+cluster.name: <%= node[:elasticsearch][:cluster] %>
+node.rack: <%= node[:elasticsearch][:rack] %>
+node.name: <%= node[:fqdn] %>
+
+node.master: <%= !!node[:elasticsearch][:master] %>
+node.data: <%= !!node[:elasticsearch][:data] %>
+
+node.max_local_storage_nodes: 1
+
+index.number_of_shards: <%= node[:elasticsearch][:index][:shards] %>
+index.number_of_replicas: <%= node[:elasticsearch][:index][:replicas] %>
+
+path.home:    /var/app/elasticsearch/current
+path.conf:    /var/app/elasticsearch/current/config
+path.data:    /var/app/elasticsearch/shared/data
+path.work:    /var/app/elasticsearch/shared/work
+path.logs:    /var/app/elasticsearch/shared/logs
+path.pluings: /var/app/elasticsearch/shared/plugins
+
+network.publish_host: <%= node[:ipaddress] %>
+
+http.port: 9200
+http.max_content_length: 128mb
+http.compression: true
+
+transport.tcp.port: 9300
+transport.tcp.compress: true
+
+gateway.type: local
+gateway.recover_after_nodes: <%= (elasticsearch_nodes.length / 2) + 1 %>
+gateway.recover_after_time: 10m
+gateway.expected_nodes: <%= elasticsearch_nodes.length %>
+
+# tuned for ssd
+indices.store.throttle.max_bytes_per_sec: 100mb
+indices.recovery.max_bytes_per_sec: 100mb
+
+#discovery.zen.ping.timeout: 3s
+discovery.zen.ping.multicast.enabled: false
+discovery.zen.ping.unicast.hosts: <%= elasticsearch_masters.map{|n| n[:fqdn]}.to_json %>
+discovery.zen.minimum_master_nodes: <%= (elasticsearch_masters.length / 2) + 1 %>
+
+# elasticsearch::journald will send *lots* of bulk requests
+threadpool.bulk.queue_size: 500
