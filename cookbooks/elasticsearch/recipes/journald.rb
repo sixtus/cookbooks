@@ -1,4 +1,4 @@
-if systemd_running? && elasticsearch_nodes.length > 0
+if systemd_running? && elasticsearch_nodes(node[:elasticsearch][:journald][:cluster]).length > 0
   homedir = "/var/app/elastic-journald"
 
   include_recipe "golang"
