@@ -55,6 +55,10 @@ action :create do
         end
       end
 
+      execute "#{nr.user}-clean" do
+        command "rm -rf #{path}/shared/vendor/*"
+      end
+
       execute "#{nr.user}-make" do
         command "make dep all"
         cwd release_path
