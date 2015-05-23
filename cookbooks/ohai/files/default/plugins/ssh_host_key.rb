@@ -26,6 +26,8 @@ Ohai.plugin(:SSHHostKey) do
       [ "dsa", nil ]
     when "ssh-rsa"
       [ "rsa", nil ]
+    when "ssh-ed25519"
+      [ "ed25519", nil ]
     when /^ecdsa/
       [ "ecdsa", content[0] ]
     else
@@ -66,6 +68,10 @@ Ohai.plugin(:SSHHostKey) do
 
     if keys[:ssh][:host_rsa_public].nil? && File.exists?("/etc/ssh/ssh_host_rsa_key.pub")
       keys[:ssh][:host_rsa_public] = IO.read("/etc/ssh/ssh_host_rsa_key.pub").split[1]
+    end
+
+    if keys[:ssh][:host_ed25519_public].nil? && File.exists?("/etc/ssh/ssh_host_ed25519_key.pub")
+      keys[:ssh][:host_ed25519_public] = IO.read("/etc/ssh/ssh_host_ed25519_key.pub").split[1]
     end
 
     if keys[:ssh][:host_ecdsa_public].nil? && File.exists?("/etc/ssh/ssh_host_ecdsa_key.pub")
