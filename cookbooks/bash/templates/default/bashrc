@@ -67,11 +67,8 @@ fi
 # keychain for ssh
 if [[ $USER != root ]]; then
 	if type -P keychain >/dev/null; then
-		if [[ -r ~/.ssh/id_dsa ]]; then
-			eval `keychain --eval --quiet ~/.ssh/id_dsa`
-		fi
-		if [[ -r ~/.ssh/id_rsa ]]; then
-			eval `keychain --eval --quiet ~/.ssh/id_rsa`
+		if [[ -r ~/.ssh/id_ed25519 ]]; then
+			eval `keychain --eval --quiet ~/.ssh/id_ed25519`
 		fi
 	fi
 fi
