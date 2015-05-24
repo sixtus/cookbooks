@@ -14,12 +14,13 @@ namespace :node do
     args.with_defaults(env: 'production', run_list: 'role[base]')
     stdout, stderr, status = knife_capture :node_show, [args.fqdn, '-F', 'json']
     raise "node already exists" if status == 0
-    stdout, stderr, status = knife :node_create, [args.fqdn, '-d', '-E', args.env]
+    stdout, stderr, status = knife :node_create, [args.fqdn, '-d']
     if status != 0
       STDOUT.write(stdout)
       STDERR.write(stderr)
       raise "failed to get node data"
     end
+    knife :node_environment_set, [args.fqdn, args.env]
     knife :node_run_list_set, [args.fqdn] + args.run_list.split(' ')
   end
 
@@ -43,15 +44,34 @@ namespace :node do
     zendns_add_record(args.fqdn, ipaddress)
     run_task('node:checkdns', args.fqdn, ipaddress)
 
-    sh("ssh #{args.old} sudo rm -f /etc/chef/client.pem /etc/chef/client.rb")
-    sh("echo root:tux | ssh #{args.old} sudo chpasswd")
-    sh("ssh #{args.old} sudo sed -i -e '/PasswordAuthentication/s/no/yes/g' /etc/ssh/sshd_config")
-    sh("ssh #{args.old} sudo sed -i -e '/PermitRootLogin/s/no/yes/g' /etc/ssh/sshd_config")
-    sh("ssh #{args.old} sudo systemctl reload sshd")
+    sh("ssh #{args.old} sudo rm -f /etc/chef/client.pem")
+    sh("ssh #{args.old} sudo sed -i -e 's/#{args.old}/#{args.fqdn}/g' /etc/chef/client.rb")
+    sh("ssh #{args.old} sudo sed -i -e 's/#{args.old}/#{args.fqdn}/g' /etc/hosts")
 
-    ENV['NO_UPDATEWORLD'] = "1"
+    old_hostname = args.old.split('.').first
+    hostname = args.fqdn.split('.').first
+    sh("ssh #{args.old} sudo sed -i -e 's/#{old_hostname}/#{hostname}/g' /etc/hosts")
+    sh("ssh #{args.old} sudo hostname #{hostname}")
+
     run_task('node:copy', args.old, args.fqdn)
-    run_task('node:bootstrap', args.fqdn, ipaddress)
+
+    tmpfile = Tempfile.new('chef_client_key')
+    stdout, stderr, status = knife_capture :client_create, [args.fqdn, '-d', '-f', tmpfile.path]
+    if status != 0
+      STDOUT.write(stdout)
+      STDERR.write(stderr)
+      raise "failed to create new client key for node"
+    end
+
+    sh("cat #{tmpfile.path} | ssh #{args.old} 'sudo tee /etc/chef/client.pem'")
+    tmpfile.unlink
+
+    ENV['BATCH'] = "1"
+    run_task('ssl:do_cert', args.fqdn)
+    knife :upload, ["cookbooks/certificates"]
+
+    sh("ssh #{args.old} sudo chef-client")
+
     run_task('node:delete', args.old)
   end
 
@@ -94,6 +114,7 @@ namespace :node do
   task :bootstrap, :fqdn, :ipaddress, :password do |t, args|
     args.with_defaults(password: "tux")
     ENV['BATCH'] = "1"
+    ENV['CREATE'] ||= "1"
     ENV['DISTRO'] ||= "gentoo"
     ENV['ROLE'] ||= "bootstrap"
     ENV['ENVIRONMENT'] ||= "production"
