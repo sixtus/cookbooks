@@ -96,6 +96,53 @@ if gentoo?
       action :enable
       provider Chef::Provider::Service::Systemd
     end
+
+    # emulate crontab support
+    cookbook_file "/usr/lib/systemd/system-generators/systemd-crontab-generator" do
+      source "systemd-crontab-generator"
+      owner "root"
+      group "root"
+      mode "0755"
+    end
+
+    cookbook_file "/usr/lib/systemd/system/cron.target" do
+      source "cron.target"
+      owner "root"
+      group "root"
+      mode "0644"
+    end
+
+    cookbook_file "/usr/bin/systemd-crontab-update" do
+      source "systemd-crontab-update"
+      owner "root"
+      group "root"
+      mode "0755"
+    end
+
+
+    cookbook_file "/usr/bin/crontab" do
+      source "crontab"
+      owner "root"
+      group "root"
+      mode "0755"
+    end
+
+    directory "/var/spool/cron" do
+      owner "root"
+      group "root"
+      mode "0755"
+    end
+
+    file "/var/spool/cron/root" do
+      owner "root"
+      group "root"
+      mode "0644"
+    end
+
+    service "cron.target" do
+      action [:enable, :start]
+      provider Chef::Provider::Service::Systemd
+    end
   end
 end
 
