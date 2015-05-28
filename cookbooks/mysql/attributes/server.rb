@@ -43,7 +43,7 @@ default[:mysql][:server][:auto_increment_offset] = 1
 default[:mysql][:server][:binlog_format] = "row"
 
 # General Performance Options
-default[:mysql][:server][:table_open_cache] = "1024"
+default[:mysql][:server][:table_open_cache] = "64"
 default[:mysql][:server][:table_definition_cache] = 4 * node[:mysql][:server][:table_open_cache].to_i
 default[:mysql][:server][:open_files_limit] = 3 * node[:mysql][:server][:table_open_cache].to_i
 default[:mysql][:server][:tmp_table_size] = "64M"
@@ -51,7 +51,7 @@ default[:mysql][:server][:max_heap_table_size] = node[:mysql][:server][:tmp_tabl
 default[:mysql][:server][:group_concat_max_len] = "1024"
 
 # Client Connection Optimization
-default[:mysql][:server][:max_connections] = "128"
+default[:mysql][:server][:max_connections] = "512"
 default[:mysql][:server][:thread_cache_size] = node[:mysql][:server][:max_connections]
 default[:mysql][:server][:max_allowed_packet] = "64M"
 default[:mysql][:server][:wait_timeout] = "28800"
