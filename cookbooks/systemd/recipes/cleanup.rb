@@ -53,7 +53,6 @@ end
   /etc/local.d
   /etc/syslog-ng
   /etc/xinetd.d
-  /var/spool/cron
 ).each do |d|
   directory d do
     action :delete
