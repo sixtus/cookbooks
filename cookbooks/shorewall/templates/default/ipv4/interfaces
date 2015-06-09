@@ -15,6 +15,10 @@ net <%= node[:network][:default_interface] %> detect bridge
 net <%= node[:network][:default_interface] %>
 <% end %>
 
+<% if node[:network][:interfaces]["eth1"] %>
+loc eth1
+<% end %>
+
 <% node[:shorewall][:interfaces].each do |zone, interface| %>
 <%= zone %> <%= interface %>
 <% end %>

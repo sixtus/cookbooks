@@ -15,5 +15,6 @@
 <% end %>
 
 $FW all ACCEPT - -
+loc all ACCEPT - -
 net all DROP - -
 all all REJECT - -
