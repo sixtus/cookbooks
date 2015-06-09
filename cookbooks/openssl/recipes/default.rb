@@ -15,6 +15,13 @@ template "/etc/ssl/openssl.cnf" do
   mode "0644"
 end
 
+cookbook_file "/etc/ssl/dhparams.pem" do
+  source "dhparams.pem"
+  owner "root"
+  group "root"
+  mode "0644"
+end
+
 directory "/usr/local/share"
 directory "/usr/local/share/ca-certificates"
 
