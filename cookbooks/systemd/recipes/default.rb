@@ -51,17 +51,26 @@ if gentoo?
       mode "0644"
     end
 
+    # workaround for bootstrapping problems
+    execute "disable systemd-networkd.socket mdmonitor.service" do
+      command "/usr/bin/systemctl -f disable systemd-networkd.socket mdmonitor.service"
+    end
+    execute "enable systemd-networkd" do
+      command "/usr/bin/systemctl -f enable systemd-networkd.service "
+    end
+
+    # just a place holder to allow restarting
+    service "systemd-networkd" do
+      action [:nothing]
+    end
+
     file "/etc/systemd/network/default.network" do
-      content "[Match]\nName=eth0\n\n[Network]\nDHCP=v4\n"
+      content "[Match]\nName=#{node[:network][:default_interface]}\n\n[Network]\nDHCP=yes\n"
       owner "root"
       group "root"
       mode "0644"
+      notifies :restart, "service[systemd-networkd]"
       not_if { File.exist?("/etc/systemd/network/default.network") }
-    end
-
-    service "systemd-networkd.service" do
-      action [:enable]
-      provider Chef::Provider::Service::Systemd
     end
 
     service "systemd-networkd-wait-online.service" do
