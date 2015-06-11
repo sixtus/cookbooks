@@ -79,6 +79,12 @@ if gentoo?
       only_if { File.exist?("/usr/lib/systemd/system/systemd-networkd-wait-online.service") }
     end
 
+    # systemd-networkd will do it
+    service "dhcpcd.service" do
+      action :disable
+      provider Chef::Provider::Service::Systemd
+    end
+
     service "sshd.service" do
       action :enable
       provider Chef::Provider::Service::Systemd
