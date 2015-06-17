@@ -1,14 +1,11 @@
 include_recipe "kafka"
 
-node[:kafka][:mirror][:sources].each do |source|
-  template "/var/app/kafka/current/config/mirror-consumer-#{source}.properties" do
-    variables cluster: source
-    source "consumer.properties"
-    owner "root"
-    group "kafka"
-    mode "0640"
-    notifies :restart, "service[kafka-mirror]"
-  end
+template "/var/app/kafka/current/config/mirror-consumer.properties" do
+  source "consumer.properties"
+  owner "root"
+  group "kafka"
+  mode "0640"
+  notifies :restart, "service[kafka-mirror]"
 end
 
 template "/var/app/kafka/current/config/mirror-producer.properties" do
