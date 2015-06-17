@@ -30,7 +30,7 @@
 # cluster nodes
 <% node.nodes.cluster(node.cluster_name).each do |n| %>
 <% if n[:private_ipaddress] %>
-<%= n[:private_ipaddress] %> <%= n[:hostname] %>.local
+<%= n[:private_ipaddress] %> <%= n[:private_hostname] %>
 <% end %>
 <% end %>
 
