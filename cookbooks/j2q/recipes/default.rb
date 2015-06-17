@@ -12,6 +12,7 @@ if systemd_running?
       user: "j2q",
       group: "j2q",
     })
+    notifies :restart, "service[j2q]"
   end
 
   deploy_go_application "j2q" do
