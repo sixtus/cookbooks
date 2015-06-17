@@ -12,6 +12,7 @@ if gentoo?
       user: "smc",
       group: "smc",
     })
+    notifies :restart, "service[smc]"
   end
 
   deploy_go_application "smc" do
