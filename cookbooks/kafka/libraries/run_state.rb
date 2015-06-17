@@ -7,7 +7,11 @@ module KafkaRunStateHelpers
 
   def kafka_connect(cluster_name = node.cluster_name, fallback = nil)
     kafka_brokers(cluster_name, fallback).map do |broker|
-      "#{broker[:ipaddress]}:9092"
+      if broker[:kafka][:private]
+        "#{broker[:private_ipaddress]}:9092"
+      else
+        "#{broker[:ipaddress]}:9092"
+      end
     end.join(',')
   end
 
