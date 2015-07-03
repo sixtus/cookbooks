@@ -10,10 +10,10 @@ def wait_for_ssh(fqdn, login = true)
   end
   print "\n"
 
-  system("ssh -t #{fqdn} '/usr/bin/sudo -i uname -a'") if login
+  system("ssh -o 'StrictHostKeyChecking no' -o 'UserKnownHostsFile /dev/null' -o 'GlobalKnownHostsFile /dev/null' -t #{fqdn} '/usr/bin/sudo -i uname -a'") if login
 end
 
 def reboot_wait(fqdn, login = true)
-  system("ssh -t #{fqdn} '/usr/bin/sudo -i systemctl reboot'")
+  system("ssh -o 'StrictHostKeyChecking no' -o 'UserKnownHostsFile /dev/null' -o 'GlobalKnownHostsFile /dev/null' -t #{fqdn} '/usr/bin/sudo -i systemctl reboot'")
   wait_for_ssh(fqdn, login)
 end

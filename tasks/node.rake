@@ -40,8 +40,9 @@ namespace :node do
   task :rename, :old, :fqdn do |t, args|
     ipaddress = Resolv.getaddress(args.old)
 
+    inwx_add_record(args.fqdn, ipaddress)
     hetzner_server_name_rdns(ipaddress, args.fqdn)
-    zendns_add_record(args.fqdn, ipaddress)
+    ovh_server_name_rdns(args.ipaddress, args.fqdn)
     run_task('node:checkdns', args.fqdn, ipaddress)
 
     sh("ssh #{args.old} sudo rm -f /etc/chef/client.pem")
@@ -52,7 +53,6 @@ namespace :node do
     hostname = args.fqdn.split('.').first
     sh("ssh #{args.old} sudo sed -i -e 's/#{old_hostname}/#{hostname}/g' /etc/hosts")
     sh("ssh #{args.old} sudo hostname #{hostname}")
-
     run_task('node:copy', args.old, args.fqdn)
 
     tmpfile = Tempfile.new('chef_client_key')
@@ -127,19 +127,20 @@ namespace :node do
 
   desc "Update node packages"
   task :updateworld, :fqdn do |t, args|
-    system("ssh -t #{args.fqdn} '/usr/bin/sudo -i eix-sync -q'")
+    system("ssh -o 'StrictHostKeyChecking no' -o 'UserKnownHostsFile /dev/null' -o 'GlobalKnownHostsFile /dev/null' -t #{args.fqdn} '/usr/bin/sudo -i eix-sync -q'")
     env = "/usr/bin/env UPDATEWORLD_DONT_ASK=1" if ENV['BATCH']
-    system("ssh -t #{args.fqdn} '/usr/bin/sudo -i #{env} /usr/local/sbin/updateworld'")
+    system("ssh -o 'StrictHostKeyChecking no' -o 'UserKnownHostsFile /dev/null' -o 'GlobalKnownHostsFile /dev/null' -t #{args.fqdn} '/usr/bin/sudo -i #{env} /usr/local/sbin/updateworld'")
     reboot_wait(args.fqdn) if ENV['REBOOT']
-    system("ssh -t #{args.fqdn} '/usr/bin/sudo -i #{env} chef-client'")
+    system("ssh -o 'StrictHostKeyChecking no' -o 'UserKnownHostsFile /dev/null' -o 'GlobalKnownHostsFile /dev/null' -t #{args.fqdn} '/usr/bin/sudo -i ntpdate pool.ntp.org'")
+    system("ssh -o 'StrictHostKeyChecking no' -o 'UserKnownHostsFile /dev/null' -o 'GlobalKnownHostsFile /dev/null' -t #{args.fqdn} '/usr/bin/sudo -i #{env} chef-client'")
   end
 
   # private
 
   task :checkdns, :fqdn, :ipaddress do |t, args|
+    inwx_add_record(args.fqdn, args.ipaddress)
     hetzner_server_name_rdns(args.ipaddress, args.fqdn)
     ovh_server_name_rdns(args.ipaddress, args.fqdn)
-    zendns_add_record(args.fqdn, args.ipaddress)
 
     ip = Resolv.getaddress(args.fqdn)
     if ip != args.ipaddress

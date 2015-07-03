@@ -18,7 +18,8 @@ end
 def ovh_enable_rescue_wait(ipaddress)
   name = ovh_servers[ipaddress]['name']
   puts "Putting #{name} into rescue mode"
-  ovh.put("/dedicated/server/#{name}", 'bootId' => 22)
+  ovh.put("/dedicated/server/#{name}", 'bootId' => 22, 'monitoring' => false)
+  ovh.put("/dedicated/server/#{name}/serviceInfos", 'renew' => {'automatic' => true, 'forced' => false, 'period' => 1, 'deleteAtExpiration' => false})
   ovh_reset(ipaddress)
   wait_for_ssh(name, false)
   ovh.put("/dedicated/server/#{name}", 'bootId' => 1)
@@ -30,10 +31,21 @@ def ovh_server_name_rdns(ip, fqdn)
   server = ovh_servers[ip]
 
   if server.nil?
-    puts "not a ovh machine!"
+    puts "#{fqdn} not a ovh machine!"
     return
   end
 
-  puts "Setting reverse DNS for #{ip} to #{fqdn}"
-  puts "WARN: this API is not implemented for OVH"
+  result = ovh.get("/ip/#{ip}/reverse/#{ip}") rescue {}
+  expected = "#{fqdn}."
+
+  if result['reverse'] != expected
+    ovh.post("/ip/#{ip}/reverse", 'ipReverse' => ip, 'reverse' => "#{fqdn}.")
+    puts "Set reverse for #{fqdn} to #{ip}"
+  end
+end
+
+def ovh_expire(ipaddress)
+  name = ovh_servers[ipaddress]['name']
+  puts "Canceling #{name}"
+  puts ovh.put("/dedicated/server/#{name}/serviceInfos", 'renew' => {'automatic' => false, 'deleteAtExpiration' => true, 'forced' => false})
 end
