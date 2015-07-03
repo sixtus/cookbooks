@@ -1,0 +1,19 @@
+{
+  "name": "linux-realtime",
+  "description": "Kernel Options for low-latency TCP/IP",
+  "default_attributes": {
+    "sysctl": {
+      "fs": {
+        "file_max": 2097152,
+        "nr_open": 1048576
+      },
+      "net": {
+        "ipv4": {
+          "tcp_low_latency": 1,
+          "tcp_rmem": "4095 65535 131071",
+          "tcp_wmem": "4095 65535 131071"
+        }
+      }
+    }
+  }
+}

@@ -30,6 +30,7 @@ default[:sysctl][:net][:ipv4][:tcp_timestamps] = 1
 default[:sysctl][:net][:ipv4][:tcp_tw_recycle] = 0
 default[:sysctl][:net][:ipv4][:tcp_tw_reuse] = 0
 default[:sysctl][:net][:ipv4][:tcp_window_scaling] = 1
+default[:sysctl][:net][:ipv4][:tcp_low_latency] = 0
 default[:sysctl][:net][:ipv4][:tcp_rmem] = "4096 87380 6291456"
 default[:sysctl][:net][:ipv4][:tcp_wmem] = "4096 16384 4194304"
 default[:sysctl][:net][:netfilter][:nf_conntrack_max] = 262144
