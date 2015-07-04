@@ -1,4 +1,8 @@
 if gentoo?
+  portage_overlay "java" do
+    repository "https://github.com/zentoo/java-overlay"
+  end
+
   package "dev-java/oracle-jdk-bin" do
     version "1.7*"
   end
