@@ -1,14 +1,5 @@
 {
   "name": "camus",
-  "default_attributes": {
-    "camus": {
-      "topics": [
-        "druid",
-        "journal",
-        "metrics"
-      ]
-    }
-  },
   "run_list": [
     "role[base]",
     "recipe[hadoop2]",
