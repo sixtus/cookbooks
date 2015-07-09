@@ -10,7 +10,16 @@ execute "sysctl-reload" do
 end
 
 link "/etc/sysctl.conf" do
-  to "/etc/sysctl.d/base.conf"
+  action :delete
+  only_if { File.symlink?("/etc/sysctl.conf") }
+end
+
+template "/etc/sysctl.conf" do
+  owner "root"
+  group "root"
+  mode "0644"
+  source "sysctl.conf"
+  notifies :run, "execute[sysctl-reload]"
 end
 
 directory "/etc/sysctl.d" do
@@ -19,12 +28,12 @@ directory "/etc/sysctl.d" do
   mode "0755"
 end
 
-template "/etc/sysctl.d/base.conf" do
-  owner "root"
-  group "root"
-  mode "0644"
-  source "sysctl.conf"
-  notifies :run, "execute[sysctl-reload]"
+link "/etc/sysctl.d/99-sysctl.conf" do
+  to "/etc/sysctl.conf"
+end
+
+file "/etc/sysctl.d/base.conf" do
+  action :delete
 end
 
 template "/etc/security/limits.conf" do
@@ -32,4 +41,12 @@ template "/etc/security/limits.conf" do
   owner "root"
   group "root"
   mode "0644"
+end
+
+(node[:interrupts] || {}).each do |id, config|
+  config.each do |key, value|
+    file "/proc/irq/#{id}/#{key}" do
+      content "#{value}\n"
+    end
+  end
 end

@@ -28,7 +28,7 @@ service "irqd" do
 end
 
 service "irqbalance" do
-  action [:enable, :start]
+  action [:disable, :stop]
 end
 
 file "/etc/resolvconf.conf" do

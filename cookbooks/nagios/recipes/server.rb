@@ -90,7 +90,7 @@ hosts.each do |h|
 
   # group per role
   (h[:roles] || []).each do |r|
-    next if %w(base c500k smc).include?(r)
+    next if %w(base smc).include?(r)
     next if r == h.cluster_name
     hostgroups[r] << h[:fqdn]
   end

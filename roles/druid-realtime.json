@@ -2,7 +2,6 @@
   "name": "druid-realtime",
   "run_list": [
     "role[base]",
-    "role[c500k]",
     "role[druid-sources]",
     "role[druid-storage]",
     "recipe[hadoop2]",
