@@ -68,7 +68,7 @@ if ($verbose < 1 || $verbose > 3) {
 	exit $ERRORS{$state};
 }
 
-my $statcommand="sudo /sbin/zpool list $pool";
+my $statcommand="sudo /sbin/zpool list -o name,size,alloc,free,cap,dedup,health,altroot $pool";
 
 if (! open STAT, "$statcommand|") {
 	print ("$state '$statcommand' command returns no result! NOTE: This plugin needs OS support for ZFS, and execution with root privileges.\n");
