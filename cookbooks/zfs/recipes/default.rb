@@ -34,6 +34,17 @@ end
 
 zfs_pools = %x{/sbin/zpool list -Ho name}.split("\n") rescue []
 
+# write the initial set of zfs pools to the node
+# this helps defend against failure to mount leading to removing the checks
+if !zfs_pools.empty?
+  if !node[:zfs] || !node[:zfs][:pools]
+    node.set[:zfs][:pools] = zfs_pools
+  end
+end
+
+# make sure the stored pools are part of the check list
+zfs_pools = (zfs_pools + ((node[:zfs] && node[:zfs][:pools]) || [])).compact.uniq
+
 if zfs_pools.any?
   include_recipe "zfs"
 
