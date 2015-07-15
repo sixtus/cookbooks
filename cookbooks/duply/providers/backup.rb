@@ -26,7 +26,7 @@ action :create do
   end
 
   s = nr.schedule
-  s ||= %W(OnCalendar=#{node[:duply][:backup_time]})
+  s ||= %W(OnCalendar=#{node[:duply][:backup_time]} AccuracySec=1h)
 
   systemd_timer "duply-bkp-#{nr.name}" do
     schedule s
@@ -34,7 +34,7 @@ action :create do
   end
 
   systemd_timer "duply-purge-#{nr.name}" do
-    schedule %w(OnCalendar=weekly)
+    schedule %w(OnCalendar=weekly AccuracySec=1h)
     unit command: "/usr/bin/duply #{nr.name} purgeFull --force"
   end
 end
