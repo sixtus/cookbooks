@@ -18,6 +18,7 @@ end
 
 systemd_unit "kafka-mirror.service" do
   template true
+  notifies :restart, "service[kafka-mirror]"
 end
 
 service "kafka-mirror" do
