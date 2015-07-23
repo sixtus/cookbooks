@@ -48,6 +48,7 @@ if gentoo?
     sys-apps/the_silver_searcher
     sys-apps/util-linux
     sys-fs/ncdu
+    sys-libs/libunwind
     sys-power/acpitool
     sys-process/iotop
     sys-process/lsof
