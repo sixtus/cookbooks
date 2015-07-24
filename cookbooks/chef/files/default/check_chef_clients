@@ -14,4 +14,4 @@ if [[ $result == "" ]]; then
 fi
 
 echo $result
-exit 2
+exit 1
