@@ -8,6 +8,3 @@ ForwardX11Trusted yes
 
 Host *
 	HashKnownHosts no
-	PasswordAuthentication no
-	ChallengeResponseAuthentication no
-	PubkeyAuthentication yes
