@@ -5,7 +5,7 @@ require 'nagios/plugin/jolokia'
 
 module UnderReplicatedPartitions
   def bean
-    '"kafka.server":name="UnderReplicatedPartitions",type="ReplicaManager"'
+    'kafka.server:name=UnderReplicatedPartitions,type=ReplicaManager'
   end
 
   def attribute

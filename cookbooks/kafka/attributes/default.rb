@@ -1,5 +1,5 @@
 default[:kafka][:git][:repository] = "https://github.com/apache/kafka"
-default[:kafka][:git][:revision] = "0.8.1.1"
+default[:kafka][:git][:revision] = "0.8.2.1"
 
 default[:kafka][:storage] = "/var/app/kafka/storage"
 
