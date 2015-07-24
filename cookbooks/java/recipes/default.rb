@@ -1,15 +1,15 @@
 if gentoo?
-  portage_overlay "java" do
-    repository "https://github.com/zentoo/java-overlay"
-  end
-
-  package "dev-java/oracle-jdk-bin" do
-    version "1.7*"
-  end
-
-  package "dev-java/maven-bin"
-
   if root?
+    portage_overlay "java" do
+      repository "https://github.com/zentoo/java-overlay"
+    end
+
+    package "dev-java/oracle-jdk-bin" do
+      version "1.7*"
+    end
+
+    package "dev-java/maven-bin"
+
     execute "eselect-java-vm" do
       command "eselect java-vm set system oracle-jdk-bin-1.7"
       not_if { %x(eselect --brief java-vm show system).strip == "oracle-jdk-bin-1.7" }
