@@ -32,6 +32,32 @@
             "service",
             "type"
           ]
+        },
+        "druid": {
+          "timestamp": {
+            "column": "timestamp"
+          },
+          "aggregators": {
+            "value": "doubleSum"
+          },
+          "dimensions": [
+            "bufferpoolName",
+            "dataSource",
+            "gcName",
+            "hasFilters",
+            "host",
+            "memKind",
+            "metric",
+            "numComplexMetrics",
+            "numMetrics",
+            "poolKind",
+            "poolName",
+            "priority",
+            "server",
+            "service",
+            "tier",
+            "type"
+          ]
         }
       }
     }
