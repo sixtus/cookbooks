@@ -13,6 +13,7 @@ module DruidHelpers
 
   def druid_realtime_spec
     node[:druid][:sources].map do |source, config|
+      next if config[:clusters] && !config[:clusters].include?(node.cluster_name)
       {
         dataSchema: {
           dataSource: source,
@@ -70,7 +71,7 @@ module DruidHelpers
           },
         },
       }
-    end
+    end.compact
   end
 
   def druid_sources
