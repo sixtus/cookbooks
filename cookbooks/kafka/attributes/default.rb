@@ -15,4 +15,4 @@ default[:kafka][:log][:retention_hours] = 7 * 24 # 7 days
 default[:kafka][:log][:retention_bytes] = 64 * 1024 * 1024 * 1024 # 64G
 
 default[:kafka][:mirror][:topics] = []
-default[:kafka][:mirror][:sources] = []
+default[:kafka][:mirror][:destination] = nil
