@@ -1,5 +1,5 @@
-default[:druid][:git][:repository] = "https://github.com/metamx/druid"
-default[:druid][:git][:revision] = "druid-0.7.1"
+default[:druid][:git][:repository] = "https://github.com/druid-io/druid"
+default[:druid][:git][:revision] = "druid-0.8.0"
 
 default[:druid][:cluster] = node.cluster_name
 
