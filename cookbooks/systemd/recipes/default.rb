@@ -51,14 +51,6 @@ if gentoo?
       mode "0644"
     end
 
-    file "/etc/systemd/network/default.network" do
-      content "[Match]\nName=eth0\n\n[Network]\nDHCP=v4\n"
-      owner "root"
-      group "root"
-      mode "0644"
-      not_if { File.exist?("/etc/systemd/network/default.network") }
-    end
-
     service "systemd-networkd.service" do
       action [:enable]
       provider Chef::Provider::Service::Systemd
