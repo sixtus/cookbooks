@@ -17,13 +17,6 @@ deploy_application "camus" do
   end
 end
 
-template "#{homedir}/current/camus.properties" do
-  source "camus.properties"
-  owner "camus"
-  group "camus"
-  mode "0644"
-end
-
 systemd_unit "camus.service" do
   action :delete
 end
@@ -42,10 +35,13 @@ unit_defaults = {
 
 node[:camus][:topics].each do |name, properties|
   args = (properties || {}).merge({
-    "kafka.whitelist.topics" => name,
     "camus.job.name" => "camus-#{name}",
+    "etl.destination.path" => node[:camus][:destination],
     "etl.execution.base.path" => "#{node[:camus][:base_path]}/#{name}",
     "etl.execution.history.path" => "#{node[:camus][:history_path]}/#{name}",
+    "kafka.brokers" => kafka_connect,
+    "kafka.client.name" => "camus",
+    "kafka.whitelist.topics" => name,
   }).map do |key, value|
     "-D#{key}=#{value}"
   end.join(' ')
@@ -54,7 +50,7 @@ node[:camus][:topics].each do |name, properties|
     schedule %w(OnCalendar=*:20 AccuracySec=20m)
     action :delete unless primary
     unit(unit_defaults.merge({
-      command: "/var/app/camus/current/camus #{args}",
+      command: "/var/app/camus/current/camus -P /dev/null #{args}",
     }))
   end
 end
