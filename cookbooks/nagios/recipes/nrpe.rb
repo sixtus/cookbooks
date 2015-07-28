@@ -1,5 +1,11 @@
 if gentoo?
   package "net-analyzer/nrpe"
+
+  group "systemd-journal-#{rrand}" do
+    group_name "systemd-journal"
+    members "nagios"
+    append true
+  end
 elsif debian_based?
   package "nagios-nrpe-server"
 end
