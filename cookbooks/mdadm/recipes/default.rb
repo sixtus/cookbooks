@@ -6,8 +6,12 @@ else
   raise "cookbook mdadm does not support platform #{node[:platform]}"
 end
 
-service "mdadm" do
-  action [:disable, :stop]
+service "mdmonitor" do
+  if lxc?
+    action [:disable, :stop]
+  else
+    action [:enable, :start]
+  end
 end
 
 template "/etc/mdadm.conf" do
