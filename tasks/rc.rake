@@ -29,4 +29,16 @@ namespace :rc do
     end
   end
 
+  desc "Run custom script"
+  task :script, :name do |t, args|
+    script = File.join(ROOT, 'scripts', args.name)
+    raise "script '#{args.name}' not found" if not File.exist?(script)
+    search("*:*") do |node|
+      if ENV.key?('NOSUDO')
+        system("cat '#{script}' | ssh #{node.name} '/bin/bash -s'")
+      else
+        system("cat '#{script}' | ssh #{node.name} '/usr/bin/sudo -i /bin/bash -s'")
+      end
+    end
+  end
 end

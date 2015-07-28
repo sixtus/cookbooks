@@ -136,6 +136,11 @@ namespace :node do
     end
   end
 
+  desc "Convert node to networkd with private interface"
+  task :networkd, :fqdn, :public, :private do |t, args|
+    sh("cat scripts/convert-to-networkd.sh | ssh #{args.fqdn} 'sudo bash -x -s #{args.public} #{args.private}'")
+  end
+
   # private
 
   task :checkdns, :fqdn, :ipaddress do |t, args|
