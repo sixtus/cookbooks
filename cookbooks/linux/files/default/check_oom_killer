@@ -1,0 +1,19 @@
+#!/bin/bash
+
+if [[ -e /tmp/.check_oom_killer ]]; then
+	set -- $(</tmp/.check_oom_killer)
+else
+	set -- @0
+fi
+
+since=$1
+until=@$(date +%s)
+
+incidents=$(journalctl SYSLOG_IDENTIFIER=kernel --reverse --quiet --no-pager --since=${since} --until=${until} | fgrep 'Out of memory: Kill process')
+
+if [[ -z ${incidents} ]]; then
+	echo ${until} > /tmp/.check_oom_killer
+else
+	echo "${incidents}"
+	exit 2
+fi

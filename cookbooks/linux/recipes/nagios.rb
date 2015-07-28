@@ -62,6 +62,20 @@ if nagios_client?
     env [:staging, :testing, :development]
   end
 
+  if systemd_running?
+    nagios_plugin "check_oom_killer"
+
+    nrpe_command "check_oom_killer" do
+      command "/usr/lib/nagios/plugins/check_oom_killer"
+    end
+
+    nagios_service "OOM-KILLER" do
+      check_command "check_nrpe!check_oom_killer"
+      servicegroups "system"
+      env [:staging, :testing, :development]
+    end
+  end
+
   nagios_plugin "check_raid"
 
   nrpe_command "check_raid" do
