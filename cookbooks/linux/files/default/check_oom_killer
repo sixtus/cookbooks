@@ -13,6 +13,8 @@ incidents=$(journalctl SYSLOG_IDENTIFIER=kernel --reverse --quiet --no-pager --s
 
 if [[ -z ${incidents} ]]; then
 	echo ${until} > /tmp/.check_oom_killer
+	echo "No incidents since last ack"
+	exit 0
 else
 	echo "${incidents}"
 	exit 2
