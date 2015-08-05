@@ -51,8 +51,11 @@ namespace :generate do
     b = binding()
     erb = Erubis::Eruby.new(File.read(File.join(TEMPLATES_DIR, 'openvpn.conf')))
 
+    name = "#{$conf.company.name} VPN"
+    archive = "#{ROOT}/#{name} (#{login}).zip"
+
     tmpdir = Dir.mktmpdir
-    path = File.join(tmpdir, "#{$conf.company.name} VPN.tblk")
+    path = File.join(tmpdir, "#{name}.tblk")
     FileUtils.mkdir_p(path)
 
     File.open(File.join(path, "config.ovpn"), "w") do |f|
@@ -66,8 +69,11 @@ namespace :generate do
     FileUtils.cp(File.join(SSL_CERT_DIR, "#{login}.key"),
                  File.join(path, "#{login}.key"))
 
-    puts ">>> Configuration is at #{path}"
-    system("open '#{path}' || :")
+    Dir.chdir(tmpdir) do |path|
+      system("apack '#{archive}' '#{name}.tblk'")
+    end
+
+    puts ">>> Configuration is at #{archive}"
   end
 
 end
