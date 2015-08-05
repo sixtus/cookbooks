@@ -48,6 +48,7 @@ namespace :generate do
     remote = "vpn." + URI.parse(Chef::Config[:chef_server_url]).host.split('.')[1..-1].join('.')
     login = args.login
 
+    ENV["BATCH"] = "1"
     ssl_args = Rake::TaskArguments.new([:cn], [login])
     Rake::Task["ssl:do_cert"].execute(ssl_args)
 
