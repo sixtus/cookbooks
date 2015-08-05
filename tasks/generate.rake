@@ -48,6 +48,9 @@ namespace :generate do
     remote = "vpn." + URI.parse(Chef::Config[:chef_server_url]).host.split('.')[1..-1].join('.')
     login = args.login
 
+    ssl_args = Rake::TaskArguments.new([:cn], [login])
+    Rake::Task["ssl:do_cert"].execute(ssl_args)
+
     b = binding()
     erb = Erubis::Eruby.new(File.read(File.join(TEMPLATES_DIR, 'openvpn.conf')))
 
