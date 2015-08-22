@@ -89,6 +89,9 @@ namespace :node do
     args.with_defaults(:profile => 'generic-two-disk-md')
     raise "missing parameters!" unless args.fqdn && args.ipaddress
 
+    # load profile
+    profile = File.read(File.join(ROOT, "config/quickstart", "#{args.profile}.sh"))
+
     # create DNS/rDNS records
     run_task('node:checkdns', args.fqdn, args.ipaddress)
 

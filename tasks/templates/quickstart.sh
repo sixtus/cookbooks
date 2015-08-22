@@ -24,4 +24,9 @@ cd /tmp
 wget -q -O quickstart.tar.gz https://github.com/zentoo/quickstart/tarball/master
 tar -xzf quickstart.tar.gz
 cd *-quickstart-*
-exec ./quickstart -v -d profiles/<%= args.profile %>.sh
+
+cat >> profile.sh <<EOF
+<%= profile %>
+EOF
+
+exec ./quickstart -v -d profile.sh
