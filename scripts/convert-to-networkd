@@ -8,6 +8,8 @@ fi
 ipaddress=$(ip addr show dev $1 | grep 'inet .*global' | awk '{ print $2 }')
 gateway=$(ip route list | grep default | head -n1 | awk '{ print $3 }')
 
+rm -v /etc/systemd/network/*
+
 cat > /etc/systemd/network/default.network <<EOF
 [Match]
 Name=$1
