@@ -4152,7 +4152,7 @@ use base 'plugin';
 push(@utils::plugins, __PACKAGE__);
 
 sub program_names {
-	qw(hpacucli hpssacli);
+	qw(hpssacli hpacucli);
 }
 
 sub commands {
