@@ -66,7 +66,7 @@ ssl_certificate "/etc/ssl/nginx/wildcard.#{node[:chef_domain]}" do
   cn "wildcard.#{node[:chef_domain]}"
 end
 
-if node.clustered?
+if node.clustered? && node[:fqdn] =~ %r{\.#{node[:chef_domain]}$}
   ssl_certificate "/etc/ssl/nginx/wildcard.#{node.cluster_name}.#{node[:chef_domain]}" do
     cn "wildcard.#{node.cluster_name}.#{node[:chef_domain]}"
   end
