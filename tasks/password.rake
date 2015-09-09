@@ -24,7 +24,7 @@ task :password do
   end
 
   salt = SecureRandom.hex(8)
-  printf "password1 '%s'\n", p1.crypt("$1$#{salt}$")
+  printf "  \"password1\": \"%s\",\n", p1.crypt("$1$#{salt}$")
   salt = SecureRandom.hex(4)
-  printf "password '%s'\n", p1.crypt("$6$#{salt}$")
+  printf "  \"password\": \"%s\",\n", p1.crypt("$6$#{salt}$")
 end
