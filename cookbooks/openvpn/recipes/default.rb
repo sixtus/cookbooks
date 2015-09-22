@@ -60,7 +60,14 @@ end
 
 cidr = IPAddr.new(node[:openvpn][:netmask]).to_i.to_s(2).count("1")
 
-shorewall_masq "vpn" do
+shorewall_masq "vpn-to-public" do
   interface node[:network][:default_interface]
   source "#{node[:openvpn][:network]}/#{cidr}"
+end
+
+if node[:private_ipaddress]
+  shorewall_masq "vpn-to-private" do
+    interface "eth1"
+    source "#{node[:openvpn][:network]}/#{cidr}"
+  end
 end
