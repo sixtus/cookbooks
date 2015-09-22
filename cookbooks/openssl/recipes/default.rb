@@ -38,6 +38,12 @@ if root?
       ssl_certificate "/etc/ssl/certs/wildcard.#{node[:chef_domain]}" do
         cn "wildcard.#{node[:chef_domain]}"
       end
+
+      if node[:cluster_domain]
+        ssl_certificate "/etc/ssl/certs/wildcard.#{node[:cluster_domain]}" do
+          cn "wildcard.#{node[:cluster_domain]}"
+        end
+      end
     end
   else
     Chef::Log.warn("No CA certificate found. Run `rake ssl:init` to create a CA")
