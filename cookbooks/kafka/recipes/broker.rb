@@ -39,13 +39,15 @@ service "kafka" do
   action [:enable, :start]
 end
 
-file "/var/app/smc/current/plugin.d/kafka.json" do
-  content({
-    Enabled: true,
-  }.to_json)
-  owner "smc"
-  group "smc"
-  notifies :restart, "service[smc]"
+if smc_node?
+  file "/var/app/smc/current/plugin.d/kafka.json" do
+    content({
+      Enabled: true,
+    }.to_json)
+    owner "smc"
+    group "smc"
+    notifies :restart, "service[smc]"
+  end
 end
 
 if nagios_client?
