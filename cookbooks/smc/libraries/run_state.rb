@@ -1,4 +1,8 @@
 module SmcHelpers
+  def smc_node?
+    node.role?("smc")
+  end
+
   def smc_nodes(cluster_name = node.cluster_name)
     node.nodes.cluster(cluster_name).role("smc")
   end
