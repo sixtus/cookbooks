@@ -9,6 +9,7 @@ Ohai.plugin(:PrivateIpaddress) do
     Ohai::Log.debug("looking for a private network interface in #{network.inspect}")
 
     ip = network['interfaces']
+      .select { |name, i| name =~ /^(en|eth)/ }
       .map { |name, i| (i['addresses'] || {}).keys }
       .flatten
       .grep(/^10\.|^172\.1[6-9]\.|^172\.2\d\.|^172\.3[0-1]\.|^192\.168/)
