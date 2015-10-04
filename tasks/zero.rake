@@ -1,7 +1,6 @@
 require 'listen'
 
 CHEF_ZERO_IGNORE = [
-  %r{vagrant/machines},
   %r{\.swp$},
 ]
 

@@ -9,6 +9,5 @@
 .kitchen/
 .rake_test_cache
 .user
-.vagrant/machines/
 .zero-knife.rb
 documentation/_build

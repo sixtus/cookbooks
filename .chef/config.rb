@@ -24,10 +24,6 @@ cookbook_path [
   "#{chef_repo_path}/site-cookbooks",
 ]
 
-if ENV["CHEF_ZERO"]
-  node_path "#{chef_repo_path}/.vagrant/nodes"
-end
-
 script_path "#{chef_repo_path}/scripts"
 
 if File.exist?("#{chef_repo_path}/.chef/client.pem")
