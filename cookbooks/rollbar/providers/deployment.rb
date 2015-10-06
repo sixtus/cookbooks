@@ -47,10 +47,4 @@ action :notify do
     req.form_data = payload
     res = http.request(req)
   end
-
-  if res.code != "200"
-    body = res.body.length != 0 ? res.body : "<no body>"
-    Chef::Log.error("Invalid status code from rollbar #{res.code}: #{body}")
-    raise "Invalid status code from rollbar #{res.code}"
-  end
 end
