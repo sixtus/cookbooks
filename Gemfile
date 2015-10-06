@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Chef
-gem 'chef' , '~> 12.1.0'
+gem 'chef' #, '~> 12.1.0'
 gem 'foodcritic' #, '~> 3.0'
 gem 'knife-dsl', github: 'zenops/knife-dsl'
 
