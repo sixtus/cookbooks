@@ -64,7 +64,7 @@ default[:php][:session][:save_path] = "#{node[:php][:tmp_dir]}/sessions"
 default[:php][:session][:use_only_cookies] = "1"
 
 # upload settings
-default[:php][:upload][:max_filesize] = "2M"
+default[:php][:upload][:max_filesize] = "32M"
 default[:php][:upload][:tmp_dir] = "#{node[:php][:tmp_dir]}/uploads"
 
 # paths
