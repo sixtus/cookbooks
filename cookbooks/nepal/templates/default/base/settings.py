@@ -17,6 +17,7 @@ DATABASE_PASSWORD = '<%= @database_password %>'
 ADMINS = (('hostmaster', '<%= node[:contacts][:hostmaster] %>'),)
 MANAGERS = ADMINS
 DEFAULT_FROM_EMAIL = '<%= node[:contacts][:hostmaster] %>'
+SERVER_EMAIL = '<%= node[:contacts][:hostmaster] %>'
 
 # local time zone for this installation
 TIME_ZONE = '<%= node[:timezone] %>'
