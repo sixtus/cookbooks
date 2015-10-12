@@ -39,7 +39,7 @@ if root?
         cn "wildcard.#{node[:chef_domain]}"
       end
 
-      if node.cluster_domain
+      if node.cluster_domain && node[:fqdn] =~ %r{#{node.cluster_domain}$}
         ssl_certificate "/etc/ssl/certs/wildcard.#{node.cluster_domain}" do
           cn "wildcard.#{node.cluster_domain}"
         end
