@@ -40,5 +40,9 @@ def clean_directory(path, mtime)
 end
 
 <% node[:hadoop2][:hdfs][:clean].each do |dir, days| %>
+<% if days == 0 %>
+clean_directory("<%= dir %>", 0)
+<% else %>
 clean_directory("<%= dir %>", (Time.now.to_i - <%= days %> * 24 * 60 * 60) * 1000)
+<% end %>
 <% end %>
