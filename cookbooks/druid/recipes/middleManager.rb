@@ -36,3 +36,12 @@ service "druid-middleManager" do
   subscribes :restart, "template[/var/app/druid/bin/druid-middleManager]"
   subscribes :restart, "systemd_unit[druid-middleManager]"
 end
+
+systemd_timer "druid-middleManager-cleanup" do
+  schedule %w(OnCalendar=daily)
+  unit(
+    command: "/usr/bin/find /var/app/druid/storage/task -mtime +7 -delete",
+    user: "root",
+    group: "root",
+  )
+end
