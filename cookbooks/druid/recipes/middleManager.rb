@@ -40,7 +40,7 @@ end
 systemd_timer "druid-middleManager-cleanup" do
   schedule %w(OnCalendar=daily)
   unit(
-    command: "/usr/bin/find /var/app/druid/storage/task -mtime +7 -delete",
+    command: "/bin/sh -c '/usr/bin/find /var/app/druid/storage/task -mtime +7 -delete || :'",
     user: "root",
     group: "root",
   )
