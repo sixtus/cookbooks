@@ -29,7 +29,7 @@ else
 end
 
 systemd_timer "clean_hdfs" do
-  schedule %w(OnCalendar=hourly)
+  schedule %w(OnCalendar=daily)
   action :delete unless primary
   unit command: "/var/app/hadoop2/current/bin/clean_hdfs"
 end
