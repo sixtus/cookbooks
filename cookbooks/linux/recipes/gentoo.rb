@@ -20,17 +20,6 @@ end
 
 directory "/var/lib/misc"
 
-package "sys-apps/irqbalance"
-package "sys-apps/irqd"
-
-service "irqd" do
-  action [:disable, :stop]
-end
-
-service "irqbalance" do
-  action [:disable, :stop]
-end
-
 file "/etc/resolvconf.conf" do
   content "resolv_conf=/tmp/.resolv.conf\n"
   owner "root"
