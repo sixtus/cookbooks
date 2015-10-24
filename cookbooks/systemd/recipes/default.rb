@@ -24,6 +24,11 @@ if gentoo?
       mode "0644"
     end
 
+    # and shutdown on SIGPWR
+    link "/etc/systemd/system/sigpwr.target" do
+      to "/usr/lib/systemd/system/poweroff.target"
+    end
+
     # timesyncd
     service "systemd-timesyncd.service" do
       action [:enable]
