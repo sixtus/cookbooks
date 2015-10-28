@@ -1,0 +1,23 @@
+[Unit]
+Description=NFS server and services
+Requires=network.target proc-fs-nfsd.mount rpcbind.target
+Requires=nfs-mountd.service
+Wants=rpc-statd.service auth-rpcgss-module.service
+Wants=rpc-gssd.service gssproxy.service rpc-svcgssd.service
+
+After=network.target proc-fs-nfsd.mount rpcbind.target nfs-mountd.service
+After=rpc-statd.service
+After=rpc-gssd.service gssproxy.service rpc-svcgssd.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStartPre=/usr/sbin/exportfs -r
+ExecStart=/usr/sbin/rpc.nfsd 8
+ExecStop=/usr/sbin/rpc.nfsd 0
+ExecStopPost=/usr/sbin/exportfs -au
+ExecStopPost=/usr/sbin/exportfs -f
+ExecReload=/usr/sbin/exportfs -r
+
+[Install]
+WantedBy=multi-user.target
