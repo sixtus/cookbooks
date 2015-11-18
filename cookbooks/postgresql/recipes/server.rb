@@ -51,6 +51,16 @@ template "#{datadir}/pg_ident.conf" do
   notifies :reload, "service[postgresql]"
 end
 
+template "#{datadir}/recovery.conf" do
+  action(postgresql_hot_standby? ? :create : :delete)
+
+  source "recovery.conf"
+  owner "postgres"
+  group "postgres"
+  mode "0600"
+  notifies :reload, "service[postgresql]"
+end
+
 directory "/etc/postgresql-#{version}" do
   action :delete
   recursive true
@@ -65,18 +75,16 @@ service "postgresql" do
   supports [:reload]
 end
 
-backupdir = "#{homedir}/backup"
+backupdir = "/var/app/postgresql/backup"
+backup_active = postgresql_master? and production?
 
-directory backupdir do
-  owner "postgres"
-  group "postgres"
-  mode "0700"
-end
-
-if postgresql_nodes.first
-  primary = (node[:fqdn] == postgresql_nodes.first[:fqdn])
-else
-  primary = true
+if backup_active
+  directory backupdir do
+    owner "postgres"
+    group "postgres"
+    mode "0700"
+    recursive true
+  end
 end
 
 systemd_timer "postgresql-backup" do
@@ -89,12 +97,70 @@ systemd_timer "postgresql-backup" do
     user: "postgres",
     group: "postgres",
   })
-  action :delete unless primary
+  action :delete unless backup_active
 end
 
 duply_backup "postgresql" do
   source backupdir
   max_full_backups 30
   incremental false
-  action :delete unless primary
+  action :delete unless backup_active
+end
+
+if node[:postgresql][:snapshot][:active]
+  directory node[:postgresql][:snapshot][:path] do
+    owner "postgres"
+    group "postgres"
+    mode "0700"
+    recursive true
+  end
+
+  template "/var/app/postgresql/postgres-snapshot" do
+    source "postgres-snapshot.sh"
+    owner "postgres"
+    group "postgres"
+    mode "0544"
+  end
+end
+
+systemd_timer "postgresql-snapshot" do
+  schedule %w(OnCalendar=hourly)
+  unit({
+    command: [
+      "/var/app/postgresql/postgres-snapshot"
+    ],
+    user: "postgres",
+    group: "postgres",
+  })
+  action :delete unless node[:postgresql][:snapshot][:active]
+end
+
+if postgresql_master? && nagios_client?
+  nagios_plugin "check_postgres" do
+    source "check_postgres.rb"
+  end
+
+  nrpe_command "check_postgres_replication_lag" do
+    command "/usr/lib/nagios/plugins/check_postgres --user=postgres -m ReplicationLag -w 100 -c 300"
+  end
+
+  nagios_service "POSTGRES-REPLICATION-LAG" do
+    check_command "check_nrpe!check_postgres_replication_lag"
+    servicegroups "postgres"
+  end
+end
+
+if postgresql_hot_standby? && nagios_client?
+  nagios_plugin "check_postgres_slave" do
+    source "check_postgres_slave.rb"
+  end
+
+  nrpe_command "check_postgres_slave_lag" do
+    command "/usr/lib/nagios/plugins/check_postgres_slave -w 60 -c 180"
+  end
+
+  nagios_service "POSTGRES-SLAVE-LAG" do
+    check_command "check_nrpe!check_postgres_slave_lag"
+    servicegroups "postgres"
+  end
 end
