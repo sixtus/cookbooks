@@ -21,6 +21,7 @@ default[:php][:default_use_flags] = %w(-*
   nls
   pcre
   pdo
+  phar
   posix
   reflection
   session
