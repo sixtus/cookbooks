@@ -5,7 +5,7 @@ default[:nginx][:worker_connections] = "16384"
 
 default[:nginx][:client_body_timeout] = 10
 default[:nginx][:client_header_timeout] = 10
-default[:nginx][:client_max_body_size] = "10M"
+default[:nginx][:client_max_body_size] = "0"
 default[:nginx][:keepalive_timeout] = 15
 default[:nginx][:send_timeout] = 10
 
