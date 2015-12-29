@@ -2,10 +2,11 @@
 
 source /usr/lib/nagios/plugins/utils.sh
 
-PIDS=$(sudo lib_users -m | awk -F\; '{print $1}' | paste -sd ',')
+output=$(sudo lib_users)
 
-if [[ -n $PIDS ]]; then
-	echo "WARNING - processes use old libraries (${PIDS})"
+if [[ -n $output ]]; then
+	echo "WARNING - processes use old libraries"
+	echo "${output}"
 	exit $STATE_WARNING
 fi
 
