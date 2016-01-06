@@ -31,10 +31,6 @@ if mac_os_x?
     action :nothing
   end
 
-  include_recipe "mac::iterm"
-  include_recipe "mac::alfred2"
-  include_recipe "mac::chrome"
-
 else
   raise "mac cookbook can only run on platform mac_os_x"
 end
