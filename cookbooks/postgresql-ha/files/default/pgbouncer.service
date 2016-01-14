@@ -1,0 +1,16 @@
+[Unit]
+Description=PgBouncer
+After=network-online.target
+Wants=dnsmasq.service
+
+[Service]
+User=pgbouncer
+Group=pgbouncer
+ExecStart=/var/app/pgbouncer/current/pgbouncer /var/app/pgbouncer/shared/config/pgbouncer.ini
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+TimeoutSec=900
+OOMScoreAdjust=-990
+
+[Install]
+WantedBy=multi-user.target

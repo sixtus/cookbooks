@@ -1,0 +1,15 @@
+[Unit]
+Description=Postgresql %i HA Watch Daemon
+After=consul.service
+Wants=consul.service
+
+[Service]
+User=postgres
+Group=postgres
+ExecStart=/var/lib/postgresql/postgresql-ha
+Restart=always
+TimeoutSec=900
+OOMScoreAdjust=-990
+
+[Install]
+WantedBy=multi-user.target

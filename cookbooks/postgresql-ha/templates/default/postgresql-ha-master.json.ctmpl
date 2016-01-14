@@ -1,0 +1,14 @@
+{
+  "service": {
+    "name": "postgresql-{{env "CLUSTER" | toLower }}",
+    "address": <%= node[:ipaddress].to_json %>,
+    "port": 5432,
+    "tags": ["master"],
+    "checks": [
+      {
+        "script": "/var/app/consul/shared/config/services/postgresql-ha-check-master.sh",
+        "interval": "1s"
+      }
+    ]
+  }
+}

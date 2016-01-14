@@ -1,0 +1,16 @@
+[Unit]
+Description=Postgresql %i Database
+After=network.target
+
+[Service]
+User=postgres
+Group=postgres
+ExecStart=/bin/sh -c "/usr/lib/postgresql-%I/bin/postgres -D /var/lib/postgresql/%I/data"
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+TimeoutSec=900
+OOMScoreAdjust=-990
+SyslogIdentifier=postgres
+
+[Install]
+WantedBy=multi-user.target
