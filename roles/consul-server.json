@@ -1,0 +1,7 @@
+{
+  "name": "consul-server",
+  "description": "Consul Server Agent",
+  "run_list": [
+    "recipe[consul]"
+  ]
+}

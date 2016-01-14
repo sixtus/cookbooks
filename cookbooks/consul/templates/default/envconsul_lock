@@ -1,0 +1,7 @@
+#!/bin/bash
+
+PREFIX=$1
+shift
+PARAMS=$@
+
+exec <%= @release_path %>/consul lock $PREFIX <%= @release_path %>/envconsul -prefix $PREFIX $PARAMS

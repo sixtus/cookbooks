@@ -1,0 +1,14 @@
+[Unit]
+Description=Dnsmasq Agent
+After=network-online.target
+Wants=consul.target
+
+[Service]
+User=root
+Group=dnsmasq
+ExecStart=/var/app/dnsmasq/current/src/dnsmasq --server=/consul/127.0.0.1#8600 --server=8.8.8.8 --server=8.8.4.4 -d -R
+SyslogIdentifier=dnsmasq
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

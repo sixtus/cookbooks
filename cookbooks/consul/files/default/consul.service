@@ -1,0 +1,16 @@
+[Unit]
+Description=Consul Agent
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=consul
+Group=consul
+Environment=GOMAXPROCS=3
+ExecStart=/var/app/consul/current/consul agent -config-file=/var/app/consul/shared/config/config.json -config-dir=/var/app/consul/shared/config/services
+ExecReload=/var/app/consul/current/consul reload
+SyslogIdentifier=consul
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
