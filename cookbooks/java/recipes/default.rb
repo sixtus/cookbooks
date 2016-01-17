@@ -30,7 +30,7 @@ if gentoo?
     end
 
     remote_file "/usr/lib/jvm/jolokia.jar" do
-      source "http://labs.consol.de/maven/repository/org/jolokia/jolokia-jvm/1.2.2/jolokia-jvm-1.2.2-agent.jar"
+      source "https://repo1.maven.org/maven2/org/jolokia/jolokia-jvm/1.2.2/jolokia-jvm-1.2.2-agent.jar"
     end
   end
 end
