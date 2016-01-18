@@ -16,7 +16,7 @@ pig_dir = "/var/app/hadoop2/pig/pig-#{node[:hadoop2][:pig][:version]}-src"
 
 # bug fix, remove when ant runs w/o it (or dependencies change)
 remote_file "/var/app/hadoop2/.m2/repository/org/mortbay/jetty/jetty/6.1.26/jetty-6.1.26.zip" do
-  source "https://repository.jboss.org/nexus/content/groups/public/org/mortbay/jetty/jetty/6.1.26/jetty-6.1.26-bundle.zip"
+  source "http://zenops-assets.s3.amazonaws.com/jetty-6.1.26-bundle.zip"
   user "hadoop2"
   group "hadoop2"
 end
