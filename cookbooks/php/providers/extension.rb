@@ -7,7 +7,13 @@ action :create do
     action :nothing
   end
 
-  node[:php][:sapi].each do |sapi|
+  sapis = nr.sapi
+
+  if sapis.empty? || sapis == "all"
+    sapis = node[:php][:sapi]
+  end
+
+  sapis.each do |sapi|
     case sapi
     when "fpm"
       service = "php-fpm"
@@ -41,7 +47,13 @@ action :delete do
     action :nothing
   end
 
-  node[:php][:sapi].each do |sapi|
+  sapis = nr.sapi
+
+  if sapis.empty? || sapis == "all"
+    sapis = node[:php][:sapi]
+  end
+
+  sapis.each do |sapi|
     case sapi
     when "fpm"
       service = "php-fpm"

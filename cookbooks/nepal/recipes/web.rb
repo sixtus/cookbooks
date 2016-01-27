@@ -59,6 +59,7 @@ end
 
 php_extension "xdebug" do
   template "web/xdebug.ini"
+  sapi %w(fpm)
 end
 
 # Apache

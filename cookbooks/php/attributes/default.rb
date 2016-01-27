@@ -14,6 +14,7 @@ default[:php][:default_use_flags] = %w(-*
   hash
   iconv
   imap
+  intl
   json
   mysql
   mysqli
@@ -51,7 +52,7 @@ default[:php][:max_execution_time] = "30"
 default[:php][:max_input_nesting_level] = "64"
 default[:php][:max_input_time] = "60"
 default[:php][:max_input_vars] = "1000"
-default[:php][:memory_limit] = "128M"
+default[:php][:memory_limit] = "-1"
 default[:php][:post_max_size] = "8M"
 default[:php][:realpath_cache_size] = "16k"
 default[:php][:register_argc_argv] = "Off"
