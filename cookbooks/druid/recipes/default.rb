@@ -58,15 +58,6 @@ ruby_block "druid-zk-chroot" do
   end
 end
 
-#file "/var/app/smc/current/plugin.d/druid.json" do
-#  content({
-#    Enabled: true,
-#  }.to_json)
-#  owner "smc"
-#  group "smc"
-#  notifies :restart, "service[smc]"
-#end
-
 if nagios_client?
   nagios_plugin "check_druid" do
     source "check_druid.rb"

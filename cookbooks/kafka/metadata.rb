@@ -11,5 +11,4 @@ supports "gentoo"
 
 depends "deploy"
 depends "java"
-depends "smc"
 depends "zookeeper"
