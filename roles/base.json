@@ -12,6 +12,7 @@
     "recipe[chef::client]",
     "recipe[duply]",
     "recipe[htop]",
+    "recipe[ipmi]",
     "recipe[hwraid]",
     "recipe[lftp]",
     "recipe[lib_users]",
