@@ -87,6 +87,25 @@ if gentoo?
       provider Chef::Provider::Service::Systemd
     end
 
+    # system timers
+    systemd_timer "makewhatis" do
+      schedule %w(OnCalendar=daily)
+      unit({
+        command: "/usr/sbin/makewhatis -u",
+        user: "root",
+        group: "root",
+      })
+    end
+
+    systemd_timer "logrotate" do
+      schedule %w(OnCalendar=daily)
+      unit({
+        command: "/usr/sbin/logrotate --verbose /etc/logrotate.conf",
+        user: "root",
+        group: "root",
+      })
+    end
+
     # emulate crontab support
     cookbook_file "/usr/lib/systemd/system-generators/systemd-crontab-generator" do
       source "systemd-crontab-generator"
@@ -108,7 +127,6 @@ if gentoo?
       group "root"
       mode "0755"
     end
-
 
     cookbook_file "/usr/bin/crontab" do
       source "crontab"

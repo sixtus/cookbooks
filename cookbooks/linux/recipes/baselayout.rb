@@ -108,12 +108,25 @@ link "/run/lock" do
   not_if { File.symlink?("/var/lock") }
 end
 
-# wrapper for systemd/openrc/sysvinit abstraction
-cookbook_file "/sbin/service" do
-  source "service.sh"
+# global ag ignore file
+file "/.agignore" do
+  content([
+    "dev/",
+    "proc/",
+    "run/",
+    "sys/",
+    "tmp/",
+    "var/lib/chef/backup",
+    "var/lib/syslog-ng/syslog-ng.ctl",
+    "var/log/",
+    "var/spool/",
+  ].join("\n"))
   owner "root"
   group "root"
-  mode "0755"
-  manage_symlink_source false
-  force_unlink true if File.exist?("/sbin/service")
+  mode "0644"
+end
+
+# old cruft
+file "/sbin/service" do
+  action :delete
 end
