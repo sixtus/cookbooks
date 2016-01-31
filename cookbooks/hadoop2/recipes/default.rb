@@ -78,7 +78,7 @@ src_dir = "/var/app/hadoop2/releases/hadoop-#{node[:hadoop2][:version]}-src"
 release_dir = "#{src_dir}/hadoop-dist/target/hadoop-#{node[:hadoop2][:version]}"
 
 tar_extract src_tar do
-  target_dir "/var/app/hadoop2/releases"
+  target_dir src_dir
   creates src_dir
   user "hadoop2"
   group "hadoop2"

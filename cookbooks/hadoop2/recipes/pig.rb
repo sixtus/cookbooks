@@ -22,26 +22,25 @@ remote_file "/var/app/hadoop2/.m2/repository/org/mortbay/jetty/jetty/6.1.26/jett
 end
 
 tar_extract pig_tar do
-  target_dir "/var/app/hadoop2/pig"
+  target_dir pig_dir
   creates pig_dir
   user "hadoop2"
   group "hadoop2"
-
   notifies :run, "execute[pig-build]"
 end
 
 execute "pig-build" do
   cwd pig_dir
-  command "/usr/bin/ant clean jar-withouthadoop -Dhadoopversion=23" #TODO: make that configurable again
+  command "/usr/bin/ant clean jar-withouthadoop -Dhadoopversion=23"
   user "hadoop2"
   group "hadoop2"
+  action :nothing
 end
 
 contrib_jars = Hash[node[:hadoop2][:pig][:default_jars].map do |contrib_uri|
   [contrib_uri, "/var/app/hadoop2/pig/contrib/#{contrib_uri.split('/')[-1]}"]
 end]
 
-# Deploy contrib jars
 contrib_jars.each do |contrib_uri, jar_name|
   remote_file jar_name do
     source contrib_uri
@@ -51,7 +50,6 @@ contrib_jars.each do |contrib_uri, jar_name|
   end
 end
 
-# Clean contrib folder, only leave only node[:hadoop2][:pig][:default_jars]
 Dir["/var/app/hadoop2/pig/contrib/*"].each do |file_name|
   unless contrib_jars.values.include? file_name
     file file_name do

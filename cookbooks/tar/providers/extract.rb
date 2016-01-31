@@ -15,12 +15,7 @@ action :extract do
   end
 
   execute "extract #{basename}" do
-    if r.target_dir == "/"
-      command "aunpack -X / #{local_archive}"
-    else
-      command "aunpack #{local_archive}"
-    end
-    cwd r.target_dir
+    command "tar xvzf #{local_archive} -C #{r.target_dir} --keep-directory-symlink"
     creates r.creates
     group r.group
     user r.user
