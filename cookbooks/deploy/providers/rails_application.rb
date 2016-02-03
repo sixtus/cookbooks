@@ -33,6 +33,7 @@ action :create do
 
     purge_before_symlink nr.purge_before_symlink
     symlink_before_migrate({
+      "cache" => "cache",
       "config/unicorn.rb" => "config/unicorn.rb",
     }.merge(nr.symlink_before_migrate))
     symlinks nr.symlinks
