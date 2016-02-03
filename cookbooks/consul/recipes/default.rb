@@ -168,7 +168,7 @@ if systemd_running?
   end
 end
 
-if gentoo?
+if zentoo?
   gem_package "diplomat" do
     action :install
   end.run_action(:install)
