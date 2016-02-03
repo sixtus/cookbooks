@@ -1,11 +1,11 @@
 #!/bin/bash
 
-CLUSTER=${1:-<%= node[:postgresql][:ha][:cluster] %>}
+HAGROUP=${1:-<%= node[:postgresql][:ha][:group] %>}
 PGDATA=${2:-/var/lib/postgresql/<%= node[:postgresql][:server][:version] %>/data}
 DAEMON=${3:-postgresql@<%= node[:postgresql][:server][:version] %>.service}
 CONSUL_SERVICE=/var/app/consul/shared/config/services/postgresql-ha.json
 
-KV_MASTER="postgresql/${CLUSTER}/master"
+KV_MASTER="postgresql/${HAGROUP}/master"
 HOSTNAME=`hostname -f`
 
 function psql_get {
@@ -40,7 +40,7 @@ function init_config {
 
 function init_master {
     echo "adding a service to consul so I can be found"
-    env CLUSTER=$CLUSTER /var/app/consul/current/consul-template -once \
+    env HAGROUP=$HAGROUP /var/app/consul/current/consul-template -once \
       -template=/var/app/postgresql/template/postgresql-ha-master.json.ctmpl:$CONSUL_SERVICE
     sudo systemctl reload consul
 
@@ -86,7 +86,7 @@ function elect_master {
   if [[ "$MASTER" == "" ]]; then
     echo "first election, I am master then"
     FORCE_MASTER=true
-  elif [[ $HOSTNAME != $MASTER ]]; then
+  elif [[ "$HOSTNAME" != "$MASTER" ]]; then
     check_master
     if [[ "$MASTER_UP" == "false" ]]; then
       echo "master $MASTER is not up... :("
@@ -122,7 +122,7 @@ function elect_master {
 }
 
 function ensure_slave {
-  env CLUSTER=$CLUSTER /var/app/consul/current/consul-template -once \
+  env HAGROUP=$HAGROUP /var/app/consul/current/consul-template -once \
     -template=/var/app/postgresql/template/postgresql-ha-slave.json.ctmpl:$CONSUL_SERVICE:'sudo systemctl reload consul'
 
   check_daemon
@@ -145,7 +145,7 @@ function ensure_slave {
   fi
   NEW_RECOVERY=`cat $PGDATA/recovery.expected`
 
-  if [ "$OLD_RECOVERY" != "$NEW_RECOVERY" ] || [ "$DAEMON_MASTER" == "true" ]; then
+  if [ "$OLD_RECOVERY" != "$NEW_RECOVERY" ] || [ "$DAEMON_MASTER" == "true" ] || [ "$DAEMON_UP" == "false" ]; then
     echo "old recovery.conf"
     echo $OLD_RECOVERY
     echo "new recovery.conf"
@@ -156,7 +156,7 @@ function ensure_slave {
 
     echo "moving old $PGDATA to /var/app/postgresql/crashed"
     mkdir -p /var/app/postgresql/crashed
-    mv $PGDATA /var/app/postgresql/crashed/`date +%Y-%M-%d-%k-%m-%S`
+    mv $PGDATA /var/app/postgresql/crashed/`date +%Y-%m-%d-%k-%M-%S`
 
     echo "taking a base backup from $MASTER"
     /usr/bin/pg_basebackup -h $MASTER -D $PGDATA -v -P -U postgres --xlog-method=stream
@@ -184,15 +184,18 @@ function ensure_slave {
   fi
 }
 
-elect_master
-echo "postgresql-ha in cluster $CLUSTER, data in $PGDATA, master is $MASTER"
+while [[ "$CONSUL_UP" != "true" ]]
+do
+  elect_master
+done
+echo "postgresql-ha in group $HAGROUP, data in $PGDATA, master is $MASTER"
 
 while :
 do
   elect_master
-  if [[ "$CONSUL_UP" == false ]]; then
+  if [[ "$CONSUL_UP" == "false" ]]; then
     echo "oh no, consul is down..."
-  elif [[ $HOSTNAME != $MASTER ]]; then
+  elif [[ "$HOSTNAME" != "$MASTER" ]]; then
     ensure_slave
   elif [[ "$MASTER_UP" == "false" ]]; then
     echo "my daemon is down... waiting for a slave to become master"

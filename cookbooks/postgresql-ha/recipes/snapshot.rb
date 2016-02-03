@@ -1,4 +1,4 @@
-include_recipe "postgresql"
+include_recipe "postgresql-ha"
 
 directory node[:postgresql][:snapshot][:path] do
   owner "postgres"

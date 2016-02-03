@@ -32,6 +32,7 @@ default[:postgresql][:server][:effective_cache_size] = "128MB"
 default[:postgresql][:snapshot][:path] = "/var/app/postgresql/snapshots"
 
 # HA
-default[:postgresql][:ha][:cluster] = node[:cluster][:name]
+default[:postgresql][:ha][:group] = node.production? ? node.chef_environment : "dev"
+default[:postgresql][:ha][:cluster] = node.production? ? node[:cluster][:name].gsub(".", "_") : "dev"
 default[:postgresql][:ha][:pgbouncer] = "1.7"
 default[:postgresql][:ha][:client_port] = 6432

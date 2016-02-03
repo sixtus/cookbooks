@@ -1,6 +1,6 @@
 {
   "service": {
-    "name": "postgresql-{{env "CLUSTER" | toLower }}",
+    "name": "postgresql-{{env "HAGROUP" | toLower }}",
     "address": <%= node[:ipaddress].to_json %>,
     "port": 5432,
     "tags": ["master"],

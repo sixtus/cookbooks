@@ -1,2 +1,2 @@
 standby_mode = 'on'
-primary_conninfo = 'host={{ key "postgresql/<%= node[:postgresql][:ha][:cluster] %>/master"}}'
+primary_conninfo = 'host={{ key "postgresql/<%= node[:postgresql][:ha][:group] %>/master"}}'
