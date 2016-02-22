@@ -11,8 +11,9 @@ include_recipe "hadoop2"
   end
 end
 
-pig_tar = "http://www.eu.apache.org/dist/pig/pig-#{node[:hadoop2][:pig][:version]}/pig-#{node[:hadoop2][:pig][:version]}-src.tar.gz"
-pig_dir = "/var/app/hadoop2/pig/pig-#{node[:hadoop2][:pig][:version]}-src"
+pig_tar = "https://archive.apache.org/dist/pig/pig-#{node[:hadoop2][:pig][:version]}/pig-#{node[:hadoop2][:pig][:version]}-src.tar.gz"
+pig_basedir = "/var/app/hadoop2/pig"
+pig_dir = "#{pig_basedir}/pig-#{node[:hadoop2][:pig][:version]}-src"
 
 # bug fix, remove when ant runs w/o it (or dependencies change)
 remote_file "/var/app/hadoop2/.m2/repository/org/mortbay/jetty/jetty/6.1.26/jetty-6.1.26.zip" do
@@ -21,12 +22,18 @@ remote_file "/var/app/hadoop2/.m2/repository/org/mortbay/jetty/jetty/6.1.26/jett
   group "hadoop2"
 end
 
+directory pig_basedir do
+  user "hadoop2"
+  group "hadoop2"
+  mode "0755"
+end
+
 tar_extract pig_tar do
-  target_dir pig_dir
+  target_dir pig_basedir
   creates pig_dir
   user "hadoop2"
   group "hadoop2"
-  notifies :run, "execute[pig-build]"
+  notifies :run, "execute[pig-build]", :immediately
 end
 
 execute "pig-build" do
