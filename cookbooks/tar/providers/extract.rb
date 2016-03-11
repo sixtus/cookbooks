@@ -15,7 +15,7 @@ action :extract do
   end
 
   execute "extract #{basename}" do
-    command "tar xvzf #{local_archive} -C #{r.target_dir} --keep-directory-symlink"
+    command "tar xvf #{local_archive} -C #{r.target_dir} --keep-directory-symlink"
     creates r.creates
     group r.group
     user r.user
