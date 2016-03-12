@@ -1,25 +1,11 @@
-if gentoo?
-  package "net-firewall/shorewall6"
-
-elsif debian_based?
-  package "shorewall6"
-end
-
 directory "/etc/shorewall6" do
   owner "root"
   group "root"
   mode "0700"
 end
 
-template "/etc/shorewall6/shorewall6.conf" do
-  source "ipv6/shorewall6.conf"
-  owner "root"
-  group "root"
-  mode "0600"
-  notifies :restart, "service[shorewall6]"
-end
-
 %w(
+  shorewall6.conf
   hosts
   interfaces
   policy
@@ -28,7 +14,11 @@ end
   zones
 ).each do |t|
   template "/etc/shorewall6/#{t}" do
-    source "ipv6/#{t}"
+    if gentoo? # shorewall 5.x
+      source "ipv6/5.x/#{t}"
+    else # shorewall 4.x
+      source "ipv6/4.x/#{t}"
+    end
     owner "root"
     group "root"
     mode "0600"
@@ -48,7 +38,7 @@ if nagios_client?
   sudo_rule "nagios-shorewall6" do
     user "nagios"
     runas "root"
-    command "NOPASSWD: /sbin/shorewall6 status"
+    command "NOPASSWD: /usr/sbin/shorewall6 status"
   end
 
   nagios_plugin "check_shorewall6"

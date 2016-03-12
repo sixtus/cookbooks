@@ -1,6 +1,6 @@
 {
   "name": "zenops-mirror",
-  "description": "ZenOps Mirror and CI",
+  "description": "ZenOps Mirror",
   "run_list": [
     "recipe[zenops::mirror]"
   ]

@@ -17,11 +17,6 @@ make INSTALL_MOD_PATH=${tmpdir} modules_install
 # crappy kernel module build scripts
 export FEATURES="-userpriv"
 
-# install virtualbox modules
-ROOT=${tmpdir} KERNEL_DIR=$(realpath $PWD) \
-	emerge --getbinpkg=n --usepkg=n --nodeps \
-	app-emulation/virtualbox-modules
-
 # install zfs modules
 ROOT=${tmpdir} KERNEL_DIR=$(realpath $PWD) \
 	emerge --getbinpkg=n --usepkg=n --nodeps \

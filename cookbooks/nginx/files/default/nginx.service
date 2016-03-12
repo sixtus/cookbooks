@@ -9,7 +9,6 @@ PIDFile=/run/nginx.pid
 ExecStartPre=/usr/bin/systemd-tmpfiles --create nginx.conf
 ExecStartPre=/usr/sbin/nginx -t
 ExecStart=/usr/sbin/nginx
-ExecReload=/bin/kill -USR1 $MAINPID
 ExecReload=/bin/kill -HUP $MAINPID
 ExecStop=/bin/kill -QUIT $MAINPID
 Restart=always

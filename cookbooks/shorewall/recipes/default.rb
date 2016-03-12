@@ -16,6 +16,35 @@ unless vbox?
     end
   end
 
+  if gentoo?
+    package "net-firewall/conntrack-tools"
+
+    package "net-firewall/shorewall-core" do
+      action :remove
+    end
+
+    package "net-firewall/shorewall6" do
+      action :remove
+    end
+
+    package "net-firewall/shorewall" do
+      # prevent accidental config upgrade
+      version "5.0.2.1"
+    end
+  elsif debian_based?
+    package "shorewall"
+
+    link "/usr/sbin/shorewall" do
+      to "/sbin/shorewall"
+    end
+
+    package "shorewall6"
+
+    link "/usr/sbin/shorewall6" do
+      to "/sbin/shorewall6"
+    end
+  end
+
   include_recipe "shorewall::ipv4"
   include_recipe "shorewall::ipv6"
 

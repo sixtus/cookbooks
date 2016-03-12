@@ -1,0 +1,22 @@
+#
+# Shorewall6 -- /etc/shorewall6/interfaces
+#
+# For information about entries in this file, type "man shorewall6-interfaces"
+#
+# The manpage is also online at
+# http://www.shorewall.net/manpages6/shorewall6-interfaces.html
+#
+###############################################################################
+?FORMAT 2
+###############################################################################
+#ZONE		INTERFACE		OPTIONS
+
+<% if node[:network][:default_interface_bridged] %>
+net <%= node[:network][:default_interface] %> bridge
+<% else %>
+net <%= node[:network][:default_interface] %>
+<% end %>
+
+<% node[:shorewall6][:interfaces].each do |zone, interface| %>
+<%= zone %> <%= interface %>
+<% end %>

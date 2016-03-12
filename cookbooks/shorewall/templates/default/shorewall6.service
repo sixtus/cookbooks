@@ -1,15 +1,20 @@
+#
+#       The Shoreline Firewall 6 (Shorewall6) Packet Filtering Firewall - V5.0
+#
 [Unit]
-Description=The Shoreline IPv6 Firewall
-After=network-online.target
+Description=Shorewall IPv6 firewall
+Documentation=man:shorewall6(8) http://www.shorewall.net/Documentation_Index.html
 Wants=network-online.target
+After=network-online.target
+Conflicts=ip6tables.service firewalld.service ip6tables-restore.service
 
 [Service]
 Type=oneshot
-ExecStart=/sbin/shorewall6 start
-ExecStartPost=-/usr/lib/systemd/systemd-sysctl
-ExecReload=/sbin/shorewall6 restart
-ExecStop=/sbin/shorewall6 stop
 RemainAfterExit=yes
+StandardOutput=syslog
+ExecStart=/usr/sbin/shorewall6 start
+ExecStartPost=-/usr/lib/systemd/systemd-sysctl
+ExecStop=/usr/sbin/shorewall6 stop
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=basic.target

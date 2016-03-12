@@ -1,0 +1,15 @@
+#
+# Shorewall6 -- /etc/shorewall6/hosts
+#
+# For information about entries in this file, type "man shorewall6-hosts"
+#
+# The manpage is also online at
+# http://www.shorewall.net/manpages6/shorewall6-hosts.html
+#
+###############################################################################
+#ZONE	HOST(S)					OPTIONS
+
+<% node[:shorewall6][:hosts].each do |name, host| %>
+# <%= name %>
+<%= [ :zone, :hosts, :options ].map { |a| host[a] }.join(" ") %>
+<% end %>

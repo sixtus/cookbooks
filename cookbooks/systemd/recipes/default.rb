@@ -17,13 +17,6 @@ if gentoo?
       mode "0644"
     end
 
-    cookbook_file "/usr/lib/tmpfiles.d/etc.conf" do
-      source "etc.conf"
-      owner "root"
-      group "root"
-      mode "0644"
-    end
-
     # and shutdown on SIGPWR
     link "/etc/systemd/system/sigpwr.target" do
       to "/usr/lib/systemd/system/poweroff.target"

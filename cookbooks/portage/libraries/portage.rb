@@ -86,15 +86,6 @@ class Chef
       class Portage < Chef::Provider::Package
         include Chef::Mixin::ShellOut
 
-        def load_current_resource
-          @current_resource = Chef::Resource::Package.new(@new_resource.name)
-          @current_resource.package_name(@new_resource.package_name)
-          if package_info and package_info[:current_version]
-            @current_resource.version(package_info[:current_version])
-          end
-          @current_resource
-        end
-
         def candidate_version
           @candidate_version ||= package_info[:candidate_version] rescue nil
         end

@@ -1,3 +1,5 @@
+include_recipe "nepal::overlay"
+
 include_recipe "mysql::server"
 
 mysql_password = get_password("mysql/nepal")
@@ -12,10 +14,6 @@ end
 
 mysql_database "nepal" do
   connection node[:mysql][:connection]
-end
-
-portage_overlay "nepal" do
-  repository "https://github.com/hollow/nepal-overlay"
 end
 
 # we need this in the base recipe so we can create directories for user apache

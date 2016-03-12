@@ -4,17 +4,8 @@ directory "/var/cache/mirror" do
   mode "0755"
 end
 
-include_recipe "zenops::ci"
-include_recipe "zenops::binhost"
 include_recipe "zenops::distfiles"
 include_recipe "zenops::mirror-zentoo"
-
-rsync_module "mirror" do
-  path "/var/cache/mirror"
-  uid "nobody"
-  gid "nobody"
-  exclude "/.git* /eix.* /scripts"
-end
 
 include_recipe "nginx"
 
@@ -24,9 +15,9 @@ end
 
 # shorewall
 shorewall_rule "zenops-mirror" do
-  destport "http,https,rsync"
+  destport "http,https"
 end
 
 shorewall6_rule "zenops-mirror" do
-  destport "http,https,rsync"
+  destport "http,https"
 end

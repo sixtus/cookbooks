@@ -47,10 +47,33 @@ end
   end
 end
 
-directory "/home" do
+# force sane permissions on directories
+%w(
+  /bin
+  /boot
+  /dev
+  /etc
+  /home
+  /media
+  /mnt
+  /opt
+  /run
+  /sbin
+  /srv
+  /usr
+  /var
+).each do |dir|
+  directory dir do
+    owner "root"
+    group "root"
+    mode "0755"
+  end
+end
+
+directory "/tmp" do
   owner "root"
   group "root"
-  mode "0755"
+  mode "1777"
 end
 
 # we don't want no motd

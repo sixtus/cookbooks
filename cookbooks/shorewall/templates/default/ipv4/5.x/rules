@@ -1,0 +1,46 @@
+#
+# Shorewall -- /etc/shorewall/rules
+#
+# For information on the settings in this file, type "man shorewall-rules"
+#
+# The manpage is also online at
+# http://www.shorewall.net/manpages/shorewall-rules.html
+#
+######################################################################################################################################################################################################
+#ACTION		SOURCE		DEST		PROTO	DEST	SOURCE		ORIGINAL	RATE		USER/	MARK	CONNLIMIT	TIME		HEADERS		SWITCH		HELPER
+#							PORT(S)	PORT(S)		DEST		LIMIT		GROUP
+?SECTION ALL
+?SECTION ESTABLISHED
+?SECTION RELATED
+?SECTION INVALID
+?SECTION UNTRACKED
+?SECTION NEW
+
+# accept icmp messages
+ACCEPT $FW net icmp
+ACCEPT net $FW icmp
+
+# accept ssh connections
+ACCEPT all all tcp ssh
+
+# accept nrpe connection from nagios
+<% if nagios_node %>
+ACCEPT net:<%= nagios_node[:ipaddress] %> all tcp 5666
+<% end %>
+
+# accept connections from openvpn server(s)
+<% openvpn_nodes.each do |n| %>
+ACCEPT net:<%= n[:ipaddress] %> all tcp
+<% end %>
+
+# accept all connections from chef nodes
+<% nodes = node[:shorewall][:clustered] ? node.nodes.cluster(node.cluster_name) : node.nodes %>
+<% nodes.each do |n| %>
+<% next unless n[:ipaddress] %>
+ACCEPT net:<%= n[:ipaddress] %> all - -
+<% end %>
+
+<% node[:shorewall][:rules].sort_by {|r| r[0]}.each do |name, rule| %>
+# <%= name %>
+<%= [ :action, :source, :dest, :proto, :destport, :sourceport ].map { |a| rule[a] }.join(" ") %>
+<% end %>

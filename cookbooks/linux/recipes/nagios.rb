@@ -109,16 +109,16 @@ if nagios_client?
     env [:staging, :testing, :development]
   end
 
-  nrpe_command "check_swap" do
-    command "/usr/lib/nagios/plugins/check_swap -w 75% -c 50%"
-  end
+  #nrpe_command "check_swap" do
+  #  command "/usr/lib/nagios/plugins/check_swap -w 75% -c 50%"
+  #end
 
-  nagios_service "SWAP" do
-    check_command "check_nrpe!check_swap"
-    notification_interval 180
-    servicegroups "system"
-    env [:staging, :testing, :development]
-  end
+  #nagios_service "SWAP" do
+  #  check_command "check_nrpe!check_swap"
+  #  notification_interval 180
+  #  servicegroups "system"
+  #  env [:staging, :testing, :development]
+  #end
 
   sudo_rule "nagios-ethtool" do
     user "nagios"

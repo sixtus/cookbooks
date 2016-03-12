@@ -58,6 +58,12 @@ fi
 # dummy run emerge first, so global updates don't clutter the output.
 emerge --info &>/dev/null
 
+# update portage
+emerge sys-apps/portage -u1
+
+# run chef to fixup stuff that portage broke
+run_chef
+
 # remove packages that do not exist in the repository
 installed=$(mktemp)
 qlist -IC | sort -u > ${installed}

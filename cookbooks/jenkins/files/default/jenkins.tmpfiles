@@ -1,4 +1,0 @@
-# systemd tmpfile settings for jenkins
-# See tmpfiles.d(5) for details
-
-d /run/jenkins 0755 jenkins jenkins -
