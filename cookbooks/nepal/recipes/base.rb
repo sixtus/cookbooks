@@ -24,12 +24,6 @@ package "www-apps/nepal" do
 end
 
 # system directories
-directory "/srv" do
-  owner "root"
-  group "root"
-  mode "0755"
-end
-
 directory "/srv/system" do
   owner "nepal"
   group "nepal"
