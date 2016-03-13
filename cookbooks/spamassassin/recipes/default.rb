@@ -45,7 +45,7 @@ end
 
 if nagios_client?
   nrpe_command "check_spamd" do
-    command "/usr/bin/sa-check_spamd -H localhost -t 10 -w 5 -c 10"
+    command "/usr/bin/sa-check_spamd -H 127.0.0.1 -t 10 -w 5 -c 10"
   end
 
   nagios_service "SPAMD" do
