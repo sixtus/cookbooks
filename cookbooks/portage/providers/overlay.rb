@@ -16,7 +16,7 @@ action :create do
     block do
       node.set[:portage][:overlays][nr.name] = path
     end
-    only_if { node[:portage][:overlays][nr.name].nil? }
+    not_if { node[:portage][:overlays][nr.name] == path }
     notifies :run, "execute[update-overlay-#{nr.name}]", :immediately
     notifies :create, "ruby_block[update-packages-cache]", :immediately
     notifies :create, "file[/etc/portage/make.profile/parent]", :immediately
