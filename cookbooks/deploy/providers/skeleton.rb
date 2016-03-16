@@ -46,13 +46,17 @@ action :create do
     end
   end
 
-  shared = %w(cache config log pids system) + nr.shared
+  shared = %w(cache log) + nr.shared
 
   shared.uniq.each do |d|
     directory "#{homedir}/shared/#{d}" do
       owner user
       group user
       mode "0755"
+    end
+
+    link "#{homedir}/#{d}" do
+      to "#{homedir}/shared/#{d}"
     end
   end
 
