@@ -10,3 +10,4 @@ license "Apache v2.0"
 supports "gentoo"
 
 depends "php"
+depends "nepal"

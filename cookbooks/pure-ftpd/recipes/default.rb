@@ -1,3 +1,5 @@
+include_recipe "nepal::overlay"
+
 portage_package_use "net-ftp/pure-ftpd" do
   use %w(vchroot -caps) + node[:pureftpd][:use_flags]
 end

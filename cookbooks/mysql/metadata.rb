@@ -11,3 +11,4 @@ supports "gentoo"
 supports "mac_os_x"
 
 depends "database"
+depends "nepal"

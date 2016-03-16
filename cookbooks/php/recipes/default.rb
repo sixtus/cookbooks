@@ -1,3 +1,5 @@
+include_recipe "nepal::overlay"
+
 # remove old attributes
 node.normal_attrs[:php].delete(:extension_dir)
 

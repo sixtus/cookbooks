@@ -1,3 +1,5 @@
+include_recipe "nepal::overlay"
+
 portage_package_use "dev-libs/apr-util" do
   use node[:apache][:apr_util][:use]
 end
