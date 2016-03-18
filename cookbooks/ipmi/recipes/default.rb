@@ -1,7 +1,12 @@
-package "sys-apps/ipmitool"
-package "sys-libs/freeipmi"
+if gentoo?
+  package "sys-apps/ipmitool"
+  package "sys-libs/freeipmi"
+elsif debian_based?
+  package "ipmitool"
+  package "freeipmi-tools"
+end
 
-if nagios_client?
+if nagios_client? && !lxc?
   ipmi_exclude = "--exclude-sensor-types=#{node[:ipmi][:exclude_sensor_types].join(',')}"
 
   sudo_rule "nagios-ipmi-sensors" do
