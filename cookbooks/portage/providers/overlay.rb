@@ -19,7 +19,7 @@ action :create do
     not_if { node[:portage][:overlays][nr.name] == path }
     notifies :run, "execute[update-overlay-#{nr.name}]", :immediately
     notifies :create, "ruby_block[update-packages-cache]", :immediately
-    notifies :create, "file[/etc/portage/make.profile/parent]", :immediately
+    notifies :create, "template[/etc/portage/make.profile/parent]", :immediately
   end
 
   execute "update-overlay-#{nr.name}" do
@@ -28,8 +28,9 @@ action :create do
   end
 
   # copy due to use_inline_resources
-  file "/etc/portage/make.profile/parent" do
-    content "#{node[:portage][:profile]}\n#{node[:portage][:overlays].map { |name, _path| "#{_path}/profiles/#{name}" }.select { |x| ::File.exist?(x) }.join("\n")}"
+  template "/etc/portage/make.profile/parent" do
+    source "make.profile.parent"
+    cookbook "portage"
     owner "root"
     group "root"
     mode "0644"

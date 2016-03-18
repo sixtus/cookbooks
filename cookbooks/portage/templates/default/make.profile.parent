@@ -1,0 +1,4 @@
+<%= node[:portage][:profile] %>
+<% node[:portage][:overlays].map { |name, _path| "#{_path}/profiles/#{name}" }.select { |x| ::File.exist?(x) }.each do |file| %>
+<%= file %>
+<% end %>

@@ -65,8 +65,8 @@ if root?
     mode "0755"
   end
 
-  file "/etc/portage/make.profile/parent" do
-    content "#{node[:portage][:profile]}\n#{node[:portage][:overlays].map { |name, path| "#{path}/profiles/#{name}" }.join("\n")}"
+  template "/etc/portage/make.profile/parent" do
+    source "make.profile.parent"
     owner "root"
     group "root"
     mode "0644"
