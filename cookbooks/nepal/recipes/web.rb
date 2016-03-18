@@ -17,7 +17,7 @@ end
 node.default[:php][:fpm][:conf] = "/srv/system/etc/php/fpm.conf"
 include_recipe "php"
 
-cookbook_file "#{node[:php][:extension_dir]}/ioncube_loader_lin_#{node[:php][:slot]}.so" do
+cookbook_file "#{node.php_extension_dir}/ioncube_loader_lin_#{node[:php][:slot]}.so" do
   source "web/ioncube_loader_lin_#{node[:php][:slot]}.so"
 end
 
@@ -25,7 +25,7 @@ php_extension "ioncube" do
   template "web/ioncube.ini"
 end
 
-cookbook_file "#{node[:php][:extension_dir]}/ixed.#{node[:php][:slot]}.lin" do
+cookbook_file "#{node.php_extension_dir}/ixed.#{node[:php][:slot]}.lin" do
   source "web/ixed.#{node[:php][:slot]}.lin"
 end
 
@@ -34,7 +34,7 @@ php_extension "sourceguardian" do
 end
 
 if %w(5.3 5.4).include?(node[:php][:slot])
-  cookbook_file "#{node[:php][:extension_dir]}/ZendGuardLoader-#{node[:php][:slot]}.so" do
+  cookbook_file "#{node.php_extension_dir}/ZendGuardLoader-#{node[:php][:slot]}.so" do
     source "web/ZendGuardLoader-#{node[:php][:slot]}.so"
   end
 

@@ -24,6 +24,7 @@ default[:php][:default_use_flags] = %w(-*
   pdo
   phar
   posix
+  readline
   reflection
   session
   simplexml
@@ -73,7 +74,6 @@ default[:php][:upload][:tmp_dir] = "#{node[:php][:tmp_dir]}/uploads"
 default[:php][:slot] = "5.5"
 default[:php][:install_path] = "/usr/lib/php#{node[:php][:slot]}"
 default[:php][:php_config] = "/usr/bin/php-config"
-default[:php][:extension_dir] = %x(#{node[:php][:php_config]} --extension-dir 2>/dev/null || :).chomp
 
 # create default fpm pool
 default[:php][:fpm][:conf] = "/etc/php/fpm-php#{node[:php][:slot]}/php-fpm.conf"
