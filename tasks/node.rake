@@ -104,12 +104,11 @@ namespace :node do
     sshlive(args.ipaddress, ENV['PASSWORD'], tmpfile.path)
     tmpfile.unlink
 
-    # wait until machine is up again
-    wait_with_ping(args.ipaddress, false)
-    wait_with_ping(args.ipaddress, true)
+    # reboot & wait until machine is up again
+    sshlive(args.fqdn, ENV['PASSWORD'], "reboot")
+    wait_for_ssh(args.fqdn, false)
 
     # run normal bootstrap
-    ENV['REBOOT'] = "1"
     run_task('node:bootstrap', args.fqdn, args.ipaddress)
   end
 
@@ -117,18 +116,21 @@ namespace :node do
   task :bootstrap, :fqdn, :ipaddress, :password do |t, args|
     args.with_defaults(password: "tux")
     ENV['BATCH'] = "1"
-    ENV['CREATE'] ||= "1"
     ENV['DISTRO'] ||= "gentoo"
     ENV['ROLE'] ||= "bootstrap"
     ENV['ENVIRONMENT'] ||= "production"
+
     run_task('node:checkdns', args.fqdn, args.ipaddress)
     run_task('ssl:do_cert', args.fqdn)
     knife :upload, ["cookbooks/certificates"]
-    key = File.join(ROOT, "tasks/support/id_rsa")
+
     sh("knife node create -d #{args.fqdn}")
     sh("knife node environment set #{args.fqdn} #{ENV['ENVIRONMENT']}")
     sh("knife node run list set #{args.fqdn} 'role[#{ENV['ROLE']}]'")
     sh("knife bootstrap #{args.fqdn} --no-host-key-verify --no-node-verify-api-cert --node-ssl-verify-mode none -t #{ENV['DISTRO']} -P #{args.password} -r 'role[#{ENV['ROLE']}]' -E #{ENV['ENVIRONMENT']}")
+
+    ENV['REBOOT'] = "1"
+    run_task('node:updateworld', args.fqdn)
   end
 
   desc "Update node packages"
@@ -137,7 +139,8 @@ namespace :node do
     env = "/usr/bin/env UPDATEWORLD_DONT_ASK=1" if ENV['BATCH']
     system("ssh -t #{args.fqdn} '/usr/bin/sudo -i #{env} /usr/local/sbin/updateworld'")
     if ENV['REBOOT']
-      reboot_wait(args.fqdn)
+      system("ssh -t #{args.fqdn} '/usr/bin/sudo -i reboot'")
+      wait_for_ssh(args.fqdn)
       system("ssh -t #{args.fqdn} '/usr/bin/sudo -i #{env} chef-client'")
     end
   end

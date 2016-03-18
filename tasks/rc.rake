@@ -23,7 +23,7 @@ namespace :rc do
   desc "Reboot machines and wait until they are up"
   task :reboot do
     search("default_query:does_not_exist") do |node|
-      reboot_wait(node.name)
+      system("ssh -t #{fqdn} '/usr/bin/sudo -i reboot'")
       puts "Sleeping 5 minutes to slow down reboot loop"
       sleep 5*60
     end
