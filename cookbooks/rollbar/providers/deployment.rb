@@ -21,15 +21,14 @@ end
 action :notify do
   if new_resource.revision
     revision = new_resource.revision
+  elsif new_resource.command
+    revision = %x(#{new_resource.command}).chomp
   elsif new_resource.path
-    path = new_resource.path
-    cwd = Dir.getwd
-
-    Dir.chdir path
-    revision=`git log -n 1 --pretty=format:"%H"`
-    Dir.chdir cwd
+    Dir.chdir(new_resource.path) do
+      revision = %x(git log -n 1 --pretty=format:"%H").chomp
+    end
   else
-    raise "A revision or a path should be provided"
+    raise "a revision, path or command should be provided"
   end
 
   payload = {
