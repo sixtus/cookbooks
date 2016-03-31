@@ -37,6 +37,9 @@ default[:php][:default_use_flags] = %w(-*
   truetype
   unicode
   xml
+  xmlreader
+  xmlwriter
+  xslt
   zip
   zlib
 )
