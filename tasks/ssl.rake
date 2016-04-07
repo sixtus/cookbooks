@@ -82,7 +82,7 @@ namespace :ssl do
     end
 
     if ENV['BATCH'] != "1" and not Process.euid == 0
-      knife :upload, ["cookbooks/certificates"]
+      knife :cookbook, ["upload", "certificates"]
     end
   end
 
@@ -107,7 +107,7 @@ namespace :ssl do
     end
 
     if ENV['BATCH'] != "1" and not Process.euid == 0
-      knife :upload, ["cookbooks/certificates"]
+      knife :cookbook, ["upload", "certificates"]
     end
   end
 
@@ -121,7 +121,7 @@ namespace :ssl do
     end
 
     ENV['BATCH'] = old_batch
-    knife :upload, ["cookbooks/certificates"]
+    knife :cookbook, ["upload", "certificates"]
   end
 
   desc "Revoke an existing SSL certificate"
@@ -135,7 +135,7 @@ namespace :ssl do
       sh("openssl ca -config #{SSL_CONFIG_FILE} -gencrl -out #{SSL_CERT_DIR}/ca.crl")
       cn = args.cn.gsub("*", "wildcard")
       sh("rm #{SSL_CERT_DIR}/#{cn}.{csr,crt,key}")
-      knife :upload, ["cookbooks/certificates"] unless ENV["BATCH"]
+      knife :cookbook, ["upload", "certificates"] unless ENV["BATCH"]
     end
   end
 
@@ -155,7 +155,7 @@ namespace :ssl do
     end
 
     ENV['BATCH'] = old_batch
-    knife :upload, ["cookbooks/certificates"]
+    knife :cookbook, ["upload", "certificates"]
 
     sh("git add -A ca/ site-cookbooks/certificates || :")
     sh("git commit -q -m 'renew certificates' || :")
