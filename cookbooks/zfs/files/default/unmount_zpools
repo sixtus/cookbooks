@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# do not clobber files if zpool is broken
+/sbin/zpool list || exit 0
+
 /sbin/zpool list -Ho name > /etc/zfs/zpools
 /sbin/zfs umount -a
 /usr/bin/xargs -rn1 /sbin/zpool export < /etc/zfs/zpools
