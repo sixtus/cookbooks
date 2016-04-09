@@ -73,7 +73,7 @@ systemd_unit "hdfs@.service"
 systemd_unit "yarn@.service"
 systemd_unit "mapred@.service"
 
-src_tar = "http://archive.apache.org/dist/hadoop/common/hadoop-#{node[:hadoop2][:version]}/hadoop-#{node[:hadoop2][:version]}-src.tar.gz"
+src_tar = "http://www.apache.org/dist/hadoop/core/hadoop-#{node[:hadoop2][:version]}/hadoop-#{node[:hadoop2][:version]}-src.tar.gz"
 src_dir = "/var/app/hadoop2/releases/hadoop-#{node[:hadoop2][:version]}-src"
 release_dir = "#{src_dir}/hadoop-dist/target/hadoop-#{node[:hadoop2][:version]}"
 
