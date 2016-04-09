@@ -1,6 +1,6 @@
 [Unit]
 Description=PHP FastCGI Process Manager
-After=network.target
+After=network.target mysql.service
 
 [Service]
 ExecStart=/usr/lib/php<%= node[:php][:slot] %>/bin/php-fpm -F -y <%= node[:php][:fpm][:conf] %> -g /run/php-fpm.pid
