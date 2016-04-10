@@ -43,10 +43,11 @@ template "/etc/security/limits.conf" do
   mode "0644"
 end
 
-(node[:interrupts] || {}).each do |id, config|
-  config.each do |key, value|
-    file "/proc/irq/#{id}/#{key}" do
-      content "#{value}\n"
-    end
+(node[:interrupt_affinity] || {}).each do |name, cpu|
+  irq = node[:interrupts][name]
+  next unless irq
+
+  file "/proc/irq/#{irq}/smp_affinity" do
+    content "#{(2**cpu).to_s(16)}\n"
   end
 end
