@@ -1,11 +1,15 @@
 if gentoo?
   package "dev-vcs/git"
-  package "dev-vcs/git-extras" if zentoo?
+  if zentoo?
+    package "dev-vcs/git-extras"
+    package "dev-vcs/hub"
+  end
 elsif debian_based?
   package "git"
 elsif mac_os_x?
   homebrew_package "git"
   homebrew_package "git-extras"
+  homebrew_package "hub"
 end
 
 template node[:git][:rcfile] do
@@ -24,9 +28,8 @@ if !root?
     mode "0755"
   end
 
-  remote_file "#{node[:homedir]}/bin/hub" do
-    source "http://hub.github.com/standalone"
-    mode "0755"
+  file "#{node[:homedir]}/bin/hub" do
+    action :delete
   end
 
   overridable_template "#{node[:homedir]}/.gitconfig.local" do
