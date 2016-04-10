@@ -32,6 +32,7 @@
 	default = simple
 [diff]
 	renames = true
+	renameLimit = 32767
 [core]
 	excludesfile = <%= node[:git][:exfile] %>
 <% if node[:git][:github][:user] %>
