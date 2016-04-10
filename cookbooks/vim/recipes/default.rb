@@ -41,7 +41,8 @@ else
   git "#{node[:vim][:rcdir]}/bundle/neobundle.vim" do
     repository "https://github.com/hollow/neobundle.vim"
     reference "master"
-    action :checkout
+    enable_checkout false
+    action :sync
   end
 
   overridable_template "#{node[:homedir]}/.vimrc.local" do
