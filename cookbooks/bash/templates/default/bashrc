@@ -67,12 +67,8 @@ fi
 # keychain for ssh
 if [[ $USER != root ]]; then
 	if type -P keychain >/dev/null; then
-		if [[ -r ~/.ssh/id_rsa ]]; then
-			eval `keychain --eval --quiet ~/.ssh/id_rsa`
-		fi
-		if [[ -r ~/.ssh/id_ed25519 ]]; then
-			eval `keychain --eval --quiet ~/.ssh/id_ed25519`
-		fi
+		eval $(keychain --quiet --eval --agents gpg,ssh --inherit any)
+		export GPG_TTY=$(tty)
 	fi
 fi
 
