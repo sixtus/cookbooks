@@ -167,7 +167,7 @@ cdu() {
 }
 
 sl() {
-	sort -u | less
+	sort -u | less -S
 }
 
 # tmux helper
