@@ -73,12 +73,12 @@ systemd_unit "hdfs@.service"
 systemd_unit "yarn@.service"
 systemd_unit "mapred@.service"
 
-src_tar = "http://www.apache.org/dist/hadoop/core/hadoop-#{node[:hadoop2][:version]}/hadoop-#{node[:hadoop2][:version]}-src.tar.gz"
+src_tar = "http://www.apache.org/dist/hadoop/common/hadoop-#{node[:hadoop2][:version]}/hadoop-#{node[:hadoop2][:version]}-src.tar.gz"
 src_dir = "/var/app/hadoop2/releases/hadoop-#{node[:hadoop2][:version]}-src"
 release_dir = "#{src_dir}/hadoop-dist/target/hadoop-#{node[:hadoop2][:version]}"
 
 tar_extract src_tar do
-  target_dir src_dir
+  target_dir "/var/app/hadoop2/releases"
   creates src_dir
   user "hadoop2"
   group "hadoop2"

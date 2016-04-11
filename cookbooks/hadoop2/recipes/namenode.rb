@@ -75,7 +75,7 @@ end
 end
 
 nagios_service "HDFS-NAMENODE-WEBUI" do
-  check_command "check_http!-p 50070 -u /dfshealth.jsp -s 'reported blocks'"
+  check_command "check_http!-p 50070 -u /dfshealth.html -s 'Safemode is off'"
   servicegroups "hdfs,hdfs-namenode"
 end
 
