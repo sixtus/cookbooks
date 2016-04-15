@@ -156,6 +156,11 @@ alias sshlive='ssh -l root -o "StrictHostKeyChecking no" -o "UserKnownHostsFile 
 # easy port listing
 alias ports="netstat -tulpen"
 
+# show interrupt numbers
+irqs() {
+	tail -n +2 /proc/interrupts | awk '{ print $1 $NF }'
+}
+
 # pydf has nicer output
 if hash pydf &>/dev/null; then
 	alias df=pydf
