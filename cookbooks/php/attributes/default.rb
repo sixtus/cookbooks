@@ -31,7 +31,7 @@ default[:php][:default_use_flags] = %w(-*
   soap
   sockets
   spl
-  sqlite3
+  sqlite
   ssl
   tokenizer
   truetype
