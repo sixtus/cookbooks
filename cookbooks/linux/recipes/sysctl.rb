@@ -47,7 +47,7 @@ end
   irq = node[:interrupts][name]
   next unless irq
 
-  file "/proc/irq/#{irq}/smp_affinity" do
-    content "#{(2**cpu).to_s(16)}\n"
+  file "/proc/irq/#{irq}/smp_affinity_list" do
+    content "#{cpu}\n"
   end
 end
