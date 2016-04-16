@@ -21,6 +21,7 @@ JVM_OPTS+=" -Dcom.sun.management.jmxremote.ssl=false"
 
 # build the classpath - use node[:druid][:extensions] for more
 CLASSPATH="/var/app/druid/config/_common:/var/app/druid/config/<%= @service %>"
+CLASSPATH+=":/var/app/druid/postgresql.jar"
 CLASSPATH+=":$(/usr/bin/find /var/app/druid/current/services/target/*selfcontained.jar)"
 
 # add hadoop if it exists

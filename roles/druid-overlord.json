@@ -1,9 +1,9 @@
 {
-  "name": "druid-coordinator",
+  "name": "druid-overlord",
   "run_list": [
     "role[base]",
     "role[druid-sources]",
     "role[druid-storage]",
-    "recipe[druid::coordinator]"
+    "recipe[druid::overlord]"
   ]
 }

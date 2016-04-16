@@ -23,18 +23,16 @@ template "/var/app/druid/bin/druid-coordinator" do
   owner "root"
   group "root"
   mode "0755"
-  notifies :restart, "service[druid-coordinator]"
   variables service: "coordinator"
 end
 
 systemd_unit "druid-coordinator.service" do
   template "druid.service"
-  notifies :restart, "service[druid-coordinator]"
 end
 
 service "druid-coordinator" do
   action [:enable, :start]
-  subscribes :restart, "systemd_unit[druid-coordinator]"
+  subscribes :restart, "systemd_unit[druid-coordinator.service]"
   subscribes :restart, "template[/var/app/druid/bin/druid-coordinator]"
   subscribes :restart, "template[/var/app/druid/config/coordinator/runtime.properties]"
   subscribes :restart, "template[/var/app/druid/config/log4j.properties]"

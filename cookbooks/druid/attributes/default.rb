@@ -1,5 +1,5 @@
 default[:druid][:git][:repository] = "https://github.com/druid-io/druid"
-default[:druid][:git][:revision] = "druid-0.8.0"
+default[:druid][:git][:revision] = "druid-0.8.3"
 
 default[:druid][:cluster] = node.cluster_name
 
@@ -12,6 +12,7 @@ default[:druid][:core_extensions] = [
   "druid-hdfs-storage",
   "druid-kafka-eight",
   "druid-histogram",
+  "druid-namespace-lookup",
 ]
 
 default[:druid][:extensions] = []
@@ -75,3 +76,6 @@ default[:druid][:middleManager][:dm] = 64
 default[:druid][:worker][:capacity] = [node[:cpu][:total]/2,1].max
 default[:druid][:indexer][:runner][:javaOpts] = "-d64 -server -Xmx8g -XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:+PrintGCDetails -XX:+PrintGCTimeStamps"
 default[:druid][:indexer][:runner][:startPort] = 8092
+
+# Query Time Lookups
+default[:druid][:namespace][:lookups] = []

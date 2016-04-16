@@ -26,19 +26,17 @@ template "/var/app/druid/bin/druid-realtime" do
   owner "root"
   group "root"
   mode "0755"
-  notifies :restart, "service[druid-realtime]"
   variables service: "realtime"
 end
 
 systemd_unit "druid-realtime.service" do
   template "druid.service"
-  notifies :restart, "service[druid-realtime]"
 end
 
 service "druid-realtime" do
   action [:enable, :start]
   subscribes :restart, "file[/var/app/druid/config/realtime/realtime.spec]"
-  subscribes :restart, "systemd_unit[druid-realtime]"
+  subscribes :restart, "systemd_unit[druid-realtime.service]"
   subscribes :restart, "template[/var/app/druid/bin/druid-realtime]"
   subscribes :restart, "template[/var/app/druid/config/realtime/runtime.properties]"
   subscribes :restart, "template[/var/app/druid/config/log4j.properties]"

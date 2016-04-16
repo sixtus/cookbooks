@@ -20,6 +20,13 @@ deploy_skeleton "druid"
   end
 end
 
+remote_file "/var/app/druid/postgresql.jar" do
+  source "https://jdbc.postgresql.org/download/postgresql-9.4.1208.jre7.jar"
+  owner "druid"
+  group "druid"
+  mode "0644"
+end
+
 deploy_application "druid" do
   repository node[:druid][:git][:repository]
   revision node[:druid][:git][:revision]
