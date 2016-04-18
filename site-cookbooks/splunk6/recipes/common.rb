@@ -96,3 +96,7 @@ end
 service "splunk" do
   action [:enable, :start]
 end
+
+nginx_server "splunk" do
+  template "nginx.conf"
+end
