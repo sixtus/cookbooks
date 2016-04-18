@@ -27,6 +27,7 @@ cd *-quickstart-*
 
 cat >> profile.sh <<EOF
 <%= profile %>
+ssh_authorized_key "<%= ssh_authorized_key %>"
 EOF
 
 exec ./quickstart -v -d profile.sh

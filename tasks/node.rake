@@ -86,20 +86,23 @@ namespace :node do
 
   desc "quickstart & bootstrap machine"
   task :quickstart, :fqdn, :ipaddress, :profile do |t, args|
-    args.with_defaults(:profile => 'generic-two-disk-md')
-    raise "missing parameters!" unless args.fqdn && args.ipaddress
+    raise "missing parameters!" unless args.fqdn && args.ipaddress && args.profile
 
     # load profile
     profile = File.read(File.join(ROOT, "config/quickstart", "#{args.profile}.sh"))
+    ssh_authorized_key = File.read(File.join(ROOT, "tasks/support/id_rsa.pub")).chomp
 
     # create DNS/rDNS records
     run_task('node:checkdns', args.fqdn, args.ipaddress)
 
     # quick start
-    b = binding()
     erb = Erubis::Eruby.new(File.read(File.join(TEMPLATES_DIR, 'quickstart.sh')))
     tmpfile = Tempfile.new('quickstart')
-    tmpfile.write(erb.result(b))
+    tmpfile.write(erb.result(
+      profile: profile,
+      ssh_authorized_key: ssh_authorized_key,
+    ))
+
     tmpfile.rewind
     sshlive(args.ipaddress, ENV['PASSWORD'], tmpfile.path)
     tmpfile.unlink
@@ -113,8 +116,7 @@ namespace :node do
   end
 
   desc "Bootstrap the specified node"
-  task :bootstrap, :fqdn, :ipaddress, :password do |t, args|
-    args.with_defaults(password: "tux")
+  task :bootstrap, :fqdn, :ipaddress do |t, args|
     ENV['BATCH'] = "1"
     ENV['DISTRO'] ||= "gentoo"
     ENV['ROLE'] ||= "bootstrap"
@@ -127,7 +129,14 @@ namespace :node do
     sh("knife node create -d #{args.fqdn}")
     sh("knife node environment set #{args.fqdn} #{ENV['ENVIRONMENT']}")
     sh("knife node run list set #{args.fqdn} 'role[#{ENV['ROLE']}]'")
-    sh("knife bootstrap #{args.fqdn} --no-host-key-verify --no-node-verify-api-cert --node-ssl-verify-mode none -t #{ENV['DISTRO']} -P #{args.password} -r 'role[#{ENV['ROLE']}]' -E #{ENV['ENVIRONMENT']}")
+    sh("knife bootstrap #{args.fqdn} " +
+       "--no-host-key-verify " +
+       "--no-node-verify-api-cert " +
+       "--node-ssl-verify-mode none " +
+       "-t #{ENV['DISTRO']} " +
+       "-r 'role[#{ENV['ROLE']}]' " +
+       "-E #{ENV['ENVIRONMENT']} " +
+       "-i tasks/support/id_rsa")
 
     ENV['REBOOT'] = "1"
     run_task('node:updateworld', args.fqdn)
@@ -135,13 +144,18 @@ namespace :node do
 
   desc "Update node packages"
   task :updateworld, :fqdn do |t, args|
-    system("ssh -t #{args.fqdn} '/usr/bin/sudo -i eix-sync -q'")
+    if ENV['BATCH']
+      ssh_opts = "-o 'StrictHostKeyChecking no' -o 'UserKnownHostsFile /dev/null' -o 'GlobalKnownHostsFile /dev/null'"
+    else
+      ssh_opts = ""
+    end
+    system("ssh -t #{args.fqdn} #{ssh_opts} '/usr/bin/sudo -i eix-sync -q'")
     env = "/usr/bin/env UPDATEWORLD_DONT_ASK=1" if ENV['BATCH']
-    system("ssh -t #{args.fqdn} '/usr/bin/sudo -i #{env} /usr/local/sbin/updateworld'")
+    system("ssh -t #{args.fqdn} #{ssh_opts} '/usr/bin/sudo -i #{env} /usr/local/sbin/updateworld'")
     if ENV['REBOOT']
-      system("ssh -t #{args.fqdn} '/usr/bin/sudo -i reboot'")
+      system("ssh -t #{args.fqdn} #{ssh_opts} '/usr/bin/sudo -i reboot'")
       wait_for_ssh(args.fqdn)
-      system("ssh -t #{args.fqdn} '/usr/bin/sudo -i #{env} chef-client'")
+      system("ssh -t #{args.fqdn} #{ssh_opts} '/usr/bin/sudo -i #{env} chef-client'")
     end
   end
 
