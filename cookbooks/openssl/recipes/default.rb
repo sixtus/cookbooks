@@ -33,7 +33,9 @@ if root?
   if filenames.include?("ca.crt")
     if node[:chef_domain]
       ssl_ca "/usr/share/ca-certificates/chef-ca"
-      ssl_ca "/usr/local/share/ca-certificates/chef-ca"
+      ssl_ca "/usr/local/share/ca-certificates/chef-ca" do
+        notifies :run, "execute[update-ca-certificates]"
+      end
 
       ssl_certificate "/etc/ssl/certs/wildcard.#{node[:chef_domain]}" do
         cn "wildcard.#{node[:chef_domain]}"
@@ -64,10 +66,14 @@ if root?
         File.symlink?(path) and not File.exist?(path)
       end
     end
+
+    notifies :run, "execute[update-ca-certificates]"
   end
 end
 
-execute "update-ca-certificates"
+execute "update-ca-certificates" do
+  action :nothing
+end
 
 if nagios_client?
   nagios_plugin "check_ssl_server"

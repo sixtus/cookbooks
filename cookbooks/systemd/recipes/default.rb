@@ -31,6 +31,7 @@ if gentoo?
 
     execute "timedatectl set-ntp true" do
       only_if { systemd_running? && File.exist?("/usr/lib/systemd/system/systemd-timesyncd.service") }
+      not_if { %x{timedatectl | grep 'Network time on: yes'}.chomp.length > 0 }
     end
 
     # journal
