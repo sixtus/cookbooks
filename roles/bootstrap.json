@@ -6,6 +6,7 @@
     "recipe[base]",
     "recipe[openssl]",
     "recipe[ssh::server]",
+    "recipe[hwraid]",
     "recipe[bash]",
     "recipe[git]",
     "recipe[vim]"
