@@ -3,7 +3,7 @@ After=network-online.target
 Wants=network-online.target
 
 [Service]
-ExecStart=<%= @path %>/current/j2q \
+ExecStart=<%= @homedir %>/bin/<%= @name %> \
 	-environment <%= node.chef_environment %> \
 	-cluster <%= node.cluster_name %> \
 	-kafka <%= kafka_connect(node.cluster_name) %> \
@@ -11,7 +11,7 @@ ExecStart=<%= @path %>/current/j2q \
 User=root
 Group=root
 Restart=always
-WorkingDirectory=<%= @path %>/current
+WorkingDirectory=<%= @homedir %>
 SyslogIdentifier=%p
 
 [Install]
