@@ -40,12 +40,3 @@ file_cache_path "#{chef_root}/cache/files"
 file_backup_path "#{chef_root}/backup"
 
 ohai.plugin_path = ["#{chef_repo_path}/cookbooks/ohai/files/default/plugins"]
-
-ssl_verify_mode :verify_none
-verify_api_cert false
-
-class Chef::Client
-  def check_ssl_config
-    # do nothing
-  end
-end

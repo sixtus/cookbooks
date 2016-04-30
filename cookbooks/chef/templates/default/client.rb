@@ -10,13 +10,4 @@ enable_reporting false
 file_cache_path "/var/lib/chef/cache"
 file_backup_path "/var/lib/chef/backup"
 
-ohai.plugin_path = [<%= node[:ohai][:plugin_path].inspect %>]
-
-ssl_verify_mode :verify_none
-verify_api_cert false
-
-class Chef::Client
-  def check_ssl_config
-    # do nothing
-  end
-end
+ohai.plugin_path [<%= node[:ohai][:plugin_path].inspect %>]
