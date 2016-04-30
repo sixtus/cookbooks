@@ -100,9 +100,9 @@ rm -f /usr/lib64/libxcb.so.1.1.0
 
 # install updates
 if [[ -z $UPDATEWORLD_DONT_ASK ]]; then
-	emerge @world --rebuilt-binaries -NDua --jobs=4 || :
+	emerge @world -NDua --jobs=12 || :
 else
-	emerge @world --rebuilt-binaries -NDu --jobs=4 || :
+	emerge @world -NDu --jobs=12 || :
 fi
 
 # force latest gcc version
