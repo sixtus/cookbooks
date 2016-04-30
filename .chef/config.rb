@@ -1,3 +1,5 @@
+require 'json'
+
 role = JSON.load(File.read(File.expand_path("../../roles/base.json", __FILE__)))
 chef_domain = role['default_attributes']['chef_domain'] rescue "localhost"
 
@@ -37,7 +39,7 @@ syntax_check_cache_path "#{chef_repo_path}/.chef/checksums"
 file_cache_path "#{chef_root}/cache/files"
 file_backup_path "#{chef_root}/backup"
 
-Ohai::Config[:plugin_path] = ["#{chef_repo_path}/cookbooks/ohai/files/default/plugins"]
+ohai.plugin_path = ["#{chef_repo_path}/cookbooks/ohai/files/default/plugins"]
 
 ssl_verify_mode :verify_none
 verify_api_cert false
