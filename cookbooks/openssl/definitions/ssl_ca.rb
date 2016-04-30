@@ -1,7 +1,8 @@
 define :ssl_ca, :symlink => false, :owner => "root", :group => "root", :mode => "0444" do
   include_recipe "openssl"
 
-  directory File.dirname(params[:name]) do
+  directory "#{params[:name]}-#{rrand}" do
+    path File.dirname(params[:name])
     owner params[:owner]
     group params[:group]
     mode "0755"

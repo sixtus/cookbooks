@@ -1,20 +1,12 @@
-if zentoo?
-  # portage package provider will take care of using sudo
-  package "dev-ruby/rvm" do
-    action :nothing
-  end.run_action(:install)
-else
-  # omnibus ruby
-  chef_gem 'rvm' do
-    action :install
-    options "--user-install" if !root?
-    compile_time true
-  end
+chef_gem "rvm" do
+  action :install
+  options "--user-install" if !root?
+  compile_time true
 end
 
 Gem.clear_paths
 
-require 'rvm'
+require "rvm"
 
 create_rvm_shell_chef_wrapper
 create_rvm_chef_user_environment

@@ -6,7 +6,11 @@ if gentoo?
   package "dev-db/mytop"
   package "dev-db/percona-toolkit"
   package "dev-db/xtrabackup-bin"
-  package "dev-ruby/mysql-ruby"
+
+  chef_gem 'mysql' do
+    action :install
+    compile_time true
+  end
 
   # configuration files
   if root?
