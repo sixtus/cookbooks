@@ -1,7 +1,0 @@
-{
-  "name": "splunk6-peer",
-  "description": "Splunk 6 Indexer Peer",
-  "run_list": [
-    "role[splunk6]"
-  ]
-}

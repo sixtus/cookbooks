@@ -1,8 +1,0 @@
-{
-  "name": "splunk6",
-  "description": "Splunk 6",
-  "run_list": [
-    "role[base]",
-    "recipe[splunk6]"
-  ]
-}

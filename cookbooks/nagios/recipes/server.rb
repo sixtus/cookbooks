@@ -9,7 +9,6 @@ package "net-analyzer/nagios"
 include_recipe "nagios"
 include_recipe "nagios::nrpe"
 include_recipe "nagios::nsca"
-include_recipe "nagios::splunk"
 
 package "net-analyzer/mk-livestatus"
 

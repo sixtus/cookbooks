@@ -56,11 +56,6 @@ define command {
 }
 
 define command {
-  command_name check_splunk
-  command_line $USER1$/check_splunk "$ARG1$" "$ARG2$"
-}
-
-define command {
   command_name check_jmx
   command_line $USER1$/check_jmx -vvvv -U service:jmx:rmi:///jndi/rmi://$HOSTADDRESS$:$ARG1$/jmxrmi -O '$ARG2$' -A '$ARG3$' $ARG4$
 }
