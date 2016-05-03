@@ -44,7 +44,7 @@ default[:hadoop2][:pig][:default_jars] = %w{
   http://search.maven.org/remotecontent?filepath=org/apache/pig/piggybank/0.13.0/piggybank-0.13.0.jar
   http://search.maven.org/remotecontent?filepath=mysql/mysql-connector-java/5.1.29/mysql-connector-java-5.1.29.jar
   http://search.maven.org/remotecontent?filepath=com/linkedin/datafu/datafu/1.2.0/datafu-1.2.0.jar
-  https://assets.remerge.io.s3.amazonaws.com/commons-codec-1.9.jar
+  https://d2ljt3w7wnnuw2.cloudfront.net/commons-codec-1.9.jar
 }
 
 default[:hadoop2][:fs][:s3][:access_key] = nil
