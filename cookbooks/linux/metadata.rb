@@ -11,6 +11,7 @@ supports "debian"
 supports "gentoo"
 supports "ubuntu"
 
+depends "account"
 depends "apt"
 depends "duply"
 depends "nagios"
