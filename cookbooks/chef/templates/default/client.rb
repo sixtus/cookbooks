@@ -10,6 +10,8 @@ enable_reporting false
 file_cache_path "/var/lib/chef/cache"
 file_backup_path "/var/lib/chef/backup"
 
+ssl_verify_mode :verify_peer
+
 if ohai
   ohai.plugin_path [<%= node[:ohai][:plugin_path].inspect %>]
 else
