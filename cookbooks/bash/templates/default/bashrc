@@ -64,14 +64,6 @@ if hash less; then
 	export LESS="-R --ignore-case --long-prompt"
 fi
 
-# keychain for ssh
-if [[ $USER != root ]]; then
-	if type -P keychain >/dev/null; then
-		eval $(keychain --quiet --eval --agents gpg,ssh --inherit any)
-		export GPG_TTY=$(tty)
-	fi
-fi
-
 
 ########################
 ## bash configuration ##
@@ -185,18 +177,12 @@ serve() {
 	python -m SimpleHTTPServer ${1:-8080}
 }
 
-# Igor's sanity helper:
-alias vi="vim"
-
-# replace reboot by systemctl reboot
-if [[ -x /usr/bin/systemctl ]]; then
-	alias reboot="systemctl reboot"
-fi
-
+<% if !root? %>
 # load local bashrc if it exists
 if [[ -e ${HOME}/.bashrc.local ]]; then
 	source ${HOME}/.bashrc.local
 fi
+<% end %>
 
 # cleanup
 unset _BASHRC_DIR
