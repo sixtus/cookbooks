@@ -9,7 +9,7 @@ if gentoo?
 
   chef_gem 'mysql' do
     action :install
-    compile_time true
+    compile_time false
   end
 
   # configuration files

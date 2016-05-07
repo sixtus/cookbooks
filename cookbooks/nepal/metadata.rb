@@ -11,6 +11,7 @@ supports "gentoo"
 
 depends "apache"
 depends "dovecot"
+depends "htpasswd"
 depends "mysql"
 depends "php"
 depends "postfix"
