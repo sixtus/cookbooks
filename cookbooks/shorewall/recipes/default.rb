@@ -27,10 +27,7 @@ unless vbox?
       action :remove
     end
 
-    package "net-firewall/shorewall" do
-      # prevent accidental config upgrade
-      version "5.0.2.1"
-    end
+    package "net-firewall/shorewall"
   elsif debian_based?
     package "shorewall"
 
