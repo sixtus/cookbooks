@@ -1,0 +1,13 @@
+[Unit]
+Description=Configure irq smp affinity
+After=systemd-udev-settle.target local-fs.target network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+<% @irqs.each do |irq, cpu| %>
+ExecStart=/bin/bash -c "/bin/echo <%= cpu %> > /proc/irq/<%= irq %>/smp_affinity_list"
+<% end %>
+
+[Install]
+WantedBy=multi-user.target

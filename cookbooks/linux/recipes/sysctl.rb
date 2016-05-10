@@ -43,11 +43,29 @@ template "/etc/security/limits.conf" do
   mode "0644"
 end
 
+irqs = {}
+
 (node[:interrupt_affinity] || {}).each do |name, cpu|
   irq = node[:interrupts][name]
   next unless irq
 
+  irqs[irq] = cpu
+
   file "/proc/irq/#{irq}/smp_affinity_list" do
     content "#{cpu}\n"
+  end
+end
+
+if systemd_running?
+  systemd_unit "irq-smp-affinity.service" do
+    template true
+    variables({
+      irqs: irqs
+    })
+    action :delete if irqs.length == 0
+  end
+
+  service "irq-smp-affinity" do
+    action irqs.length > 0 ? :enable : :disable
   end
 end
