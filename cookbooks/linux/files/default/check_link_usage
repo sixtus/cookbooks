@@ -4,10 +4,10 @@ source /usr/lib/nagios/plugins/utils.sh
 
 # defaults
 interface="all"
-rx_warn=60
-tx_warn=60
-rx_crit=85
-tx_crit=85
+rx_warn=600
+tx_warn=600
+rx_crit=850
+tx_crit=850
 
 while getopts "i:w:W:c:C:l:" opt; do
 	case $opt in
@@ -43,8 +43,13 @@ while read int new_rxb _ _ _ _ _ _ _ new_txb _; do
 		continue
 	fi
 
-	speed=$(sudo ethtool eth0 | grep Speed: | awk '{print $2}' | sed 's/Mb\/s//')
-	duplex=$(sudo ethtool eth0 | grep Duplex: | awk '{print $2}')
+	speed=`sudo ethtool ${int/:} | grep Speed: | awk '{print $2}' | sed 's/Mb\/s//'`
+	duplex=`sudo ethtool ${int/:} | grep Duplex: | awk '{print $2}'`
+
+	# don't fail on nics w/o cabel
+	if [[ $speed == "Unknown!" ]]; then
+		continue
+	fi
 
 	statefile="/tmp/.check_link_usage.${int}"
 
@@ -69,9 +74,9 @@ while read int new_rxb _ _ _ _ _ _ _ new_txb _; do
 
 	echo -n "$int(rx=$rx_rate,tx=$tx_rate,speed=${speed},duplex=${duplex}) "
 
-	# interpolate to 100Mbit
-	rx_rate=$(($rx_rate * 100 / ${speed}))
-	tx_rate=$(($tx_rate * 100 / ${speed}))
+	# interpolate to 1000Mbit
+	rx_rate=$(($rx_rate * 1000 / ${speed}))
+	tx_rate=$(($tx_rate * 1000 / ${speed}))
 
 	if [[ $rx_rate -ge $rx_crit ]]; then
 		state=$STATE_CRITICAL
@@ -83,7 +88,12 @@ while read int new_rxb _ _ _ _ _ _ _ new_txb _; do
 		state=$STATE_WARNING
 	fi
 
-	if [[ ${speed} -lt 100 ]]; then
+	# only check max speed on eth devices
+	if [[ $int != eth* ]]; then
+		continue
+	fi
+
+	if [[ ${speed} -lt 1000 ]]; then
 		state=$STATE_CRITICAL
 	fi
 
