@@ -1,7 +1,7 @@
 actions :create, :delete
 default_action :create
 
-attribute :login, kind_of: String, regex: /^[a-z]+$/, name_attribute: true
+attribute :login, kind_of: String, regex: /^[a-zA-Z0-9]+$/, name_attribute: true
 attribute :uid, kind_of: Integer
 attribute :gid, kind_of: String, default: "users"
 attribute :groups, kind_of: Array, default: []
