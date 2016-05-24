@@ -1,5 +1,10 @@
 include_recipe "nagios::nrpe"
 
+chef_gem 'yajl-ruby' do
+  action :install
+  compile_time false
+end
+
 directory "/usr/lib/ruby/site_ruby" do
   owner "root"
   group "root"
