@@ -1,0 +1,12 @@
+[Unit]
+Description=Gobblin %I
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=gobblin
+Group=gobblin
+ExecStart=/var/app/gobblin/bin/gobblin-mapreduce.sh --conf /var/app/gobblin/shared/config/%I.properties --workdir hdfs://<%= node[:hadoop2][:cluster] %>/gobblin/work/%I
+
+[Install]
+WantedBy=multi-user.target
