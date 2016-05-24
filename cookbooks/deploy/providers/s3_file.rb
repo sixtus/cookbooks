@@ -4,16 +4,7 @@ require 'json'
 use_inline_resources
 
 action :create do
-  #@run_context.include_recipe 's3_file::dependencies'
-
-  chef_gem 'mime-types' do
-    #version node['s3_file']['mime-types']['version']
-    action :install
-    compile_time true if Chef::Resource::ChefGem.method_defined?(:compile_time)
-  end
-
   chef_gem 'rest-client' do
-    #version node['s3_file']['rest-client']['version']
     action :install
     compile_time true if Chef::Resource::ChefGem.method_defined?(:compile_time)
   end
