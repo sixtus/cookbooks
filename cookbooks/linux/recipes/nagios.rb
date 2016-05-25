@@ -22,7 +22,7 @@ if nagios_client?
   end
 
   containers = %x(lxc-ls).chomp.split.length rescue 0
-  procs_max = 1024 * (containers + 1)
+  procs_max = 2048 * (containers + 1)
 
   nrpe_command "check_total_procs" do
     command "/usr/lib/nagios/plugins/check_procs -w #{procs_max/2} -c #{procs_max}"
