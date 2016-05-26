@@ -1,5 +1,5 @@
 default[:druid][:git][:repository] = "https://github.com/druid-io/druid"
-default[:druid][:git][:revision] = "druid-0.8.3"
+default[:druid][:git][:revision] = "druid-0.9.0"
 
 default[:druid][:cluster] = node.cluster_name
 
@@ -13,6 +13,7 @@ default[:druid][:core_extensions] = [
   "druid-kafka-eight",
   "druid-histogram",
   "druid-namespace-lookup",
+  "druid-datasketches",
 ]
 
 default[:druid][:extensions] = []
