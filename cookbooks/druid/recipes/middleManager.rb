@@ -29,6 +29,7 @@ end
 
 service "druid-middleManager" do
   action [:enable, :start]
+  subscribes :restart, "template[/var/app/druid/config/_common/common.runtime.properties]"
   subscribes :restart, "template[/var/app/druid/config/middleManager/runtime.properties]"
   subscribes :restart, "template[/var/app/druid/config/log4j.properties]"
   subscribes :restart, "template[/var/app/druid/bin/druid-middleManager]"

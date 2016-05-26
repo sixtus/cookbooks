@@ -34,6 +34,7 @@ service "druid-coordinator" do
   action [:enable, :start]
   subscribes :restart, "systemd_unit[druid-coordinator.service]"
   subscribes :restart, "template[/var/app/druid/bin/druid-coordinator]"
+  subscribes :restart, "template[/var/app/druid/config/_common/common.runtime.properties]"
   subscribes :restart, "template[/var/app/druid/config/coordinator/runtime.properties]"
   subscribes :restart, "template[/var/app/druid/config/log4j.properties]"
 end

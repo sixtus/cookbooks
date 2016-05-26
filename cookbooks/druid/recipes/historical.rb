@@ -28,6 +28,7 @@ end
 
 service "druid-historical" do
   action [:enable, :start]
+  subscribes :restart, "template[/var/app/druid/config/_common/common.runtime.properties]"
   subscribes :restart, "template[/var/app/druid/config/historical/runtime.properties]"
   subscribes :restart, "template[/var/app/druid/config/log4j.properties]"
   subscribes :restart, "template[/var/app/druid/bin/druid-historical]"

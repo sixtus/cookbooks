@@ -35,6 +35,7 @@ end
 
 service "druid-realtime" do
   action [:enable, :start]
+  subscribes :restart, "template[/var/app/druid/config/_common/common.runtime.properties]"
   subscribes :restart, "file[/var/app/druid/config/realtime/realtime.spec]"
   subscribes :restart, "systemd_unit[druid-realtime.service]"
   subscribes :restart, "template[/var/app/druid/bin/druid-realtime]"

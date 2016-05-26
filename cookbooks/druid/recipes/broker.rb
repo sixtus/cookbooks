@@ -28,6 +28,7 @@ end
 
 service "druid-broker" do
   action [:enable, :start]
+  subscribes :restart, "template[/var/app/druid/config/_common/common.runtime.properties]"
   subscribes :restart, "template[/var/app/druid/config/broker/runtime.properties]"
   subscribes :restart, "template[/var/app/druid/config/log4j.properties]"
   subscribes :restart, "template[/var/app/druid/bin/druid-broker]"
