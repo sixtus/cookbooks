@@ -58,7 +58,7 @@ default[:mysql][:server][:wait_timeout] = "28800"
 default[:mysql][:server][:connect_timeout] = "10"
 
 # Key Buffer Optimization
-default[:mysql][:server][:key_buffer_size] = "64M"
+default[:mysql][:server][:key_buffer_size] = "1024M"
 
 # Query Cache Optimization
 default[:mysql][:server][:query_cache_size] = "128M"
