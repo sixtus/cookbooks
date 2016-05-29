@@ -24,6 +24,8 @@ postconf "TLS encryption" do
     smtpd_tls_auth_only: "yes",
     smtpd_tls_session_cache_database: "btree:/var/lib/postfix/smtpd_scache",
     smtpd_tls_session_cache_timeout: "3600s",
+    smtpd_tls_exclude_ciphers: "aNULL, eNULL, EXPORT, DES, RC4, MD5, PSK, aECDH, EDH-DSS-DES-CBC3-SHA, EDH-RSA-DES-CBC3-SHA, KRB5-DES, CBC3-SHA",
+    smtpd_tls_dh1024_param_file: "/etc/ssl/dhparams.pem",
   })
 end
 
