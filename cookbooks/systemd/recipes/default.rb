@@ -156,7 +156,10 @@ if gentoo?
 end
 
 if nagios_client?
-  nagios_plugin "check_systemd"
+  nagios_plugin "check_systemd" do
+    template :true
+  end
+
   nagios_plugin "check_systemd_user"
 
   sudo_rule "nagios-systemd-active" do

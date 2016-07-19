@@ -31,5 +31,5 @@ else
 		echo -ne " \"$x\"" 
 	done
 
-	exit 2
+	exit <%= node.production? ? 2 : 1 %>
 fi
