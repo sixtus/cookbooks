@@ -1,4 +1,4 @@
-define :nagios_plugin, action: :create, source: nil, content: nil, cookbook: nil do
+define :nagios_plugin, action: :create, source: nil, content: nil, cookbook: nil, template: nil do
   # this should already be handled in recipes,
   # but we do it here again for good measure
   next unless nagios_client?
@@ -32,14 +32,26 @@ define :nagios_plugin, action: :create, source: nil, content: nil, cookbook: nil
       params[:source] = params[:name]
     end
 
-    cookbook_file "/usr/lib/nagios/plugins/#{params[:name]}-#{rrand}" do
-      path "/usr/lib/nagios/plugins/#{params[:name]}"
-      source params[:source]
-      cookbook params[:cookbook] if params[:cookbook]
-      owner "root"
-      group "nagios"
-      mode "0750"
-      action params[:action]
+    if params[:template]
+      template "/usr/lib/nagios/plugins/#{params[:name]}-#{rrand}" do
+        path "/usr/lib/nagios/plugins/#{params[:name]}"
+        source params[:source]
+        cookbook params[:cookbook] if params[:cookbook]
+        owner "root"
+        group "nagios"
+        mode "0750"
+        action params[:action]
+      end
+    else
+      cookbook_file "/usr/lib/nagios/plugins/#{params[:name]}-#{rrand}" do
+        path "/usr/lib/nagios/plugins/#{params[:name]}"
+        source params[:source]
+        cookbook params[:cookbook] if params[:cookbook]
+        owner "root"
+        group "nagios"
+        mode "0750"
+        action params[:action]
+      end
     end
   end
 end
